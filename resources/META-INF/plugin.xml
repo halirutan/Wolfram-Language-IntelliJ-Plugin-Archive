@@ -1,0 +1,21 @@
+<idea-plugin version="2">
+  <id>org.ipcu.mathematicaPlugin</id>
+  <name>Mathematica IDEA Language Plugin</name>
+  <category>Custom Language</category>
+  <version>0.0.1</version>
+  <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.trm.uni-leipzig.de">YourCompany</vendor>
+  <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <small>most HTML tags may be used</small>
+      ]]></description>
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <small>most HTML tags may be used</small>
+      ]]>
+  </change-notes>
+  <idea-version since-build="110.000"/>
+
+  <extensions defaultExtensionNs="com.intellij">
+      <fileTypeFactory implementation="org.ipcu.mathematicaPlugin.MathematicaFileTypeFactory"/>
+  </extensions>
+</idea-plugin>
