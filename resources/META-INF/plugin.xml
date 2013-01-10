@@ -13,9 +13,11 @@
       <small>most HTML tags may be used</small>
       ]]>
   </change-notes>
-  <idea-version since-build="110.000"/>
 
   <extensions defaultExtensionNs="com.intellij">
       <fileTypeFactory implementation="org.ipcu.mathematicaPlugin.MathematicaFileTypeFactory"/>
+      <lang.parserDefinition language="Mathematica"
+                             implementationClass="org.ipcu.mathematicaPlugin.parser.MathematicaParserDefinition"/>
+      <!--<lang.syntaxHighlighterFactory implementationClass="org.ipcu.mathematicaPlugin.fileTypes.MathematicaSyntaxHighlighter" key="Mathematica"/>-->
   </extensions>
 </idea-plugin>

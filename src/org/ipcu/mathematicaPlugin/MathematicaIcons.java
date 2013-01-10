@@ -9,9 +9,9 @@ import javax.swing.*;
  * User: patrick
  * Date: 12/23/12
  * Time: 10:18 PM
- * To change this template use File | Settings | File Templates.
+ * Purpose:
  */
 public class MathematicaIcons {
 
-    static final Icon FILE_ICON = IconLoader.findIcon("/icons/mma_file.png");
+    public static final Icon FILE_ICON = IconLoader.findIcon("/icons/mma_file.png");
 }

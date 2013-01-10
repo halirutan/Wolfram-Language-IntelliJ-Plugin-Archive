@@ -1,7 +1,9 @@
-package org.ipcu.mathematicaPlugin;
+package org.ipcu.mathematicaPlugin.fileTypes;
 
-import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import org.ipcu.mathematicaPlugin.Mathematica;
+import org.ipcu.mathematicaPlugin.MathematicaIcons;
+import org.ipcu.mathematicaPlugin.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,19 +14,15 @@ import javax.swing.*;
  * User: patrick
  * Date: 12/23/12
  * Time: 9:55 PM
- * To change this template use File | Settings | File Templates.
+ * Purpose:
  */
 public class MathematicaFileType extends LanguageFileType{
 
-    public static final MathematicaFileType INSTANCE = new MathematicaFileType();
-
-    public static final Language LANGUAGE = INSTANCE.getLanguage();
-
-    public static final String DEFAULT_EXTENSION = "mma";
-    public static final String NOTEBOOK_EXTENSION = "nb";
+    public static final LanguageFileType INSTANCE = new MathematicaFileType();
+    public static final String[] DEFAULT_EXTENSIONS= new String[]{"m","mma","nb"};
 
     protected MathematicaFileType(){
-        super(new MathematicaLanguage());
+        super(MathematicaLanguage.INSTANCE);
     }
 
     @NotNull
@@ -42,7 +40,7 @@ public class MathematicaFileType extends LanguageFileType{
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return MathematicaFileType.DEFAULT_EXTENSION;
+        return MathematicaFileType.DEFAULT_EXTENSIONS[0];
     }
 
     @Nullable

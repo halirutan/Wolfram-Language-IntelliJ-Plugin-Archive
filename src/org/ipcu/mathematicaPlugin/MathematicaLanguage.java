@@ -1,7 +1,10 @@
 package org.ipcu.mathematicaPlugin;
 
 import com.intellij.lang.Language;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.openapi.fileTypes.SingleLazyInstanceSyntaxHighlighterFactory;
+import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
+import org.ipcu.mathematicaPlugin.fileTypes.MathematicaSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,17 +12,22 @@ import org.jetbrains.annotations.NotNull;
  * User: patrick
  * Date: 12/23/12
  * Time: 10:06 PM
- * To change this template use File | Settings | File Templates.
+ * Purpose:
  */
 public class MathematicaLanguage extends Language {
 
+    public static final Language INSTANCE = new MathematicaLanguage();
 
-    protected MathematicaLanguage() {
+    public MathematicaLanguage() {
         super(Mathematica.NAME);
+
+        SyntaxHighlighterFactory.LANGUAGE_FACTORY.addExplicitExtension(this, new SingleLazyInstanceSyntaxHighlighterFactory() {
+            @NotNull
+            protected SyntaxHighlighter createHighlighter() {
+                return new MathematicaSyntaxHighlighter();
+            }
+        });
+
     }
 
-    @Override
-    public boolean isCaseSensitive() {
-        return true;
-    }
 }
