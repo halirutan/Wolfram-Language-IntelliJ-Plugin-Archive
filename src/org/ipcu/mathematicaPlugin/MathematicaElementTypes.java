@@ -109,7 +109,12 @@ public interface MathematicaElementTypes {
     IElementType PUT = new MathematicaElementType("PUT");
     IElementType PUT_APPEND = new MathematicaElementType("PUT_APPEND");
     
-
+    IElementType FUNCTION_EXPRESSION = new MathematicaElementType("FUNCTION_EXPRESSION");
+    IElementType SEQUENCE_EXPRESSION = new MathematicaElementType("SEQUENCE_EXPRESSION");
+    IElementType PARENTHESIZED_EXPRESSION = new MathematicaElementType("PARENTHESIZED_EXPRESSION");
+    IElementType PART_EXPRESSION = new MathematicaElementType("PART_EXPRESSION");
+   
+    
 
     TokenSet WHITE_SPACES = TokenSet.create(
             WHITE_SPACE

@@ -5,8 +5,10 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.PsiBuilder.Marker;
 
 import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.*;
+import static org.ipcu.mathematicaPlugin.parser.MathematicaParserUtil.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +26,7 @@ public class MathematicaParser  implements PsiParser{
         final PsiBuilder.Marker rootMarker = builder.mark();
 
         while (!builder.eof()) {
-
+  //          parse(builder);
             builder.advanceLexer();
         }
         rootMarker.done(root);
@@ -33,28 +35,101 @@ public class MathematicaParser  implements PsiParser{
     }
 
     private void parse(PsiBuilder builder) {
-        if (builder.getTokenType() == IDENTIFIER) {
-            if (builder.lookAhead(1) == LEFT_BRACKET && builder.lookAhead(2) == LEFT_BRACKET) parsePart(builder);
-            else if (builder.lookAhead(1) == LEFT_BRACKET) parseFunction(builder);
+        while(!builder.eof()) {
+            if (parsePart(builder)) continue;
+            if (parseFunction(builder)) continue;
+            if (parseGeneralExpression(builder)) continue;
         }
     }
 
-    private void parseFunction(PsiBuilder builder) {
+    private boolean parseExpression(PsiBuilder builder) {
+        boolean result = parseParenthesizedExpr(builder);
+        if (!result) result = parsePart(builder);
+        if (!result) result = parseFunction(builder);
+        if (!result) result = parseGeneralExpression(builder);
+        return result;
+    }
+
+    private boolean parseParenthesizedExpr(PsiBuilder builder) {
+        boolean result = false;
+        if (builder.getTokenType() == LEFT_PAR) {
+            PsiBuilder.Marker mark = builder.mark();
+            builder.advanceLexer();
+            result = parseExpression(builder);
+            if (result && builder.getTokenType() == RIGHT_PAR) {
+                builder.advanceLexer();
+                mark.done(PARENTHESIZED_EXPRESSION);
+            } else {
+                mark.error("Expression or ) expected");
+            }
+        }
+        return result;
+    }
+
+    private boolean parsePart(PsiBuilder builder) {
+        boolean result;
+        PsiBuilder.Marker mark = builder.mark();
+        result = parseExpression(builder);
+        if (result && builder.getTokenType() == LEFT_BRACKET && builder.lookAhead(1) == LEFT_BRACKET) {
+            builder.advanceLexer();
+            builder.advanceLexer();
+            result = parseSequence(builder);
+            if (result && builder.getTokenType() == RIGHT_BRACKET && builder.lookAhead(1) == RIGHT_BRACKET) {
+                builder.advanceLexer();
+                builder.advanceLexer();
+                mark.done(PART_EXPRESSION);
+            }
+        }
+        if (!result) {
+            mark.rollbackTo();
+        }
+        return result;
+    }
+
+    private boolean parseFunction(PsiBuilder builder) {
+        boolean result = false;
+        PsiBuilder.Marker mark = builder.mark();
+        result = parseExpression(builder);
+        if (builder.getTokenType() == IDENTIFIER && builder.lookAhead(1) == LEFT_BRACKET) {
+            PsiBuilder.Marker functionMarker = builder.mark();
+            builder.advanceLexer();
+            builder.advanceLexer();
+            parseSequence(builder);
+
+            // match closing bracket
+            if (builder.lookAhead(1) == RIGHT_BRACKET) {
+                builder.advanceLexer();
+            } else builder.error("] expected.");
+            functionMarker.done(FUNCTION_EXPRESSION);
+            return true;
+        } else return false;
+    }
+
+
+    private boolean parseList(PsiBuilder builder) {
+        return false;
 
     }
 
-    private void parsePart(PsiBuilder builder) {
+    private boolean parseSequence(PsiBuilder builder) {
+        boolean correctArguments = true;
+        PsiBuilder.Marker sequenceMarker = builder.mark();
+        while (correctArguments) {
+            correctArguments = parseGeneralExpression(builder);
+            if (builder.lookAhead(1) == COMMA) {
+                builder.advanceLexer();
+            } else {
+                sequenceMarker.done(SEQUENCE_EXPRESSION);
+                return true;
+            }
+        }
+        return false;
 
     }
 
-    private void parseList(PsiBuilder builder) {
-
+    private boolean parseGeneralExpression(PsiBuilder builder) {
+        return false;
     }
-
-    private void parseSequence(PsiBuilder builder) {
-
-    }
-
 
 
 
