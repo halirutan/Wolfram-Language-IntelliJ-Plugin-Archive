@@ -14,10 +14,6 @@ import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
 %eof{ return;
 %eof}
 
-%{
-	int comment_nesting = 0;
-%}
-
 
 LineTerminator = \n | \r | \r\n
 WhiteSpace = [\ \t\f] | {LineTerminator}
@@ -48,7 +44,7 @@ Out = "%"+
 %%
 
 <YYINITIAL> {
-	"(*"				{ yybegin(IN_COMMENT); comment_nesting++; return MathematicaElementTypes.COMMENT;}
+	"(*"				{ yybegin(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
 	{WhiteSpace}+ 		{ yybegin(YYINITIAL); return MathematicaElementTypes.WHITE_SPACE; }
 	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL; }
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
@@ -157,15 +153,9 @@ Out = "%"+
 
 <IN_COMMENT> {
 	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
-	"(*"				{ ++comment_nesting; return MathematicaElementTypes.COMMENT; }
-	"*"* "*)"			{
-							if(--comment_nesting == 0) {
-								comment_nesting = 0;
-								yybegin(YYINITIAL);
-							}
-							return MathematicaElementTypes.COMMENT;
-						}
-	[\*\)\(]			{ return MathematicaElementTypes.COMMENT; }
+	"*)"				{ yybegin(YYINITIAL); return MathematicaElementTypes.COMMENT; }
+	"*"					{ return MathematicaElementTypes.COMMENT; }
+	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
 
 }
 
