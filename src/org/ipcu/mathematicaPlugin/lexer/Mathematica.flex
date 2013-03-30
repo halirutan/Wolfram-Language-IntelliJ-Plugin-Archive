@@ -26,12 +26,15 @@ CommentEnd = "*)"
 Identifier = [a-zA-Z\$] [a-zA-Z0-9\$]*
 IdInContext = (`?){Identifier}(`{Identifier})*(`?)
 
-pBase = "(?:\\d+)"
-pFloat = "(?:\\.\\d+|\\d+\\.\\d*|\\d+)"
-pFloatBase = "(?:\\.\\w+|\\w+\\.\\w*|\\w+)"
-pPrecision = "(?:`(?:`?" {pFloat} ")?)"
-
-Literal = [0-9]+
+Digits = [0-9]+
+Digits2 = [0-9a-zA-Z]+
+Base = 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36
+Number = {Digits}(\.{Digits}?)? | \.{Digits}
+PrecisionNumber = {Number}`(`?){Number}
+BaseNumber = {Base} "^^" {Digits2}(\.{Digits2}?)?
+BasePrecisionNumber = {BaseNumber}((`{Number}?)|(``{Number}))
+ScientificNumber = {PrecisionNumber} "*^" {Digits}
+BaseScientificNumber = {BasePrecisionNumber} "*^" {Digits}
 
 Slot = "#" [0-9]*
 SlotSequence = "##" [0-9]*
@@ -49,10 +52,15 @@ Out = "%"+
 	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL; }
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 
-	{Literal}	  		{ return MathematicaElementTypes.LITERAL; }
+	{BaseScientificNumber}|
+	{BasePrecisionNumber}|
+	{BaseNumber}|
+	{ScientificNumber}|
+	{PrecisionNumber}|
+	{Number}  			{ return MathematicaElementTypes.NUMBER; }
 
 	"``"				{ return MathematicaElementTypes.ACCURACY; }
-
+    "[["				{ return MathematicaElementTypes.PART; }
 	"["					{ return MathematicaElementTypes.LEFT_BRACKET; }
 	"]"					{ return MathematicaElementTypes.RIGHT_BRACKET; }
 	"("					{ return MathematicaElementTypes.LEFT_PAR; }
@@ -61,7 +69,8 @@ Out = "%"+
 	"}"					{ return MathematicaElementTypes.RIGHT_BRACE; }
 	"@@@"				{ return MathematicaElementTypes.APPLY1; }
 	"@@"				{ return MathematicaElementTypes.APPLY; }
-	"@"					{ return MathematicaElementTypes.PREFIX; }
+	"@"					{ return MathematicaElementTypes.PREFIX_CALL; }
+	"//@"				{ return MathematicaElementTypes.MAP_ALL; }
 	"/@"				{ return MathematicaElementTypes.MAP; }
 
 	{Out}				{ return MathematicaElementTypes.OUT; }
@@ -107,12 +116,13 @@ Out = "%"+
 	"**"				{ return MathematicaElementTypes.NON_COMMUTATIVE_MULTIPLY; }
 	"*"					{ return MathematicaElementTypes.TIMES; }
 	"/"					{ return MathematicaElementTypes.DIVIDE; }
+	"^"					{ return MathematicaElementTypes.POWER; }
 
 
 
     "<>"				{ return MathematicaElementTypes.STRING_JOIN; }
     "~~"				{ return MathematicaElementTypes.STRING_EXPRESSION; }
-    "~"					{ return MathematicaElementTypes.INFIX; }
+    "~"					{ return MathematicaElementTypes.INFIX_CALL; }
 
     "`"					{ return MathematicaElementTypes.BACK_TICK; }
 
@@ -140,6 +150,8 @@ Out = "%"+
     "&&"				{ return MathematicaElementTypes.AND; }
     "&"					{ return MathematicaElementTypes.FUNCTION; }
 
+    "'"					{ return MathematicaElementTypes.DERIVATIVE; }
+
 
 
 	.       			{ return MathematicaElementTypes.BAD_CHARACTER; }
@@ -154,7 +166,7 @@ Out = "%"+
 <IN_COMMENT> {
 	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
 	"*)"				{ yybegin(YYINITIAL); return MathematicaElementTypes.COMMENT; }
-	"*"					{ return MathematicaElementTypes.COMMENT; }
+	[\*\)\(]			{ return MathematicaElementTypes.COMMENT; }
 	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
 
 }

@@ -9,5 +9,5 @@ import com.intellij.psi.PsiElement;
  * Time: 11:46 AM
  * Purpose:
  */
-public interface MathematicaElement extends PsiElement {
+public interface Element extends PsiElement {
 }

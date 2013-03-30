@@ -11,7 +11,7 @@ import javax.swing.*;
  * Time: 10:18 PM
  * Purpose:
  */
-public class MathematicaIcons {
+public interface MathematicaIcons {
 
-    public static final Icon FILE_ICON = IconLoader.findIcon("/icons/mma_file.png");
+    Icon FILE_ICON = IconLoader.getIcon("/mma_file.png");
 }

@@ -12,16 +12,13 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
 import org.ipcu.mathematicaPlugin.lexer.MathematicaLexer;
-import org.ipcu.mathematicaPlugin.psi.impl.MathematicaExpressionImpl;
+import org.ipcu.mathematicaPlugin.psi.impl.ExpressionImpl;
 import org.ipcu.mathematicaPlugin.psi.impl.MathematicaPsiFileImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 1/3/13
- * Time: 11:20 AM
- * Purpose:
+ * @author patrick (3/27/13)
+ *
  */
 public class MathematicaParserDefinition implements ParserDefinition {
     @NotNull
@@ -61,7 +58,7 @@ public class MathematicaParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public PsiElement createElement(ASTNode node) {
-        return new MathematicaExpressionImpl(node);
+        return MathematicaElementTypes.Factory.create(node);
     }
 
     @Override

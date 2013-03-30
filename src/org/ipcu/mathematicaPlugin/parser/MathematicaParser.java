@@ -4,133 +4,151 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
+import org.ipcu.mathematicaPlugin.parser.parselets.InfixParselet;
+import org.ipcu.mathematicaPlugin.parser.parselets.PrefixParselet;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.lang.PsiBuilder.Marker;
 
-import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.*;
-import static org.ipcu.mathematicaPlugin.parser.MathematicaParserUtil.*;
+import static org.ipcu.mathematicaPlugin.parser.ParseletProvider.getInfixParselet;
+import static org.ipcu.mathematicaPlugin.parser.ParseletProvider.getPrefixParselet;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 1/3/13
- * Time: 12:17 PM
- * Purpose:
+ *
+ * @author patrick (3/27/13)
  */
-public class MathematicaParser  implements PsiParser{
+public class MathematicaParser  implements PsiParser {
+
+    private PsiBuilder builder = null;
 
     @NotNull
     @Override
     public ASTNode parse(IElementType root, PsiBuilder builder) {
 
-        final PsiBuilder.Marker rootMarker = builder.mark();
+        boolean runthrough = false;
+        int iter = 100;
 
+        final PsiBuilder.Marker rootMarker = builder.mark();
+        this.builder = builder;
         while (!builder.eof()) {
-  //          parse(builder);
-            builder.advanceLexer();
+
+
+            if (!runthrough) {
+                Result expr = parseExpression();
+                if (!expr.parsed()) {
+                    builder.error("Errors in the preceeding expression.");
+                    builder.advanceLexer();
+                }
+            } else {
+                builder.advanceLexer();
+            }
+
         }
         rootMarker.done(root);
 
         return builder.getTreeBuilt();
     }
 
-    private void parse(PsiBuilder builder) {
-        while(!builder.eof()) {
-            if (parsePart(builder)) continue;
-            if (parseFunction(builder)) continue;
-            if (parseGeneralExpression(builder)) continue;
+    public Result parseExpression() {
+        return parseExpression(0);
+    }
+
+
+    public Result parseExpression(int precedence) {
+        if (builder.eof()) return notParsed();
+        IElementType token = builder.getTokenType();
+
+        PrefixParselet prefix = getPrefixParselet(token);
+
+        if (prefix == null) return notParsed();
+
+
+        Result left = prefix.parse(this);
+
+        while (left.parsed() && precedence < getPrecedence(builder)) {
+            token = builder.getTokenType();
+
+            InfixParselet infix = getInfixParselet(token);
+            if (infix == null) return notParsed();
+            left = infix.parse(this, left);
+        }
+        return left;
+    }
+
+    private int getPrecedence(PsiBuilder builder) {
+        IElementType token = builder.getTokenType();
+        InfixParselet parser = getInfixParselet(token);
+        if (parser != null) {
+            return parser.getPrecedence();
+        }
+        return 0;
+
+    }
+
+    public PsiBuilder getBuilder() {
+        return builder;
+    }
+
+
+    public PsiBuilder.Marker mark() {
+        return builder.mark();
+    }
+
+    public IElementType getTokenType() {
+        return builder.getTokenType();
+    }
+
+    public Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
+        return new Result(mark,token,parsedQ);
+    }
+
+    /**
+     * This is the return value of a parser when errors happened.
+     * @return
+     */
+    public Result notParsed() {
+        return new Result(null,null,false);
+    }
+
+    public void advanceLexer() {
+        builder.advanceLexer();
+    }
+
+    public boolean testToken(IElementType token) {
+        return !builder.eof() && builder.getTokenType() == token;
+    }
+
+    /**
+     * For the Pratt parser we need the left side which was already parsed.
+     * An instance of this will provide all necessary information required to
+     * know what expression was parsed on the left of an infix operator.
+     */
+    public class Result {
+
+        private PsiBuilder.Marker leftMark = null;
+        private IElementType leftToken = null;
+        private boolean result = false;
+
+        public Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean result) {
+            this.leftMark = leftMark;
+            this.leftToken = leftToken;
+            this.result = result;
+        }
+
+
+
+        public PsiBuilder.Marker getMark() {
+            return leftMark;
+        }
+
+        public IElementType getToken() {
+            return leftToken;
+        }
+
+        public boolean parsed() {
+            return result;
+        }
+
+        public boolean valid() {
+            return leftMark!=null && leftToken!=null;
         }
     }
-
-    private boolean parseExpression(PsiBuilder builder) {
-        boolean result = parseParenthesizedExpr(builder);
-        if (!result) result = parsePart(builder);
-        if (!result) result = parseFunction(builder);
-        if (!result) result = parseGeneralExpression(builder);
-        return result;
-    }
-
-    private boolean parseParenthesizedExpr(PsiBuilder builder) {
-        boolean result = false;
-        if (builder.getTokenType() == LEFT_PAR) {
-            PsiBuilder.Marker mark = builder.mark();
-            builder.advanceLexer();
-            result = parseExpression(builder);
-            if (result && builder.getTokenType() == RIGHT_PAR) {
-                builder.advanceLexer();
-                mark.done(PARENTHESIZED_EXPRESSION);
-            } else {
-                mark.error("Expression or ) expected");
-            }
-        }
-        return result;
-    }
-
-    private boolean parsePart(PsiBuilder builder) {
-        boolean result;
-        PsiBuilder.Marker mark = builder.mark();
-        result = parseExpression(builder);
-        if (result && builder.getTokenType() == LEFT_BRACKET && builder.lookAhead(1) == LEFT_BRACKET) {
-            builder.advanceLexer();
-            builder.advanceLexer();
-            result = parseSequence(builder);
-            if (result && builder.getTokenType() == RIGHT_BRACKET && builder.lookAhead(1) == RIGHT_BRACKET) {
-                builder.advanceLexer();
-                builder.advanceLexer();
-                mark.done(PART_EXPRESSION);
-            }
-        }
-        if (!result) {
-            mark.rollbackTo();
-        }
-        return result;
-    }
-
-    private boolean parseFunction(PsiBuilder builder) {
-        boolean result = false;
-        PsiBuilder.Marker mark = builder.mark();
-        result = parseExpression(builder);
-        if (builder.getTokenType() == IDENTIFIER && builder.lookAhead(1) == LEFT_BRACKET) {
-            PsiBuilder.Marker functionMarker = builder.mark();
-            builder.advanceLexer();
-            builder.advanceLexer();
-            parseSequence(builder);
-
-            // match closing bracket
-            if (builder.lookAhead(1) == RIGHT_BRACKET) {
-                builder.advanceLexer();
-            } else builder.error("] expected.");
-            functionMarker.done(FUNCTION_EXPRESSION);
-            return true;
-        } else return false;
-    }
-
-
-    private boolean parseList(PsiBuilder builder) {
-        return false;
-
-    }
-
-    private boolean parseSequence(PsiBuilder builder) {
-        boolean correctArguments = true;
-        PsiBuilder.Marker sequenceMarker = builder.mark();
-        while (correctArguments) {
-            correctArguments = parseGeneralExpression(builder);
-            if (builder.lookAhead(1) == COMMA) {
-                builder.advanceLexer();
-            } else {
-                sequenceMarker.done(SEQUENCE_EXPRESSION);
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    private boolean parseGeneralExpression(PsiBuilder builder) {
-        return false;
-    }
-
-
-
 }

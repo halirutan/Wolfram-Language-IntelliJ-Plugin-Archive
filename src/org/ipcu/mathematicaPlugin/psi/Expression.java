@@ -1,5 +1,7 @@
 package org.ipcu.mathematicaPlugin.psi;
 
+import com.intellij.psi.PsiElement;
+
 /**
  * Created with IntelliJ IDEA.
  * User: patrick
@@ -7,5 +9,5 @@ package org.ipcu.mathematicaPlugin.psi;
  * Time: 11:41 AM
  * Purpose:
  */
-public interface MathematicaExpression {
+public interface Expression extends PsiElement {
 }
