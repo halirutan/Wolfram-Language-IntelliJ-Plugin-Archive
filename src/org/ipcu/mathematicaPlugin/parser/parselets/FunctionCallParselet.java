@@ -42,7 +42,7 @@ public class FunctionCallParselet implements InfixParselet {
             return parser.notParsed();
         }
         final PsiBuilder.Marker functionCallMarker = left.getMark().precede();
-        return EnclosedExpressionSequence.parse(parser, functionCallMarker,FUNCTION_CALL_EXPRESSION,LEFT_BRACKET,RIGHT_BRACKET,
+        return ParserUtil.parseEnclosedExpressionSequence(parser, functionCallMarker, FUNCTION_CALL_EXPRESSION, LEFT_BRACKET, RIGHT_BRACKET,
                 "']' expected");
     }
 

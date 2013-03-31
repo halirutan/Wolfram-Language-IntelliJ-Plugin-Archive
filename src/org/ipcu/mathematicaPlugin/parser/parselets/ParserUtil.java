@@ -27,11 +27,11 @@ import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.COMMA;
 /**
  * @author patrick (3/30/13)
  */
-public class EnclosedExpressionSequence {
+public class ParserUtil {
 
-    static MathematicaParser.Result parse(MathematicaParser parser, PsiBuilder.Marker markerToClose,
-                                   IElementType typeToCloseExpr, IElementType leftDel, IElementType rightDel,
-                                   String expectedCloseMessage) {
+    static MathematicaParser.Result parseEnclosedExpressionSequence(MathematicaParser parser, PsiBuilder.Marker markerToClose,
+                                                                    IElementType typeToCloseExpr, IElementType leftDel, IElementType rightDel,
+                                                                    String expectedCloseMessage) {
         MathematicaParser.Result result = parser.notParsed();
         boolean hasClosingBracked = false;
 
@@ -55,8 +55,8 @@ public class EnclosedExpressionSequence {
                 }
                 result = parser.parseExpression();
 
-                // if we couldn't parse the argument expression and the next token is neither a comma nor
-                // a closing bracket, then we are lost at this point and should not try further to parse something.
+                // if we couldn't parseEnclosedExpressionSequence the argument expression and the next token is neither a comma nor
+                // a closing bracket, then we are lost at this point and should not try further to parseEnclosedExpressionSequence something.
                 if (!result.parsed() && !(parser.testToken(COMMA) || parser.testToken(rightDel))) {
                     break;
                 }

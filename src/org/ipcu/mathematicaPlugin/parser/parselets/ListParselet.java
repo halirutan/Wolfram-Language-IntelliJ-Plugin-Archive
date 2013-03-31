@@ -19,7 +19,7 @@ public class ListParselet implements PrefixParselet {
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser) {
         final PsiBuilder.Marker listMarker = parser.mark();
-        return EnclosedExpressionSequence.parse(parser,
+        return ParserUtil.parseEnclosedExpressionSequence(parser,
                 listMarker, LIST_EXPRESSION, LEFT_BRACE, RIGHT_BRACE, "'}' expected");
     }
 }

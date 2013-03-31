@@ -37,31 +37,43 @@ public class MessageNameParselet implements InfixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
-//        final PsiBuilder.Marker left = parser.getLeftMark();
-//        final PsiBuilder.Marker messageNameMarker = left.precede();
-//        parser.advanceLexer();
-//        if (!parser.testToken(IDENTIFIER) || !parser.testToken(STRING_LITERAL)) {
-//            messageNameMarker.error("tag must be a symbol or a string in symbol::tag");
-//            return false;
-//        }
-//
-//        parser.advanceLexer();
-//        // if we have the rare form symbol::string1::string2
-//        if(parser.testToken(DOUBLE_COLON)) {
-//            parser.advanceLexer();
-//            if (!parser.testToken(IDENTIFIER) || !parser.testToken(STRING_LITERAL)) {
-//                messageNameMarker.error("lang must be a symbol or a string in symbol::tag::lang");
-//                return false;
-//            }
-//            parser.advanceLexer();
-//            messageNameMarker.done(MESSAGE_NAME_EXPRESSION);
-//        }
-//        return true;
+
+        if (left.valid() && left.getToken() != SYMBOL_EXPRESSION) {
+            final PsiBuilder.Marker mark = left.getMark();
+            final PsiBuilder.Marker newmark = mark.precede();
+            mark.drop();
+            newmark.error("Usage message expects Symbol");
+            left = parser.result(newmark, left.getToken(), left.parsed());
+        }
+
+        final PsiBuilder.Marker messageNameMarker = left.getMark().precede();
+        parser.advanceLexer();
+        MathematicaParser.Result result = parser.parseExpression(precedence);
+
+        if(result.parsed()) {
+            // Check whether we have a symbol or a string in usage message
+            if (result.getToken() != SYMBOL_EXPRESSION || result.getToken() != STRING_EXPRESSION) {
+                final PsiBuilder.Marker errMark = result.getMark().precede();
+                errMark.error("Usage message exprects Symbol or String");
+            }
+
+            // Check whether we have the form symbol::name::language
+            if (parser.testToken(DOUBLE_COLON)) {
+                parser.advanceLexer();
+                result = parser.parseExpression(precedence);
+                if (result.parsed() && (result.getToken() != SYMBOL_EXPRESSION || result.getToken() != STRING_EXPRESSION)) {
+                    final PsiBuilder.Marker errMark = result.getMark().precede();
+                    errMark.error("Usage message exprects Symbol or String");
+                }
+            }
+        }
+        messageNameMarker.done(MESSAGE_NAME_EXPRESSION);
+        return result;
+
     }
 
     @Override
     public int getPrecedence() {
-        return 0;
+        return precedence;
     }
 }
