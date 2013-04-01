@@ -24,12 +24,19 @@ import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
  * @author patrick (3/27/13)
  *
  */
-public class BlankParselet implements PrefixParselet {
-    public BlankParselet(int i) {
+public class BlankParselet implements InfixParselet {
+    final int precedence;
+    public BlankParselet(int precedence) {
+        this.precedence = precedence;
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) {
-        return parser.notParsed();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+        return null;
+    }
+
+    @Override
+    public int getPrecedence() {
+        return precedence;
     }
 }

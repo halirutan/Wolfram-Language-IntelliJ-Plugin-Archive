@@ -204,7 +204,7 @@ public interface MathematicaElementTypes {
                 return new LogicalOperationImpl(node);
             } else if (SAVE_LOAD.contains(type)) {
                 return new FileOperationImpl(node);
-            } else return new ElementImpl(node);
+            } else return new ExpressionImpl(node);
         }
     }
 

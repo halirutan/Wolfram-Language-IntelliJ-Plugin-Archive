@@ -172,13 +172,13 @@ public class ParseletProvider {
         prefix(MathematicaElementTypes.SLOT_SEQUENCE,	MathematicaElementTypes.SLOT_SEQUENCE,	 77); // ##n expressions
         prefix(MathematicaElementTypes.SLOT,	MathematicaElementTypes.SLOT,	 77); // ##n expressions
 
-        register(MathematicaElementTypes.BLANK,	MathematicaElementTypes.BLANK_EXPRESSION,	 new BlankParselet(76)); // Blank(_)
-        register(MathematicaElementTypes.BLANK_SEQUENCE,	MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION,	 new BlankSequenceParselet(76)); // BlankSequence(__)
-        register(MathematicaElementTypes.BLANK_NULL_SEQUENCE,	MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION,	 new BlankNullSequenceParselet(76)); // BlankNullSequence(___)
-        register(MathematicaElementTypes.BLANK,	MathematicaElementTypes.BLANK_EXPRESSION,	 new BlankParselet(76)); // Blank(_)
-        register(MathematicaElementTypes.BLANK_SEQUENCE,	MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION,	 new BlankSequenceParselet(76)); // BlankSequence(__)
-        register(MathematicaElementTypes.BLANK_NULL_SEQUENCE,	MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION,	 new BlankNullSequenceParselet(76)); // BlankNullSequence(___)
-        register(MathematicaElementTypes.OPTIONAL,	MathematicaElementTypes.OPTIONAL_EXPRESSION,	 new PatternParselet(76)); // Optional(_.)
+        prefix(MathematicaElementTypes.BLANK,	MathematicaElementTypes.BLANK_EXPRESSION,	 76); // Blank(_)
+        infixLeft(MathematicaElementTypes.BLANK,	MathematicaElementTypes.BLANK_EXPRESSION, 76); // Blank(_)
+        prefix(MathematicaElementTypes.BLANK_SEQUENCE,	MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION,	 76); // BlankSequence(__)
+        infixLeft(MathematicaElementTypes.BLANK_SEQUENCE,	MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION,	 76); // BlankSequence(__)
+        prefix(MathematicaElementTypes.BLANK_NULL_SEQUENCE,	MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION,	 76); // BlankNullSequence(___)
+        infixLeft(MathematicaElementTypes.BLANK_NULL_SEQUENCE,	MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION,	 76); // BlankNullSequence(___)
+        postfix(MathematicaElementTypes.OPTIONAL,	MathematicaElementTypes.OPTIONAL_EXPRESSION,	 76); // Optional(_.)
 
         prefix(MathematicaElementTypes.GET,	MathematicaElementTypes.GET_PREFIX,	74); // Get(<<)
 
@@ -279,5 +279,6 @@ public class ParseletProvider {
         infixLeft(MathematicaElementTypes.PUT_APPEND,	MathematicaElementTypes.PUT_APPEND_EXPRESSION,	4); // PutAppend(>>>)
 
         infixLeft(MathematicaElementTypes.SEMICOLON,	MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION,	 2); // CompoundExpression(;)
+        postfix(MathematicaElementTypes.SEMICOLON,	MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION,	 2); // CompoundExpression(;)
     }
 }

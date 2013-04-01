@@ -40,12 +40,13 @@ public class InfixOperatorParselet implements InfixParselet {
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
         if (!left.valid()) return parser.notParsed();
         final PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
+        final IElementType token = ParseletProvider.getInfixPsiElement(this);
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence - (isRight ? 1 : 0));
         if (!result.parsed()) {
-            infixOperationMarker.error("More input expected.");
+            parser.getBuilder().error("More input expected.");
+            infixOperationMarker.done(token);
         } else {
-            final IElementType token = ParseletProvider.getInfixPsiElement(this);
             infixOperationMarker.done(token);
             result = parser.result(infixOperationMarker, token, true);
         }
