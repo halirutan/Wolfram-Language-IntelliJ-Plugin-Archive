@@ -49,7 +49,7 @@ Out = "%"+
 <YYINITIAL> {
 	"(*"				{ yybegin(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
 	{WhiteSpace}+ 		{ yybegin(YYINITIAL); return MathematicaElementTypes.WHITE_SPACE; }
-	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL; }
+	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 
 	{BaseScientificNumber}|
@@ -60,7 +60,7 @@ Out = "%"+
 	{Number}  			{ return MathematicaElementTypes.NUMBER; }
 
 	"``"				{ return MathematicaElementTypes.ACCURACY; }
-    "[["				{ return MathematicaElementTypes.PART; }
+    "[["				{ return MathematicaElementTypes.PART_BEGIN; }
 	"["					{ return MathematicaElementTypes.LEFT_BRACKET; }
 	"]"					{ return MathematicaElementTypes.RIGHT_BRACKET; }
 	"("					{ return MathematicaElementTypes.LEFT_PAR; }
@@ -159,7 +159,7 @@ Out = "%"+
 
 <IN_STRING> {
 	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
-	\"					{ yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL; }
+	\"					{ yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
 
 }
 

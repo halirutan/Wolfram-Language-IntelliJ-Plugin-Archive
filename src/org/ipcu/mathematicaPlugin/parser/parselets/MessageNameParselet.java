@@ -37,7 +37,6 @@ public class MessageNameParselet implements InfixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-
         if (left.valid() && left.getToken() != SYMBOL_EXPRESSION) {
             final PsiBuilder.Marker mark = left.getMark();
             final PsiBuilder.Marker newmark = mark.precede();
@@ -52,9 +51,9 @@ public class MessageNameParselet implements InfixParselet {
 
         if(result.parsed()) {
             // Check whether we have a symbol or a string in usage message
-            if (result.getToken() != SYMBOL_EXPRESSION || result.getToken() != STRING_EXPRESSION) {
+            if (result.getToken() != SYMBOL_EXPRESSION && result.getToken() != STRING_EXPRESSION) {
                 final PsiBuilder.Marker errMark = result.getMark().precede();
-                errMark.error("Usage message exprects Symbol or String");
+                errMark.error("Usage message expects Symbol or String");
             }
 
             // Check whether we have the form symbol::name::language
@@ -66,9 +65,11 @@ public class MessageNameParselet implements InfixParselet {
                     errMark.error("Usage message exprects Symbol or String");
                 }
             }
+        } else {
+            parser.getBuilder().error("Symbol or String expected as Name in Symbol::Name");
         }
         messageNameMarker.done(MESSAGE_NAME_EXPRESSION);
-        return result;
+        return parser.result(messageNameMarker,MESSAGE_NAME_EXPRESSION,result.parsed());
 
     }
 

@@ -19,39 +19,29 @@
 package org.ipcu.mathematicaPlugin.parser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
-import org.ipcu.mathematicaPlugin.parser.ParseletProvider;
+
+import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.BLANK_EXPRESSION;
 
 /**
  * @author patrick (3/27/13)
  *
  */
-public class PatternParselet implements InfixParselet {
-    private final int precedence;
-
-    public PatternParselet(int precedence) {
+public class PrefixBlankParselet implements PrefixParselet {
+    final int precedence;
+    public PrefixBlankParselet(int precedence) {
         this.precedence = precedence;
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
-//        final PsiBuilder.Marker left = parser.getLeftMark();
-//        final PsiBuilder.Marker infixOperationMarker = left.precede();
-//        parser.advanceLexer();
-//        boolean result = parser.parseExpression(precedence - (isRight ? 1 : 0));
-//        if (result == false) {
-//            infixOperationMarker.error("More input expected.");
-//        } else {
-//            infixOperationMarker.done(ParseletProvider.getInfixPsiElement(this));
-//            parser.setLeftMark(infixOperationMarker);
-//        }
-//        return result;
-
+    public MathematicaParser.Result parse(MathematicaParser parser) {
+        final PsiBuilder.Marker blankMark = parser.mark();
+        final IElementType token = BLANK_EXPRESSION;
+        parser.advanceLexer();
+        MathematicaParser.Result result = parser.parseExpression(precedence);
+        blankMark.done(token);
+        return parser.result(blankMark, token, result.valid() ? result.parsed() : true);
     }
 
-    @Override
-    public int getPrecedence() {
-        return 0;
-    }
 }

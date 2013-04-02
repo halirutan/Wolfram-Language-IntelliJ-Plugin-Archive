@@ -18,9 +18,18 @@
 
 package org.ipcu.mathematicaPlugin.parser.parselets;
 
+import com.intellij.lang.PsiBuilder;
+import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
 import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
 
+import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.*;
+
 /**
+ * This parses infix calls of functions which are usually in the form f[a,b]. In Mathematica you can write this as
+ * a~f~b. The difference to other infix operators is that it always has to be a pair of ~. Therefore, the first
+ * ~ in a~f~b triggers the call of {@link InfixCallParselet#parse} which needs to ensure that we find a second
+ * ~ and the expression b.
+ *
  * @author patrick (3/27/13)
  *
  */
@@ -34,7 +43,25 @@ public class InfixCallParselet implements InfixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
+        final PsiBuilder.Marker infixCall = left.getMark().precede();
+        parser.advanceLexer();
+        final MathematicaParser.Result operator = parser.parseExpression(precedence);
+
+        if (parser.testToken(INFIX_CALL)) {
+            parser.advanceLexer();
+            final MathematicaParser.Result operand2 = parser.parseExpression(precedence);
+            infixCall.done(INFIX_CALL_EXPRESSION);
+            return parser.result(infixCall, INFIX_CALL_EXPRESSION, operator.parsed() && operand2.parsed());
+        } else {
+            // if the operator was not parsed successfully we will not display a parsing error
+            if (operator.parsed()) {
+                parser.getBuilder().error("'~' expected");
+            } else {
+                parser.getBuilder().error("Operator expected");
+            }
+            infixCall.done(INFIX_CALL_EXPRESSION);
+            return parser.result(infixCall, INFIX_CALL_EXPRESSION, false);
+        }
     }
 
     @Override

@@ -39,8 +39,9 @@ public class PrefixOperatorParselet implements PrefixParselet {
         final PsiBuilder.Marker mark = parser.getBuilder().mark();
         parser.advanceLexer();
         final IElementType token = ParseletProvider.getPrefixPsiElement(this);
+        final MathematicaParser.Result result = parser.parseExpression(precedence);
         mark.done(token);
-        return parser.result(mark,token, true);
+        return parser.result(mark,token, result.parsed());
 
     }
 }

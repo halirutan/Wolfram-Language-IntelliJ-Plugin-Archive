@@ -20,7 +20,8 @@ import org.ipcu.mathematicaPlugin.psi.impl.*;
  * Pratt parser where every token gets its own small parser (called parselet) most lexer token types have one or more
  * corresponding parser element types which are then used as nodes in the AST tree.
  * </p>
- * @author  patrick (12/27/12)
+ *
+ * @author patrick (12/27/12)
  */
 public interface MathematicaElementTypes {
 
@@ -31,6 +32,8 @@ public interface MathematicaElementTypes {
     IElementType COMMENT = new MathematicaElementType("COMMENT");
 
     IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
+    IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");
+    IElementType STRING_LITERAL_END = new MathematicaElementType("STRING_LITERAL_END");
     IElementType IDENTIFIER = new MathematicaElementType("IDENTIFIER");
 
     IElementType NUMBER = new MathematicaElementType("NUMBER");
@@ -40,7 +43,7 @@ public interface MathematicaElementTypes {
     IElementType LEFT_BRACE = new MathematicaElementType("LEFT_BRACE");
     IElementType RIGHT_BRACE = new MathematicaElementType("RIGHT_BRACE");
     IElementType LEFT_BRACKET = new MathematicaElementType("LEFT_BRACKET");
-    IElementType PART = new MathematicaElementType("PART");
+    IElementType PART_BEGIN = new MathematicaElementType("PART_BEGIN");
     IElementType RIGHT_BRACKET = new MathematicaElementType("RIGHT_BRACKET");
 
     IElementType ACCURACY = new MathematicaElementType("ACCURACY");
@@ -68,7 +71,7 @@ public interface MathematicaElementTypes {
     IElementType INCREMENT = new MathematicaElementType("INCREMENT");
     IElementType DECREMENT = new MathematicaElementType("DECREMENT");
 
-    
+
     IElementType SAME_Q = new MathematicaElementType("SAME_Q");
     IElementType UNSAME_Q = new MathematicaElementType("UNSAME_Q");
     IElementType EQUAL = new MathematicaElementType("EQUAL");
@@ -103,7 +106,7 @@ public interface MathematicaElementTypes {
     IElementType OUT = new MathematicaElementType("OUT");
     IElementType STRING_JOIN = new MathematicaElementType("STRING_JOIN");
     IElementType POINT = new MathematicaElementType("POINT");
-    
+
     IElementType AND = new MathematicaElementType("AND");
     IElementType OR = new MathematicaElementType("OR");
     IElementType ALTERNATIVE = new MathematicaElementType("ALTERNATIVE");
@@ -113,18 +116,18 @@ public interface MathematicaElementTypes {
 
     IElementType EXCLAMATION_MARK = new MathematicaElementType("EXCLAMATION_MARK");
     IElementType QUESTION_MARK = new MathematicaElementType("QUESTION_MARK");
-    
+
     IElementType SLOT = new MathematicaElementType("SLOT");
     IElementType SLOT_SEQUENCE = new MathematicaElementType("SLOT_SEQUENCE");
     IElementType FUNCTION = new MathematicaElementType("FUNCTION");
-    
+
     IElementType BACK_TICK = new MathematicaElementType("BACK_TICK");
     IElementType INFIX_CALL = new MathematicaElementType("INFIX_CALL");
     IElementType PREFIX_CALL = new MathematicaElementType("PREFIX_CALL");
     IElementType GET = new MathematicaElementType("GET");
     IElementType PUT = new MathematicaElementType("PUT");
     IElementType PUT_APPEND = new MathematicaElementType("PUT_APPEND");
-    
+
 
     /**
      * The following {@link TokenSet}'s are used for the basic highlighter.
@@ -166,8 +169,8 @@ public interface MathematicaElementTypes {
     );
 
     TokenSet BRACES = TokenSet.create(
-            LEFT_BRACE,LEFT_BRACKET,LEFT_PAR,
-            RIGHT_BRACE,RIGHT_BRACKET,RIGHT_PAR
+            LEFT_BRACE, LEFT_BRACKET, LEFT_PAR,
+            RIGHT_BRACE, RIGHT_BRACKET, RIGHT_PAR
     );
 
     class Factory {
@@ -178,10 +181,18 @@ public interface MathematicaElementTypes {
                 return new SymbolImpl(node);
             } else if (type == NUMBER_EXPRESSION) {
                 return new NumberImpl(node);
+            } else if (type == BLANK_EXPRESSION) {
+                return new PatternOperationImpl(node);
+            } else if (type == BLANK_SEQUENCE_EXPRESSION) {
+                return new PatternOperationImpl(node);
+            } else if (type == BLANK_NULL_SEQUENCE_EXPRESSION) {
+                return new PatternOperationImpl(node);
             } else if (type == STRING_EXPRESSION) {
                 return new StringExpressionImpl(node);
             } else if (type == GROUP_EXPRESSION) {
                 return new GroupImpl(node);
+            } else if (type == LIST_EXPRESSION) {
+                return new ListImpl(node);
             } else if (type == MESSAGE_NAME_EXPRESSION) {
                 return new MessageNameImpl(node);
             } else if (type == FUNCTION_CALL_EXPRESSION) {
@@ -204,6 +215,8 @@ public interface MathematicaElementTypes {
                 return new LogicalOperationImpl(node);
             } else if (SAVE_LOAD.contains(type)) {
                 return new FileOperationImpl(node);
+            } else if (type == COMPOUND_EXPRESSION_EXPRESSION) {
+                return new CompoundExpressionImpl(node);
             } else return new ExpressionImpl(node);
         }
     }
@@ -338,14 +351,14 @@ public interface MathematicaElementTypes {
     TokenSet LOGICAL_OPERATIONS = TokenSet.create(AND_EXPRESSION, OR_EXPRESSION, NOT_PREFIX);
 
     TokenSet ASSIGNMENT_OPERATIONS = TokenSet.create(SET_DELAYED_EXPRESSION, SET_EXPRESSION, UP_SET_EXPRESSION,
-            UP_SET_DELAYED_EXPRESSION, TAG_SET_EXPRESSION, UNSET_EXPRESSION );
+            UP_SET_DELAYED_EXPRESSION, TAG_SET_EXPRESSION, UNSET_EXPRESSION);
 
     TokenSet COMPARISON_EXPRESSIONS = TokenSet.create(EQUAL_EXPRESSION, UNEQUAL_EXPRESSION,
             SAME_Q_EXPRESSION, UNSAME_Q_EXPRESSION,
             GREATER_EQUAL_EXPRESSION, GREATER_EXPRESSION, LESS_EQUAL_EXPRESSION, LESS_EXPRESSION);
 
     TokenSet FUNCTION_APPLICATION = TokenSet.create(MAP_ALL_EXPRESSION, MAP_EXPRESSION, POSTFIX_EXPRESSION,
-            PREFIX_CALL_EXPRESSION, APPLY1_EXPRESSION, APPLY_EXPRESSION, INFIX_CALL_EXPRESSION );
+            PREFIX_CALL_EXPRESSION, APPLY1_EXPRESSION, APPLY_EXPRESSION, INFIX_CALL_EXPRESSION);
 
     TokenSet RULES_REPLACEMENT = TokenSet.create(RULE_DELAYED_EXPRESSION, RULE_EXPRESSION, REPLACE_ALL_EXPRESSION,
             REPLACE_REPEATED_EXPRESSION);

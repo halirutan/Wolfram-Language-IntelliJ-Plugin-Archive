@@ -18,18 +18,34 @@
 
 package org.ipcu.mathematicaPlugin.parser.parselets;
 
+import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
 import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
+
+import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
 
 /**
  * @author patrick (3/27/13)
  *
  */
-public class BlankNullSequenceParselet implements PrefixParselet {
-    public BlankNullSequenceParselet(int i) {
+public class BlankNullSequenceParselet implements InfixParselet {
+    final int precedence;
+    public BlankNullSequenceParselet(int precedence) {
+        this.precedence=precedence;
+    }
+
+    public int getPrecedence() {
+        return precedence;
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) {
-        return parser.notParsed();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+        if (!left.valid()) return parser.notParsed();
+        final PsiBuilder.Marker blankMark = left.getMark().precede();
+        final IElementType token = BLANK_NULL_SEQUENCE_EXPRESSION;
+        parser.advanceLexer();
+        MathematicaParser.Result result = parser.parseExpression(precedence);
+        blankMark.done(token);
+        return parser.result(blankMark, token, result.valid() ? result.parsed() : true);
     }
 }

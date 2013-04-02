@@ -1,14 +1,8 @@
 package org.ipcu.mathematicaPlugin.psi.impl;
 
-import com.intellij.extapi.psi.ASTDelegatePsiElement;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import org.ipcu.mathematicaPlugin.MathematicaLanguage;
 import org.ipcu.mathematicaPlugin.psi.Expression;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,42 +12,21 @@ import org.jetbrains.annotations.NotNull;
  * Time: 11:42 AM
  * Purpose:
  */
-public class ExpressionImpl extends ASTDelegatePsiElement implements Expression {
-    private final ASTNode node;
-
-    @NonNls
-    private static final String IMPL = "Impl";
+public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
+    final ASTNode myNode;
 
     public ExpressionImpl(@NotNull ASTNode node) {
-        super();
-        this.node = node;
-    }
-
-    @NotNull
-    public Language getLanguage() {
-        return MathematicaLanguage.INSTANCE;
+        super(node);
+        myNode = node;
     }
 
     public String toString() {
-        String classname = getClass().getName();
-        if (classname.matches("PsiElement")) {
-            classname =  node.getElementType().toString();
+        String classname = getClass().getSimpleName();
+        final String codeText = myNode.getText();
+        String shortenedCode = codeText.length() > 20 ? codeText.substring(0, 20) + ".." : codeText;
+        if (classname.endsWith("Impl")) {
+            classname = classname.substring(0, classname.length() - "Impl".length());
         }
-        else if (classname.endsWith(IMPL)) {
-            classname = classname.substring(0, classname.length() - IMPL.length());
-        } else
-            classname = classname.substring(classname.lastIndexOf(".") + 1);
-        return classname;
-    }
-
-    @Override
-    public PsiElement getParent() {
-        return SharedImplUtil.getParent(getNode());
-    }
-
-    @NotNull
-    @Override
-    public ASTNode getNode() {
-        return node;
+        return classname + " -> \"" + shortenedCode + "\"";
     }
 }

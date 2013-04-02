@@ -21,14 +21,35 @@ package org.ipcu.mathematicaPlugin.parser.parselets;
 import com.intellij.lang.PsiBuilder;
 import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
 
-import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.SYMBOL_EXPRESSION;
+import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.*;
 
 /**
  * @author patrick (3/27/13)
  *
  */
-public class StringParselet extends AtomParselet {
+public class StringParselet implements PrefixParselet {
+
+    final int precedence;
+
     public StringParselet(int precedence) {
-        super(precedence);
+        this.precedence = precedence;
+    }
+
+    @Override
+    public MathematicaParser.Result parse(MathematicaParser parser) {
+        final PsiBuilder.Marker stringMark = parser.mark();
+        boolean parsedQ = true;
+        parser.advanceLexer();
+        while (parser.testToken(STRING_LITERAL)) {
+            parser.advanceLexer();
+        }
+        if (!parser.testToken(STRING_LITERAL_END)) {
+            parser.getBuilder().error("\" expected");
+            parsedQ = false;
+        } else {
+            parser.advanceLexer();
+        }
+        stringMark.done(STRING_EXPRESSION);
+        return parser.result(stringMark, STRING_EXPRESSION, parsedQ);
     }
 }

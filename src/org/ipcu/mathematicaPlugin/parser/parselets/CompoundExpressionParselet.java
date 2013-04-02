@@ -18,23 +18,49 @@
 
 package org.ipcu.mathematicaPlugin.parser.parselets;
 
+import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
+import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
 import org.ipcu.mathematicaPlugin.parser.MathematicaParser;
+import org.ipcu.mathematicaPlugin.parser.ParseletProvider;
+
+import static org.ipcu.mathematicaPlugin.MathematicaElementTypes.*;
 
 /**
  * @author patrick (3/27/13)
  *
  */
 public class CompoundExpressionParselet implements InfixParselet {
-    public CompoundExpressionParselet(int i) {
+    final int precedence;
+
+    public CompoundExpressionParselet(int precedence) {
+        this.precedence = precedence;
     }
 
     @Override
     public int getPrecedence() {
-        return 0;
+        return precedence;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
+        if (!left.valid()) return parser.notParsed();
+        final PsiBuilder.Marker compoundExprMark = left.getMark().precede();
+        final IElementType token = COMPOUND_EXPRESSION_EXPRESSION;
+        parser.advanceLexer();
+
+        boolean ok = true;
+
+        while(true){
+            MathematicaParser.Result result = parser.parseExpression(precedence);
+            if (!result.valid()) break;
+            ok &= result.parsed();
+            if(parser.testToken(SEMICOLON)) parser.advanceLexer();
+            else break;
+        }
+
+        compoundExprMark.done(token);
+        return parser.result(compoundExprMark, token, ok);
+
     }
 }

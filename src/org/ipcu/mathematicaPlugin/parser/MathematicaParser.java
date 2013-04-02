@@ -28,6 +28,7 @@ public class MathematicaParser  implements PsiParser {
 
         final PsiBuilder.Marker rootMarker = builder.mark();
         this.builder = builder;
+        builder.setDebugMode(true);
         while (!builder.eof()) {
 
 
@@ -114,6 +115,10 @@ public class MathematicaParser  implements PsiParser {
 
     public boolean testToken(IElementType token) {
         return !builder.eof() && builder.getTokenType() == token;
+    }
+
+    public boolean testToken(IElementType token1, IElementType token2) {
+        return builder.lookAhead(0) == token1 && builder.lookAhead(1) == token2;
     }
 
     /**
