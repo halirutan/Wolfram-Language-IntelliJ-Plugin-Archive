@@ -1,25 +1,43 @@
 <idea-plugin version="2">
-  <id>org.ipcu.mathematicaPlugin</id>
-  <name>Mathematica IDEA Language Plugin</name>
-  <category>Custom Language</category>
-  <version>0.0.1</version>
-  <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.trm.uni-leipzig.de">YourCompany</vendor>
-  <description><![CDATA[
+    <id>org.ipcu.mathematicaPlugin</id>
+    <name>Mathematica IDEA Language Plugin</name>
+    <category>Custom Language</category>
+    <version>0.0.1</version>
+    <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.trm.uni-leipzig.de">YourCompany</vendor>
+    <description><![CDATA[
       Enter short description for your plugin here.<br>
       <small>most HTML tags may be used</small>
       ]]></description>
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       Add change notes here.<br>
       <small>most HTML tags may be used</small>
       ]]>
-  </change-notes>
+    </change-notes>
 
-  <extensions defaultExtensionNs="com.intellij">
-      <fileTypeFactory implementation="org.ipcu.mathematicaPlugin.MathematicaFileTypeFactory"/>
-      <lang.parserDefinition language="Mathematica"
-                             implementationClass="org.ipcu.mathematicaPlugin.parser.MathematicaParserDefinition"/>
 
-      <lang.commenter language="Mathematica" implementationClass="org.ipcu.mathematicaPlugin.MathematicaCommenter"/>
-      <!--<lang.syntaxHighlighterFactory implementationClass="org.ipcu.mathematicaPlugin.fileTypes.MathematicaSyntaxHighlighter" key="Mathematica"/>-->
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
+        <lang.parserDefinition language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
+
+        <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaCommenter"/>
+        <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaBraceMatcher"/>
+        <completion.contributor language="Mathematica"
+                                implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionContributor"/>
+        <completion.confidence language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
+        <typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler" id="MathematicaBinary"/>
+        <lang.syntaxHighlighterFactory key="Mathematica"
+                implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighterFactory"/>
+        <lang.documentationProvider language="Mathematica"
+                                    implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+        <colorSettingsPage
+                implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaColorSettingsPage"/>
+
+    </extensions>
+    <application-components>
+        <component>
+            <implementation-class>de.halirutan.mathematica.MathematicaApplication</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>

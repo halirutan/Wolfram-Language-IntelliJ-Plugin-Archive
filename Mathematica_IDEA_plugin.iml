@@ -8,10 +8,11 @@
       <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/resources/icons" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources/codeInsight" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/resources/usages" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="JLink" level="application" />
   </component>
 </module>
 
