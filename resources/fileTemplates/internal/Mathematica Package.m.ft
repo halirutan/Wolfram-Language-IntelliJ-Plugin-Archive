@@ -1,0 +1,14 @@
+BeginPackage["${NAME}"];
+
+
+
+(****************   Private`    *******************)
+
+Begin["`Private`"];
+
+
+End[];   (*   Private   *)
+
+
+EndPackage[];
+

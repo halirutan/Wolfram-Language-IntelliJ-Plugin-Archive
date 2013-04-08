@@ -16,6 +16,10 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <internalFileTemplate name="Mathematica Package"/>
+
+
         <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
         <lang.parserDefinition language="Mathematica"
                                implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
@@ -34,10 +38,21 @@
         <colorSettingsPage
                 implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaColorSettingsPage"/>
 
+        <moduleType id="MATHEMATICA_MODULE"
+                    implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
+
     </extensions>
     <application-components>
         <component>
             <implementation-class>de.halirutan.mathematica.MathematicaApplication</implementation-class>
         </component>
     </application-components>
+
+    <actions>
+        <action id="Mathematica.NewMathematicaFile"
+                class="de.halirutan.mathematica.actions.CreateMathematicaFile" text="Mathematica File" description="Create New Mathematica File">
+                <add-to-group  group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+
+        </action>
+    </actions>
 </idea-plugin>

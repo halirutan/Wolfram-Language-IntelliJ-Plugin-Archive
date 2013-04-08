@@ -18,8 +18,23 @@
 
 package de.halirutan.mathematica.codeInsight.editor;
 
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.openapi.module.ModuleType;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.roots.ModifiableRootModel;
+import org.jetbrains.jps.builders.java.JavaModuleBuildTargetType;
+
 /**
  * @author patrick (4/8/13)
  */
-public class MathematicaModuleBuilder {
+public class MathematicaModuleBuilder extends ModuleBuilder {
+    @Override
+    public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
+
+    }
+
+    @Override
+    public ModuleType getModuleType() {
+        return MathematicaModuleType.getInstance();
+    }
 }
