@@ -31,6 +31,7 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class GroupParselet implements PrefixParselet {
     private final int precendence;
+
     public GroupParselet(int precedence) {
         this.precendence = precedence;
     }
@@ -73,6 +74,11 @@ public class GroupParselet implements PrefixParselet {
             }
         }
         return result;
+    }
+
+
+    public int getPrecendence() {
+        return precendence;
     }
 
 }

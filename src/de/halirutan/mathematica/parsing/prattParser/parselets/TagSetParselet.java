@@ -39,6 +39,6 @@ public class TagSetParselet implements InfixParselet {
 
     @Override
     public int getPrecedence() {
-        return 0;
+        return precedence;
     }
 }

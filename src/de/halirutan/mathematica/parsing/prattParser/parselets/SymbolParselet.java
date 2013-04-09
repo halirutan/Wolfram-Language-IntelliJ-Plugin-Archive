@@ -41,4 +41,8 @@ public class SymbolParselet implements PrefixParselet {
     public SymbolParselet(int precedence) {
         this.precedence = precedence;
     }
+
+    public int getPrecedence() {
+        return precedence;
+    }
 }

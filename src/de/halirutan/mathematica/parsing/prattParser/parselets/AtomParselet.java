@@ -42,4 +42,8 @@ public class AtomParselet implements PrefixParselet {
     public AtomParselet(int precedence) {
         this.precedence = precedence;
     }
+
+    public int getPrecedence() {
+        return precedence;
+    }
 }
