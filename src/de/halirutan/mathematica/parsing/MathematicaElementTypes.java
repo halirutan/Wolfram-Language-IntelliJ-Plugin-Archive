@@ -135,7 +135,7 @@ public interface MathematicaElementTypes {
      * The following {@link TokenSet}'s are used for the basic highlighter.
      */
     TokenSet WHITE_SPACES = TokenSet.create(
-            WHITE_SPACE, LINE_BREAK
+            WHITE_SPACE
     );
 
     TokenSet COMMENTS = TokenSet.create(
@@ -225,6 +225,8 @@ public interface MathematicaElementTypes {
 
 
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
+
+    IElementType MEANINGFUL_LINE_BREAK = new MathematicaElementType("MEANINGFUL_LINE_BREAK");
 
     IElementType GROUP_EXPRESSION = new MathematicaElementType("GROUP_EXPRESSION");
     IElementType LIST_EXPRESSION = new MathematicaElementType("LIST_EXPRESSION");

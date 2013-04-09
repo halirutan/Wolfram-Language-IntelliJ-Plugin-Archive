@@ -19,43 +19,33 @@
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
-import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.TIMES_EXPRESSION;
 
 /**
- * @author patrick (3/27/13)
- *
+ * @author patrick (4/9/13)
  */
-public class InfixOperatorParselet implements InfixParselet {
-    private final int precedence;
-    private final boolean isRight;
+public class LineBreakParselet implements InfixParselet {
+    final private int  precedence;
 
-    public InfixOperatorParselet(int precedence, boolean right) {
+    public LineBreakParselet(int precedence) {
         this.precedence = precedence;
-        isRight = right;
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         if (!left.valid()) return parser.notParsed();
         final PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
-        final IElementType token = ParseletProvider.getInfixPsiElement(this);
-
-        // if we have an implicit times, we don't advance the lexer since we are already over the second operand
-        // token
-        if ( !parser.isImplicitTimesPosition() ) {
-            parser.advanceLexer();
-        }
-
-        MathematicaParser.Result result = parser.parseExpression(precedence - (isRight ? 1 : 0));
+        parser.advanceLexer();
+        MathematicaParser.Result result = parser.parseExpression(getPrecedence());
         if (!result.parsed()) {
             parser.error("More input expected.");
-            infixOperationMarker.done(token);
+            infixOperationMarker.done(TIMES_EXPRESSION);
         } else {
-            infixOperationMarker.done(token);
-            result = parser.result(infixOperationMarker, token, true);
+            infixOperationMarker.done(TIMES_EXPRESSION);
+            result = parser.result(infixOperationMarker, TIMES_EXPRESSION, true);
         }
         return result;
     }
@@ -64,5 +54,4 @@ public class InfixOperatorParselet implements InfixParselet {
     public int getPrecedence() {
         return precedence;
     }
-
 }

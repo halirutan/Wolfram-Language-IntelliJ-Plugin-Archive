@@ -174,6 +174,7 @@ public class ParseletProvider {
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
 
     private void registerAll(){
+        register(MathematicaElementTypes.LINE_BREAK, MathematicaElementTypes.MEANINGFUL_LINE_BREAK, new LineBreakParselet(100));
         register(MathematicaElementTypes.LEFT_PAR,	MathematicaElementTypes.GROUP_EXPRESSION,	 new GroupParselet(82)); // Group(()
         register(MathematicaElementTypes.LEFT_BRACE,	MathematicaElementTypes.LIST_EXPRESSION,	 new ListParselet(82)); // Group(()
 
