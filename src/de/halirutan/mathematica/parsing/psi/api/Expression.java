@@ -1,4 +1,4 @@
-package de.halirutan.mathematica.parsing.psi;
+package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 

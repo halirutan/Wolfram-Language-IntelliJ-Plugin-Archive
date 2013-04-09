@@ -54,7 +54,7 @@ public class InfixOperatorParselet implements InfixParselet {
 
         MathematicaParser.Result result = parser.parseExpression(precedence - (isRight ? 1 : 0));
         if (!result.parsed()) {
-            parser.getBuilder().error("More input expected.");
+            parser.error("More input expected.");
             infixOperationMarker.done(token);
         } else {
             infixOperationMarker.done(token);

@@ -54,9 +54,9 @@ public class InfixCallParselet implements InfixParselet {
         } else {
             // if the operator was not parsed successfully we will not display a parsing error
             if (operator.parsed()) {
-                parser.getBuilder().error("'~' expected");
+                parser.error("'~' expected");
             } else {
-                parser.getBuilder().error("Operator expected");
+                parser.error("Operator expected");
             }
             infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
             return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, false);

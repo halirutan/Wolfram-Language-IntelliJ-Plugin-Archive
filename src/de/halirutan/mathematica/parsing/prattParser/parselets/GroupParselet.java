@@ -46,8 +46,8 @@ public class GroupParselet implements PrefixParselet {
         final PsiBuilder.Marker groupMark = parser.mark();
         parser.advanceLexer();
 
-        if (parser.getBuilder().eof()) {
-            parser.getBuilder().error("More input expected");
+        if (parser.eof()) {
+            parser.error("More input expected");
             groupMark.drop();
             return parser.notParsed();
         }
@@ -65,7 +65,7 @@ public class GroupParselet implements PrefixParselet {
             // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
             // broken.
             if (result.parsed()) {
-                parser.getBuilder().error("')' expected");
+                parser.error("')' expected");
                 groupMark.done(token);
                 result = parser.result(groupMark, token,false);
             } else {

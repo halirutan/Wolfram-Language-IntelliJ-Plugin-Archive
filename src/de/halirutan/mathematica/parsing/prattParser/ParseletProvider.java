@@ -203,7 +203,8 @@ public class ParseletProvider {
         infixLeft(MathematicaElementTypes.QUESTION_MARK,	MathematicaElementTypes.PATTERN_TEST_EXPRESSION,	72); // PatternTest(?)
 
         register(MathematicaElementTypes.LEFT_BRACKET,	MathematicaElementTypes.FUNCTION_CALL_EXPRESSION,	 new FunctionCallParselet(70)); // FunctionCall([)
-        register(MathematicaElementTypes.PART_BEGIN,	MathematicaElementTypes.PART_EXPRESSION,	 new PartParselet(70)); // Part([[)
+        // Part is now handled with the function call parselet
+//        register(MathematicaElementTypes.PART_BEGIN,	MathematicaElementTypes.PART_EXPRESSION,	 new PartParselet(70)); // Part([[)
 
         postfix(MathematicaElementTypes.INCREMENT,	MathematicaElementTypes.INCREMENT_POSTFIX,	68);
         postfix(MathematicaElementTypes.DECREMENT,	MathematicaElementTypes.DECREMENT_POSTFIX,	68);

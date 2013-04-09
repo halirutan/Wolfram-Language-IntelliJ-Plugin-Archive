@@ -66,7 +66,7 @@ public class MessageNameParselet implements InfixParselet {
                 }
             }
         } else {
-            parser.getBuilder().error("Symbol or String expected as Name in Symbol::Name");
+            parser.error("Symbol or String expected as Name in Symbol::Name");
         }
         messageNameMarker.done(MathematicaElementTypes.MESSAGE_NAME_EXPRESSION);
         return parser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION,result.parsed());

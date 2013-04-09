@@ -37,7 +37,7 @@ public class PrefixOperatorParselet implements PrefixParselet {
 
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        final PsiBuilder.Marker mark = parser.getBuilder().mark();
+        final PsiBuilder.Marker mark = parser.mark();
         parser.advanceLexer();
         final IElementType token = ParseletProvider.getPrefixPsiElement(this);
         final MathematicaParser.Result result = parser.parseExpression(precedence);

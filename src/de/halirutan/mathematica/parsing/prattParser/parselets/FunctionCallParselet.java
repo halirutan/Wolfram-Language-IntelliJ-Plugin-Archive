@@ -56,14 +56,22 @@ public class FunctionCallParselet implements InfixParselet {
             parser.advanceLexer();
         }
 
-        ParserUtil.parseSequence(parser, RIGHT_BRACKET);
+        MathematicaParser.Result exprSeq = parser.notParsed();
+        boolean hasArgs = false;
+        if (!parser.testToken(RIGHT_BRACKET)) {
+             exprSeq = ParserUtil.parseSequence(parser, RIGHT_BRACKET);
+            hasArgs = true;
+        }
 
         if (parser.testToken(RIGHT_BRACKET)) {
             if (isPartExpr && parser.testToken(RIGHT_BRACKET, RIGHT_BRACKET)) {
+                if( !hasArgs ) {
+                    parser.error("Part expression cannot be empty");
+                }
                 parser.advanceLexer();
                 parser.advanceLexer();
-                mainMark.error("Part expression cannot be empty");
-                return parser.result(mainMark, PART_EXPRESSION, false);
+                mainMark.done(PART_EXPRESSION);
+                return parser.result(mainMark, PART_EXPRESSION, exprSeq.parsed() && hasArgs );
             } else if (isPartExpr) {
                 parser.advanceLexer();
                 parser.error("Closing ']' expected");
@@ -74,13 +82,13 @@ public class FunctionCallParselet implements InfixParselet {
                 mainMark.done(FUNCTION_CALL_EXPRESSION);
                 return parser.result(mainMark, FUNCTION_CALL_EXPRESSION, true);
             }
-
-        } else {
-            parser.error("Closing ']' expected");
-            IElementType expressionType = isPartExpr ? PART_EXPRESSION : FUNCTION_CALL_EXPRESSION;
-            mainMark.done(expressionType);
-            return parser.result(mainMark, expressionType, false);
         }
+
+        parser.error("Closing ']' expected");
+        IElementType expressionType = isPartExpr ? PART_EXPRESSION : FUNCTION_CALL_EXPRESSION;
+        mainMark.done(expressionType);
+        return parser.result(mainMark, expressionType, false);
+
     }
 
     @Override

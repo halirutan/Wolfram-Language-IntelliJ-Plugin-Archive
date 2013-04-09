@@ -28,7 +28,7 @@ Feature list
 - Information of function arguments (parameter info)
 - Show quick doc and call external Wolfram documentation
 - Introduce new variables inside Block/Module or even in the global context
--
+- Show FullForm or convert to FullForm of expression with operators
 - Check syntax of file through JLink with Mathematica
 
 

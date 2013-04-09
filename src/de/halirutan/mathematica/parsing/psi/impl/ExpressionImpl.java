@@ -2,7 +2,7 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.Expression;
+import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
 
 /**

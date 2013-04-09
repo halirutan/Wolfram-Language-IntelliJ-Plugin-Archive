@@ -16,22 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.halirutan.mathematica.codeInsight.editor;
-
-import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
-import com.intellij.openapi.module.ModuleType;
+package de.halirutan.mathematica.parsing.psi;
 
 /**
- * @author patrick (4/8/13)
+ * @author patrick (4/9/13)
  */
-public class MathematicaModuleBuilder extends JavaModuleBuilder {
-
-    public MathematicaModuleBuilder() {
-        super();
-    }
-
-    @Override
-    public ModuleType getModuleType() {
-        return MathematicaModuleType.getInstance();
-    }
+public interface StringExpression {
 }

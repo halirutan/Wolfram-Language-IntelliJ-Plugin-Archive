@@ -5,7 +5,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import de.halirutan.mathematica.MathematicaLanguage;
 import de.halirutan.mathematica.fileTypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.psi.MathematicaPsiFile;
+import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
 /**

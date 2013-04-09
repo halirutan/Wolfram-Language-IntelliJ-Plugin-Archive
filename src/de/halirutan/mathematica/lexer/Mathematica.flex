@@ -1,8 +1,8 @@
-package org.ipcu.mathematicaPlugin.lexer;
+package de.halirutan.mathematica.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 %%
 
@@ -16,7 +16,7 @@ import org.ipcu.mathematicaPlugin.MathematicaElementTypes;
 
 
 LineTerminator = \n | \r | \r\n
-WhiteSpace = [\ \t\f] | {LineTerminator}
+WhiteSpace = [\ \t\f]
 
 Comment   = "(*" [^*] ~"*)" | "(*" "*"+ ")"
 
@@ -49,6 +49,7 @@ Out = "%"+
 <YYINITIAL> {
 	"(*"				{ yybegin(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
 	{WhiteSpace}+ 		{ yybegin(YYINITIAL); return MathematicaElementTypes.WHITE_SPACE; }
+	{LineTerminator}+   { yybegin(YYINITIAL); return MathematicaElementTypes.LINE_BREAK; }
 	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 

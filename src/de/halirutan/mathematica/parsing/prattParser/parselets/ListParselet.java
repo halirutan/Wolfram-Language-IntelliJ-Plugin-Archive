@@ -8,6 +8,7 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
+ * Parses constructs like {1,2,3}
  * @author patrick (3/29/13)
  */
 public class ListParselet implements PrefixParselet {

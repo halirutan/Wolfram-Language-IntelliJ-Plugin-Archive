@@ -44,7 +44,7 @@ public class UnbalancedParselet implements PrefixParselet {
         } else if (token == MathematicaElementTypes.RIGHT_PAR) {
             braceChar = "')'";
         }
-        final PsiBuilder.Marker unbalancedMark = parser.getBuilder().mark();
+        final PsiBuilder.Marker unbalancedMark = parser.mark();
         parser.advanceLexer();
         unbalancedMark.error("Unbalanced " + braceChar);
         return parser.result(unbalancedMark, token, false);

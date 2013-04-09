@@ -58,7 +58,7 @@ public class ParserUtil {
             }
 
             if (parser.testToken(MathematicaElementTypes.COMMA)) {
-                if (parser.getBuilder().lookAhead(1) == rightDel) {
+                if (parser.testToken(rightDel)) {
                     parser.advanceLexer();
                     parser.error("unexpected ','");
                     // now advance over the closing bracket

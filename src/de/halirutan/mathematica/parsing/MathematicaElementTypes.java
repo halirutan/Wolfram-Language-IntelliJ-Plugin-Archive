@@ -14,7 +14,7 @@ import de.halirutan.mathematica.parsing.psi.impl.*;
  * This interface provides token types which are used by the Lexer and later by the parser.
  * Some {@link TokenSet}'s are defined which are used for the basic highlighter. Every {@link TokenSet} is then used
  * to define a group of tokens which are highlighted in the same color.
- * Check {@link de.halirutan.mathematica.fileTypes.MathematicaSyntaxHighlighter}. As a last part this interface
+ * Check {@link de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter}. As a last part this interface
  * </p>
  * <p>
  * is used to define the {@link IElementType}'s which are used to mark the AST during parsing. Since I use a
@@ -29,6 +29,7 @@ public interface MathematicaElementTypes {
     IFileElementType FILE = new IFileElementType(MathematicaLanguage.INSTANCE);
 
     IElementType WHITE_SPACE = TokenType.WHITE_SPACE;
+    IElementType LINE_BREAK = new MathematicaElementType("LINE_BREAK");
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType COMMENT = new MathematicaElementType("COMMENT");
 
@@ -134,14 +135,14 @@ public interface MathematicaElementTypes {
      * The following {@link TokenSet}'s are used for the basic highlighter.
      */
     TokenSet WHITE_SPACES = TokenSet.create(
-            WHITE_SPACE
+            WHITE_SPACE, LINE_BREAK
     );
 
     TokenSet COMMENTS = TokenSet.create(
             COMMENT
     );
     TokenSet STRING_LITERALS = TokenSet.create(
-            STRING_LITERAL
+            STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN
     );
 
     TokenSet OPERATORS = TokenSet.create(

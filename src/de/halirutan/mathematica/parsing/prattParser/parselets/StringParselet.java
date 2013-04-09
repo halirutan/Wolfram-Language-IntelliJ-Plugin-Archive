@@ -48,7 +48,7 @@ public class StringParselet implements PrefixParselet {
             parser.advanceLexer();
         }
         if (!parser.testToken(MathematicaElementTypes.STRING_LITERAL_END)) {
-            parser.getBuilder().error("\" expected");
+            parser.error("\" expected");
             parsedQ = false;
         } else {
             parser.advanceLexer();

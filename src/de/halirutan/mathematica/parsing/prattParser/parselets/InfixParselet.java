@@ -22,15 +22,16 @@ import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
+ * Interface for all parselets that implement an infix operation.
  * @author patrick (3/27/13)
- *
  */
 public interface InfixParselet {
 
     /**
      * Parses infix operations. Everything which has a left operand is an infix operation. This includes things like
      * function calls, because the [ in f[x] is an infix operator which has f as left side and which parses up to the
-     * matching ].
+     * matching ]. Note that even postfix operations are implemented through InfixParselets. They just don't have a
+     * second (right) operand.
      * @param parser The main parser object which is needed to get tokens from the stream, advance the lexer and create
      *               AST marks and result objects carrying information about the parser results.
      * @param left   The left operand of the infix operation. This needs to be passed because it is parsed earlier in

@@ -1,35 +1,54 @@
 package de.halirutan.mathematica.codeInsight.editor;
 
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.HighlighterColors;
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
+import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.options.colors.pages.ANSIColoredConsoleColorsPage;
-import groovy.util.GroovyCollections;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.lexer.MathematicaLexer;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 1/3/13 *
- * Purpose:
- * Time: 6:18 AM
+ * Provides a syntax highlighter for the Mathematica language. This class is registered through
+ * {@link MathematicaSyntaxHighlighterFactory} so it can be used in the custom language plugin.
+ * @author patrick (1/3/13)
  */
-public interface MathematicaSyntaxHighlighter {
+public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL", DefaultLanguageHighlighterColors.STATIC_FIELD);
-    TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",  DefaultLanguageHighlighterColors.FUNCTION_CALL);
-    TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS", DefaultLanguageHighlighterColors.NUMBER);
-    TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
-//    TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(DefaultLanguageHighlighterColors.BRACKETS.getDefaultAttributes().getForegroundColor(),null,null,null,Font.BOLD));
-    TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(
-        DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getForegroundColor(),
-        DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getBackgroundColor(),
-        null, null, Font.BOLD));
+    private final MathematicaLexer lexer;
+    private static final Map<IElementType, TextAttributesKey> colors = new HashMap<IElementType, TextAttributesKey>();
 
-    TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
+    public MathematicaSyntaxHighlighter() {
+        lexer = new MathematicaLexer();
+
+        SyntaxHighlighterBase.fillMap(colors, MathematicaSyntaxHighlighterColors.COMMENT, MathematicaElementTypes.COMMENT);
+        fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL);
+        fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_BEGIN);
+        fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_END);
+        fillMap(colors, MathematicaSyntaxHighlighterColors.IDENTIFIER, MathematicaElementTypes.IDENTIFIER);
+        fillMap(colors, MathematicaElementTypes.OPERATORS, MathematicaSyntaxHighlighterColors.OPERATORS);
+        fillMap(colors, MathematicaElementTypes.BRACES, MathematicaSyntaxHighlighterColors.BRACES);
+        fillMap(colors, MathematicaElementTypes.LITERALS, MathematicaSyntaxHighlighterColors.LITERALS);
+
+        fillMap(colors, MathematicaSyntaxHighlighterColors.BAD_CHARACTER, MathematicaElementTypes.BAD_CHARACTER);
+    }
+
+
+
+    @NotNull
+    @Override
+    public Lexer getHighlightingLexer() {
+        return lexer;
+    }
+
+    @NotNull
+    @Override
+    public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+        return pack(colors.get(tokenType));
+    }
+
 
 }

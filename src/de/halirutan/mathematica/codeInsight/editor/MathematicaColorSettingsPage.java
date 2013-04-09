@@ -24,8 +24,6 @@ import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
 import de.halirutan.mathematica.MathematicaIcons;
-import de.halirutan.mathematica.fileTypes.*;
-import de.halirutan.mathematica.fileTypes.MathematicaSyntaxHighlighter;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.Map;
 
-import static de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter.*;
+import static de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighterColors.*;
 
 /**
  * @author patrick (4/7/13)

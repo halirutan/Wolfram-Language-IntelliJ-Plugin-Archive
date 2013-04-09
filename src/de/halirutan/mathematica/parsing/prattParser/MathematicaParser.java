@@ -3,6 +3,8 @@ package de.halirutan.mathematica.parsing.prattParser;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
+import com.intellij.lang.WhitespaceSkippedCallback;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattParser.parselets.PrefixParselet;
@@ -20,11 +22,18 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getP
 public class MathematicaParser  implements PsiParser {
 
     private PsiBuilder builder = null;
+    private int recursionDepth;
+    public ImportantWhitespaceHandler whitespaceHandler;
+
+    public MathematicaParser() {
+        this.recursionDepth = 0;
+        whitespaceHandler = new ImportantWhitespaceHandler();
+    }
 
     @NotNull
     @Override
     public ASTNode parse(IElementType root, PsiBuilder builder) {
-
+        builder.setWhitespaceSkippedCallback(this.whitespaceHandler);
         boolean runthrough = false;
         int iter = 100;
 
@@ -71,22 +80,26 @@ public class MathematicaParser  implements PsiParser {
             return notParsed();
         }
 
-
+        recursionDepth++;
         Result left = prefix.parse(this);
 
         while (left.parsed() && precedence < getPrecedence(builder)) {
             token = builder.getTokenType();
 
             InfixParselet infix = getInfixParselet(token);
+
             if (infix == null) {
-                if (isImplicitTimesPosition()) {
+                if (whitespaceHandler.hadWhitespace()) {
                     infix = getInfixParselet(TIMES);
                 } else {
+                    recursionDepth--;
                     return notParsed();
                 }
-            }
+            };
+
             left = infix.parse(this, left);
         }
+        recursionDepth--;
         return left;
     }
 
@@ -94,27 +107,18 @@ public class MathematicaParser  implements PsiParser {
         IElementType token = builder.getTokenType();
         InfixParselet parser = getInfixParselet(token);
         if (parser == null) {
-            if( isImplicitTimesPosition())
+            if(isImplicitTimesPosition()) {
                 return getInfixParselet(TIMES).getPrecedence();
-            else
-                return 0;
+            }
+            return 0;
         }
         return parser.getPrecedence();
     }
 
-
-    public boolean isImplicitTimesPosition() {
-        IElementType token = builder.getTokenType();
-        InfixParselet parser = getInfixParselet(token);
-        if (parser == null && builder.rawLookup(-1) == WHITE_SPACE && (token == IDENTIFIER  || token == LEFT_BRACE || token == LEFT_PAR)) {
-            return true;
-        }
-        return false;
-    }
-
-    public PsiBuilder getBuilder() {
-        return builder;
-    }
+//
+//    public PsiBuilder getBuilder() {
+//        return builder;
+//    }
 
 
     public PsiBuilder.Marker mark() {
@@ -138,6 +142,7 @@ public class MathematicaParser  implements PsiParser {
     }
 
     public void advanceLexer() {
+        whitespaceHandler.reset();
         builder.advanceLexer();
     }
 
@@ -156,6 +161,44 @@ public class MathematicaParser  implements PsiParser {
     public void error(String s) {
         builder.error(s);
     }
+
+    public boolean isImplicitTimesPosition() {
+        IElementType token = builder.getTokenType();
+        InfixParselet parser = getInfixParselet(token);
+        if (parser == null && whitespaceHandler.hadWhitespace() && (token == IDENTIFIER  || token == LEFT_BRACE || token == LEFT_PAR)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean eof() {
+        return builder.eof();
+    }
+
+
+    /**
+     * Finds out when a whitespace means multiplication or *sequence* of expressions.
+     */
+    public class ImportantWhitespaceHandler implements WhitespaceSkippedCallback {
+        private boolean whitespaceSeen;
+        @Override
+        public void onSkip(IElementType type, int start, int end) {
+            whitespaceSeen = true;
+        }
+
+        public void reset() {
+            whitespaceSeen = false;
+        }
+
+        public boolean hadWhitespace() {
+            return whitespaceSeen;
+        }
+
+
+    }
+
+
+
 
     /**
      * For the Pratt parser we need the left side which was already parsed.

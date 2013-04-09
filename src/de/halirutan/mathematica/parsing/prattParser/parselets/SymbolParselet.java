@@ -32,7 +32,7 @@ public class SymbolParselet implements PrefixParselet {
 
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) {
-        final PsiBuilder.Marker symbolMark = parser.getBuilder().mark();
+        final PsiBuilder.Marker symbolMark = parser.mark();
         parser.advanceLexer();
         symbolMark.done(MathematicaElementTypes.SYMBOL_EXPRESSION);
         return parser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);

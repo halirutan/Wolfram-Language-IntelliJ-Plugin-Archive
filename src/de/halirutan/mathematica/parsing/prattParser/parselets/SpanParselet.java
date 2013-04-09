@@ -40,12 +40,19 @@ public class SpanParselet implements InfixParselet {
     }
 
 
-    // Parses things like <code>expr1;;expr2</code>, <code>expr0;; ;;expr1</code> or <code>expr0;;expr1;;expr2</code>.
+    // Parses things like expr1;;expr2, expr0;; ;;expr1 or expr0;;expr1;;expr2.
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         final PsiBuilder.Marker spanMark = left.getMark().precede();
         boolean skipped = false;
-        parser.advanceLexer();
+
+        if (parser.testToken(SPAN)) {
+            parser.advanceLexer();
+        } else {
+            spanMark.drop();
+            throw new CriticalParserError("SPAN token ';;' expected");
+        }
+
         // if we meet a second ;; right after the first ;; we just skip it
         if (parser.testToken(SPAN)) {
             skipped = true;

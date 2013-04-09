@@ -18,7 +18,12 @@
 
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
+import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (3/27/13)
@@ -33,8 +38,40 @@ public class TagSetParselet implements InfixParselet {
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+        final PsiBuilder.Marker tagSetMark = left.getMark().precede();
+        if (parser.testToken(TAG_SET)) {
+            parser.advanceLexer();
+        } else {
+            tagSetMark.drop();
+            throw new CriticalParserError("Expected token TAG_SET");
+        }
+        // In the next line we parse expr1 of expr0/:expr1 and we reduce the precedence by one because it is
+        // right associative. Using SetDelayed (:=) which has the same precedence the following expression:
+        // a /: b := c := d is then correctly parsed as a /: b := (c := d)
+        final MathematicaParser.Result expr1 = parser.parseExpression(getPrecedence());
+
+        IElementType setOrSetDelayedOrUnset = parser.getTokenType();
+
+        // Form expr0 /: expr1 =. where nothing needs to be parsed right of the =.
+        if (setOrSetDelayedOrUnset == UNSET) {
+            parser.advanceLexer();
+            tagSetMark.done(TAG_SET_EXPRESSION);
+            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.parsed());
+        }
+
+        // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
+        if (setOrSetDelayedOrUnset == SET || setOrSetDelayedOrUnset == SET_DELAYED) {
+            parser.advanceLexer();
+            final MathematicaParser.Result expr2 = parser.parseExpression(getPrecedence());
+            tagSetMark.done(TAG_SET_EXPRESSION);
+            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.parsed() && expr2.parsed());
+        }
+
+        // if we are here, the second operator (:=, = or =.) is missing and we give up
+        parser.error("Missing ':=','=' or '=.' to complete TagSet");
+        tagSetMark.done(TAG_SET_EXPRESSION);
+        return parser.result(tagSetMark, TAG_SET_EXPRESSION, false);
     }
 
     @Override

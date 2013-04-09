@@ -22,7 +22,7 @@ import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.SingleLazyInstanceSyntaxHighlighterFactory;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
-import de.halirutan.mathematica.fileTypes.MathematicaSyntaxHighlighter;
+import de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -39,7 +39,7 @@ public class MathematicaLanguage extends Language {
 //        SyntaxHighlighterFactory.LANGUAGE_FACTORY.addExplicitExtension(this, new SingleLazyInstanceSyntaxHighlighterFactory() {
 //            @NotNull
 //            protected SyntaxHighlighter createHighlighter() {
-//                return new MathematicaSyntaxHighlighter();
+//                return new MathematicaSyntaxHighlighterColors();
 //            }
 //        });
 
