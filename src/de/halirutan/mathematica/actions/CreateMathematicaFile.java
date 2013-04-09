@@ -46,10 +46,7 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
 
     @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-        builder.setTitle(NEW_M_FILE).addKind("Package", MathematicaIcons.FILE_ICON, "Mathematica Package").
-        addKind("Package", MathematicaIcons.FILE_ICON, "Mathematica Package");
-
-
+        builder.setTitle(NEW_M_FILE).addKind("Package", MathematicaIcons.FILE_ICON, "Package");
     }
 
     @Override
