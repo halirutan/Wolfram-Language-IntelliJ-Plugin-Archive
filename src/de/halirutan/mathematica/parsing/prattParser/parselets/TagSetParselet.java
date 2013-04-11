@@ -57,7 +57,7 @@ public class TagSetParselet implements InfixParselet {
         if (setOrSetDelayedOrUnset == UNSET) {
             parser.advanceLexer();
             tagSetMark.done(TAG_SET_EXPRESSION);
-            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.parsed());
+            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.isParsed());
         }
 
         // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
@@ -65,7 +65,7 @@ public class TagSetParselet implements InfixParselet {
             parser.advanceLexer();
             final MathematicaParser.Result expr2 = parser.parseExpression(getPrecedence());
             tagSetMark.done(TAG_SET_EXPRESSION);
-            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.parsed() && expr2.parsed());
+            return parser.result(tagSetMark, TAG_SET_EXPRESSION, expr1.isParsed() && expr2.isParsed());
         }
 
         // if we are here, the second operator (:=, = or =.) is missing and we give up

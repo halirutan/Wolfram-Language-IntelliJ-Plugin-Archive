@@ -40,7 +40,7 @@ public class FunctionCallParselet implements InfixParselet {
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         // should never happen
-        if (parser.getTokenType() != LEFT_BRACKET && !left.valid()) {
+        if (parser.getTokenType() != LEFT_BRACKET && !left.isValid()) {
             return parser.notParsed();
         }
         final PsiBuilder.Marker mainMark = left.getMark().precede();
@@ -70,7 +70,7 @@ public class FunctionCallParselet implements InfixParselet {
                 parser.advanceLexer();
                 parser.advanceLexer();
                 mainMark.done(PART_EXPRESSION);
-                return parser.result(mainMark, PART_EXPRESSION, exprSeq.parsed() && hasArgs );
+                return parser.result(mainMark, PART_EXPRESSION, exprSeq.isParsed() && hasArgs );
             } else if (isPartExpr) {
                 parser.advanceLexer();
                 parser.error("Closing ']' expected");

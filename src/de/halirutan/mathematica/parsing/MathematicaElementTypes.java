@@ -135,7 +135,7 @@ public interface MathematicaElementTypes {
      * The following {@link TokenSet}'s are used for the basic highlighter.
      */
     TokenSet WHITE_SPACES = TokenSet.create(
-            WHITE_SPACE
+            WHITE_SPACE,LINE_BREAK
     );
 
     TokenSet COMMENTS = TokenSet.create(

@@ -64,7 +64,7 @@ public class GroupParselet implements PrefixParselet {
             // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
             // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
             // broken.
-            if (result.parsed()) {
+            if (result.isParsed()) {
                 parser.error("')' expected");
                 groupMark.done(token);
                 result = parser.result(groupMark, token,false);

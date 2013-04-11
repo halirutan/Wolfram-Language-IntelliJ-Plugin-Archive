@@ -50,10 +50,10 @@ public class InfixCallParselet implements InfixParselet {
             parser.advanceLexer();
             final MathematicaParser.Result operand2 = parser.parseExpression(precedence);
             infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
-            return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.parsed() && operand2.parsed());
+            return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
         } else {
             // if the operator was not parsed successfully we will not display a parsing error
-            if (operator.parsed()) {
+            if (operator.isParsed()) {
                 parser.error("'~' expected");
             } else {
                 parser.error("Operator expected");

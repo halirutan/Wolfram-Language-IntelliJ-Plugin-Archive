@@ -42,7 +42,7 @@ public class CompoundExpressionParselet implements InfixParselet {
 
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.valid()) return parser.notParsed();
+        if (!left.isValid()) return parser.notParsed();
         final PsiBuilder.Marker compoundExprMark = left.getMark().precede();
         final IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
         parser.advanceLexer();
@@ -51,8 +51,8 @@ public class CompoundExpressionParselet implements InfixParselet {
 
         while(true){
             MathematicaParser.Result result = parser.parseExpression(precedence);
-            if (!result.valid()) break;
-            ok &= result.parsed();
+            if (!result.isValid()) break;
+            ok &= result.isParsed();
             if(parser.testToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
             else break;
         }

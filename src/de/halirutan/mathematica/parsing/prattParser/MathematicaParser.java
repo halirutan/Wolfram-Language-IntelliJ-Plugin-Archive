@@ -4,11 +4,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.WhitespaceSkippedCallback;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.prattParser.parselets.PrefixParselet;
 import de.halirutan.mathematica.parsing.prattParser.parselets.InfixParselet;
+import de.halirutan.mathematica.parsing.prattParser.parselets.PrefixParselet;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
@@ -16,10 +14,9 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getI
 import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getPrefixParselet;
 
 /**
- *
  * @author patrick (3/27/13)
  */
-public class MathematicaParser  implements PsiParser {
+public class MathematicaParser implements PsiParser {
 
     private PsiBuilder builder = null;
     private int recursionDepth;
@@ -42,16 +39,15 @@ public class MathematicaParser  implements PsiParser {
         builder.setDebugMode(true);
         try {
             while (!builder.eof()) {
-
-
-                if (!runthrough) {
+                if (runthrough) {
+                    builder.advanceLexer();
+                } else {
                     Result expr = parseExpression();
-                    if (!expr.parsed()) {
+
+                    if (!expr.isParsed()) {
                         builder.error("Errors in the preceeding expression.");
                         builder.advanceLexer();
                     }
-                } else {
-                    builder.advanceLexer();
                 }
 
             }
@@ -83,7 +79,7 @@ public class MathematicaParser  implements PsiParser {
         recursionDepth++;
         Result left = prefix.parse(this);
 
-        while (left.parsed() && precedence < getPrecedence(builder)) {
+        while (left.isParsed() && precedence < getPrecedence(builder)) {
             token = builder.getTokenType();
 
             InfixParselet infix = getInfixParselet(token);
@@ -95,7 +91,8 @@ public class MathematicaParser  implements PsiParser {
                     recursionDepth--;
                     return notParsed();
                 }
-            };
+            }
+            ;
 
             left = infix.parse(this, left);
         }
@@ -107,7 +104,7 @@ public class MathematicaParser  implements PsiParser {
         IElementType token = builder.getTokenType();
         InfixParselet parser = getInfixParselet(token);
         if (parser == null) {
-            if(isImplicitTimesPosition()) {
+            if (isImplicitTimesPosition()) {
                 return getInfixParselet(TIMES).getPrecedence();
             }
             return 0;
@@ -130,15 +127,16 @@ public class MathematicaParser  implements PsiParser {
     }
 
     public Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
-        return new Result(mark,token,parsedQ);
+        return new Result(mark, token, parsedQ);
     }
 
     /**
      * This is the return value of a parser when errors happened.
+     *
      * @return
      */
     public Result notParsed() {
-        return new Result(null,null,false);
+        return new Result(null, null, false);
     }
 
     public void advanceLexer() {
@@ -156,6 +154,7 @@ public class MathematicaParser  implements PsiParser {
 
     /**
      * Wrapper for {@link PsiBuilder#error(String)}
+     *
      * @param s Error message
      */
     public void error(String s) {
@@ -165,7 +164,7 @@ public class MathematicaParser  implements PsiParser {
     public boolean isImplicitTimesPosition() {
         IElementType token = builder.getTokenType();
         InfixParselet parser = getInfixParselet(token);
-        if (parser == null && whitespaceHandler.hadWhitespace() && (token == IDENTIFIER  || token == LEFT_BRACE || token == LEFT_PAR)) {
+        if (parser == null && whitespaceHandler.hadWhitespace() && (token == IDENTIFIER || token == LEFT_BRACE || token == LEFT_PAR)) {
             return true;
         }
         return false;
@@ -175,12 +174,17 @@ public class MathematicaParser  implements PsiParser {
         return builder.eof();
     }
 
+    public int getRecursionDepth() {
+        return recursionDepth;
+    }
+
 
     /**
      * Finds out when a whitespace means multiplication or *sequence* of expressions.
      */
     public class ImportantWhitespaceHandler implements WhitespaceSkippedCallback {
         private boolean whitespaceSeen;
+
         @Override
         public void onSkip(IElementType type, int start, int end) {
             whitespaceSeen = true;
@@ -197,27 +201,22 @@ public class MathematicaParser  implements PsiParser {
 
     }
 
-
-
-
     /**
      * For the Pratt parser we need the left side which was already parsed.
      * An instance of this will provide all necessary information required to
      * know what expression was parsed on the left of an infix operator.
      */
-    public class Result {
+    public final class Result {
 
-        private PsiBuilder.Marker leftMark = null;
-        private IElementType leftToken = null;
-        private boolean result = false;
+        private final PsiBuilder.Marker leftMark;
+        private final IElementType leftToken;
+        private final boolean parsed;
 
-        public Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean result) {
+        public Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean parsed) {
             this.leftMark = leftMark;
             this.leftToken = leftToken;
-            this.result = result;
+            this.parsed = parsed;
         }
-
-
 
         public PsiBuilder.Marker getMark() {
             return leftMark;
@@ -227,12 +226,12 @@ public class MathematicaParser  implements PsiParser {
             return leftToken;
         }
 
-        public boolean parsed() {
-            return result;
+        public boolean isParsed() {
+            return parsed;
         }
 
-        public boolean valid() {
-            return leftMark!=null && leftToken!=null;
+        public boolean isValid() {
+            return leftMark != null && leftToken != null;
         }
     }
 }

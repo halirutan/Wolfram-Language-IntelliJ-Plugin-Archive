@@ -18,18 +18,13 @@
 
 package de.halirutan.mathematica.codeInsight.completion;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -71,7 +66,7 @@ public class MathematicaBracketInsertHandler implements InsertHandler<LookupElem
 
         if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR ) {
             final SymbolInformationProvider.SymbolInformation symbol = SymbolInformationProvider.getSymbolNames().get(item.getLookupString());
-            boolean insertBrackets = symbol!=null && symbol.isFunction;
+            boolean insertBrackets = symbol!=null && symbol.function;
             if (insertBrackets) {
                 document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));
                 editor.getCaretModel().moveToOffset(context.getTailOffset());

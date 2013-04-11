@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class SymbolInformationProvider {
 
-    private static HashMap<String, SymbolInformation> ourSymbols = null;
+    private static HashMap<String, SymbolInformation> ourSymbols;
 
     private SymbolInformationProvider() { }
 
@@ -55,7 +55,7 @@ public class SymbolInformationProvider {
                 options = parts[4].replace("{","").replace("}","").trim().split(" ");
             }
 
-            if (pattern != "") {
+            if (!pattern.equals("")) {
                 isFunction = true;
             }
 
@@ -71,12 +71,12 @@ public class SymbolInformationProvider {
         return ourSymbols;
     }
 
-    static public class SymbolInformation {
+    public static class SymbolInformation {
         public final String name;
         public final int importance;
         public final String shortName;
         public final String callPattern;
-        public final boolean isFunction;
+        public final boolean function;
         public final String attributes[];
         public final String options[];
 
@@ -85,7 +85,7 @@ public class SymbolInformationProvider {
             this.shortName = shortName;
             this.importance = importance;
             this.callPattern = callPattern;
-            isFunction = function;
+            this.function = function;
             this.attributes = attributes;
             this.options = options;
         }
@@ -95,7 +95,7 @@ public class SymbolInformationProvider {
             shortName = name;
             importance = 0;
             callPattern = "";
-            isFunction = false;
+            function = false;
             attributes = new String[0];
             options = new String[0];
         }

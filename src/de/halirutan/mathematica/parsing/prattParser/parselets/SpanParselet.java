@@ -69,7 +69,7 @@ public class SpanParselet implements InfixParselet {
             } else {
                 spanMark.error("Expression expected after  \"expr0;; ;;\"");
             }
-            return parser.result(spanMark, SPAN_EXPRESSION, left.parsed() && !skipped);
+            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
         }
 
         final MathematicaParser.Result expr1 = parser.parseExpression(precedence);
@@ -77,21 +77,21 @@ public class SpanParselet implements InfixParselet {
         // if we had expr0;;;;expr1
         if (skipped) {
             spanMark.done(SPAN_EXPRESSION);
-            return parser.result(spanMark, SPAN_EXPRESSION, left.parsed() && expr1.parsed());
+            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
         }
 
         if (parser.testToken(SPAN)) {
             parser.advanceLexer();
             final MathematicaParser.Result expr2 = parser.parseExpression(precedence);
-            if (expr2.parsed()) {
+            if (expr2.isParsed()) {
                 spanMark.done(SPAN_EXPRESSION);
             } else
                 spanMark.error("Expression expected after \"expr0;;expr1;;\"");
-            return parser.result(spanMark, SPAN_EXPRESSION, left.parsed() && expr1.parsed() && expr2.parsed());
+            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed() && expr2.isParsed());
         } else {
             // we have the form expr0;;expr1
             spanMark.done(SPAN_EXPRESSION);
-            return parser.result(spanMark, SPAN_EXPRESSION, left.parsed() && expr1.parsed());
+            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
         }
     }
 

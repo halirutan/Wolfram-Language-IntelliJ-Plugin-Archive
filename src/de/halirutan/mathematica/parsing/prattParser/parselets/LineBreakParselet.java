@@ -21,6 +21,7 @@ package de.halirutan.mathematica.parsing.prattParser.parselets;
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.TIMES_EXPRESSION;
 
@@ -36,18 +37,9 @@ public class LineBreakParselet implements InfixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.valid()) return parser.notParsed();
-        final PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
         parser.advanceLexer();
-        MathematicaParser.Result result = parser.parseExpression(getPrecedence());
-        if (!result.parsed()) {
-            parser.error("More input expected.");
-            infixOperationMarker.done(TIMES_EXPRESSION);
-        } else {
-            infixOperationMarker.done(TIMES_EXPRESSION);
-            result = parser.result(infixOperationMarker, TIMES_EXPRESSION, true);
-        }
-        return result;
+        return left;
+
     }
 
     @Override

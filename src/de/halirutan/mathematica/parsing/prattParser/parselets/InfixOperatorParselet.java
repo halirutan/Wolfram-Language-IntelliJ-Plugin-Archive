@@ -29,17 +29,18 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  *
  */
 public class InfixOperatorParselet implements InfixParselet {
-    private final int precedence;
-    private final boolean isRight;
 
-    public InfixOperatorParselet(int precedence, boolean right) {
+    private final int precedence;
+    private final boolean rightAssociative;
+
+    public InfixOperatorParselet(int precedence, boolean rightAssociative) {
         this.precedence = precedence;
-        isRight = right;
+        this.rightAssociative = rightAssociative;
     }
 
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.valid()) return parser.notParsed();
+        if (!left.isValid()) return parser.notParsed();
         final PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
         final IElementType token = ParseletProvider.getInfixPsiElement(this);
 
@@ -49,8 +50,8 @@ public class InfixOperatorParselet implements InfixParselet {
             parser.advanceLexer();
         }
 
-        MathematicaParser.Result result = parser.parseExpression(precedence - (isRight ? 1 : 0));
-        if (!result.parsed()) {
+        MathematicaParser.Result result = parser.parseExpression(precedence - (rightAssociative ? 1 : 0));
+        if (!result.isParsed()) {
             parser.error("More input expected.");
             infixOperationMarker.done(token);
         } else {

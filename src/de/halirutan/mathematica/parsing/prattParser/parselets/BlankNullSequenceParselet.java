@@ -40,12 +40,12 @@ public class BlankNullSequenceParselet implements InfixParselet {
 
     @Override
     public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.valid()) return parser.notParsed();
+        if (!left.isValid()) return parser.notParsed();
         final PsiBuilder.Marker blankMark = left.getMark().precede();
         final IElementType token = MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, result.valid() ? result.parsed() : true);
+        return parser.result(blankMark, token, result.isValid() ? result.isParsed() : true);
     }
 }

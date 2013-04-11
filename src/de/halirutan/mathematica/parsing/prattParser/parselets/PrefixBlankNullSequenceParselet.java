@@ -42,6 +42,6 @@ public class PrefixBlankNullSequenceParselet implements PrefixParselet {
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, result.valid() ? result.parsed() : true);
+        return parser.result(blankMark, token, result.isValid() ? result.isParsed() : true);
     }
 }

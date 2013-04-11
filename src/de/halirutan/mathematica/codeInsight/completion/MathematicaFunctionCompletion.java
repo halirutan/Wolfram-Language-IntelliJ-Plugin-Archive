@@ -38,7 +38,7 @@ public class MathematicaFunctionCompletion extends CompletionProvider<Completion
 
     @Override
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet _result) {
-        final HashMap<String,SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
+        HashMap<String,SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
 
         if (Character.isLowerCase(parameters.getPosition().getText().charAt(0))) {
             _result.stopHere();
@@ -50,7 +50,9 @@ public class MathematicaFunctionCompletion extends CompletionProvider<Completion
                 parameters.getOffset(),
                 character().andOr(character().letterOrDigit(),character().equalTo('$')),
                 character().andOr(character().letterOrDigit(), character().equalTo('$')));
+
         CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
+
         CompletionResultSet result = _result.withPrefixMatcher(matcher);
         for (String name : symbols.keySet()) {
             if (name.length() < 3) continue;

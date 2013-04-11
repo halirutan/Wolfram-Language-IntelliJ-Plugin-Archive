@@ -39,6 +39,6 @@ public class ListParselet implements PrefixParselet {
             result = false;
         }
         listMarker.done(LIST_EXPRESSION);
-        return parser.result(listMarker, LIST_EXPRESSION, result && seqResult.parsed());
+        return parser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
     }
 }

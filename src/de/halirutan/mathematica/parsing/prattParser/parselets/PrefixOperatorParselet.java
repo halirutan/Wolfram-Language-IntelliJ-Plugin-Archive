@@ -42,7 +42,7 @@ public class PrefixOperatorParselet implements PrefixParselet {
         final IElementType token = ParseletProvider.getPrefixPsiElement(this);
         final MathematicaParser.Result result = parser.parseExpression(precedence);
         mark.done(token);
-        return parser.result(mark,token, result.parsed());
+        return parser.result(mark,token, result.isParsed());
 
     }
 }
