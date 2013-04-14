@@ -9,5 +9,5 @@ import javax.swing.*;
  */
 public interface MathematicaIcons {
 
-    Icon FILE_ICON = IconLoader.getIcon("/mma_file.png");
+    Icon FILE_ICON = IconLoader.getIcon("/spiky1_file.png");
 }
