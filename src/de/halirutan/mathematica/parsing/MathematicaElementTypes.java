@@ -7,14 +7,88 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.parsing.psi.impl.*;
+import de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter;
+import de.halirutan.mathematica.parsing.psi.impl.CompoundExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.FunctionCallImpl;
+import de.halirutan.mathematica.parsing.psi.impl.GroupImpl;
+import de.halirutan.mathematica.parsing.psi.impl.ListImpl;
+import de.halirutan.mathematica.parsing.psi.impl.MessageNameImpl;
+import de.halirutan.mathematica.parsing.psi.impl.NumberImpl;
+import de.halirutan.mathematica.parsing.psi.impl.PlusImpl;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.DivideImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.DotImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.FactorialImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.MinusImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.PowerImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.TimesImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.UnaryMinusImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.UnaryPlusImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.AddToImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.DecrementImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.DivideByImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.IncrementImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.PreDecrementImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.PreIncrementImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.SetDelayedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.SetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.SubtractFromImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.TagSetDelayedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.TagSetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.TagUnsetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.TimesByImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.UnsetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.UpSetDelayedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.UpSetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.EqualImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.GreaterEqualImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.GreaterImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.LessEqualImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.LessImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.SameQImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.UnequalImpl;
+import de.halirutan.mathematica.parsing.psi.impl.comparison.UnsameQImpl;
+import de.halirutan.mathematica.parsing.psi.impl.files.GetImpl;
+import de.halirutan.mathematica.parsing.psi.impl.files.PutAppendImpl;
+import de.halirutan.mathematica.parsing.psi.impl.files.PutImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.Apply1Impl;
+import de.halirutan.mathematica.parsing.psi.impl.function.ApplyImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.FunctionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.InfixImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.MapAllImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.MapImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.PostfixImpl;
+import de.halirutan.mathematica.parsing.psi.impl.function.PrefixImpl;
+import de.halirutan.mathematica.parsing.psi.impl.lists.PartImpl;
+import de.halirutan.mathematica.parsing.psi.impl.lists.SpanImpl;
+import de.halirutan.mathematica.parsing.psi.impl.logical.AndImpl;
+import de.halirutan.mathematica.parsing.psi.impl.logical.NotImpl;
+import de.halirutan.mathematica.parsing.psi.impl.logical.OrImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.AlternativeImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.BlankImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.BlankNullSequenceImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.BlankSequenceImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.ConditionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.OptionalImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.PatternImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.PatternTestImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.RepeatedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.pattern.RepeatedNullImpl;
+import de.halirutan.mathematica.parsing.psi.impl.rules.ReplaceAllImpl;
+import de.halirutan.mathematica.parsing.psi.impl.rules.ReplaceRepeatedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.rules.RuleDelayedImpl;
+import de.halirutan.mathematica.parsing.psi.impl.rules.RuleImpl;
+import de.halirutan.mathematica.parsing.psi.impl.string.StringExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.string.StringImpl;
+import de.halirutan.mathematica.parsing.psi.impl.string.StringJoinImpl;
 
 /**
  * <p>
  * This interface provides token types which are used by the Lexer and later by the parser.
  * Some {@link TokenSet}'s are defined which are used for the basic highlighter. Every {@link TokenSet} is then used
  * to define a group of tokens which are highlighted in the same color.
- * Check {@link de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter}. As a last part this interface
+ * Check {@link MathematicaSyntaxHighlighter}. As a last part this interface
  * </p>
  * <p>
  * is used to define the {@link IElementType}'s which are used to mark the AST during parsing. Since I use a
@@ -99,7 +173,6 @@ public interface MathematicaElementTypes {
     IElementType REPEATED_NULL = new MathematicaElementType("REPEATED_NULL");
     IElementType CONDITION = new MathematicaElementType("CONDITION");
     IElementType OPTIONAL = new MathematicaElementType("OPTIONAL");
-    IElementType PATTERN = new MathematicaElementType("PATTERN");
 
     IElementType COLON = new MathematicaElementType("COLON");
     IElementType DOUBLE_COLON = new MathematicaElementType("DOUBLE_COLON");
@@ -135,7 +208,7 @@ public interface MathematicaElementTypes {
      * The following {@link TokenSet}'s are used for the basic highlighter.
      */
     TokenSet WHITE_SPACES = TokenSet.create(
-            WHITE_SPACE,LINE_BREAK
+            WHITE_SPACE, LINE_BREAK
     );
 
     TokenSet COMMENTS = TokenSet.create(
@@ -179,47 +252,106 @@ public interface MathematicaElementTypes {
 
         public static PsiElement create(ASTNode node) {
             IElementType type = node.getElementType();
-            if (type == SYMBOL_EXPRESSION) {
-                return new SymbolImpl(node);
-            } else if (type == NUMBER_EXPRESSION) {
-                return new NumberImpl(node);
-            } else if (type == BLANK_EXPRESSION) {
-                return new PatternOperationImpl(node);
-            } else if (type == BLANK_SEQUENCE_EXPRESSION) {
-                return new PatternOperationImpl(node);
-            } else if (type == BLANK_NULL_SEQUENCE_EXPRESSION) {
-                return new PatternOperationImpl(node);
-            } else if (type == STRING_EXPRESSION) {
-                return new StringExpressionImpl(node);
-            } else if (type == GROUP_EXPRESSION) {
-                return new GroupImpl(node);
-            } else if (type == LIST_EXPRESSION) {
-                return new ListImpl(node);
-            } else if (type == MESSAGE_NAME_EXPRESSION) {
-                return new MessageNameImpl(node);
-            } else if (type == FUNCTION_CALL_EXPRESSION) {
-                return new FunctionCallImpl(node);
-            } else if (type == FUNCTION_POSTFIX) {
-                return new AnonymousFunctionImpl(node);
-            } else if (ARITHMETIC_OPERATIONS.contains(type)) {
-                return new ArithmeticOperationImpl(node);
-            } else if (ASSIGNMENT_OPERATIONS.contains(type)) {
-                return new AssignmentImpl(node);
-            } else if (COMPARISON_EXPRESSIONS.contains(type)) {
-                return new ComparisonOperationImpl(node);
-            } else if (RULES_REPLACEMENT.contains(type)) {
-                return new ReplacementOperationImpl(node);
-            } else if (FUNCTION_APPLICATION.contains(type)) {
-                return new FunctionApplicationOperationImpl(node);
-            } else if (PATTERNS.contains(type)) {
-                return new PatternOperationImpl(node);
-            } else if (LOGICAL_OPERATIONS.contains(type)) {
-                return new LogicalOperationImpl(node);
-            } else if (SAVE_LOAD.contains(type)) {
-                return new FileOperationImpl(node);
-            } else if (type == COMPOUND_EXPRESSION_EXPRESSION) {
-                return new CompoundExpressionImpl(node);
-            } else return new ExpressionImpl(node);
+
+            if (type.equals(GROUP_EXPRESSION)) return new GroupImpl(node);
+            if (type.equals(FUNCTION_CALL_EXPRESSION)) return new FunctionCallImpl(node);
+
+            // Basic types
+            if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
+            if (type.equals(STRING_EXPRESSION)) return new StringImpl(node);
+
+            // Arithmetic operations
+            if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
+            if (type.equals(DIVIDE_EXPRESSION)) return new DivideImpl(node);
+            if (type.equals(DOT_EXPRESSION)) return new DotImpl(node);
+            if (type.equals(FACTORIAL_POSTFIX)) return new FactorialImpl(node);
+            if (type.equals(MINUS_EXPRESSION)) return new MinusImpl(node);
+            if (type.equals(PLUS_EXPRESSION)) return new PlusImpl(node);
+            if (type.equals(POWER_EXPRESSION)) return new PowerImpl(node);
+            if (type.equals(TIMES_EXPRESSION)) return new TimesImpl(node);
+            if (type.equals(UNARY_MINUS_PREFIX)) return new UnaryMinusImpl(node);
+            if (type.equals(UNARY_PLUS_PREFIX)) return new UnaryPlusImpl(node);
+
+            // Assignments
+            if (type.equals(ADD_TO_EXPRESSION)) return new AddToImpl(node);
+            if (type.equals(DECREMENT_POSTFIX)) return new DecrementImpl(node);
+            if (type.equals(DIVIDE_BY_EXPRESSION)) return new DivideByImpl(node);
+            if (type.equals(INCREMENT_POSTFIX)) return new IncrementImpl(node);
+            if (type.equals(PRE_INCREMENT_PREFIX)) return new PreIncrementImpl(node);
+            if (type.equals(PRE_DECREMENT_PREFIX)) return new PreDecrementImpl(node);
+            if (type.equals(SET_DELAYED_EXPRESSION)) return new SetDelayedImpl(node);
+            if (type.equals(SET_EXPRESSION)) return new SetImpl(node);
+            if (type.equals(SUBTRACT_FROM_EXPRESSION)) return new SubtractFromImpl(node);
+            if (type.equals(TAG_SET_EXPRESSION)) return new TagSetImpl(node);
+            if (type.equals(TAG_SET_DELAYED_EXPRESSION)) return new TagSetDelayedImpl(node);
+            if (type.equals(TAG_UNSET_EXPRESSION)) return new TagUnsetImpl(node);
+            if (type.equals(TIMES_BY_EXPRESSION)) return new TimesByImpl(node);
+            if (type.equals(UNSET_EXPRESSION)) return new UnsetImpl(node);
+            if (type.equals(UP_SET_DELAYED_EXPRESSION)) return new UpSetDelayedImpl(node);
+            if (type.equals(UP_SET_EXPRESSION)) return new UpSetImpl(node);
+
+            // Comparisons
+            if (type.equals(EQUAL_EXPRESSION)) return new EqualImpl(node);
+            if (type.equals(GREATER_EQUAL_EXPRESSION)) return new GreaterEqualImpl(node);
+            if (type.equals(GREATER_EXPRESSION)) return new GreaterImpl(node);
+            if (type.equals(LESS_EQUAL_EXPRESSION)) return new LessEqualImpl(node);
+            if (type.equals(LESS_EXPRESSION)) return new LessImpl(node);
+            if (type.equals(SAME_Q_EXPRESSION)) return new SameQImpl(node);
+            if (type.equals(UNEQUAL_EXPRESSION)) return new UnequalImpl(node);
+            if (type.equals(UNSAME_Q_EXPRESSION)) return new UnsameQImpl(node);
+
+            // File operations
+            if (type.equals(GET_PREFIX)) return new GetImpl(node);
+            if (type.equals(PUT_APPEND_EXPRESSION)) return new PutAppendImpl(node);
+            if (type.equals(PUT_EXPRESSION)) return new PutImpl(node);
+
+            // Function related
+            if (type.equals(APPLY1_EXPRESSION)) return new Apply1Impl(node);
+            if (type.equals(APPLY_EXPRESSION)) return new ApplyImpl(node);
+            if (type.equals(INFIX_CALL_EXPRESSION)) return new InfixImpl(node);
+            if (type.equals(MAP_ALL_EXPRESSION)) return new MapAllImpl(node);
+            if (type.equals(MAP_EXPRESSION)) return new MapImpl(node);
+            if (type.equals(POSTFIX_EXPRESSION)) return new PostfixImpl(node);
+            if (type.equals(PREFIX_CALL_EXPRESSION)) return new PrefixImpl(node);
+            if (type.equals(FUNCTION_POSTFIX)) return new FunctionImpl(node);
+
+            // List related
+            if (type.equals(LIST_EXPRESSION)) return new ListImpl(node);
+            if (type.equals(PART_EXPRESSION)) return new PartImpl(node);
+            if (type.equals(SPAN_EXPRESSION)) return new SpanImpl(node);
+
+            // Logical operations
+            if (type.equals(AND_EXPRESSION)) return new AndImpl(node);
+            if (type.equals(OR_EXPRESSION)) return new OrImpl(node);
+            if (type.equals(NOT_PREFIX)) return new NotImpl(node);
+
+            // Patterns
+            if (type.equals(ALTERNATIVE_EXPRESSION)) return new AlternativeImpl(node);
+            if (type.equals(BLANK_EXPRESSION)) return new BlankImpl(node);
+            if (type.equals(BLANK_NULL_SEQUENCE_EXPRESSION)) return new BlankNullSequenceImpl(node);
+            if (type.equals(BLANK_SEQUENCE_EXPRESSION)) return new BlankSequenceImpl(node);
+            if (type.equals(CONDITION_EXPRESSION)) return new ConditionImpl(node);
+            if (type.equals(OPTIONAL_EXPRESSION)) return new OptionalImpl(node);
+            if (type.equals(PATTERN_EXPRESSION)) return new PatternImpl(node);
+            if (type.equals(PATTERN_TEST_EXPRESSION)) return new PatternTestImpl(node);
+            if (type.equals(REPEATED_POSTFIX)) return new RepeatedImpl(node);
+            if (type.equals(REPEATED_NULL_POSTFIX)) return new RepeatedNullImpl(node);
+
+            // Rules
+            if (type.equals(REPLACE_ALL_EXPRESSION)) return new ReplaceAllImpl(node);
+            if (type.equals(REPLACE_REPEATED_EXPRESSION)) return new ReplaceRepeatedImpl(node);
+            if (type.equals(RULE_DELAYED_EXPRESSION)) return new RuleDelayedImpl(node);
+            if (type.equals(RULE_EXPRESSION)) return new RuleImpl(node);
+
+            // MString stuff
+            if (type.equals(STRING_EXPRESSION_EXPRESSION)) return new StringExpressionImpl(node);
+            if (type.equals(STRING_JOIN_EXPRESSION)) return new StringJoinImpl(node);
+            if (type.equals(MESSAGE_NAME_EXPRESSION)) return new MessageNameImpl(node);
+
+            if (type.equals(COMPOUND_EXPRESSION_EXPRESSION)) return new CompoundExpressionImpl(node);
+
+            // At least everything is an expression
+            return new ExpressionImpl(node);
         }
     }
 
@@ -335,6 +467,8 @@ public interface MathematicaElementTypes {
     IElementType UP_SET_EXPRESSION = new MathematicaElementType("UP_SET_EXPRESSION");
     IElementType UP_SET_DELAYED_EXPRESSION = new MathematicaElementType("UP_SET_DELAYED_EXPRESSION");
     IElementType TAG_SET_EXPRESSION = new MathematicaElementType("TAG_SET_EXPRESSION");
+    IElementType TAG_SET_DELAYED_EXPRESSION = new MathematicaElementType("TAG_SET_DELAYED_EXPRESSION");
+    IElementType TAG_UNSET_EXPRESSION = new MathematicaElementType("TAG_UNSET_EXPRESSION");
     IElementType UNSET_EXPRESSION = new MathematicaElementType("UNSET_EXPRESSION");
 
     IElementType PUT_EXPRESSION = new MathematicaElementType("PUT_EXPRESSION");
@@ -343,33 +477,33 @@ public interface MathematicaElementTypes {
     IElementType COMPOUND_EXPRESSION_EXPRESSION = new MathematicaElementType("COMPOUND_EXPRESSION_EXPRESSION");
 
     IElementType FAILBACK = new MathematicaElementType("FAILBACK");
-    IElementType UNBALANCED_PARANTHESIS = new MathematicaElementType("UNBALANCED_PARANTHESIS");
 
-    TokenSet ARITHMETIC_OPERATIONS = TokenSet.create(
-            UNARY_PLUS_PREFIX, UNARY_MINUS_PREFIX, PLUS_EXPRESSION, MINUS_EXPRESSION,
-            TIMES_BY_EXPRESSION, TIMES_EXPRESSION, DIVIDE_BY_EXPRESSION, DIVIDE_EXPRESSION,
-            POWER_EXPRESSION, FACTORIAL_POSTFIX, DOT_EXPRESSION, STRING_JOIN_EXPRESSION,
-            INCREMENT_POSTFIX, DECREMENT_POSTFIX, PRE_INCREMENT_PREFIX, PRE_DECREMENT_PREFIX
-    );
+//    TokenSet ARITHMETIC_OPERATIONS = TokenSet.create(
+//            UNARY_PLUS_PREFIX, UNARY_MINUS_PREFIX, PLUS_EXPRESSION, MINUS_EXPRESSION,
+//            TIMES_BY_EXPRESSION, TIMES_EXPRESSION, DIVIDE_BY_EXPRESSION, DIVIDE_EXPRESSION,
+//            POWER_EXPRESSION, FACTORIAL_POSTFIX, DOT_EXPRESSION, STRING_JOIN_EXPRESSION,
+//            INCREMENT_POSTFIX, DECREMENT_POSTFIX, PRE_INCREMENT_PREFIX, PRE_DECREMENT_PREFIX
+//    );
+//
+//    TokenSet LOGICAL_OPERATIONS = TokenSet.create(AND_EXPRESSION, OR_EXPRESSION, NOT_PREFIX);
+//
+//    TokenSet ASSIGNMENT_OPERATIONS = TokenSet.create(SET_DELAYED_EXPRESSION, SET_EXPRESSION, UP_SET_EXPRESSION,
+//            UP_SET_DELAYED_EXPRESSION, TAG_SET_EXPRESSION, UNSET_EXPRESSION);
+//
+//    TokenSet COMPARISON_EXPRESSIONS = TokenSet.create(EQUAL_EXPRESSION, UNEQUAL_EXPRESSION,
+//            SAME_Q_EXPRESSION, UNSAME_Q_EXPRESSION,
+//            GREATER_EQUAL_EXPRESSION, GREATER_EXPRESSION, LESS_EQUAL_EXPRESSION, LESS_EXPRESSION);
+//
+//    TokenSet FUNCTION_APPLICATION = TokenSet.create(MAP_ALL_EXPRESSION, MAP_EXPRESSION, POSTFIX_EXPRESSION,
+//            PREFIX_CALL_EXPRESSION, APPLY1_EXPRESSION, APPLY_EXPRESSION, INFIX_CALL_EXPRESSION);
+//
+//    TokenSet RULES_REPLACEMENT = TokenSet.create(RULE_DELAYED_EXPRESSION, RULE_EXPRESSION, REPLACE_ALL_EXPRESSION,
+//            REPLACE_REPEATED_EXPRESSION);
+//
+//    TokenSet PATTERNS = TokenSet.create(BLANK_NULL_SEQUENCE_EXPRESSION, BLANK_EXPRESSION, REPEATED_NULL_POSTFIX,
+//            REPEATED_POSTFIX, OPTIONAL_EXPRESSION, CONDITION_EXPRESSION, ALTERNATIVE_EXPRESSION,
+//            PATTERN_TEST_EXPRESSION, STRING_EXPRESSION_EXPRESSION);
+//
+//    TokenSet SAVE_LOAD = TokenSet.create(GET_PREFIX, PUT_EXPRESSION, PUT_APPEND_EXPRESSION);
 
-    TokenSet LOGICAL_OPERATIONS = TokenSet.create(AND_EXPRESSION, OR_EXPRESSION, NOT_PREFIX);
-
-    TokenSet ASSIGNMENT_OPERATIONS = TokenSet.create(SET_DELAYED_EXPRESSION, SET_EXPRESSION, UP_SET_EXPRESSION,
-            UP_SET_DELAYED_EXPRESSION, TAG_SET_EXPRESSION, UNSET_EXPRESSION);
-
-    TokenSet COMPARISON_EXPRESSIONS = TokenSet.create(EQUAL_EXPRESSION, UNEQUAL_EXPRESSION,
-            SAME_Q_EXPRESSION, UNSAME_Q_EXPRESSION,
-            GREATER_EQUAL_EXPRESSION, GREATER_EXPRESSION, LESS_EQUAL_EXPRESSION, LESS_EXPRESSION);
-
-    TokenSet FUNCTION_APPLICATION = TokenSet.create(MAP_ALL_EXPRESSION, MAP_EXPRESSION, POSTFIX_EXPRESSION,
-            PREFIX_CALL_EXPRESSION, APPLY1_EXPRESSION, APPLY_EXPRESSION, INFIX_CALL_EXPRESSION);
-
-    TokenSet RULES_REPLACEMENT = TokenSet.create(RULE_DELAYED_EXPRESSION, RULE_EXPRESSION, REPLACE_ALL_EXPRESSION,
-            REPLACE_REPEATED_EXPRESSION);
-
-    TokenSet PATTERNS = TokenSet.create(BLANK_NULL_SEQUENCE_EXPRESSION, BLANK_EXPRESSION, REPEATED_NULL_POSTFIX,
-            REPEATED_POSTFIX, OPTIONAL_EXPRESSION, CONDITION_EXPRESSION, ALTERNATIVE_EXPRESSION,
-            PATTERN_TEST_EXPRESSION, STRING_EXPRESSION_EXPRESSION);
-
-    TokenSet SAVE_LOAD = TokenSet.create(GET_PREFIX, PUT_EXPRESSION, PUT_APPEND_EXPRESSION);
 }

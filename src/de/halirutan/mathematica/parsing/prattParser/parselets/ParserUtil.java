@@ -26,7 +26,10 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 /**
  * @author patrick (3/30/13)
  */
-public class ParserUtil {
+public final class ParserUtil {
+
+    private ParserUtil() {
+    }
 
     static MathematicaParser.Result parseSequence(MathematicaParser parser, IElementType rightDel) throws CriticalParserError {
 

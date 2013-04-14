@@ -43,7 +43,7 @@ public class SpanParselet implements InfixParselet {
     // Parses things like expr1;;expr2, expr0;; ;;expr1 or expr0;;expr1;;expr2.
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        final PsiBuilder.Marker spanMark = left.getMark().precede();
+        PsiBuilder.Marker spanMark = left.getMark().precede();
         boolean skipped = false;
 
         if (parser.testToken(SPAN)) {
@@ -64,15 +64,15 @@ public class SpanParselet implements InfixParselet {
         // which is a syntax error list[expr0;;;;]].
         PrefixParselet nextPrefix = getPrefixParselet(parser.getTokenType());
         if (nextPrefix == null) {
-            if (!skipped) {
-                spanMark.done(SPAN_EXPRESSION);
-            } else {
+            if (skipped) {
                 spanMark.error("Expression expected after  \"expr0;; ;;\"");
+            } else {
+                spanMark.done(SPAN_EXPRESSION);
             }
             return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
         }
 
-        final MathematicaParser.Result expr1 = parser.parseExpression(precedence);
+        MathematicaParser.Result expr1 = parser.parseExpression(precedence);
 
         // if we had expr0;;;;expr1
         if (skipped) {
@@ -82,7 +82,7 @@ public class SpanParselet implements InfixParselet {
 
         if (parser.testToken(SPAN)) {
             parser.advanceLexer();
-            final MathematicaParser.Result expr2 = parser.parseExpression(precedence);
+            MathematicaParser.Result expr2 = parser.parseExpression(precedence);
             if (expr2.isParsed()) {
                 spanMark.done(SPAN_EXPRESSION);
             } else

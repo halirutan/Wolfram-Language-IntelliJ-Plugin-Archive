@@ -16,10 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.halirutan.mathematica.parsing.psi;
+package de.halirutan.mathematica.parsing.psi.impl.pattern;
+
+import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/9/13)
+ * @author patrick (4/14/13)
  */
-public interface StringExpression {
+public class ConditionImpl extends ExpressionImpl {
+    public ConditionImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 }

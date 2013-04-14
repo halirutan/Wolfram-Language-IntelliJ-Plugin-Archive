@@ -26,20 +26,24 @@ CommentEnd = "*)"
 Identifier = [a-zA-Z\$] [a-zA-Z0-9\$]*
 IdInContext = (`?){Identifier}(`{Identifier})*(`?)
 
+NamedCharacter = "\\["{Identifier}"]"
+
 Digits = [0-9]+
 Digits2 = [0-9a-zA-Z]+
 Base = 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36
 Number = {Digits}(\.{Digits}?)? | \.{Digits}
-PrecisionNumber = {Number}`(`?){Number}
+PrecisionNumber = {Number}`((`?){Number})?
 BaseNumber = {Base} "^^" {Digits2}(\.{Digits2}?)?
 BasePrecisionNumber = {BaseNumber}((`{Number}?)|(``{Number}))
-ScientificNumber = {PrecisionNumber} "*^" {Digits}
-BaseScientificNumber = {BasePrecisionNumber} "*^" {Digits}
+ScientificInteger = {Number} "\*^"(-?){Digits}
+ScientificNumber = {PrecisionNumber} "\*^"(-?){Digits}
+BaseScientificNumber = {BasePrecisionNumber} "\*^"(-?){Digits}
 
 Slot = "#" [0-9]*
 SlotSequence = "##" [0-9]*
 
 Out = "%"+
+
 
 %state IN_COMMENT
 %state IN_STRING
@@ -49,19 +53,23 @@ Out = "%"+
 <YYINITIAL> {
 	"(*"				{ yybegin(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
 	{WhiteSpace}+ 		{ yybegin(YYINITIAL); return MathematicaElementTypes.WHITE_SPACE; }
+    "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
+
 	{LineTerminator}+   { yybegin(YYINITIAL); return MathematicaElementTypes.LINE_BREAK; }
 	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
+
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
+	{NamedCharacter}    { return MathematicaElementTypes.IDENTIFIER; }
 
 	{BaseScientificNumber}|
 	{BasePrecisionNumber}|
+	{ScientificInteger}|
 	{BaseNumber}|
 	{ScientificNumber}|
 	{PrecisionNumber}|
 	{Number}  			{ return MathematicaElementTypes.NUMBER; }
 
 	"``"				{ return MathematicaElementTypes.ACCURACY; }
-//    "[["				{ return MathematicaElementTypes.PART_BEGIN; }
 	"["					{ return MathematicaElementTypes.LEFT_BRACKET; }
 	"]"					{ return MathematicaElementTypes.RIGHT_BRACKET; }
 	"("					{ return MathematicaElementTypes.LEFT_PAR; }
@@ -153,15 +161,25 @@ Out = "%"+
 
     "'"					{ return MathematicaElementTypes.DERIVATIVE; }
 
-
+    "'"					{ return MathematicaElementTypes.DERIVATIVE; }
 
 	.       			{ return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
-<IN_STRING> {
-	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
-	\"					{ yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
+//<IN_STRING> {
+//	\\                  { return MathematicaElementTypes.STRING_LITERAL; }
+//	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
+//	\"					{ yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
+//
+//}
 
+<IN_STRING> {
+  \"                             { yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
+  [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
+  "\\"{LineTerminator}           { return MathematicaElementTypes.STRING_LITERAL; }
+  "\\\\"                         {  return MathematicaElementTypes.STRING_LITERAL; }
+  "\\\""                         { return MathematicaElementTypes.STRING_LITERAL; }
+  "\\"                           { return MathematicaElementTypes.STRING_LITERAL; }
 }
 
 <IN_COMMENT> {

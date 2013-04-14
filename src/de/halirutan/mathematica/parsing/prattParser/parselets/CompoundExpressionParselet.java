@@ -29,7 +29,7 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  *
  */
 public class CompoundExpressionParselet implements InfixParselet {
-    final int precedence;
+    private final int precedence;
 
     public CompoundExpressionParselet(int precedence) {
         this.precedence = precedence;
@@ -41,10 +41,10 @@ public class CompoundExpressionParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         if (!left.isValid()) return parser.notParsed();
-        final PsiBuilder.Marker compoundExprMark = left.getMark().precede();
-        final IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
+        PsiBuilder.Marker compoundExprMark = left.getMark().precede();
+        IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
         parser.advanceLexer();
 
         boolean ok = true;

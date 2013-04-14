@@ -62,20 +62,20 @@ public class MathematicaFunctionCompletion extends CompletionProvider<Completion
         }
     }
 
-//    public static String findMathematicaIdentifierPrefix(CompletionParameters parameters) {
+//    public static MString findMathematicaIdentifierPrefix(CompletionParameters parameters) {
 //        final PsiFile file = parameters.getPosition().getContainingFile();
 //        if (file == null) return "";
-//        final String text = file.getText();
+//        final MString text = file.getText();
 //        ElementPattern<Character>
 //
 //
 //        //, parameters.getOffset(), character().letterOrDigit(), character().letterOrDigit());
 //    }
 //
-//    public static String findIdentifierPrefix(PsiElement insertedElement, int offset, ElementPattern<Character> idPart,
+//    public static MString findIdentifierPrefix(PsiElement insertedElement, int offset, ElementPattern<Character> idPart,
 //                                              ElementPattern<Character> idStart) {
 //        if(insertedElement == null) return "";
-//        final String text = insertedElement.getText();
+//        final MString text = insertedElement.getText();
 //
 //        final int offsetInElement = offset - insertedElement.getTextRange().getStartOffset();
 //        int start = offsetInElement - 1;

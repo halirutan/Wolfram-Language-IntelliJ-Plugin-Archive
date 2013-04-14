@@ -36,10 +36,10 @@ public class PostfixOperatorParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        final IElementType token = parser.getTokenType();
-        final IElementType psiElement = ParseletProvider.getInfixPsiElement(this);
-        final PsiBuilder.Marker postfixMarker = left.getMark().precede();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+        IElementType token = parser.getTokenType();
+        IElementType psiElement = ParseletProvider.getInfixPsiElement(this);
+        PsiBuilder.Marker postfixMarker = left.getMark().precede();
         parser.advanceLexer();
         postfixMarker.done(psiElement);
         return parser.result(postfixMarker, token, true);

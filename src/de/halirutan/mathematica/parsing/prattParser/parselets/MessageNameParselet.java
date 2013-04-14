@@ -36,23 +36,23 @@ public class MessageNameParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (left.isValid() && left.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION) {
-            final PsiBuilder.Marker mark = left.getMark();
-            final PsiBuilder.Marker newmark = mark.precede();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+        if (left.isValid() && (left.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION)) {
+            PsiBuilder.Marker mark = left.getMark();
+            PsiBuilder.Marker newmark = mark.precede();
             mark.drop();
             newmark.error("Usage message expects Symbol");
             left = parser.result(newmark, left.getToken(), left.isParsed());
         }
 
-        final PsiBuilder.Marker messageNameMarker = left.getMark().precede();
+        PsiBuilder.Marker messageNameMarker = left.getMark().precede();
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
 
         if(result.isParsed()) {
             // Check whether we have a symbol or a string in usage message
-            if (result.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION && result.getToken() != MathematicaElementTypes.STRING_EXPRESSION) {
-                final PsiBuilder.Marker errMark = result.getMark().precede();
+            if ((result.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION) && (result.getToken() != MathematicaElementTypes.STRING_EXPRESSION)) {
+                PsiBuilder.Marker errMark = result.getMark().precede();
                 errMark.error("Usage message expects Symbol or String");
             }
 
@@ -60,8 +60,8 @@ public class MessageNameParselet implements InfixParselet {
             if (parser.testToken(MathematicaElementTypes.DOUBLE_COLON)) {
                 parser.advanceLexer();
                 result = parser.parseExpression(precedence);
-                if (result.isParsed() && (result.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION || result.getToken() != MathematicaElementTypes.STRING_EXPRESSION)) {
-                    final PsiBuilder.Marker errMark = result.getMark().precede();
+                if (result.isParsed() && ((result.getToken() != MathematicaElementTypes.SYMBOL_EXPRESSION) || (result.getToken() != MathematicaElementTypes.STRING_EXPRESSION))) {
+                    PsiBuilder.Marker errMark = result.getMark().precede();
                     errMark.error("Usage message exprects Symbol or String");
                 }
             }

@@ -39,24 +39,21 @@ public class InfixOperatorParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         if (!left.isValid()) return parser.notParsed();
-        final PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
-        final IElementType token = ParseletProvider.getInfixPsiElement(this);
+        PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
+        IElementType token = ParseletProvider.getInfixPsiElement(this);
 
-        // if we have an implicit times, we don't advance the lexer since we are already over the second operand
-        // token
-        if ( !parser.isImplicitTimesPosition() ) {
-            parser.advanceLexer();
-        }
+//        if (token != parser.getTokenType()) throw new CriticalParserError("Operator does not match");
+        parser.advanceLexer();
 
         MathematicaParser.Result result = parser.parseExpression(precedence - (rightAssociative ? 1 : 0));
-        if (!result.isParsed()) {
-            parser.error("More input expected.");
-            infixOperationMarker.done(token);
-        } else {
+        if (result.isParsed()) {
             infixOperationMarker.done(token);
             result = parser.result(infixOperationMarker, token, true);
+        } else {
+            parser.error("More input expected.");
+            infixOperationMarker.done(token);
         }
         return result;
     }

@@ -38,12 +38,13 @@ public class FunctionCallParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         // should never happen
-        if (parser.getTokenType() != LEFT_BRACKET && !left.isValid()) {
+        if ((parser.getTokenType() != LEFT_BRACKET) && !left.isValid()) {
             return parser.notParsed();
         }
-        final PsiBuilder.Marker mainMark = left.getMark().precede();
+
+        PsiBuilder.Marker mainMark = left.getMark().precede();
 
         // parse the start. Either a Part expression like list[[ or a function call f[
         boolean isPartExpr = false;

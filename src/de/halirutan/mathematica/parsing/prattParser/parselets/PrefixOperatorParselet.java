@@ -36,11 +36,11 @@ public class PrefixOperatorParselet implements PrefixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        final PsiBuilder.Marker mark = parser.mark();
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+        PsiBuilder.Marker mark = parser.mark();
         parser.advanceLexer();
-        final IElementType token = ParseletProvider.getPrefixPsiElement(this);
-        final MathematicaParser.Result result = parser.parseExpression(precedence);
+        IElementType token = ParseletProvider.getPrefixPsiElement(this);
+        MathematicaParser.Result result = parser.parseExpression(precedence);
         mark.done(token);
         return parser.result(mark,token, result.isParsed());
 

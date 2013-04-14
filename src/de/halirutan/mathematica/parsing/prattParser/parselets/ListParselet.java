@@ -12,15 +12,15 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  */
 public class ListParselet implements PrefixParselet {
 
-    final int precedence;
+    private final int precedence;
 
     public ListParselet(int precedence) {
         this.precedence = precedence;
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        final PsiBuilder.Marker listMarker = parser.mark();
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+        PsiBuilder.Marker listMarker = parser.mark();
         boolean result = true;
 
         if(parser.testToken(LEFT_BRACE)) {
@@ -30,7 +30,7 @@ public class ListParselet implements PrefixParselet {
             throw new CriticalParserError("List parselet does not start with {");
         }
 
-        final MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
+        MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
 
         if (parser.testToken(RIGHT_BRACE)) {
             parser.advanceLexer();

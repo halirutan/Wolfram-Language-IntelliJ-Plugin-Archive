@@ -19,31 +19,38 @@
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
-import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
-
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.TIMES_EXPRESSION;
 
 /**
- * @author patrick (4/9/13)
+ * @author patrick (4/13/13)
  */
-public class LineBreakParselet implements InfixParselet {
-    final private int  precedence;
+public class ImplicitMultiplicationParselet implements InfixParselet {
 
-    public LineBreakParselet(int precedence) {
-        this.precedence = precedence;
-    }
+    private static final int precedence = 42;
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        parser.advanceLexer();
-        return left;
+        if (!left.isValid()) return parser.notParsed();
 
+        PsiBuilder.Marker timesMarker = left.getMark().precede();
+
+
+        MathematicaParser.Result result = parser.parseExpression(precedence);
+        if (result.isParsed()) {
+            timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
+            result = parser.result(timesMarker, MathematicaElementTypes.TIMES_EXPRESSION, true);
+        } else {
+            parser.error("More input expected.");
+            timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
+        }
+        return result;
     }
 
     @Override
     public int getPrecedence() {
         return precedence;
     }
+
 }

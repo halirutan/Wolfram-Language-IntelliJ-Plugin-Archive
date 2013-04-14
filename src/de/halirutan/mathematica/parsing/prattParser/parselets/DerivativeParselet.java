@@ -33,7 +33,7 @@ public class DerivativeParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
         return parser.notParsed();
     }
 

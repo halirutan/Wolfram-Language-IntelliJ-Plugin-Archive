@@ -29,11 +29,12 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  *
  */
 public class BlankSequenceParselet implements InfixParselet {
-    final int precedence;
+    private final int precedence;
     public BlankSequenceParselet(int precedence) {
         this.precedence=precedence;
     }
 
+    @Override
     public int getPrecedence() {
         return precedence;
     }
@@ -41,11 +42,11 @@ public class BlankSequenceParselet implements InfixParselet {
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         if (!left.isValid()) return parser.notParsed();
-        final PsiBuilder.Marker blankMark = left.getMark().precede();
-        final IElementType token = MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION;
+        PsiBuilder.Marker blankMark = left.getMark().precede();
+        IElementType token = MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION;
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, result.isValid() ? result.isParsed() : true);
+        return parser.result(blankMark, token, !result.isValid() || result.isParsed());
     }
 }

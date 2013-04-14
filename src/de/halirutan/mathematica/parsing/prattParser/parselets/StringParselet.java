@@ -28,7 +28,7 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  */
 public class StringParselet implements PrefixParselet {
 
-    final int precedence;
+    private final int precedence;
 
     public StringParselet(int precedence) {
         this.precedence = precedence;
@@ -41,17 +41,17 @@ public class StringParselet implements PrefixParselet {
      */
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser) {
-        final PsiBuilder.Marker stringMark = parser.mark();
+        PsiBuilder.Marker stringMark = parser.mark();
         boolean parsedQ = true;
         parser.advanceLexer();
         while (parser.testToken(MathematicaElementTypes.STRING_LITERAL)) {
             parser.advanceLexer();
         }
-        if (!parser.testToken(MathematicaElementTypes.STRING_LITERAL_END)) {
+        if (parser.testToken(MathematicaElementTypes.STRING_LITERAL_END)) {
+            parser.advanceLexer();
+        } else {
             parser.error("\" expected");
             parsedQ = false;
-        } else {
-            parser.advanceLexer();
         }
         stringMark.done(MathematicaElementTypes.STRING_EXPRESSION);
         return parser.result(stringMark, MathematicaElementTypes.STRING_EXPRESSION, parsedQ);

@@ -26,6 +26,6 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  *
  */
 public interface PrefixParselet {
-    MathematicaParser.Result parse(MathematicaParser builder) throws CriticalParserError;
+    MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError;
 }
 

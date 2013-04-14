@@ -5,6 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.WhitespaceSkippedCallback;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.prattParser.parselets.ImplicitMultiplicationParselet;
 import de.halirutan.mathematica.parsing.prattParser.parselets.InfixParselet;
 import de.halirutan.mathematica.parsing.prattParser.parselets.PrefixParselet;
 import org.jetbrains.annotations.NotNull;
@@ -18,23 +19,24 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getP
  */
 public class MathematicaParser implements PsiParser {
 
-    private PsiBuilder builder = null;
-    private int recursionDepth;
+    private PsiBuilder builder;
     public ImportantWhitespaceHandler whitespaceHandler;
+    private int recursionDepth;
+    private static final ImplicitMultiplicationParselet myImplicitMultiplicationParselet = new ImplicitMultiplicationParselet();
+
 
     public MathematicaParser() {
-        this.recursionDepth = 0;
+        recursionDepth = 0;
         whitespaceHandler = new ImportantWhitespaceHandler();
     }
 
     @NotNull
     @Override
     public ASTNode parse(IElementType root, PsiBuilder builder) {
-        builder.setWhitespaceSkippedCallback(this.whitespaceHandler);
+        builder.setWhitespaceSkippedCallback(whitespaceHandler);
         boolean runthrough = false;
-        int iter = 100;
 
-        final PsiBuilder.Marker rootMarker = builder.mark();
+        PsiBuilder.Marker rootMarker = builder.mark();
         this.builder = builder;
         builder.setDebugMode(true);
         try {
@@ -70,53 +72,62 @@ public class MathematicaParser implements PsiParser {
     public Result parseExpression(int precedence) throws CriticalParserError {
         if (builder.eof()) return notParsed();
         IElementType token = builder.getTokenType();
+        if (token == LINE_BREAK) {
+            advanceLexer();
+            token = builder.getTokenType();
+        }
 
         PrefixParselet prefix = getPrefixParselet(token);
         if (prefix == null) {
             return notParsed();
         }
 
-        recursionDepth++;
+        increaseRecursionDepth();
         Result left = prefix.parse(this);
 
-        while (left.isParsed() && precedence < getPrecedence(builder)) {
+        while (left.isParsed()) {
             token = builder.getTokenType();
-
-            InfixParselet infix = getInfixParselet(token);
-
+            InfixParselet infix = getInfixOrMultiplyParselet(token);
             if (infix == null) {
-                if (whitespaceHandler.hadWhitespace()) {
-                    infix = getInfixParselet(TIMES);
-                } else {
-                    recursionDepth--;
-                    return notParsed();
-                }
+                break;
             }
-            ;
-
+            if (precedence >= infix.getPrecedence()){
+                break;
+            }
             left = infix.parse(this, left);
         }
-        recursionDepth--;
+        decreaseRecursionDepth();
         return left;
     }
 
-    private int getPrecedence(PsiBuilder builder) {
-        IElementType token = builder.getTokenType();
-        InfixParselet parser = getInfixParselet(token);
-        if (parser == null) {
-            if (isImplicitTimesPosition()) {
-                return getInfixParselet(TIMES).getPrecedence();
-            }
-            return 0;
+    private InfixParselet getInfixOrMultiplyParselet(IElementType token) {
+        InfixParselet infixParselet = getInfixParselet(token);
+        PrefixParselet prefixParselet = getPrefixParselet(token);
+
+        if (infixParselet != null) return infixParselet;
+
+        if (prefixParselet == null) {
+            return null;
         }
-        return parser.getPrecedence();
+
+        if (whitespaceHandler.hadWhitespace()) {
+            return null;
+        }
+
+        return myImplicitMultiplicationParselet;
     }
 
-//
-//    public PsiBuilder getBuilder() {
-//        return builder;
-//    }
+    public PsiBuilder getBuilder() {
+        return builder;
+    }
 
+    public int decreaseRecursionDepth() {
+        return --recursionDepth;
+    }
+
+    public int increaseRecursionDepth() {
+        return ++recursionDepth;
+    }
 
     public PsiBuilder.Marker mark() {
         return builder.mark();
@@ -145,11 +156,11 @@ public class MathematicaParser implements PsiParser {
     }
 
     public boolean testToken(IElementType token) {
-        return !builder.eof() && builder.getTokenType() == token;
+        return !builder.eof() && (builder.getTokenType() == token);
     }
 
     public boolean testToken(IElementType token1, IElementType token2) {
-        return builder.lookAhead(0) == token1 && builder.lookAhead(1) == token2;
+        return (builder.lookAhead(0) == token1) && (builder.lookAhead(1) == token2);
     }
 
     /**
@@ -164,10 +175,9 @@ public class MathematicaParser implements PsiParser {
     public boolean isImplicitTimesPosition() {
         IElementType token = builder.getTokenType();
         InfixParselet parser = getInfixParselet(token);
-        if (parser == null && whitespaceHandler.hadWhitespace() && (token == IDENTIFIER || token == LEFT_BRACE || token == LEFT_PAR)) {
-            return true;
-        }
-        return false;
+        if (parser != null) return false;
+        return (whitespaceHandler.hadWhitespace() && (token == IDENTIFIER)) ||
+                ((token == LEFT_BRACE) || (token == LEFT_PAR) || (token == RIGHT_PAR) || (token == RIGHT_BRACE));
     }
 
     public boolean eof() {
@@ -178,7 +188,6 @@ public class MathematicaParser implements PsiParser {
         return recursionDepth;
     }
 
-
     /**
      * Finds out when a whitespace means multiplication or *sequence* of expressions.
      */
@@ -187,7 +196,7 @@ public class MathematicaParser implements PsiParser {
 
         @Override
         public void onSkip(IElementType type, int start, int end) {
-            whitespaceSeen = true;
+            if (type == LINE_BREAK) whitespaceSeen = true;
         }
 
         public void reset() {
@@ -231,7 +240,7 @@ public class MathematicaParser implements PsiParser {
         }
 
         public boolean isValid() {
-            return leftMark != null && leftToken != null;
+            return (leftMark != null) && (leftToken != null);
         }
     }
 }

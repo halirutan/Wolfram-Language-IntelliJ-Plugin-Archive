@@ -1,6 +1,7 @@
 package de.halirutan.mathematica.codeInsight.editor;
 
 import com.intellij.codeInsight.CodeInsightSettings;
+import com.intellij.codeInsight.editorActions.TypedHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.codeInsight.highlighting.BraceMatcher;
 import com.intellij.codeInsight.highlighting.BraceMatchingUtil;
@@ -28,7 +29,7 @@ public class MathematicaBinaryTypedHandler extends TypedHandlerDelegate
         public TypedHandlerDelegate.Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
         if (!(file instanceof MathematicaPsiFile)) return super.charTyped(c, project, editor, file);
 
-        if (c != '<' || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
+        if ((c != '<') || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
             return TypedHandlerDelegate.Result.CONTINUE;
         }
         insertMatchedBinaryBraces(project, editor, file);
@@ -39,8 +40,8 @@ public class MathematicaBinaryTypedHandler extends TypedHandlerDelegate
          * this is almost complete c'n'p from TypedHandler,
          * This code should be generalized into BraceMatchingUtil to support custom matching braces for plugin developers
          *
-         * @see com.intellij.codeInsight.editorActions.TypedHandler
-         * @see com.intellij.codeInsight.highlighting.BraceMatchingUtil
+         * @see TypedHandler
+         * @see BraceMatchingUtil
          */
     private static void insertMatchedBinaryBraces(Project project, Editor editor, PsiFile file) {
         if (!(file instanceof MathematicaPsiFile)) return;

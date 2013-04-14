@@ -4,11 +4,11 @@ import com.intellij.openapi.fileTypes.LanguageFileType;
 import de.halirutan.mathematica.MathematicaLanguage;
 import de.halirutan.mathematica.Mathematica;
 import de.halirutan.mathematica.MathematicaIcons;
-import de.halirutan.mathematica.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +20,7 @@ import javax.swing.*;
 public class MathematicaFileType extends LanguageFileType{
 
     public static final LanguageFileType INSTANCE = new MathematicaFileType();
-    public static final String[] DEFAULT_EXTENSIONS= new String[]{"m","mma","nb"};
+    private static final String[] DEFAULT_EXTENSIONS= {"m","mma","nb"};
 
     protected MathematicaFileType(){
         super(MathematicaLanguage.INSTANCE);

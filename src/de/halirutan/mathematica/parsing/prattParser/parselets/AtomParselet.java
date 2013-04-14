@@ -32,8 +32,8 @@ public class AtomParselet implements PrefixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser) {
-        final IElementType token = parser.getTokenType();
-        final PsiBuilder.Marker symbolMark = parser.mark();
+        IElementType token = parser.getTokenType();
+        PsiBuilder.Marker symbolMark = parser.mark();
         parser.advanceLexer();
         symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
         return parser.result(symbolMark, token, true);

@@ -41,14 +41,14 @@ public class InfixCallParselet implements InfixParselet {
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        final PsiBuilder.Marker infixCall = left.getMark().precede();
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+        PsiBuilder.Marker infixCall = left.getMark().precede();
         parser.advanceLexer();
-        final MathematicaParser.Result operator = parser.parseExpression(precedence);
+        MathematicaParser.Result operator = parser.parseExpression(precedence);
 
         if (parser.testToken(MathematicaElementTypes.INFIX_CALL)) {
             parser.advanceLexer();
-            final MathematicaParser.Result operand2 = parser.parseExpression(precedence);
+            MathematicaParser.Result operand2 = parser.parseExpression(precedence);
             infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
             return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
         } else {

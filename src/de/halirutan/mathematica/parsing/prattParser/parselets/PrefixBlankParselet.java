@@ -29,19 +29,19 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  *
  */
 public class PrefixBlankParselet implements PrefixParselet {
-    final int precedence;
+    private final int precedence;
     public PrefixBlankParselet(int precedence) {
         this.precedence = precedence;
     }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        final PsiBuilder.Marker blankMark = parser.mark();
-        final IElementType token = MathematicaElementTypes.BLANK_EXPRESSION;
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+        PsiBuilder.Marker blankMark = parser.mark();
+        IElementType token = MathematicaElementTypes.BLANK_EXPRESSION;
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, result.isValid() ? result.isParsed() : true);
+        return parser.result(blankMark, token, !result.isValid() || result.isParsed());
     }
 
 }

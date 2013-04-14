@@ -42,8 +42,8 @@ public class GroupParselet implements PrefixParselet {
         if (parser.getTokenType() != MathematicaElementTypes.LEFT_PAR) {
             return parser.notParsed();
         }
-        final IElementType token = ParseletProvider.getPrefixPsiElement(this);
-        final PsiBuilder.Marker groupMark = parser.mark();
+        IElementType token = ParseletProvider.getPrefixPsiElement(this);
+        PsiBuilder.Marker groupMark = parser.mark();
         parser.advanceLexer();
 
         if (parser.eof()) {
