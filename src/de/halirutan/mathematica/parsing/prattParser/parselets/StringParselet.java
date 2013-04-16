@@ -53,7 +53,7 @@ public class StringParselet implements PrefixParselet {
             parser.error("\" expected");
             parsedQ = false;
         }
-        stringMark.done(MathematicaElementTypes.STRING_EXPRESSION);
-        return parser.result(stringMark, MathematicaElementTypes.STRING_EXPRESSION, parsedQ);
+        stringMark.done(MathematicaElementTypes.STRING);
+        return parser.result(stringMark, MathematicaElementTypes.STRING, parsedQ);
     }
 }

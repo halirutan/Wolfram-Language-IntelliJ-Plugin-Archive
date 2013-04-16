@@ -180,6 +180,7 @@ public interface MathematicaElementTypes {
     IElementType SPAN = new MathematicaElementType("SPAN");
     IElementType OUT = new MathematicaElementType("OUT");
     IElementType STRING_JOIN = new MathematicaElementType("STRING_JOIN");
+    IElementType STRING_EXPRESSION = new MathematicaElementType("STRING_EXPRESSION");
     IElementType POINT = new MathematicaElementType("POINT");
 
     IElementType AND = new MathematicaElementType("AND");
@@ -236,7 +237,7 @@ public interface MathematicaElementTypes {
             REPEATED, REPEATED_NULL, REPLACE_ALL, REPLACE_REPEATED, RULE, RULE_DELAYED,
             SAME_Q, SEMICOLON, SET, SET_DELAYED,
             TAG_SET, TIMES, TIMES_BY,
-            UNEQUAL, UNSAME_Q, UNSET, UP_SET, UP_SET_DELAYED
+            UNEQUAL, UNSAME_Q, UNSET, UP_SET, UP_SET_DELAYED, PREFIX_CALL, STRING_JOIN, STRING_EXPRESSION
     );
 
     TokenSet LITERALS = TokenSet.create(
@@ -258,7 +259,7 @@ public interface MathematicaElementTypes {
 
             // Basic types
             if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
-            if (type.equals(STRING_EXPRESSION)) return new StringImpl(node);
+            if (type.equals(STRING)) return new StringImpl(node);
 
             // Arithmetic operations
             if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
@@ -358,14 +359,13 @@ public interface MathematicaElementTypes {
 
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
 
-    IElementType MEANINGFUL_LINE_BREAK = new MathematicaElementType("MEANINGFUL_LINE_BREAK");
 
     IElementType GROUP_EXPRESSION = new MathematicaElementType("GROUP_EXPRESSION");
     IElementType LIST_EXPRESSION = new MathematicaElementType("LIST_EXPRESSION");
 
     IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");
     IElementType SYMBOL_EXPRESSION = new MathematicaElementType("SYMBOL_EXPRESSION");
-    IElementType STRING_EXPRESSION = new MathematicaElementType("STRING_EXPRESSION");
+    IElementType STRING = new MathematicaElementType("STRING");
 
     IElementType MESSAGE_NAME_EXPRESSION = new MathematicaElementType("MESSAGE_NAME_EXPRESSION");
 
