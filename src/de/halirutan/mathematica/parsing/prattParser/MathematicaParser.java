@@ -34,24 +34,18 @@ public class MathematicaParser implements PsiParser {
     @Override
     public ASTNode parse(IElementType root, PsiBuilder builder) {
         builder.setWhitespaceSkippedCallback(whitespaceHandler);
-        boolean runthrough = false;
 
         PsiBuilder.Marker rootMarker = builder.mark();
         this.builder = builder;
         builder.setDebugMode(true);
         try {
             while (!builder.eof()) {
-                if (runthrough) {
+                Result expr = parseExpression();
+
+                if (!expr.isParsed()) {
+                    builder.error("Errors in the preceeding expression.");
                     builder.advanceLexer();
-                } else {
-                    Result expr = parseExpression();
-
-                    if (!expr.isParsed()) {
-                        builder.error("Errors in the preceeding expression.");
-                        builder.advanceLexer();
-                    }
                 }
-
             }
         } catch (CriticalParserError criticalParserError) {
             builder.error(criticalParserError.toString());
