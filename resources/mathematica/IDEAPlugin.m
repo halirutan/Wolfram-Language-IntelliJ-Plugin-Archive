@@ -1,6 +1,5 @@
 BeginPackage["IDEAPlugin`"];
 
-
 CreateHTMLUsage::usage = "CreateHTMLUsage[function_String] creates HTML/MathML code of the usage message of the symbol.";
 CreateAllHTMLUsages::usage = "CreateAllHTMLUsages[file] exports all usages to a file.";
 
@@ -54,20 +53,26 @@ createOptionString[s_] := With[{opts = Function[expr, Options[expr], HoldAll] @@
    	]
 ];
 
+replaceNestedStyleString[str_] := StringReplace[str,
+                                   Shortest["\\\"\\!\\(\\*StyleBox[\\\"" ~~ name__ ~~ "\\\"" ~~ __ ~~
+                                      "\\_" ~~ n_ ~~ "\\)\\\""] :>
+                                    "\\\"<em>" ~~ name ~~ "<sub>" ~~ n ~~ "</sub></em>\\\""];
+
 CreateHTMLUsage[s_String] := Module[{
 	usg = extractUsage[s],
    	attr = Attributes[s],
    	link, linkname},
 	{linkname, link} = createLinkName[s];
 
-  	result = linkname <> " <h3><a href=\"http://reference.wolfram.com/mathematica/ref/" <>
-   	link <> ".html\">" <> linkname <> "</a></h3>" <> If[usg =!= "",
-    "<ul><li>" <> StringReplace[
-    	StringReplace[usg, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :> convertBoxExpressionToHTML[content], "\n" :> "<li>"}
-    	], {"\[Null]" :> "", a_?(StringMatchQ[ToString@FullForm[#], "\"\\[" ~~ __ ~~ "]\""] &) :>
-    		StringReplace[ToString[a, MathMLForm], {WhitespaceCharacter :> ""}]}
-    ] <> "</ul>", ""] <> "<b>Attributes:</b> " <> StringJoin[ToString /@ Riffle[attr, ", "]] <> createOptionString[s] <> "\n";
-    StringReplace[result, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :> convertBoxExpressionToHTML[content]}]
+  	result = "<h3><a href=\"http://reference.wolfram.com/mathematica/ref/" <>
+   		link <> ".html\">" <> linkname <> "</a></h3>" <> If[usg =!= "",
+      	"<ul><li>" <> StringReplace[
+      		StringReplace[usg, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :>
+    			convertBoxExpressionToHTML[replaceNestedStyleString[content]], "\n" :> "<li>"}
+    		], {"\[Null]" :> "", a_?(StringMatchQ[ToString@FullForm[#], "\"\\[" ~~ __ ~~ "]\""] &) :>
+    			StringReplace[ToString[a, MathMLForm], {WhitespaceCharacter :> ""}]}
+    	] <> "</ul>", ""] <> "<b>Attributes:</b> " <> StringJoin[ToString /@ Riffle[attr, ", "]] <> "</p>" <> createOptionString[s] <> "\n";
+    {linkname, result}
 
 ];
 
@@ -78,4 +83,3 @@ CreateAllHTMLUsages[file_String] := Module[{names},
 
 End[];
 EndPackage[];
-
