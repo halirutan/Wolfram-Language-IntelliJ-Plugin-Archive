@@ -194,41 +194,41 @@ public class ParseletProvider {
         register(MathematicaElementTypes.BLANK_NULL_SEQUENCE, MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION, new PrefixBlankNullSequenceParselet(76)); // BlankNullSequence(___)
         postfix(MathematicaElementTypes.OPTIONAL, MathematicaElementTypes.OPTIONAL_EXPRESSION, 76); // Optional(_.)
 
-        prefix(MathematicaElementTypes.GET,	MathematicaElementTypes.GET_PREFIX,	74); // Get(<<)
+        prefix(MathematicaElementTypes.GET, MathematicaElementTypes.GET_PREFIX, 74); // Get(<<)
 
-        infixLeft(MathematicaElementTypes.QUESTION_MARK,	MathematicaElementTypes.PATTERN_TEST_EXPRESSION,	72); // PatternTest(?)
+        infixLeft(MathematicaElementTypes.QUESTION_MARK, MathematicaElementTypes.PATTERN_TEST_EXPRESSION, 72); // PatternTest(?)
 
         register(MathematicaElementTypes.LEFT_BRACKET,	MathematicaElementTypes.FUNCTION_CALL_EXPRESSION,	 new FunctionCallParselet(70)); // FunctionCall([)
 
         postfix(MathematicaElementTypes.INCREMENT,	MathematicaElementTypes.INCREMENT_POSTFIX,	68);
-        postfix(MathematicaElementTypes.DECREMENT,	MathematicaElementTypes.DECREMENT_POSTFIX,	68);
+        postfix(MathematicaElementTypes.DECREMENT, MathematicaElementTypes.DECREMENT_POSTFIX, 68);
 
-        prefix(MathematicaElementTypes.INCREMENT,	MathematicaElementTypes.PRE_INCREMENT_PREFIX,	66); // PreIncrement(++)
-        prefix(MathematicaElementTypes.DECREMENT,	MathematicaElementTypes.PRE_DECREMENT_PREFIX,	66); // PreDecrement(--)
+        prefix(MathematicaElementTypes.INCREMENT, MathematicaElementTypes.PRE_INCREMENT_PREFIX, 66); // PreIncrement(++)
+        prefix(MathematicaElementTypes.DECREMENT, MathematicaElementTypes.PRE_DECREMENT_PREFIX, 66); // PreDecrement(--)
 
         infixRight(MathematicaElementTypes.PREFIX_CALL,	MathematicaElementTypes.PREFIX_CALL_EXPRESSION,	64); // PrefixCall(@)
 
         register(MathematicaElementTypes.INFIX_CALL,	MathematicaElementTypes.INFIX_CALL_EXPRESSION,	 new InfixCallParselet(62)); // InfixCall(~)
 
-        infixRight(MathematicaElementTypes.MAP,	MathematicaElementTypes.MAP_EXPRESSION,	60); // Map(/@)
-        infixRight(MathematicaElementTypes.MAP_ALL,	MathematicaElementTypes.MAP_ALL_EXPRESSION,	60); // MapAll(//@)
-        infixRight(MathematicaElementTypes.APPLY,	MathematicaElementTypes.APPLY_EXPRESSION,	60); // Apply(@@)
-        infixRight(MathematicaElementTypes.APPLY1,	MathematicaElementTypes.APPLY1_EXPRESSION,	60); // Apply1(@@@)
+        infixRight(MathematicaElementTypes.MAP, MathematicaElementTypes.MAP_EXPRESSION, 60); // Map(/@)
+        infixRight(MathematicaElementTypes.MAP_ALL, MathematicaElementTypes.MAP_ALL_EXPRESSION, 60); // MapAll(//@)
+        infixRight(MathematicaElementTypes.APPLY, MathematicaElementTypes.APPLY_EXPRESSION, 60); // Apply(@@)
+        infixRight(MathematicaElementTypes.APPLY1, MathematicaElementTypes.APPLY1_EXPRESSION, 60); // Apply1(@@@)
 
-        postfix(MathematicaElementTypes.EXCLAMATION_MARK,	MathematicaElementTypes.FACTORIAL_POSTFIX,	58);
+        postfix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.FACTORIAL_POSTFIX, 58);
 
         register(MathematicaElementTypes.DERIVATIVE,	MathematicaElementTypes.DERIVATIVE_EXPRESSION,	 new DerivativeParselet(56)); // Derivative(')
 
-        infixLeft(MathematicaElementTypes.STRING_JOIN,	MathematicaElementTypes.STRING_JOIN_EXPRESSION,	54); // StringJoin(<>)
+        infixLeft(MathematicaElementTypes.STRING_JOIN, MathematicaElementTypes.STRING_JOIN_EXPRESSION, 54); // StringJoin(<>)
 
         infixRight(MathematicaElementTypes.POWER,	MathematicaElementTypes.POWER_EXPRESSION,	52); // Power(^)
 
-        infixLeft(MathematicaElementTypes.NON_COMMUTATIVE_MULTIPLY,	MathematicaElementTypes.NON_COMMUTATIVE_MULTIPLY_EXPRESSION,	50); // NonCommutativeMultiply(**)
+        infixLeft(MathematicaElementTypes.NON_COMMUTATIVE_MULTIPLY, MathematicaElementTypes.NON_COMMUTATIVE_MULTIPLY_EXPRESSION, 50); // NonCommutativeMultiply(**)
 
-        infixLeft(MathematicaElementTypes.POINT,	MathematicaElementTypes.DOT_EXPRESSION,	48); // Dot(.)
+        infixLeft(MathematicaElementTypes.POINT, MathematicaElementTypes.DOT_EXPRESSION, 48); // Dot(.)
 
-        prefix(MathematicaElementTypes.MINUS,	MathematicaElementTypes.UNARY_MINUS_PREFIX,	46); // UnaryMinus(-)
-        prefix(MathematicaElementTypes.PLUS,	MathematicaElementTypes.UNARY_PLUS_PREFIX,	46); // UnaryPlus(+)
+        prefix(MathematicaElementTypes.MINUS, MathematicaElementTypes.UNARY_MINUS_PREFIX, 46); // UnaryMinus(-)
+        prefix(MathematicaElementTypes.PLUS, MathematicaElementTypes.UNARY_PLUS_PREFIX, 46); // UnaryPlus(+)
 
         infixLeft(MathematicaElementTypes.DIVIDE,	MathematicaElementTypes.DIVIDE_EXPRESSION,	44); // Divide(/)
 
@@ -237,26 +237,26 @@ public class ParseletProvider {
         infixLeft(MathematicaElementTypes.PLUS,	MathematicaElementTypes.PLUS_EXPRESSION,	40); // Plus(+)
         infixLeft(MathematicaElementTypes.MINUS,	MathematicaElementTypes.MINUS_EXPRESSION,	40); // Minus(-)
 
-        register(MathematicaElementTypes.SPAN,	MathematicaElementTypes.SPAN_EXPRESSION,	 new SpanParselet(38)); // Span(;;)
+        register(MathematicaElementTypes.SPAN, MathematicaElementTypes.SPAN_EXPRESSION, new SpanParselet(38)); // Span(;;)
 
-        infixLeft(MathematicaElementTypes.EQUAL,	MathematicaElementTypes.EQUAL_EXPRESSION,	36); // Equal(==)
+        infixLeft(MathematicaElementTypes.EQUAL, MathematicaElementTypes.EQUAL_EXPRESSION, 36); // Equal(==)
         infixLeft(MathematicaElementTypes.UNEQUAL,	MathematicaElementTypes.UNEQUAL_EXPRESSION,	36); // Unequal(!=)
         infixLeft(MathematicaElementTypes.GREATER,	MathematicaElementTypes.GREATER_EXPRESSION,	36); // Greater(>)
         infixLeft(MathematicaElementTypes.GREATER_EQUAL,	MathematicaElementTypes.GREATER_EQUAL_EXPRESSION,	36); // GreaterEqual(>=)
         infixLeft(MathematicaElementTypes.LESS,	MathematicaElementTypes.LESS_EXPRESSION,	36); // Less(<)
-        infixLeft(MathematicaElementTypes.LESS_EQUAL,	MathematicaElementTypes.LESS_EQUAL_EXPRESSION,	36); // LessEqual(<=)
+        infixLeft(MathematicaElementTypes.LESS_EQUAL, MathematicaElementTypes.LESS_EQUAL_EXPRESSION, 36); // LessEqual(<=)
 
         infixLeft(MathematicaElementTypes.SAME_Q,	MathematicaElementTypes.SAME_Q_EXPRESSION,	34); // SameQ(===)
         infixLeft(MathematicaElementTypes.UNSAME_Q,	MathematicaElementTypes.UNSAME_Q_EXPRESSION,	34); // UnsameQ(=!=)
 
-        prefix(MathematicaElementTypes.EXCLAMATION_MARK,	MathematicaElementTypes.NOT_PREFIX,	32); // Not(!)
+        prefix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.NOT_PREFIX, 32); // Not(!)
 
         infixLeft(MathematicaElementTypes.AND,	MathematicaElementTypes.AND_EXPRESSION,	30); // And(&&)
 
         infixLeft(MathematicaElementTypes.OR,	MathematicaElementTypes.OR_EXPRESSION,	28); // Or(||)
 
-        postfix(MathematicaElementTypes.REPEATED,	MathematicaElementTypes.REPEATED_POSTFIX,	26);
-        postfix(MathematicaElementTypes.REPEATED_NULL,	MathematicaElementTypes.REPEATED_NULL_POSTFIX,	26);
+        postfix(MathematicaElementTypes.REPEATED, MathematicaElementTypes.REPEATED_POSTFIX, 26);
+        postfix(MathematicaElementTypes.REPEATED_NULL, MathematicaElementTypes.REPEATED_NULL_POSTFIX, 26);
 
         infixLeft(MathematicaElementTypes.ALTERNATIVE,	MathematicaElementTypes.ALTERNATIVE_EXPRESSION,	24); // Alternative(|)
 
@@ -266,18 +266,18 @@ public class ParseletProvider {
 
         infixLeft(MathematicaElementTypes.CONDITION,	MathematicaElementTypes.CONDITION_EXPRESSION,	18); // Condition(/;)
 
-        infixRight(MathematicaElementTypes.RULE,	MathematicaElementTypes.RULE_EXPRESSION,	16); // Rule(->)
-        infixRight(MathematicaElementTypes.RULE_DELAYED,	MathematicaElementTypes.RULE_DELAYED_EXPRESSION,	16); // RuleDelayed(:>)
+        infixRight(MathematicaElementTypes.RULE, MathematicaElementTypes.RULE_EXPRESSION, 16); // Rule(->)
+        infixRight(MathematicaElementTypes.RULE_DELAYED, MathematicaElementTypes.RULE_DELAYED_EXPRESSION, 16); // RuleDelayed(:>)
 
         infixLeft(MathematicaElementTypes.REPLACE_ALL,	MathematicaElementTypes.REPLACE_ALL_EXPRESSION,	14); // ReplaceAll(/.)
         infixLeft(MathematicaElementTypes.REPLACE_REPEATED,	MathematicaElementTypes.REPLACE_REPEATED_EXPRESSION,	14); // ReplaceRepeated(//.)
 
-        infixRight(MathematicaElementTypes.ADD_TO,	MathematicaElementTypes.ADD_TO_EXPRESSION,	12); // AddTo(+=)
-        infixRight(MathematicaElementTypes.SUBTRACT_FROM,	MathematicaElementTypes.SUBTRACT_FROM_EXPRESSION,	12); // SubtractFrom(-=)
+        infixRight(MathematicaElementTypes.ADD_TO, MathematicaElementTypes.ADD_TO_EXPRESSION, 12); // AddTo(+=)
+        infixRight(MathematicaElementTypes.SUBTRACT_FROM, MathematicaElementTypes.SUBTRACT_FROM_EXPRESSION, 12); // SubtractFrom(-=)
         infixRight(MathematicaElementTypes.TIMES_BY,	MathematicaElementTypes.TIMES_BY_EXPRESSION,	12); // TimesBy(*=)
         infixRight(MathematicaElementTypes.DIVIDE_BY,	MathematicaElementTypes.DIVIDE_BY_EXPRESSION,	12); // DivideBy(/=)
 
-        postfix(MathematicaElementTypes.FUNCTION,	MathematicaElementTypes.FUNCTION_POSTFIX,	10);
+        postfix(MathematicaElementTypes.FUNCTION, MathematicaElementTypes.FUNCTION_POSTFIX, 10);
 
         infixLeft(MathematicaElementTypes.POSTFIX,	MathematicaElementTypes.POSTFIX_EXPRESSION,	8); // Postfix(//)
 
@@ -285,11 +285,11 @@ public class ParseletProvider {
         infixRight(MathematicaElementTypes.SET_DELAYED,	MathematicaElementTypes.SET_DELAYED_EXPRESSION,	6); // SetDelayed(:=)
         infixRight(MathematicaElementTypes.UP_SET,	MathematicaElementTypes.UP_SET_EXPRESSION,	6); // UpSet(^=)
         infixRight(MathematicaElementTypes.UP_SET_DELAYED,	MathematicaElementTypes.UP_SET_DELAYED_EXPRESSION,	6); // UpSetDelayed(^:=)
-        register(MathematicaElementTypes.TAG_SET,	MathematicaElementTypes.TAG_SET_EXPRESSION,	 new TagSetParselet(6)); // TagSet(/:)
+        register(MathematicaElementTypes.TAG_SET, MathematicaElementTypes.TAG_SET_EXPRESSION, new TagSetParselet(6)); // TagSet(/:)
         postfix(MathematicaElementTypes.UNSET, MathematicaElementTypes.UNSET_EXPRESSION, 6); // Unset(=.)
 
-        infixLeft(MathematicaElementTypes.PUT,	MathematicaElementTypes.PUT_EXPRESSION,	4); // Put(>>)
-        infixLeft(MathematicaElementTypes.PUT_APPEND,	MathematicaElementTypes.PUT_APPEND_EXPRESSION,	4); // PutAppend(>>>)
+        infixLeft(MathematicaElementTypes.PUT, MathematicaElementTypes.PUT_EXPRESSION, 4); // Put(>>)
+        infixLeft(MathematicaElementTypes.PUT_APPEND, MathematicaElementTypes.PUT_APPEND_EXPRESSION, 4); // PutAppend(>>>)
 
         register(MathematicaElementTypes.SEMICOLON, MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION, new CompoundExpressionParselet(2)); // CompoundExpression(;)
 

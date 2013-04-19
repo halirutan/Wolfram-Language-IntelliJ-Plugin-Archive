@@ -26,10 +26,10 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  */
 public class DerivativeParselet implements InfixParselet {
 
-    private final int precedence;
+    private final int myPrecedence;
 
     public DerivativeParselet(int precedence) {
-        this.precedence = precedence;
+        myPrecedence = precedence;
     }
 
     @Override
@@ -39,6 +39,6 @@ public class DerivativeParselet implements InfixParselet {
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return myPrecedence;
     }
 }
