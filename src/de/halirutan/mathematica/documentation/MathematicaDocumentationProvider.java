@@ -1,25 +1,23 @@
 package de.halirutan.mathematica.documentation;
 
-import com.intellij.lang.documentation.DocumentationProvider;
 import com.intellij.lang.documentation.DocumentationProviderEx;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.paths.WebReferenceDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author patrick (4/4/13)
  */
-public class MathematicaDocumentationProvider extends DocumentationProviderEx {
-
-
-
+public class MathematicaDocumentationProvider extends DocumentationProviderEx  {
 
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
@@ -28,14 +26,20 @@ public class MathematicaDocumentationProvider extends DocumentationProviderEx {
 
     @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        ArrayList<String> urls = new ArrayList<String>();
-        urls.add("http://reference.wolfram.com/mathematica/ref/character/Alpha.html");
-        return urls;    //To change body of overridden methods use File | Settings | File Templates.
+        return super.getUrlFor(element, originalElement);
     }
 
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
-        return "<h3><a href=\"http://reference.wolfram.com/mathematica/ref/LinearModelFit.html\">LinearModelFit</a></h3><ul><li>LinearModelFit[{<em>y</em><sub>1</sub>,<em>y</em><sub>2</sub>,<math><ms>&#8230;</ms></math>},{<em>f</em><sub>1</sub>,<em>f</em><sub>2</sub>,<math><ms>&#8230;</ms></math>},<em>x</em>] constructs a linear model of the form <math><ms>&#946;</ms></math><sub>0</sub>+<math><ms>&#946;</ms></math><sub>1</sub><em>f</em><sub>1</sub>+<math><ms>&#946;</ms></math><sub>2</sub><em>f</em><sub>2</sub>+<math><ms>&#8230;</ms></math> that fits the <em>y</em><sub><em>i</em></sub> for successive <em>x</em> values 1, 2, <math><ms>&#8230;</ms></math>.<li>LinearModelFit[{{<em>x</em><sub>11</sub>,<em>x</em><sub>12</sub>,<math><ms>&#8230;</ms></math>,<em>y</em><sub>1</sub>},{<em>x</em><sub>21</sub>,<em>x</em><sub>22</sub>,<math><ms>&#8230;</ms></math>,<em>y</em><sub>2</sub>},<math><ms>&#8230;</ms></math>},{<em>f</em><sub>1</sub>,<em>f</em><sub>2</sub>,<math><ms>&#8230;</ms></math>},{<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,<math><ms>&#8230;</ms></math>}] constructs a linear model of the form <math><ms>&#946;</ms></math><sub>0</sub>+<math><ms>&#946;</ms></math><sub>1</sub><em>f</em><sub>1</sub>+<math><ms>&#946;</ms></math><sub>2</sub><em>f</em><sub>2</sub>+<math><ms>&#8230;</ms></math> where the <em>f</em><sub><em>i</em></sub> depend on the variables <em>x</em><sub><em>k</em></sub>. <li>LinearModelFit[{<em>m</em>,<em>v</em>}] constructs a linear model from the design matrix <em>m</em> and response vector <em>v</em>.</ul>";
+        if (element instanceof Symbol) {
+            String context = ((Symbol) element).getMathematicaContext();
+            String name = ((Symbol) element).getSymbolName();
+            String path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
+            InputStream docFile = MathematicaDocumentationProvider.class.getResourceAsStream(path);
+            String inputStreamString = new Scanner(docFile,"UTF-8").useDelimiter("\\A").next();
+            return inputStreamString;
+        }
+        return "Could not fetch documentation.";
     }
 
     /**
@@ -63,6 +67,6 @@ public class MathematicaDocumentationProvider extends DocumentationProviderEx {
     @Nullable
     @Override
     public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-        return contextElement;
+        return contextElement.getParent();
     }
 }

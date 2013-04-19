@@ -10,4 +10,7 @@ import com.intellij.psi.PsiNamedElement;
  * Purpose:
  */
 public interface Symbol extends PsiNamedElement {
+    String getMathematicaContext();
+
+    String getSymbolName();
 }

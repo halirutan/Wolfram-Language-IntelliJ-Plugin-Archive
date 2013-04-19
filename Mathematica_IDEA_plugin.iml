@@ -6,9 +6,8 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/resources/icons" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/resources/codeInsight" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/resources/mathematica" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/resources/mathematica" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

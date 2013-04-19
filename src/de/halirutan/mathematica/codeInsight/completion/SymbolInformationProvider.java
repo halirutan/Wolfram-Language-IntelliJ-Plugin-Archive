@@ -13,11 +13,11 @@ public class SymbolInformationProvider {
 
     private static void initialize() {
 
-        final ResourceBundle info = ResourceBundle.getBundle("symbolInformation");
+        ResourceBundle info = ResourceBundle.getBundle("/de/halirutan/mathematica/codeInsight/completion/symbolInformation");
 
         ourSymbols = new HashMap<String, SymbolInformation>();
 
-        final Enumeration<String> names = info.getKeys();
+        Enumeration<String> names = info.getKeys();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             String parts[] = info.getString(name).split(";");
