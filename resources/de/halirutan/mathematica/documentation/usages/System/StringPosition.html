@@ -1,0 +1,19 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/StringPosition.html">StringPosition</a></h3>
+<ul>
+    <li>StringPosition["string","sub"] gives a list of the starting and ending character positions at which
+        "<em>sub</em>" appears as a substring of "<em>string</em>".
+    <li>StringPosition["string",<em>patt</em>] gives all positions at which substrings matching the general string
+        expression <em>patt</em> appear in "<em>string</em>".
+    <li>StringPosition["string",<em>patt</em>,<em>n</em>] includes only the first <em>n</em> occurrences of
+        <em>patt</em>.
+    <li>StringPosition["string",{<em>patt</em><sub>1</sub>,<em>patt</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives positions of all the <em>patt</em><sub><em>i</em></sub>.
+    <li>StringPosition[{<em>s</em><sub>1</sub>,<em>s</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>p</em>] gives the list of results for each of the <em>s</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Options: </b>IgnoreCase, MetaCharacters, Overlaps</p>

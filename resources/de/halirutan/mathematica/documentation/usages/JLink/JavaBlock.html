@@ -1,0 +1,9 @@
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/JavaBlock.html">JavaBlock</a></h3>
+<ul>
+    <li>JavaBlock[expr] causes all new Java objects returned to Mathematica during the evaluation of expr to be released
+        when expr finishes. It is an error to refer to such an object after JavaBlock ends. See the usage message for
+        ReleaseJavaObject for more information. JavaBlock only affects new objects, not additional references to ones
+        that have previously been seen. If a JavaBlock returns a single JavaObject as a result, that object will not be
+        released. JavaBlock is a way to mark a set of objects as temporary so they can be automatically cleaned up when
+        the block of code ends.
+</ul><p><b>Attributes:</b> HoldAllComplete</p><p><b>Options: </b>KeepObjects</p>

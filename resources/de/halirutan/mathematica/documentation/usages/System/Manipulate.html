@@ -1,0 +1,65 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Manipulate.html">Manipulate</a></h3>
+<ul>
+    <li>Manipulate[<em>expr</em>,{<em>u</em>,<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>}]
+        generates a version of <em>expr</em> with controls added to allow interactive manipulation of the value of
+        <em>u</em>.
+    <li>
+        Manipulate[<em>expr</em>,{<em>u</em>,<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>,<em>du</em>}]
+        allows the value of <em>u</em> to vary between <em>u</em><sub><em>min</em></sub> and <em>u</em><sub><em>max</em></sub>
+        in steps <em>du</em>.
+    <li>Manipulate[<em>expr</em>,{{<em>u</em>,<em>u</em><sub><em>init</em></sub>},<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes the initial value of <em>u</em> to be <em>u</em><sub><em>init</em></sub>.
+    <li>Manipulate[<em>expr</em>,{{<em>u</em>,<em>u</em><sub><em>init</em></sub>,<em>u</em><sub><em>lbl</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] labels the controls for <em>u</em> with <em>u</em><sub><em>lbl</em></sub>.
+    <li>Manipulate[<em>expr</em>,{<em>u</em>,{<em>u</em><sub>1</sub>,<em>u</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }}] allows <em>u</em> to take on discrete values <em>u</em><sub>1</sub>,<em>u</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>Manipulate[<em>expr</em>,{<em>u</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{<em>v</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] provides controls to manipulate each of the <em>u</em>,<em>v</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>Manipulate[<em>expr</em>,<em>c</em><sub><em>u</em></sub>->{<em>u</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>c</em><sub><em>v</em></sub>->{<em>v</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] links the controls to the specified controllers on an external device.
+</ul><p><b>Attributes:</b> HoldAll, Protected, ReadProtected</p><p><b>Options: </b>Alignment, AppearanceElements,
+    AutoAction, AutorunSequencing, BaselinePosition, BaseStyle, Bookmarks, ContentSize, ContinuousAction,
+    ControlAlignment, ControllerLinking, ControllerMethod, ControllerPath, ControlPlacement, ControlType,
+    DefaultBaseStyle, DefaultLabelStyle, Deinitialization, Deployed, Evaluator, Frame, FrameLabel, FrameMargins,
+    ImageMargins, Initialization, InterpolationOrder, LabelStyle, LocalizeVariables, Method, Paneled,
+    PreserveImageOptions, RotateLabel, SaveDefinitions, ShrinkingDelay, SynchronousInitialization, SynchronousUpdating,
+    TouchscreenAutoZoom, TouchscreenControlPlacement, TrackedSymbols, UnsavedVariables, UntrackedVariables</p>

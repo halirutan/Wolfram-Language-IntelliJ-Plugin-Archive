@@ -1,0 +1,24 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Slider.html">Slider</a></h3>
+<ul>
+    <li>Slider[<em>x</em>] represents a slider with setting <em>x</em> in the range 0 to 1.
+    <li>Slider[Dynamic[<em>x</em>]] takes the setting to be the dynamically updated current value of <em>x</em>, with
+        the value of <em>x</em> being reset if the slider is moved.
+    <li>Slider[<em>x</em>,{<em>x</em><sub><em>min</em></sub>,<em>x</em><sub><em>max</em></sub>}] represents a slider
+        with range <em>x</em><sub><em>min</em></sub> to <em>x</em><sub><em>max</em></sub>.
+    <li>Slider[<em>x</em>,{<em>x</em><sub><em>min</em></sub>,<em>x</em><sub><em>max</em></sub>,<em>dx</em>}] represents
+        a slider that jumps in steps <em>dx</em>.
+    <li>Slider[<em>x</em>,{{<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }}] represents a slider in which equally spaced intervals correspond to successive settings
+        <em>e</em><sub><em>i</em></sub>.
+    <li>
+        Slider[<em>x</em>,{{{<em>e</em><sub>1</sub>,<em>w</em><sub>1</sub>},{<em>e</em><sub>2</sub>,<em>w</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }}] uses intervals of relative widths <em>w</em><sub><em>i</em></sub> for the <em>e</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Appearance, AutoAction, Background,
+    BaselinePosition, BaseStyle, ContentPadding, ContinuousAction, DefaultBaseStyle, Enabled, Exclusions, ImageMargins,
+    ImageSize</p>

@@ -1,0 +1,23 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ImageAdjust.html">ImageAdjust</a></h3>
+<ul>
+    <li>ImageAdjust[<em>image</em>] adjusts the levels in <em>image</em>, rescaling them to cover the range 0 to 1.
+    <li>ImageAdjust[<em>image</em>,<em>c</em>] adjusts the contrast of <em>image</em> by an amount <em>c</em>.
+    <li>ImageAdjust[<em>image</em>,{<em>c</em>,<em>b</em>}] adjusts the contrast by an amount <em>c</em> and the
+        brightness by an amount <em>b</em>.
+    <li>ImageAdjust[<em>image</em>,{<em>c</em>,<em>b</em>,
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        }] also performs a gamma correction by raising values to the power
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        .
+    <li>ImageAdjust[<em>image</em>,<em>corr</em>,{<em>in</em><sub><em>min</em></sub>,<em>in</em><sub><em>max</em></sub>}]
+        first rescales so that the range of input values <em>in</em><sub><em>min</em></sub> to
+        <em>in</em><sub><em>max</em></sub> is mapped to 0 to 1.
+    <li>ImageAdjust[<em>image</em>,<em>corr</em>,{<em>in</em><sub><em>min</em></sub>,<em>in</em><sub><em>max</em></sub>},{<em>out</em><sub><em>min</em></sub>,<em>out</em><sub><em>max</em></sub>}]
+        rescales so that the range of input values <em>in</em><sub><em>min</em></sub> to
+        <em>in</em><sub><em>max</em></sub> is mapped to <em>out</em><sub><em>min</em></sub> to
+        <em>out</em><sub><em>max</em></sub>.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Symbol has no options.</b></p>

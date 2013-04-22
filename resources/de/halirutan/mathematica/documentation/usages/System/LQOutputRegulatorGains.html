@@ -1,0 +1,18 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LQOutputRegulatorGains.html">LQOutputRegulatorGains</a></h3>
+<ul>
+    <li>LQOutputRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>}] gives the optimal state feedback gain matrix for
+        the StateSpaceModel <em>ssm</em> and the quadratic cost function, with output and control weighting matrices
+        <em>q</em> and <em>r</em>.
+    <li>LQOutputRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>,<em>p</em>}] includes the output-control
+        cross-coupling matrix <em>p</em> in the cost function.
+    <li>LQOutputRegulatorGains[{<em>ssm</em>,<em>sensors</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] specifies <em>sensors</em> as the measured outputs of <em>ssm</em>.
+    <li>LQOutputRegulatorGains[{<em>ssm</em>,<em>sensors</em>,<em>finputs</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] specifies <em>finputs</em> as the feedback inputs of <em>ssm</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

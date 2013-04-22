@@ -1,0 +1,21 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ListConvolve.html">ListConvolve</a></h3>
+<ul>
+    <li>ListConvolve[<em>ker</em>,<em>list</em>] forms the convolution of the kernel <em>ker</em> with <em>list</em>.
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,<em>k</em>] forms the cyclic convolution in which the
+        <em>k</em><sup>th</sup> element of <em>ker</em> is aligned with each element in <em>list</em>.
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,{<em>k</em><sub><em>L</em></sub>,<em>k</em><sub><em>R</em></sub>}] forms
+        the cyclic convolution whose first element contains
+        <em>list</em>[[1]]<em>ker</em>[[<em>k</em><sub><em>L</em></sub>]] and whose last element contains <em>list</em>[[-1]]<em>ker</em>[[<em>k</em><sub><em>R</em></sub>]].
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,<em>klist</em>,<em>p</em>] forms the convolution in which <em>list</em>
+        is padded at each end with repetitions of the element <em>p</em>.
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,<em>klist</em>,{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] forms the convolution in which <em>list</em> is padded at each end with cyclic repetitions of the
+        <em>p</em><sub><em>i</em></sub>.
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,<em>klist</em>,<em>padding</em>,<em>g</em>,<em>h</em>] forms a
+        generalized convolution in which <em>g</em> is used in place of Times and <em>h</em> in place of Plus.
+    <li>ListConvolve[<em>ker</em>,<em>list</em>,<em>klist</em>,<em>padding</em>,<em>g</em>,<em>h</em>,<em>lev</em>]
+        forms a convolution using elements at level <em>lev</em> in <em>ker</em> and <em>list</em>.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Symbol has no options.</b></p>

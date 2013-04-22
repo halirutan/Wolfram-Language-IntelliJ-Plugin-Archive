@@ -1,0 +1,17 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LQEstimatorGains.html">LQEstimatorGains</a></h3>
+<ul>
+    <li>LQEstimatorGains[<em>ssm</em>,{<em>w</em>,<em>v</em>}] gives the optimal estimator gain matrix for the
+        StateSpaceModel <em>ssm</em>, with process and measurement noise covariance matrices <em>w</em> and <em>v</em>.
+    <li>LQEstimatorGains[<em>ssm</em>,{<em>w</em>,<em>v</em>,<em>h</em>}] includes the cross-covariance matrix
+        <em>h</em>.
+    <li>LQEstimatorGains[{<em>ssm</em>,<em>sensors</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] specifies <em>sensors</em> as the noisy measurements of <em>ssm</em>.
+    <li>LQEstimatorGains[{<em>ssm</em>,<em>sensors</em>,<em>dinputs</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] specifies <em>dinputs</em> as the deterministic inputs of <em>ssm</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

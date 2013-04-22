@@ -1,0 +1,27 @@
+<h3>
+    <a href="http://reference.wolfram.com/mathematica/ref/SystemsModelFeedbackConnect.html">SystemsModelFeedbackConnect</a>
+</h3>
+<ul>
+    <li>SystemsModelFeedbackConnect[<em>sys</em>] connects the outputs from <em>sys</em> to the inputs with negative
+        feedback.
+    <li>SystemsModelFeedbackConnect[<em>sys</em>,{<em>con</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] only feedback connect the outputs and inputs in <em>con</em><sub><em>i</em></sub>.
+    <li>SystemsModelFeedbackConnect[<em>sys</em><sub>1</sub>,<em>sys</em><sub>2</sub>] connects the outputs of
+        <em>sys</em><sub>1</sub> to <em>sys</em><sub>2</sub> and the outputs of <em>sys</em><sub>2</sub> to the inputs
+        of <em>sys</em><sub>1</sub> in feedback.
+    <li>SystemsModelFeedbackConnect[<em>sys</em><sub>1</sub>,<em>sys</em><sub>2</sub>,{<em>out</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{{<em>in</em><sub>1</sub>,<em>ftype</em><sub>1</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] connects output <em>out</em><sub><em>i</em></sub> of <em>sys</em><sub>1</sub> to the <em>i</em><sup>th</sup>
+        input of <em>sys</em><sub>2</sub> and the <em>j</em><sup>th</sup> output of <em>sys</em><sub>2</sub> to input
+        <em>in</em><sub><em>j</em></sub> of <em>sys</em><sub>1</sub> with feedback type
+        <em>ftype</em><sub><em>j</em></sub>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

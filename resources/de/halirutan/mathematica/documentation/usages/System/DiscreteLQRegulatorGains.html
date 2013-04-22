@@ -1,0 +1,28 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/DiscreteLQRegulatorGains.html">DiscreteLQRegulatorGains</a>
+</h3>
+<ul>
+    <li>DiscreteLQRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>},<em>
+        <math>
+            <ms>&#964;</ms>
+        </math>
+    </em>] gives the optimal discrete-time state feedback gain matrix with sampling period
+        <math>
+            <ms>&#964;</ms>
+        </math>
+        for the continuous-time StateSpaceModel <em>ssm</em> and the quadratic cost function, with state and control
+        weighting matrices <em>q</em> and <em>r</em>.
+    <li>DiscreteLQRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>,<em>p</em>},<em>
+        <math>
+            <ms>&#964;</ms>
+        </math>
+    </em>] includes the state-control cross-coupling matrix <em>p</em> in the cost function.
+    <li>DiscreteLQRegulatorGains[{<em>ssm</em>,<em>finputs</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>
+            <math>
+                <ms>&#964;</ms>
+            </math>
+        </em>] specifies the feedback inputs of <em>ssm</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

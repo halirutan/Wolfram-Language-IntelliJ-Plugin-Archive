@@ -1,0 +1,73 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LinearProgramming.html">LinearProgramming</a></h3>
+<ul>
+    <li>LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>] finds a vector <em>x</em> that minimizes the quantity
+        <em>c</em>.<em>x</em> subject to the constraints <em>m</em>.<em>x</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        <em>b</em> and <em>x</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        0.
+    <li>LinearProgramming[<em>c</em>,<em>m</em>,{{<em>b</em><sub>1</sub>,<em>s</em><sub>1</sub>},{<em>b</em><sub>2</sub>,<em>s</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] finds a vector <em>x</em> that minimizes <em>c</em>.<em>x</em> subject to <em>x</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        0 and linear constraints specified by the matrix <em>m</em> and the pairs
+        {<em>b</em><sub><em>i</em></sub>,<em>s</em><sub><em>i</em></sub>}. For each row <em>m</em><sub><em>i</em></sub>
+        of <em>m</em>, the corresponding constraint is <em>m</em><sub><em>i</em></sub>.<em>x</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        <em>b</em><sub><em>i</em></sub> if <em>s</em><sub><em>i</em></sub>==1, or
+        <em>m</em><sub><em>i</em></sub>.<em>x</em>==<em>b</em><sub><em>i</em></sub> if <em>s</em><sub><em>i</em></sub>==0,
+        or <em>m</em><sub><em>i</em></sub>.<em>x</em>
+        <math>
+            <ms>&#8804;</ms>
+        </math>
+        <em>b</em><sub><em>i</em></sub> if <em>s</em><sub><em>i</em></sub>==-1.
+    <li>LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>,<em>l</em>] minimizes <em>c</em>.<em>x</em> subject to the
+        constraints specified by <em>m</em> and <em>b</em> and <em>x</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        <em>l</em>.
+    <li>LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>,{<em>l</em><sub>1</sub>,<em>l</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] minimizes <em>c</em>.<em>x</em> subject to the constraints specified by <em>m</em> and <em>b</em> and
+        <em>x</em><sub><em>i</em></sub>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        <em>l</em><sub><em>i</em></sub>.
+    <li>
+        LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>,{{<em>l</em><sub>1</sub>,<em>u</em><sub>1</sub>},{<em>l</em><sub>2</sub>,<em>u</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] minimizes <em>c</em>.<em>x</em> subject to the constraints specified by <em>m</em> and <em>b</em> and
+        <em>l</em><sub><em>i</em></sub>
+        <math>
+            <ms>&#8804;</ms>
+        </math>
+        <em>x</em><sub><em>i</em></sub>
+        <math>
+            <ms>&#8804;</ms>
+        </math>
+        <em>u</em><sub><em>i</em></sub>.
+    <li>LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>,<em>lu</em>,<em>dom</em>] takes the elements of <em>x</em> to
+        be in the domain <em>dom</em>, either Reals or Integers.
+    <li>
+        LinearProgramming[<em>c</em>,<em>m</em>,<em>b</em>,<em>lu</em>,{<em>dom</em><sub>1</sub>,<em>dom</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes <em>x</em><sub><em>i</em></sub> to be in the domain <em>dom</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method, Tolerance</p>

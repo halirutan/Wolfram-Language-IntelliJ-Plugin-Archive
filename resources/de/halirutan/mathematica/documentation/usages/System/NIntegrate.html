@@ -1,0 +1,48 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NIntegrate.html">NIntegrate</a></h3>
+<ul>
+    <li>NIntegrate[<em>f</em>,{<em>x</em>,<em>x</em><sub><em>min</em></sub>,<em>x</em><sub><em>max</em></sub>}] gives a
+        numerical approximation to the integral
+        <math>
+            <ms>&#8747;</ms>
+        </math>
+        <sub>
+            <small><em>x</em><sub>min</sub></small>
+        </sub><sup>
+            <small><em>x</em><sub>max</sub></small>
+        </sup> <em>f</em> <em>d</em>
+        <math>
+            <ms>&#8203;</ms>
+        </math>
+        <em>x</em>.
+    <li>
+        NIntegrate[<em>f</em>,{<em>x</em>,<em>x</em><sub><em>min</em></sub>,<em>x</em><sub><em>max</em></sub>},{<em>y</em>,<em>y</em><sub><em>min</em></sub>,<em>y</em><sub><em>max</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives a numerical approximation to the multiple integral
+        <math>
+            <ms>&#8747;</ms>
+        </math>
+        <sub>
+            <small><em>x</em><sub>min</sub></small>
+        </sub><sup>
+        <small><em>x</em><sub>max</sub></small>
+    </sup><em>d</em><em>x</em>
+        <math>
+            <ms>&#8747;</ms>
+        </math>
+        <sub>
+            <small><em>y</em><sub>min</sub></small>
+        </sub><sup>
+        <small><em>y</em><sub>max</sub></small>
+    </sup><em>d</em>
+        <math>
+            <ms>&#8203;</ms>
+        </math>
+        <em>y</em>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <em>f</em>.
+</ul><p><b>Attributes:</b> HoldAll, Protected</p><p><b>Options: </b>AccuracyGoal, Compiled, EvaluationMonitor,
+    Exclusions, MaxPoints, MaxRecursion, Method, MinRecursion, PrecisionGoal, WorkingPrecision</p>

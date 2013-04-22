@@ -1,0 +1,58 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Raster3D.html">Raster3D</a></h3>
+<ul>
+    <li>Raster3D[{{{<em>a</em><sub>11</sub>,<em>a</em><sub>12</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] is a three-dimensional graphics primitive that represents a cubical array of gray cells.
+    <li>Raster3D[{{{{<em>r</em><sub>11</sub>,<em>g</em><sub>11</sub>,<em>b</em><sub>11</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents an array of RGB color cells.
+    <li>Raster3D[{{{{<em>r</em><sub>11</sub>,<em>g</em><sub>11</sub>,<em>b</em><sub>11</sub>,
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub>11</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents an array of color cells with opacity
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub><em>ij</em></sub>.
+    <li>
+        Raster3D[<em>array</em>,{{<em>x</em><sub><em>min</em></sub>,<em>y</em><sub><em>min</em></sub>,<em>z</em><sub><em>min</em></sub>},{<em>x</em><sub><em>max</em></sub>,<em>y</em><sub><em>max</em></sub>,<em>z</em><sub><em>max</em></sub>}}]
+        represents a three-dimensional graphics primitive by giving the coordinates of opposite corners.
+    <li>
+        Raster3D[<em>array</em>,<em>coordinates</em>,{<em>a</em><sub><em>min</em></sub>,<em>a</em><sub><em>max</em></sub>}]
+        represents a three-dimensional graphics primitive whose voxel values should be scaled so that
+        <em>a</em><sub><em>min</em></sub> corresponds to 0 and <em>a</em><sub><em>max</em></sub> corresponds to 1.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>ClipRange, ColorFunction, Method,
+    VertexDataCoordinates</p>

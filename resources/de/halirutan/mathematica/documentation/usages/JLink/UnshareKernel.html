@@ -1,0 +1,13 @@
+<h3>
+    <a href="http://reference.wolfram.com/documentation-search.html?query=UnshareKernel%20JLink&collection=reference&lang=en">UnshareKernel</a>
+</h3>
+<ul>
+    <li>UnshareKernel[token] is used to "unregister" an earlier call to ShareKernel that returned the given token. When
+        all calls to ShareKernel have had a corresponding call to UnshareKernel, kernel sharing is turned off and the
+        front end returns to its normal state of having full control of the kernel. Turning off kernel sharing also
+        stops execution of any periodical tasks established with AddPeriodical. UnshareKernel[linkobject] turns off all
+        sharing of the kernel with the given link, no matter how many times ShareKernel has been called for that link
+        (this form should only be used during development, not in production code). For backwards compatibility,
+        UnshareKernel[] is equivalent to UnshareKernel[JavaLink[]], but new code should always include the link
+        argument.
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,38 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ShenCastanMatrix.html">ShenCastanMatrix</a></h3>
+<ul>
+    <li>ShenCastanMatrix[<em>r</em>] gives a matrix that corresponds to an exponential kernel of radius <em>r</em>.
+    <li>ShenCastanMatrix[{<em>r</em>,
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        }] gives a matrix corresponding to an exponential kernel with radius <em>r</em> and region of support specified
+        by
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        .
+    <li>ShenCastanMatrix[<em>r</em>,{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>}] gives a matrix formed from the <em>n</em><sub>1</sub><sup>th</sup>
+        derivative of the exponential with respect to rows and the <em>n</em><sub>2</sub><sup>th</sup> derivative with
+        respect to columns.
+    <li>
+        ShenCastanMatrix[<em>r</em>,{{<em>n</em><sub>11</sub>,<em>n</em><sub>12</sub>},{<em>n</em><sub>21</sub>,<em>n</em><sub>22</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives a matrix formed from the sums of the <em>n</em><sub><em>i1</em></sub> and
+        <em>n</em><sub><em>i2</em></sub> derivatives.
+    <li>ShenCastanMatrix[{{<em>r</em><sub>1</sub>,<em>r</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives an array corresponding to an exponential kernel with radius <em>r</em><sub><em>i</em></sub> in the
+        <em>i</em><sup>th</sup> index direction.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>WorkingPrecision, Standardization</p>

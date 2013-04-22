@@ -1,0 +1,18 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Dynamic.html">Dynamic</a></h3>
+<ul>
+    <li>Dynamic[<em>expr</em>] represents an object that displays as the dynamically updated current value of
+        <em>expr</em>. If the displayed form of Dynamic[<em>expr</em>] is interactively changed or edited, an assignment
+        <em>expr</em>=<em>val</em> is done to give <em>expr</em> the new value <em>val</em> that corresponds to the
+        displayed form.
+    <li>Dynamic[<em>expr</em>,None] does not allow interactive changing or editing.
+    <li>Dynamic[<em>expr</em>,<em>f</em>] continually evaluates <em>f</em>[<em>val</em>,<em>expr</em>] during
+        interactive changing or editing of <em>val</em>.
+    <li>Dynamic[<em>expr</em>,{<em>f</em>,<em>f</em><sub><em>end</em></sub>}] also evaluates <em>f</em><sub><em>end</em></sub>[<em>val</em>,<em>expr</em>]
+        when interactive changing or editing is complete.
+    <li>Dynamic[<em>expr</em>,{<em>f</em><sub><em>start</em></sub>,<em>f</em>,<em>f</em><sub><em>end</em></sub>}] also
+        evaluates <em>f</em><sub><em>start</em></sub>[<em>val</em>,<em>expr</em>] when interactive changing or editing
+        begins.
+</ul><p><b>Attributes:</b> HoldFirst, Protected, ReadProtected</p><p><b>Options: </b>Appearance, AutoAction, Background,
+    BaseStyle, CachedValue, ContentPadding, ContinuousAction, DefaultBaseStyle, Deinitialization, DisplayFunction,
+    Enabled, Evaluator, ImageSizeCache, Initialization, BoxForm`RecursionLimit, SaveDefinitions, Selectable,
+    ShrinkingDelay, SingleEvaluation, SynchronousUpdating, TrackedSymbols, UpdateInterval</p>

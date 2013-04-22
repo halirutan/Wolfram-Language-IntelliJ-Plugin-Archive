@@ -1,0 +1,81 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ItoProcess.html">ItoProcess</a></h3>
+<ul>
+    <li>ItoProcess[{<em>a</em>,<em>b</em>},<em>x</em>,<em>t</em>] represents an Ito process <em>x</em>(<em>t</em>),
+        where
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>x</em>(<em>t</em>)
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>a</em>(<em>t</em>,<em>x</em>(<em>t</em>))
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>t</em>+<em>b</em>(<em>t</em>,<em>x</em>(<em>t</em>)).
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>w</em>(<em>t</em>).
+    <li>ItoProcess[{<em>a</em>,<em>b</em>,<em>c</em>},<em>x</em>,<em>t</em>] represents an Ito process
+        <em>y</em>(<em>t</em>)
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>c</em>(<em>t</em>,<em>x</em>(<em>t</em>)), where
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>x</em>(<em>t</em>)
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>a</em>(<em>t</em>,<em>x</em>(<em>t</em>))
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>t</em>+<em>b</em>(<em>t</em>,<em>x</em>(<em>t</em>)).
+        <math>
+            <ms>&#8518;</ms>
+        </math>
+        <em>w</em>(<em>t</em>) .
+    <li>ItoProcess[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,{<em>x</em>,<em>x</em><sub>0</sub>},{<em>t</em>,<em>t</em><sub>0</sub>}] uses initial condition <em>x</em>(<em>t</em><sub>0</sub>)
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>x</em><sub>0</sub>.
+    <li>ItoProcess[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#931;</ms>
+        </math>
+        ] uses a Wiener process <em>w</em>(<em>t</em>), with covariance
+        <math>
+            <ms>&#931;</ms>
+        </math>
+        .
+    <li>ItoProcess[<em>proc</em>] converts <em>proc</em> to a standard Ito process whenever possible.
+    <li>ItoProcess[<em>sdeqns</em>,<em>expr</em>,<em>x</em>,<em>t</em>,<em>w</em>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dproc</em>] represents an Ito process specified by a stochastic differential equation <em>sdeqns</em>,
+        output expression <em>expr</em>, with state <em>x</em> and time <em>t</em>, driven by <em>w</em> following the
+        process <em>dproc</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Assumptions</p>

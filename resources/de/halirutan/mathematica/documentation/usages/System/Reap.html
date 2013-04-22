@@ -1,0 +1,22 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Reap.html">Reap</a></h3>
+<ul>
+    <li>Reap[<em>expr</em>] gives the value of <em>expr</em> together with all expressions to which Sow has been applied
+        during its evaluation. Expressions sown using Sow[<em>e</em>] or
+        Sow[<em>e</em>,<em>tag</em><sub><em>i</em></sub>] with different tags are given in different lists.
+    <li>Reap[<em>expr</em>,<em>patt</em>] reaps only expressions sown with tags that match <em>patt</em>.
+    <li>Reap[<em>expr</em>,{<em>patt</em><sub>1</sub>,<em>patt</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] puts expressions associated with each of the <em>patt</em><sub><em>i</em></sub> in a separate list.
+    <li>Reap[<em>expr</em>,<em>patt</em>,<em>f</em>] returns
+        {<em>expr</em>,{<em>f</em>[<em>tag</em><sub>1</sub>,{<em>e</em><sub>11</sub>,<em>e</em><sub>12</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }],
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }}.
+</ul><p><b>Attributes:</b> HoldFirst, Protected</p><p><b>Symbol has no options.</b></p>

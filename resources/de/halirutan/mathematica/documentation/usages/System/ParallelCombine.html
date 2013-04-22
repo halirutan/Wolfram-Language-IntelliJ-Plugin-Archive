@@ -1,0 +1,26 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ParallelCombine.html">ParallelCombine</a></h3>
+<ul>
+    <li>ParallelCombine[<em>f</em>,<em>h</em>[<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ],<em>comb</em>] evaluates <em>f</em>[<em>h</em>[<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ]] in parallel by distributing parts of the computation to all parallel kernels and combining the partial
+        results with <em>comb</em>.
+    <li>ParallelCombine[<em>f</em>,<em>h</em>[<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ]] is equivalent to ParallelCombine[<em>f</em>,<em>h</em>[<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ],<em>h</em>] if <em>h</em> has attribute Flat, and ParallelCombine[<em>f</em>,<em>h</em>[<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ],Join] otherwise.
+</ul><p><b>Attributes:</b> HoldAllComplete</p><p><b>Options: </b>Method, DistributedContexts</p>

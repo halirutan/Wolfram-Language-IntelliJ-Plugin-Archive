@@ -1,0 +1,50 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Sum.html">Sum</a></h3>
+<ul>
+    <li>Sum[<em>f</em>,{<em>i</em>,<em>i</em><sub><em>max</em></sub>}] evaluates the sum UnderoverscriptBox[
+        <math>
+            <ms>&#8721;</ms>
+        </math>
+        , {{{<em>, i, </em>}, =, 1}}, {{<em>, i, </em>}, <sub>, {max}, </sub>}, LimitsPositioning -> True]<em>f</em>.
+    <li>Sum[<em>f</em>,{<em>i</em>,<em>i</em><sub><em>min</em></sub>,<em>i</em><sub><em>max</em></sub>}] starts with
+        <em>i</em>=<em>i</em><sub><em>min</em></sub>.
+    <li>Sum[<em>f</em>,{<em>i</em>,<em>i</em><sub><em>min</em></sub>,<em>i</em><sub><em>max</em></sub>,<em>di</em>}]
+        uses steps <em>d</em>
+        <math>
+            <ms>&#8203;</ms>
+        </math>
+        <em>i</em>.
+    <li>Sum[<em>f</em>,{<em>i</em>,{<em>i</em><sub>1</sub>,<em>i</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }}] uses successive values <em>i</em><sub>1</sub>, <em>i</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>Sum[<em>f</em>,{<em>i</em>,<em>i</em><sub><em>min</em></sub>,<em>i</em><sub><em>max</em></sub>},{<em>j</em>,<em>j</em><sub><em>min</em></sub>,<em>j</em><sub><em>max</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] evaluates the multiple sum UnderoverscriptBox[
+        <math>
+            <ms>&#8721;</ms>
+        </math>
+        , {{{<em>, i, </em>}, =, {{<em>, i, </em>}, <sub>, {min}, </sub>}}}, {{<em>, i, </em>}, <sub>, {max}, </sub>},
+        LimitsPositioning -> True]UnderoverscriptBox[
+        <math>
+            <ms>&#8721;</ms>
+        </math>
+        , {{{<em>, j, </em>}, =, {{<em>, j, </em>}, <sub>, {min}, </sub>}}}, {{<em>, j, </em>}, <sub>, {max}, </sub>},
+        LimitsPositioning -> True]
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <em>f</em>.
+    <li>Sum[<em>f</em>,<em>i</em>] gives the indefinite sum Underscript[
+        <math>
+            <ms>&#8721;</ms>
+        </math>
+        <em>i</em>]<em>f</em>.
+</ul><p><b>Attributes:</b> HoldAll, Protected, ReadProtected</p><p><b>Options: </b>Assumptions, GenerateConditions,
+    Method, Regularization, VerifyConvergence</p>

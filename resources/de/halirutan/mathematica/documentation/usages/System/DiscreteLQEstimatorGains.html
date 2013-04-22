@@ -1,0 +1,24 @@
+<h3><a href="http://reference.wolfram.com/mathematica/ref/DiscreteLQEstimatorGains.html">DiscreteLQEstimatorGains</a>
+</h3>
+<ul>
+    <li>DiscreteLQEstimatorGains[<em>ssm</em>,{<em>w</em>,<em>v</em>},
+        <math>
+            <ms>&#964;</ms>
+        </math>
+        ] gives the optimal discrete-time estimator gain matrix with sampling period
+        <math>
+            <ms>&#964;</ms>
+        </math>
+        for the continuous-time StateSpaceModel <em>ssm</em>, with process and measurement noise covariance matrices
+        <em>w</em> and <em>v</em>.
+    <li>DiscreteLQEstimatorGains[{<em>ssm</em>,<em>sensors</em>},{<em>w</em>,<em>v</em>},
+        <math>
+            <ms>&#964;</ms>
+        </math>
+        ] specifies <em>sensors</em> as the noisy measurements of <em>ssm</em>.
+    <li>DiscreteLQEstimatorGains[{<em>ssm</em>,<em>sensors</em>,<em>dinputs</em>},{<em>w</em>,<em>v</em>},
+        <math>
+            <ms>&#964;</ms>
+        </math>
+        ] specifies <em>dinputs</em> as the deterministic inputs of <em>ssm</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

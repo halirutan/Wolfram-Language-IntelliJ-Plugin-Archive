@@ -40,7 +40,7 @@ public class SymbolImpl  extends ExpressionImpl implements Symbol {
     public String getMathematicaContext() {
         String context;
         if (name.contains("`")) {
-            context = name.substring(0, name.lastIndexOf('`'));
+            context = name.substring(0, name.lastIndexOf('`')+1);
         } else {
             context = "System`";
         }
@@ -52,7 +52,7 @@ public class SymbolImpl  extends ExpressionImpl implements Symbol {
         if (name.lastIndexOf('`') == -1) {
             return name;
         } else {
-            return name.substring(name.lastIndexOf('`'), name.length());
+            return name.substring(name.lastIndexOf('`')+1, name.length());
         }
     }
 }

@@ -22,11 +22,9 @@ public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
 
     public String toString() {
         String classname = getClass().getSimpleName();
-        final String codeText = myNode.getText();
-        String shortenedCode = codeText.length() > 20 ? codeText.substring(0, 20) + ".." : codeText;
         if (classname.endsWith("Impl")) {
             classname = classname.substring(0, classname.length() - "Impl".length());
         }
-        return classname + " -> \"" + shortenedCode + "\"";
+        return classname;
     }
 }

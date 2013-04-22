@@ -1,0 +1,36 @@
+<h3><a href="http://reference.wolfram.com/mathematica/Developer/ref/PartitionMap.html">PartitionMap</a></h3>
+<ul>
+    <li>PartitionMap[<em>f</em>,<em>list</em>,<em>n</em>] applies <em>f</em> to <em>list</em> after partitioning into
+        nonoverlapping sublists of length <em>n</em>.
+    <li>PartitionMap[<em>f</em>,<em>list</em>,<em>n</em>,<em>d</em>] applies <em>f</em> to sublists obtained by
+        partitioning with offset <em>d</em>.
+    <li>PartitionMap[<em>f</em>,<em>list</em>,{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] applies <em>f</em> after partitioning a nested list into blocks of size <em>n</em><sub>1</sub>
+        <math>
+            <ms>&#215;</ms>
+        </math>
+        <em>n</em><sub>2</sub>
+        <math>
+            <ms>&#215;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>PartitionMap[<em>f</em>,<em>list</em>,{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{<em>d</em><sub>1</sub>,<em>d</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] applies <em>f</em> after partitioning using offset <em>d</em><sub><em>i</em></sub> at level <em>i</em>.
+    <li>PartitionMap[<em>f</em>,<em>list</em>,<em>n</em>,<em>d</em>,{<em>k</em><sub><em>L</em></sub>,<em>k</em><sub><em>R</em></sub>}]
+        specifies where sublists should begin and end.
+    <li>PartitionMap[<em>f</em>,<em>list</em>,<em>n</em>,<em>d</em>,{<em>k</em><sub><em>L</em></sub>,<em>k</em><sub><em>R</em></sub>},<em>padding</em>]
+        specifies what padding should be used.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Symbol has no options.</b></p>
