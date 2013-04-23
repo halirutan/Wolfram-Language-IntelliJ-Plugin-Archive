@@ -25,32 +25,33 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for all <em>non-special</em> binary infix operators like *, +, ==. This contrasts special infix operators
+ * like a /: b := c which consist of more than two operands or need certain requirements on their operands.
  *
+ * @author patrick (3/27/13)
  */
 public class InfixOperatorParselet implements InfixParselet {
 
-    private final int precedence;
-    private final boolean rightAssociative;
+    private final int m_precedence;
+    private final boolean m_rightAssociative;
 
     public InfixOperatorParselet(int precedence, boolean rightAssociative) {
-        this.precedence = precedence;
-        this.rightAssociative = rightAssociative;
+        this.m_precedence = precedence;
+        this.m_rightAssociative = rightAssociative;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return parser.notParsed();
+        if (!left.isValid()) return MathematicaParser.notParsed();
         PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
         IElementType token = ParseletProvider.getInfixPsiElement(this);
 
-//        if (token != parser.getTokenType()) throw new CriticalParserError("Operator does not match");
         parser.advanceLexer();
 
-        MathematicaParser.Result result = parser.parseExpression(precedence - (rightAssociative ? 1 : 0));
+        MathematicaParser.Result result = parser.parseExpression(m_precedence - (m_rightAssociative ? 1 : 0));
         if (result.isParsed()) {
             infixOperationMarker.done(token);
-            result = parser.result(infixOperationMarker, token, true);
+            result = MathematicaParser.result(infixOperationMarker, token, true);
         } else {
             parser.error("More input expected.");
             infixOperationMarker.done(token);
@@ -60,7 +61,7 @@ public class InfixOperatorParselet implements InfixParselet {
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 
 }

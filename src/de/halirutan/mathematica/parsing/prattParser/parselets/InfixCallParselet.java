@@ -24,33 +24,32 @@ import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
- * This parses infix calls of functions which are usually in the form f[a,b]. In Mathematica you can write this as
+ * This parses infix calls of functions. Usually, functions are called like this f[a,b]. In Mathematica you can write this as
  * a~f~b. The difference to other infix operators is that it always has to be a pair of ~. Therefore, the first
  * ~ in a~f~b triggers the call of {@link InfixCallParselet#parse} which needs to ensure that we find a second
  * ~ and the expression b.
  *
  * @author patrick (3/27/13)
- *
  */
 public class InfixCallParselet implements InfixParselet {
 
-    private final int precedence;
+    private final int m_precedence;
 
     public InfixCallParselet(int prec) {
-        precedence = prec;
+        m_precedence = prec;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         PsiBuilder.Marker infixCall = left.getMark().precede();
         parser.advanceLexer();
-        MathematicaParser.Result operator = parser.parseExpression(precedence);
+        MathematicaParser.Result operator = parser.parseExpression(m_precedence);
 
-        if (parser.testToken(MathematicaElementTypes.INFIX_CALL)) {
+        if (parser.matchesToken(MathematicaElementTypes.INFIX_CALL)) {
             parser.advanceLexer();
-            MathematicaParser.Result operand2 = parser.parseExpression(precedence);
+            MathematicaParser.Result operand2 = parser.parseExpression(m_precedence);
             infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
-            return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
+            return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
         } else {
             // if the operator was not parsed successfully we will not display a parsing error
             if (operator.isParsed()) {
@@ -59,12 +58,12 @@ public class InfixCallParselet implements InfixParselet {
                 parser.error("Operator expected for infix notation");
             }
             infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
-            return parser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, false);
+            return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, false);
         }
     }
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 }

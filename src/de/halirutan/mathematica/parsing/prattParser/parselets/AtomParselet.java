@@ -28,7 +28,7 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class AtomParselet implements PrefixParselet {
 
-    private final int precedence;
+    private final int m_precedence;
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser) {
@@ -36,14 +36,14 @@ public class AtomParselet implements PrefixParselet {
         PsiBuilder.Marker symbolMark = parser.mark();
         parser.advanceLexer();
         symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
-        return parser.result(symbolMark, token, true);
+        return MathematicaParser.result(symbolMark, token, true);
     }
 
     public AtomParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 }

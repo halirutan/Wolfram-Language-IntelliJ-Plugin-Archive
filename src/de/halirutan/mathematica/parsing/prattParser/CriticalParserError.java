@@ -19,6 +19,7 @@
 package de.halirutan.mathematica.parsing.prattParser;
 
 /**
+ * Exception which can be thrown in parselets when something really bad happens.
  * @author patrick (4/7/13)
  */
 public class CriticalParserError extends Throwable {

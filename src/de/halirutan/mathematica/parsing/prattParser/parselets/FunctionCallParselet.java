@@ -26,28 +26,29 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
  * Parses functions calls like f[x] and array element access like l[[i]] since both start with an opening bracket.
+ *
  * @author patrick (3/27/13)
  */
 public class FunctionCallParselet implements InfixParselet {
 
-    private final int myPrecedence;
+    private final int m_precedence;
 
     public FunctionCallParselet(int precedence) {
-        myPrecedence = precedence;
+        m_precedence = precedence;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         // should never happen
-        if ((parser.getTokenType() != MathematicaElementTypes.LEFT_BRACKET) && !left.isValid()) {
-            return parser.notParsed();
+        if ((!parser.getTokenType().equals(MathematicaElementTypes.LEFT_BRACKET)) && !left.isValid()) {
+            return MathematicaParser.notParsed();
         }
 
         PsiBuilder.Marker mainMark = left.getMark().precede();
 
         // parse the start. Either a Part expression like list[[ or a function call f[
         boolean isPartExpr = false;
-        if (parser.testToken(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.LEFT_BRACKET)) {
+        if (parser.matchesToken(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.LEFT_BRACKET)) {
             isPartExpr = true;
             parser.advanceLexer();
             parser.advanceLexer();
@@ -55,43 +56,43 @@ public class FunctionCallParselet implements InfixParselet {
             parser.advanceLexer();
         }
 
-        MathematicaParser.Result exprSeq = parser.notParsed();
+        MathematicaParser.Result exprSeq = MathematicaParser.notParsed();
         boolean hasArgs = false;
-        if (!parser.testToken(MathematicaElementTypes.RIGHT_BRACKET)) {
-             exprSeq = ParserUtil.parseSequence(parser, MathematicaElementTypes.RIGHT_BRACKET);
+        if (!parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET)) {
+            exprSeq = ParserUtil.parseSequence(parser, MathematicaElementTypes.RIGHT_BRACKET);
             hasArgs = true;
         }
 
-        if (parser.testToken(MathematicaElementTypes.RIGHT_BRACKET)) {
-            if (isPartExpr && parser.testToken(MathematicaElementTypes.RIGHT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET)) {
-                if( !hasArgs ) {
+        if (parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET)) {
+            if (isPartExpr && parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET)) {
+                if (!hasArgs) {
                     parser.error("Part expression cannot be empty");
                 }
                 parser.advanceLexer();
                 parser.advanceLexer();
                 mainMark.done(MathematicaElementTypes.PART_EXPRESSION);
-                return parser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isParsed() && hasArgs );
+                return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isParsed() && hasArgs);
             } else if (isPartExpr) {
                 parser.advanceLexer();
                 parser.error("Closing ']' expected");
                 mainMark.done(MathematicaElementTypes.PART_EXPRESSION);
-                return parser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, false);
+                return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, false);
             } else {
                 parser.advanceLexer();
                 mainMark.done(MathematicaElementTypes.FUNCTION_CALL_EXPRESSION);
-                return parser.result(mainMark, MathematicaElementTypes.FUNCTION_CALL_EXPRESSION, true);
+                return MathematicaParser.result(mainMark, MathematicaElementTypes.FUNCTION_CALL_EXPRESSION, true);
             }
         }
 
         parser.error("Closing ']' expected");
         IElementType expressionType = isPartExpr ? MathematicaElementTypes.PART_EXPRESSION : MathematicaElementTypes.FUNCTION_CALL_EXPRESSION;
         mainMark.done(expressionType);
-        return parser.result(mainMark, expressionType, false);
+        return MathematicaParser.result(mainMark, expressionType, false);
 
     }
 
     @Override
     public int getPrecedence() {
-        return myPrecedence;
+        return m_precedence;
     }
 }

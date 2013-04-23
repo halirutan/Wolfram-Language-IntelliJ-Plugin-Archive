@@ -19,10 +19,12 @@
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for numbers. Does not need to do anything, because all kind of numbers are recognized by the lexer
+ * and this parselet needs only to advance over the lexer token.
  *
+ * @author patrick (3/27/13)
  */
-public class NumberParselet extends AtomParselet{
+public class NumberParselet extends AtomParselet {
     public NumberParselet(int precedence) {
         super(precedence);
     }

@@ -26,27 +26,27 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
  * @author patrick (3/27/13)
- *
  */
 public class BlankNullSequenceParselet implements InfixParselet {
-    private final int precedence;
+    private final int m_precedence;
+
     public BlankNullSequenceParselet(int precedence) {
-        this.precedence=precedence;
+        this.m_precedence = precedence;
     }
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return parser.notParsed();
+        if (!left.isValid()) return MathematicaParser.notParsed();
         PsiBuilder.Marker blankMark = left.getMark().precede();
         IElementType token = MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
         parser.advanceLexer();
-        MathematicaParser.Result result = parser.parseExpression(precedence);
+        MathematicaParser.Result result = parser.parseExpression(m_precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, !result.isValid() || result.isParsed());
+        return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
     }
 }

@@ -18,27 +18,46 @@
 
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
+import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+
 /**
- * @author patrick (3/27/13)
+ * Parselet for derivative expression like f''[x] or g'
+ * I expect the left operand to be a symbol. Don't know whether this is a requirement, but I cannot think of another
+ * form.
  *
+ * @author patrick (3/27/13)
  */
 public class DerivativeParselet implements InfixParselet {
 
-    private final int myPrecedence;
+    private final int m_precedence;
 
     public DerivativeParselet(int precedence) {
-        myPrecedence = precedence;
+        m_precedence = precedence;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
-        return parser.notParsed();
+        PsiBuilder.Marker derivativeMark = left.getMark().precede();
+        boolean result = true;
+
+        if (left.getToken().equals(SYMBOL_EXPRESSION)) {
+            parser.error("Derivative expects symbol");
+            result = false;
+        }
+
+        while (parser.getTokenType().equals(DERIVATIVE)) {
+            parser.advanceLexer();
+        }
+        derivativeMark.done(DERIVATIVE_EXPRESSION);
+
+        return MathematicaParser.result(derivativeMark, DERIVATIVE_EXPRESSION, result);
     }
 
     @Override
     public int getPrecedence() {
-        return myPrecedence;
+        return m_precedence;
     }
 }

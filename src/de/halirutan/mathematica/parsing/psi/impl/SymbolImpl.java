@@ -1,12 +1,17 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,4 +60,5 @@ public class SymbolImpl  extends ExpressionImpl implements Symbol {
             return name.substring(name.lastIndexOf('`')+1, name.length());
         }
     }
+
 }

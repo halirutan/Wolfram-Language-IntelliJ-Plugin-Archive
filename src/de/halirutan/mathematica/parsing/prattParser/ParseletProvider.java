@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class ParseletProvider {
 
-    private static ParseletProvider instance = null;
+    private static ParseletProvider s_instance = null;
 
     private static final Map<IElementType, PrefixParselet> prefixParselets = new HashMap<IElementType, PrefixParselet>();
     private static final Map<IElementType, InfixParselet> infixParselets = new HashMap<IElementType, InfixParselet>();
@@ -53,8 +53,8 @@ public class ParseletProvider {
      * @return The {@link PrefixParselet} if available for this token and {@code null} otherwise.
      */
     public static PrefixParselet getPrefixParselet(IElementType token) {
-        if (instance == null) {
-            instance = new ParseletProvider();
+        if (s_instance == null) {
+            s_instance = new ParseletProvider();
         }
         return prefixParselets.get(token);
     }
@@ -65,8 +65,8 @@ public class ParseletProvider {
      * @return The {@link InfixParselet} if available for this token and {@code null} otherwise.
      */
     public static InfixParselet getInfixParselet(IElementType token) {
-        if (instance == null) {
-            instance = new ParseletProvider();
+        if (s_instance == null) {
+            s_instance = new ParseletProvider();
         }
         return infixParselets.get(token);
     }
@@ -77,8 +77,8 @@ public class ParseletProvider {
      * @return The precedence of the specified token or 0 whether the precedence is not available.
      */
     public static int getPrecedence(IElementType token) {
-        if (instance == null) {
-            instance = new ParseletProvider();
+        if (s_instance == null) {
+            s_instance = new ParseletProvider();
         }
         InfixParselet parselet = infixParselets.get(token);
         if (parselet != null) {
@@ -93,8 +93,8 @@ public class ParseletProvider {
      * @return The precedence of the specified token or 0 whether the precedence is not available.
      */
     public static int getPrecedence(PsiBuilder builder) {
-        if (instance == null) {
-            instance = new ParseletProvider();
+        if (s_instance == null) {
+            s_instance = new ParseletProvider();
         }
         IElementType token = builder.getTokenType();
         if (token == null) {
@@ -112,7 +112,7 @@ public class ParseletProvider {
      * specific {@link InfixParselet} the node in the AST is then the {@link IElementType} which is returned by this
      * method.
      * E.g. When a PLUS token arises in the lexer token stream first the infix-parselet of the PLUS token is extracted
-     * with {@link #getInfixParselet(com.intellij.psi.tree.IElementType)} which parses the left and right operand.
+     * with {@link #getInfixParselet(IElementType)} which parses the left and right operand.
      * Afterwards it marks the whole expression a+b in the AST tree as being a node of type returned by this
      * method.
      * @param parselet The parselet for which the node type is wanted
@@ -127,7 +127,7 @@ public class ParseletProvider {
     }
 
     /**
-     * Please see {@link #getInfixPsiElement(de.halirutan.mathematica.parsing.prattParser.parselets.InfixParselet)}
+     * Please see {@link #getInfixPsiElement(InfixParselet)}
      * @param parselet The parselet for which the type is wanted
      * @return The element of the node in the AST tree
      */
@@ -174,7 +174,7 @@ public class ParseletProvider {
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
 
     private void registerAll(){
-        register(MathematicaElementTypes.LEFT_PAR,	MathematicaElementTypes.GROUP_EXPRESSION,	 new GroupParselet(82)); // Group(()
+        register(MathematicaElementTypes.LEFT_PAR,	MathematicaElementTypes.GROUP_EXPRESSION,	 new GroupParselet()); // Group(()
         register(MathematicaElementTypes.LEFT_BRACE,	MathematicaElementTypes.LIST_EXPRESSION,	 new ListParselet(82)); // Group(()
 
         register(MathematicaElementTypes.NUMBER,	MathematicaElementTypes.NUMBER_EXPRESSION,	 new NumberParselet(80)); // Number(123)

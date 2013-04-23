@@ -26,39 +26,38 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
  * @author patrick (3/27/13)
- *
  */
 public class CompoundExpressionParselet implements InfixParselet {
-    private final int precedence;
+    private final int m_precedence;
 
     public CompoundExpressionParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return parser.notParsed();
+        if (!left.isValid()) return MathematicaParser.notParsed();
         PsiBuilder.Marker compoundExprMark = left.getMark().precede();
         IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
         parser.advanceLexer();
 
         boolean ok = true;
 
-        while(true){
-            MathematicaParser.Result result = parser.parseExpression(precedence);
+        while (true) {
+            MathematicaParser.Result result = parser.parseExpression(m_precedence);
             if (!result.isValid()) break;
             ok &= result.isParsed();
-            if(parser.testToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
+            if (parser.matchesToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
             else break;
         }
 
         compoundExprMark.done(token);
-        return parser.result(compoundExprMark, token, ok);
+        return MathematicaParser.result(compoundExprMark, token, ok);
 
     }
 }

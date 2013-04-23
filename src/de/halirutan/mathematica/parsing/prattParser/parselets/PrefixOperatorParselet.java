@@ -25,14 +25,15 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for a typical prefix operator like ++a or !a which does not need special care.
  *
+ * @author patrick (3/27/13)
  */
 public class PrefixOperatorParselet implements PrefixParselet {
-    private final int precedence;
+    private final int m_precedence;
 
     public PrefixOperatorParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
     @Override
@@ -40,9 +41,9 @@ public class PrefixOperatorParselet implements PrefixParselet {
         PsiBuilder.Marker mark = parser.mark();
         parser.advanceLexer();
         IElementType token = ParseletProvider.getPrefixPsiElement(this);
-        MathematicaParser.Result result = parser.parseExpression(precedence);
+        MathematicaParser.Result result = parser.parseExpression(m_precedence);
         mark.done(token);
-        return parser.result(mark,token, result.isParsed());
+        return MathematicaParser.result(mark, token, result.isParsed());
 
     }
 }

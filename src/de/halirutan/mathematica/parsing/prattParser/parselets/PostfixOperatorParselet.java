@@ -24,15 +24,16 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for typical postfix operators like a! or i++
  *
+ * @author patrick (3/27/13)
  */
 public class PostfixOperatorParselet implements InfixParselet {
 
-    private final int precedence;
+    private final int m_precedence;
 
     public PostfixOperatorParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
     @Override
@@ -42,11 +43,11 @@ public class PostfixOperatorParselet implements InfixParselet {
         PsiBuilder.Marker postfixMarker = left.getMark().precede();
         parser.advanceLexer();
         postfixMarker.done(psiElement);
-        return parser.result(postfixMarker, token, true);
+        return MathematicaParser.result(postfixMarker, token, true);
     }
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 }

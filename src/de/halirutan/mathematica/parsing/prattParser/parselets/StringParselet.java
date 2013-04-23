@@ -24,18 +24,19 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
  * Parsing a string.
+ *
  * @author patrick (3/27/13)
  */
 public class StringParselet implements PrefixParselet {
-
-    private final int precedence;
+    private final int m_precedence;
 
     public StringParselet(int precedence) {
-        this.precedence = precedence;
+        m_precedence = precedence;
     }
 
     /**
      * Tries to parse a string consisting of beginning ", string content and final ".
+     *
      * @param parser The main parser object.
      * @return Information about the success of the parsing.
      */
@@ -44,10 +45,10 @@ public class StringParselet implements PrefixParselet {
         PsiBuilder.Marker stringMark = parser.mark();
         boolean parsedQ = true;
         parser.advanceLexer();
-        while (parser.testToken(MathematicaElementTypes.STRING_LITERAL)) {
+        while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL)) {
             parser.advanceLexer();
         }
-        if (parser.testToken(MathematicaElementTypes.STRING_LITERAL_END)) {
+        if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {
             parser.advanceLexer();
         } else {
             parser.error("\" expected");
@@ -55,5 +56,9 @@ public class StringParselet implements PrefixParselet {
         }
         stringMark.done(MathematicaElementTypes.STRING);
         return parser.result(stringMark, MathematicaElementTypes.STRING, parsedQ);
+    }
+
+    public int getPrecedence() {
+        return m_precedence;
     }
 }

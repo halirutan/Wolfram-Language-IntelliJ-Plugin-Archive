@@ -26,21 +26,17 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for grouping (2+3)*4
  *
+ * @author patrick (3/27/13)
  */
 public class GroupParselet implements PrefixParselet {
-    private final int precendence;
-
-    public GroupParselet(int precedence) {
-        this.precendence = precedence;
-    }
 
     @Override
-    public de.halirutan.mathematica.parsing.prattParser.MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
         // should never happen
-        if (parser.getTokenType() != MathematicaElementTypes.LEFT_PAR) {
-            return parser.notParsed();
+        if (!parser.getTokenType().equals(MathematicaElementTypes.LEFT_PAR)) {
+            return MathematicaParser.notParsed();
         }
         IElementType token = ParseletProvider.getPrefixPsiElement(this);
         PsiBuilder.Marker groupMark = parser.mark();
@@ -49,17 +45,17 @@ public class GroupParselet implements PrefixParselet {
         if (parser.eof()) {
             parser.error("More input expected");
             groupMark.drop();
-            return parser.notParsed();
+            return MathematicaParser.notParsed();
         }
 
         MathematicaParser.Result result = parser.parseExpression();
-        if (parser.testToken(MathematicaElementTypes.RIGHT_PAR)) {
+        if (parser.matchesToken(MathematicaElementTypes.RIGHT_PAR)) {
             parser.advanceLexer();
             groupMark.done(token);
 
             // if we find a closing ) we return the group as parsed successful, no matter whether
             // the containing expression was parsed. Errors in the expression are marked there anyway.
-            result = parser.result(groupMark, token, true);
+            result = MathematicaParser.result(groupMark, token, true);
         } else {
             // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
             // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
@@ -67,18 +63,12 @@ public class GroupParselet implements PrefixParselet {
             if (result.isParsed()) {
                 parser.error("')' expected");
                 groupMark.done(token);
-                result = parser.result(groupMark, token,false);
+                result = MathematicaParser.result(groupMark, token, false);
             } else {
-                result = parser.notParsed();
+                result = MathematicaParser.notParsed();
                 groupMark.drop();
             }
         }
         return result;
     }
-
-
-    public int getPrecendence() {
-        return precendence;
-    }
-
 }

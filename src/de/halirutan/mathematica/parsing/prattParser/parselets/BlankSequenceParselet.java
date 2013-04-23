@@ -26,12 +26,12 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
  * @author patrick (3/27/13)
- *
  */
 public class BlankSequenceParselet implements InfixParselet {
     private final int precedence;
+
     public BlankSequenceParselet(int precedence) {
-        this.precedence=precedence;
+        this.precedence = precedence;
     }
 
     @Override

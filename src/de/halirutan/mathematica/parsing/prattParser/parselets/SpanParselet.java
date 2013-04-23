@@ -33,10 +33,10 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getP
  * @author patrick (3/27/13)
  */
 public class SpanParselet implements InfixParselet {
-    private final int precedence;
+    private final int m_precedence;
 
     public SpanParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
 
@@ -46,7 +46,7 @@ public class SpanParselet implements InfixParselet {
         PsiBuilder.Marker spanMark = left.getMark().precede();
         boolean skipped = false;
 
-        if (parser.testToken(SPAN)) {
+        if (parser.matchesToken(SPAN)) {
             parser.advanceLexer();
         } else {
             spanMark.drop();
@@ -54,7 +54,7 @@ public class SpanParselet implements InfixParselet {
         }
 
         // if we meet a second ;; right after the first ;; we just skip it
-        if (parser.testToken(SPAN)) {
+        if (parser.matchesToken(SPAN)) {
             skipped = true;
             parser.advanceLexer();
         }
@@ -72,7 +72,7 @@ public class SpanParselet implements InfixParselet {
             return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
         }
 
-        MathematicaParser.Result expr1 = parser.parseExpression(precedence);
+        MathematicaParser.Result expr1 = parser.parseExpression(m_precedence);
 
         // if we had expr0;;;;expr1
         if (skipped) {
@@ -80,9 +80,9 @@ public class SpanParselet implements InfixParselet {
             return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
         }
 
-        if (parser.testToken(SPAN)) {
+        if (parser.matchesToken(SPAN)) {
             parser.advanceLexer();
-            MathematicaParser.Result expr2 = parser.parseExpression(precedence);
+            MathematicaParser.Result expr2 = parser.parseExpression(m_precedence);
             if (expr2.isParsed()) {
                 spanMark.done(SPAN_EXPRESSION);
             } else
@@ -97,6 +97,6 @@ public class SpanParselet implements InfixParselet {
 
     @Override
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 }

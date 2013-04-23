@@ -8,14 +8,15 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
  * Parses constructs like {1,2,3}
+ *
  * @author patrick (3/29/13)
  */
 public class ListParselet implements PrefixParselet {
 
-    private final int precedence;
+    private final int m_precedence;
 
     public ListParselet(int precedence) {
-        this.precedence = precedence;
+        m_precedence = precedence;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ListParselet implements PrefixParselet {
         PsiBuilder.Marker listMarker = parser.mark();
         boolean result = true;
 
-        if(parser.testToken(LEFT_BRACE)) {
+        if (parser.matchesToken(LEFT_BRACE)) {
             parser.advanceLexer();
         } else {
             listMarker.drop();
@@ -32,7 +33,7 @@ public class ListParselet implements PrefixParselet {
 
         MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
 
-        if (parser.testToken(RIGHT_BRACE)) {
+        if (parser.matchesToken(RIGHT_BRACE)) {
             parser.advanceLexer();
         } else {
             parser.error("Closing '}' expected");
@@ -40,5 +41,9 @@ public class ListParselet implements PrefixParselet {
         }
         listMarker.done(LIST_EXPRESSION);
         return parser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
+    }
+
+    public int getPrecedence() {
+        return m_precedence;
     }
 }

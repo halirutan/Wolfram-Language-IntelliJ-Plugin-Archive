@@ -23,12 +23,13 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
- * @author patrick (3/27/13)
+ * Parselet for symbols (identifier).
  *
+ * @author patrick (3/27/13)
  */
 public class SymbolParselet implements PrefixParselet {
 
-    private final int precedence;
+    private final int m_precedence;
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser) {
@@ -39,10 +40,10 @@ public class SymbolParselet implements PrefixParselet {
     }
 
     public SymbolParselet(int precedence) {
-        this.precedence = precedence;
+        this.m_precedence = precedence;
     }
 
     public int getPrecedence() {
-        return precedence;
+        return m_precedence;
     }
 }

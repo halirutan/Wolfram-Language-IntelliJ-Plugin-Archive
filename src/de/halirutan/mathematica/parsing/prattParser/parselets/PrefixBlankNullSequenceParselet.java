@@ -26,13 +26,15 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
 
 /**
- * @author patrick (3/27/13)
+ * Parses ___expr. Note expr must be present.
  *
+ * @author patrick (3/27/13)
  */
 public class PrefixBlankNullSequenceParselet implements PrefixParselet {
-    private final int precedence;
+    private final int m_precedence;
+
     public PrefixBlankNullSequenceParselet(int precedence) {
-        this.precedence=precedence;
+        this.m_precedence = precedence;
     }
 
     @Override
@@ -40,8 +42,8 @@ public class PrefixBlankNullSequenceParselet implements PrefixParselet {
         PsiBuilder.Marker blankMark = parser.mark();
         IElementType token = BLANK_NULL_SEQUENCE_EXPRESSION;
         parser.advanceLexer();
-        MathematicaParser.Result result = parser.parseExpression(precedence);
+        MathematicaParser.Result result = parser.parseExpression(m_precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, !result.isValid() || result.isParsed());
+        return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
     }
 }

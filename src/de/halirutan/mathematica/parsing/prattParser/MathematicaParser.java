@@ -9,6 +9,7 @@ import de.halirutan.mathematica.parsing.prattParser.parselets.ImplicitMultiplica
 import de.halirutan.mathematica.parsing.prattParser.parselets.InfixParselet;
 import de.halirutan.mathematica.parsing.prattParser.parselets.PrefixParselet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getInfixParselet;
@@ -66,7 +67,7 @@ public class MathematicaParser implements PsiParser {
     public Result parseExpression(int precedence) throws CriticalParserError {
         if (builder.eof()) return notParsed();
         IElementType token = builder.getTokenType();
-        if (token == LINE_BREAK) {
+        if (token.equals(LINE_BREAK)) {
             advanceLexer();
             token = builder.getTokenType();
         }
@@ -94,6 +95,7 @@ public class MathematicaParser implements PsiParser {
         return left;
     }
 
+    @Nullable
     private InfixParselet getInfixOrMultiplyParselet(IElementType token) {
         InfixParselet infixParselet = getInfixParselet(token);
         PrefixParselet prefixParselet = getPrefixParselet(token);
@@ -131,7 +133,14 @@ public class MathematicaParser implements PsiParser {
         return builder.getTokenType();
     }
 
-    public Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
+    /**
+     * Function to create a
+     * @param mark
+     * @param token
+     * @param parsedQ
+     * @return
+     */
+    public static Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
         return new Result(mark, token, parsedQ);
     }
 
@@ -140,7 +149,7 @@ public class MathematicaParser implements PsiParser {
      *
      * @return
      */
-    public Result notParsed() {
+    public static Result notParsed() {
         return new Result(null, null, false);
     }
 
@@ -149,12 +158,12 @@ public class MathematicaParser implements PsiParser {
         builder.advanceLexer();
     }
 
-    public boolean testToken(IElementType token) {
-        return !builder.eof() && (builder.getTokenType() == token);
+    public boolean matchesToken(IElementType token) {
+        return !builder.eof() && (builder.getTokenType().equals(token));
     }
 
-    public boolean testToken(IElementType token1, IElementType token2) {
-        return (builder.lookAhead(0) == token1) && (builder.lookAhead(1) == token2);
+    public boolean matchesToken(IElementType token1, IElementType token2) {
+        return (builder.lookAhead(0).equals(token1)) && (builder.lookAhead(1).equals(token2));
     }
 
     /**
@@ -164,14 +173,6 @@ public class MathematicaParser implements PsiParser {
      */
     public void error(String s) {
         builder.error(s);
-    }
-
-    public boolean isImplicitTimesPosition() {
-        IElementType token = builder.getTokenType();
-        InfixParselet parser = getInfixParselet(token);
-        if (parser != null) return false;
-        return (whitespaceHandler.hadWhitespace() && (token == IDENTIFIER)) ||
-                ((token == LEFT_BRACE) || (token == LEFT_PAR) || (token == RIGHT_PAR) || (token == RIGHT_BRACE));
     }
 
     public boolean eof() {
@@ -190,7 +191,7 @@ public class MathematicaParser implements PsiParser {
 
         @Override
         public void onSkip(IElementType type, int start, int end) {
-            if (type == LINE_BREAK) whitespaceSeen = true;
+            if (type.equals(LINE_BREAK)) whitespaceSeen = true;
         }
 
         public void reset() {
@@ -209,13 +210,13 @@ public class MathematicaParser implements PsiParser {
      * An instance of this will provide all necessary information required to
      * know what expression was parsed on the left of an infix operator.
      */
-    public final class Result {
+    public static final class Result {
 
         private final PsiBuilder.Marker leftMark;
         private final IElementType leftToken;
         private final boolean parsed;
 
-        public Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean parsed) {
+        private Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean parsed) {
             this.leftMark = leftMark;
             this.leftToken = leftToken;
             this.parsed = parsed;

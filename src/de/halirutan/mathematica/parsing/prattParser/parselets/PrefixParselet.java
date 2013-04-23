@@ -22,8 +22,10 @@ import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
- * @author patrick (3/27/13)
+ * Interface for all prefix operator parselets. Prefix operators are not only the usual ++x or -3. In a+b
+ * a and b are prefix operators (having no argument) too.
  *
+ * @author patrick (3/27/13)
  */
 public interface PrefixParselet {
     MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError;
