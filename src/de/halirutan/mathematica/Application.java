@@ -24,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/4/13)
  */
-public class MathematicaApplication implements ApplicationComponent {
-    public MathematicaApplication() {
+public class Application implements ApplicationComponent {
+    public Application() {
     }
 
     public void initComponent() {
@@ -38,6 +38,6 @@ public class MathematicaApplication implements ApplicationComponent {
 
     @NotNull
     public String getComponentName() {
-        return "MathematicaApplication";
+        return "Application";
     }
 }
