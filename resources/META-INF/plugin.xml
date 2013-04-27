@@ -47,11 +47,13 @@
                     implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
 
     </extensions>
-    <application-components>
-        <component>
-            <implementation-class>de.halirutan.mathematica.Application</implementation-class>
-        </component>
-    </application-components>
+
+    <!---->
+    <!--<application-components>-->
+        <!--<component>-->
+            <!--<implementation-class>de.halirutan.mathematica.MathematicaApplication</implementation-class>-->
+        <!--</component>-->
+    <!--</application-components>-->
 
     <actions>
         <action id="Mathematica.NewMathematicaFile"
