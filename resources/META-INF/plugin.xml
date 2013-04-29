@@ -45,6 +45,8 @@
 
         <moduleType id="MATHEMATICA_MODULE"
                     implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
+        <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
+        <sdkFinder id="MATHEMATICA_SDK_FINDER" implementation="de.halirutan.mathematica.sdk.MathematicaSdkFinder"/>
 
     </extensions>
 
