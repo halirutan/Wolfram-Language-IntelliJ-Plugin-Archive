@@ -2,9 +2,12 @@ package de.halirutan.mathematica.sdk;
 
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.JarFileSystem;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.newvfs.NewVirtualFileSystem;
 import de.halirutan.mathematica.MathematicaIcons;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nullable;
@@ -12,13 +15,16 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * @author patrick (4/27/13)
  */
 public class MathematicaSdkType extends SdkType {
     private static final String DOC_URL = "http://reference.wolfram.com/mathematica/guide/Mathematica.html";
+    private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
     private final String version = null;
 
     public MathematicaSdkType() {
@@ -79,7 +85,7 @@ public class MathematicaSdkType extends SdkType {
 
     @Override
     public boolean isRootTypeApplicable(OrderRootType type) {
-        return true;
+        return type.equals(OrderRootType.SOURCES) || type.equals(OrderRootType.DOCUMENTATION) || type.equals(OrderRootType.CLASSES);
     }
 
     @Nullable
@@ -114,27 +120,35 @@ public class MathematicaSdkType extends SdkType {
         sdkModificator.setVersionString(getMathematicaVersionString(homePath));
         addAddOnPackageSources(sdkModificator, homePath);
         addJLinkJars(sdkModificator, homePath);
-        addInternalDocumentationNotebooks(sdkModificator, homePath);
-
+        sdkModificator.commitChanges();
         return true;
 
 
     }
 
-    private void addJLinkJars(SdkModificator sdkModificator, String homePath) {
-        VirtualFile jLinkJar = JarFileSystem.getInstance().findLocalVirtualFileByPath(homePath + "/SystemFiles/Links/JLink/JLink.jar");
-        sdkModificator.addRoot(jLinkJar, OrderRootType.CLASSES);
+    private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
+
+        final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
+        String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
+        jarFileSystem.setNoCopyJarForPath(path);
+        VirtualFile vFile = jarFileSystem.findFileByPath(path);
+        sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
     }
 
-    private void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
+    private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
+        File addOns = new File(homePath, "AddOns");
+        Pattern initMPattern = Pattern.compile(".*init\\.m");
+        if (addOns.isDirectory()) {
+            final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
+            for (File file : initFiles) {
+                if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
+                    final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
+                    sdkModificator.addRoot(packageDirectory, OrderRootType.SOURCES);
+                }
+            }
+        }
     }
 
-    private void addInternalDocumentationNotebooks(SdkModificator sdkModificator, String homePath) {
 
-    }
-
-    private static String convertFileName(String input) {
-        return input.replace("/", File.pathSeparator);
-    }
 
 }
