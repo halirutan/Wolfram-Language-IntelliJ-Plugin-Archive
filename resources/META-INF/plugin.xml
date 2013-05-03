@@ -3,17 +3,12 @@
     <name>Mathematica Language Plugin</name>
     <category>Custom Language</category>
     <version>0.1</version>
-    <idea-version since-build="129.354"/>
+    <idea-version since-build="129"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
     <description><![CDATA[
-
+        Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
+        lookup and more.
       ]]></description>
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
-      ]]>
-    </change-notes>
-
 
     <extensions defaultExtensionNs="com.intellij">
 
@@ -46,7 +41,6 @@
         <moduleType id="MATHEMATICA_MODULE"
                     implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
-        <sdkFinder id="MATHEMATICA_SDK_FINDER" implementation="de.halirutan.mathematica.sdk.MathematicaSdkFinder"/>
 
     </extensions>
 
