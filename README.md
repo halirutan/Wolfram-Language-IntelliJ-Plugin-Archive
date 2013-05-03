@@ -1,4 +1,4 @@
-Mathematica language plugin for Intellij IDEA
+Mathematica language plugin for IntelliJIDEA
 =============================================
 
 Feature list
