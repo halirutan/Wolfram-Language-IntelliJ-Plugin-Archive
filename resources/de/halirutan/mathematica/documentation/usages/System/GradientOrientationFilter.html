@@ -1,0 +1,36 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GradientOrientationFilter.html">GradientOrientationFilter</a>
+</h3>
+<ul>
+    <li>GradientOrientationFilter[<em>image</em>,<em>r</em>] gives an image corresponding to the local orientation
+        parallel to the gradient of <em>image</em>, computed using discrete derivatives of a Gaussian of pixel radius
+        <em>r</em>, returning values between -(
+        <math>
+            <ms>&#960;</ms>
+        </math>
+        )/(2) and (
+        <math>
+            <ms>&#960;</ms>
+        </math>
+        )/(2).
+    <li>GradientOrientationFilter[<em>image</em>,{<em>r</em>,
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        }] uses a Gaussian with standard deviation
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        .
+    <li>GradientOrientationFilter[<em>data</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] applies orientation filtering to an array of <em>data</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>UndefinedOrientation, Method, Padding,
+    WorkingPrecision</p>

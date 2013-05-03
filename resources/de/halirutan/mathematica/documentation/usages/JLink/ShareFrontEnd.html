@@ -1,0 +1,17 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3>
+    <a href="http://reference.wolfram.com/documentation-search.html?query=ShareFrontEnd%20JLink&collection=reference&lang=en">ShareFrontEnd</a>
+</h3>
+<ul>
+    <li>ShareFrontEnd[link] initiates sharing of the notebook front end with an external program such as Java or .NET.
+        For backwards compatibility, calling ShareFrontEnd[] with no arguments initiates sharing with the Java link, but
+        new code should specify the intended link, either by calling ShareFrontEnd[JavaLink[]] or
+        ShareFrontEnd[NETLink[]]. If the front end is already being shared by that link, ShareFrontEnd does nothing.
+        ShareFrontEnd returns a token that you should save and later pass to UnshareFrontEnd to unregister the request
+        for front end sharing.
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

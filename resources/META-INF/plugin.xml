@@ -1,12 +1,12 @@
 <idea-plugin version="2">
-    <id>org.ipcu.mathematicaPlugin</id>
-    <name>Mathematica IDEA Language Plugin</name>
+    <id>de.halirutan.mathematica</id>
+    <name>Mathematica Language Plugin</name>
     <category>Custom Language</category>
-    <version>0.0.1</version>
-    <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.trm.uni-leipzig.de">YourCompany</vendor>
+    <version>0.1</version>
+    <idea-version since-build="129.354"/>
+    <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+
       ]]></description>
     <change-notes><![CDATA[
       Add change notes here.<br>
@@ -50,12 +50,6 @@
 
     </extensions>
 
-    <!---->
-    <!--<application-components>-->
-        <!--<component>-->
-            <!--<implementation-class>de.halirutan.mathematica.MathematicaApplication</implementation-class>-->
-        <!--</component>-->
-    <!--</application-components>-->
 
     <actions>
         <action id="Mathematica.NewMathematicaFile"

@@ -1,0 +1,17 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/ReturnAsJavaObject.html">ReturnAsJavaObject</a></h3>
+<ul>
+    <li>ReturnAsJavaObject[expr] causes a Java method call or field access during the evaluation of expr to return its
+        result as an object reference (that is, a JavaObject expression), not a value. Most Java objects are returned as
+        references normally, but those that have a meaningful Mathematica representation are returned "by value". Such
+        objects include strings, arrays, and the so-called wrapper classes like java.lang.Integer. ReturnAsJavaObject
+        overrides the normal behavior and forces any object returned to Mathematica to be sent only as a reference. It
+        is typically used to avoid needlessly sending large arrays of numbers back and forth between Java and
+        Mathematica. You can use ReturnAsJavaObject to cause only a reference to be sent, then use the
+        JavaObjectToExpression function at the end if the final value is needed.
+</ul><p><b>Attributes:</b> HoldAll</p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,23 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Setter.html">Setter</a></h3>
+<ul>
+    <li>Setter[<em>x</em>,<em>val</em>] represents a setter button whose setting <em>x</em> is set to <em>val</em> when
+        the button is clicked. The button is labeled with <em>val</em>, and appears pressed if the value of <em>x</em>
+        is <em>val</em>, and unpressed otherwise.
+    <li>Setter[Dynamic[<em>x</em>],<em>val</em>] takes the setting to be the dynamically updated current value of
+        <em>x</em>, with the value of <em>x</em> being reset if the button is clicked.
+    <li>Setter[<em>x</em>,<em>val</em>,<em>label</em>] labels the setter button with <em>label</em>.
+    <li>Setter[<em>x</em>,{<em>val</em><sub>1</sub>,<em>val</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>label</em>] represents a setter button that sets <em>x</em> to <em>val</em><sub><em>n</em></sub> if
+        multi-clicked <em>n</em> times.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Alignment, Appearance, AutoAction, Background,
+    BaselinePosition, BaseStyle, ContentPadding, ContinuousAction, DefaultBaseStyle, Enabled, FrameMargins,
+    ImageMargins, ImageSize</p>

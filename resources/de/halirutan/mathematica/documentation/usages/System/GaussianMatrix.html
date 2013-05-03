@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GaussianMatrix.html">GaussianMatrix</a></h3>
+<ul>
+    <li>GaussianMatrix[<em>r</em>] gives a matrix that corresponds to a Gaussian kernel of radius <em>r</em>.
+    <li>GaussianMatrix[{<em>r</em>,
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        }] gives a matrix corresponding to a Gaussian kernel with radius <em>r</em> and standard deviation
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        .
+    <li>GaussianMatrix[<em>r</em>,{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>}] gives a matrix formed from the
+        <em>n</em><sub>1</sub><sup>th</sup> derivative of the Gaussian with respect to rows and the
+        <em>n</em><sub>2</sub><sup>th</sup> derivative with respect to columns.
+    <li>GaussianMatrix[<em>r</em>,{{<em>n</em><sub>11</sub>,<em>n</em><sub>12</sub>},{<em>n</em><sub>21</sub>,<em>n</em><sub>22</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives a matrix formed from the sums of the <em>n</em><sub><em>i1</em></sub> and
+        <em>n</em><sub><em>i2</em></sub> derivatives.
+    <li>GaussianMatrix[{{<em>r</em><sub>1</sub>,<em>r</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#963;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives an array corresponding to a Gaussian kernel with radius <em>r</em><sub><em>i</em></sub> in the
+        <em>i</em><sup>th</sup> index direction.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method, WorkingPrecision, Standardization</p>

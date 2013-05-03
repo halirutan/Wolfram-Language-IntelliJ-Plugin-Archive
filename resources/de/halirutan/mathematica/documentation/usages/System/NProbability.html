@@ -1,0 +1,60 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NProbability.html">NProbability</a></h3>
+<ul>
+    <li>NProbability[<em>pred</em>,<em>x</em>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em>] gives the numerical probability for an event that satisfies the predicate <em>pred</em> under the
+        assumption that <em>x</em> follows the probability distribution <em>dist</em>.
+    <li>NProbability[<em>pred</em>,{<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em>] gives the numerical probability that an event satisfies <em>pred</em> under the assumption that {<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        } follows the multivariate distribution <em>dist</em>.
+    <li>NProbability[<em>pred</em>,{<em>x</em><sub>1</sub>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em><sub>1</sub>,<em>x</em><sub>2</sub>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the numerical probability that an event satisfies <em>pred</em> under the assumption that
+        <em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        are independent and follow the distributions <em>dist</em><sub>1</sub>, <em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>NProbability[<em>pred</em><sub>1</sub>
+        <math>
+            <ms>&#62419;</ms>
+        </math>
+        <em>pred</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives the numerical conditional probability of <em>pred</em><sub>1</sub> given <em>pred</em><sub>2</sub>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>AccuracyGoal, Compiled, Method, PrecisionGoal,
+    WorkingPrecision</p>

@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Probability.html">Probability</a></h3>
+<ul>
+    <li>Probability[<em>pred</em>,<em>x</em>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em>] gives the probability for an event that satisfies the predicate <em>pred</em> under the
+        assumption that <em>x</em> follows the probability distribution <em>dist</em>.
+    <li>Probability[<em>pred</em>,<em>x</em>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>data</em>] gives the probability for an event that satisfies the predicate <em>pred</em> under the
+        assumption that <em>x</em> follows the probability distribution given by <em>data</em>.
+    <li>Probability[<em>pred</em>,{<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em>] gives the probability that an event satisfies <em>pred</em> under the assumption that {<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        } follows the multivariate distribution <em>dist</em>.
+    <li>Probability[<em>pred</em>,{<em>x</em><sub>1</sub>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em><sub>1</sub>,<em>x</em><sub>2</sub>
+        <math>
+            <ms>&#62418;</ms>
+        </math>
+        <em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the probability that an event satisfies <em>pred</em> under the assumption that <em>x</em><sub>1</sub>,
+        <em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        are independent and follow the distributions <em>dist</em><sub>1</sub>, <em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>Probability[<em>pred</em><sub>1</sub>
+        <math>
+            <ms>&#62419;</ms>
+        </math>
+        <em>pred</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives the conditional probability of <em>pred</em><sub>1</sub> given <em>pred</em><sub>2</sub>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Assumptions, GenerateConditions, Method</p>

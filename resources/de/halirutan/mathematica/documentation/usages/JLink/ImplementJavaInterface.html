@@ -1,0 +1,17 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/ImplementJavaInterface.html">ImplementJavaInterface</a>
+</h3>
+<ul>
+    <li>ImplementJavaInterface[interfaces, handlerMappings] uses the Dynamic Proxy facility of Java to create a new Java
+        class and return an object of that class that implements the named interface or list of interfaces by calling
+        back into Mathematica. In short, it lets you create a Java object that implements a given Java interface
+        entirely in Mathematica code. The handlerMappings argument is a list of rules that specify the name of the Java
+        method and the name of the method that will be called in Mathematica to implement the body of that method, as in
+        "intfMeth1"->"mathHandlerMethod1". The arguments passed to the Mathematica method will be exactly the arguments
+        originally passed to the Java method.
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

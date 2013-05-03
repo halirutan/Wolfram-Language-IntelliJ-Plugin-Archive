@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/PIDTune.html">PIDTune</a></h3>
+<ul>
+    <li>PIDTune[<em>lsys</em>] gives a feedback PID controller for the linear time-invariant system <em>lsys</em>.
+    <li>PIDTune[<em>lsys</em>,"carch"] gives a controller of architecture "<em>carch</em>" ("P", "PI", "PID", etc).
+    <li>PIDTune[<em>lsys</em>,{"carch","trule"}] gives a controller using the tuning rule "<em>trule</em>".
+    <li>PIDTune[<em>lsys</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,"prop"] returns the value for the property "<em>prop</em>".
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>PIDFeedforward, PIDDerivativeFilter, Method
+</p>

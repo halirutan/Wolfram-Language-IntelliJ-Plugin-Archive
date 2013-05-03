@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/StateSpaceModel.html">StateSpaceModel</a></h3>
+<ul>
+    <li>StateSpaceModel[{<em>a</em>,<em>b</em>,<em>c</em>,<em>d</em>}] represents the standard state-space model with
+        state matrix <em>a</em>, input matrix <em>b</em>, output matrix <em>c</em>, and transmission matrix <em>d</em>.
+    <li>StateSpaceModel[{<em>a</em>,<em>b</em>,<em>c</em>,<em>d</em><em>,</em><em>e</em>}] represents a descriptor
+        state-space model with descriptor matrix <em>e</em>.
+    <li>StateSpaceModel[<em>tfm</em>] gives a state-space realization of a TransferFunctionModel <em>tfm</em>.
+    <li>StateSpaceModel[{<em>f</em>,<em>g</em>},{{<em>x</em><sub>1</sub>,<em>x</em><sub>10</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{{<em>u</em><sub>1</sub>,<em>u</em><sub>10</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the state-space model obtained by Taylor linearization of Overscript[<em>x</em>.]
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>f</em>(<em>x</em>,<em>u</em>) ,<em>y</em>
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>g</em>(<em>x</em>,<em>u</em>), or <em>x</em>(<em>k</em>+1)
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>f</em>(<em><em>x</em>(<em>k</em>)</em>,<em><em>u</em>(<em>k</em>)</em>),<em><em>y</em>(<em>k</em>)</em>
+        <math>
+            <ms>&#63449;</ms>
+        </math>
+        <em>g</em>(<em><em>x</em>(<em>k</em>)</em>,<em><em>u</em>(<em>k</em>)</em>), about the point
+        <em>(</em><em>x</em><sub><em>i</em></sub><sub>0</sub>,<em>u</em><sub><em>i</em></sub><sub>0</sub>).
+    <li>StateSpaceModel[<em>eqns</em>,{{<em>x</em><sub>1</sub>,<em>x</em><sub>10</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{{<em>u</em><sub>1</sub>,<em>u</em><sub>10</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{<em>g</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>
+            <math>
+                <ms>&#964;</ms>
+            </math>
+        </em>] gives the state-space model obtained by Taylor linearization about the point
+        <em>(</em><em>x</em><sub><em>i</em></sub><sub>0</sub>,<em>u</em><sub><em>i</em></sub><sub>0</sub>) of the
+        differential or difference equations <em>eqns</em> with outputs <em>g</em><sub><em>i</em></sub> and independent
+        variable <em>
+            <math>
+                <ms>&#964;</ms>
+            </math>
+        </em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>DescriptorStateSpace, SamplingPeriod,
+    Control`ShowSystemsModelLabels, StateSpaceRealization, SystemsModelLabels</p>

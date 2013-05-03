@@ -1,0 +1,35 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/TabView.html">TabView</a></h3>
+<ul>
+    <li>TabView[{<em>lbl</em><sub>1</sub>-><em>expr</em><sub>1</sub>,
+        <em>lbl</em><sub>2</sub>-><em>expr</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents an object in which clicking the tab with label <em>lbl</em><sub><em>i</em></sub> displays
+        <em>expr</em><sub><em>i</em></sub>.
+    <li>TabView[{<em>lbl</em><sub>1</sub>-><em>expr</em><sub>1</sub>,<em>lbl</em><sub>2</sub>-><em>expr</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>i</em>] makes the <em>i</em><sup>th</sup> tab be the one currently selected.
+    <li>
+        TabView[{{<em>v</em><sub>1</sub>,<em>lbl</em><sub>1</sub>-><em>expr</em><sub>1</sub>},{<em>v</em><sub>2</sub>,<em>lbl</em><sub>2</sub>-><em>expr</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>v</em>] associates values <em>v</em><sub><em>i</em></sub> with successive tabs, and makes the tab with
+        value <em>v</em> be the one currently selected.
+    <li>TabView[{<em>expr</em><sub>1</sub>,<em>expr</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes the tab labels to be successive integers.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Alignment, Appearance, AutoAction, Background,
+    BaselinePosition, BaseStyle, ContentPadding, ContinuousAction, ControlPlacement, DefaultBaseStyle,
+    DefaultLabelStyle, Enabled, FrameMargins, ImageMargins, ImageSize, LabelStyle</p>

@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/PopupMenu.html">PopupMenu</a></h3>
+<ul>
+    <li>PopupMenu[<em>x</em>,{<em>val</em><sub>1</sub>,<em>val</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents a popup menu with setting <em>x</em> and possible values <em>val</em><sub><em>i</em></sub>.
+    <li>PopupMenu[Dynamic[<em>x</em>],{<em>val</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes the setting to be the dynamically updated current value of <em>x</em>, with the value of <em>x</em>
+        being reset every time an item is selected from the menu.
+    <li>
+        PopupMenu[<em>x</em>,{<em>val</em><sub>1</sub>-><em>lbl</em><sub>1</sub>,<em>val</em><sub>2</sub>-><em>lbl</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents a popup menu in which possible value <em>val</em><sub><em>i</em></sub> is indicated by
+        <em>lbl</em><sub><em>i</em></sub>.
+    <li>PopupMenu[<em>x</em>,{<em>val</em><sub>1</sub>-><em>lbl</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>dlbl</em>] displays the menu item as <em>dlbl</em> if <em>x</em> is none of the
+        <em>val</em><sub><em>i</em></sub>.
+    <li>PopupMenu[<em>x</em>,{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>dlbl</em>,<em>base</em>] displays as <em>base</em> when it is not being clicked.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Alignment, Appearance, AutoAction, Background,
+    BaselinePosition, BaseStyle, ContentPadding, ContinuousAction, DefaultBaseStyle, DefaultMenuStyle, Enabled,
+    FieldSize, FrameMargins, ImageMargins, ImageSize, MenuAppearance, MenuStyle</p>

@@ -1,0 +1,14 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/RegionBinarize.html">RegionBinarize</a></h3>
+<ul>
+    <li>RegionBinarize[<em>image</em>,<em>marker</em>,<em>d</em>] gives a binary version of <em>image</em> that includes
+        the foreground pixels of <em>marker</em> and also connected regions whose pixel values are within a distance
+        <em>d</em>.
+    <li>RegionBinarize[<em>image</em>,<em>marker</em>,<em>d</em>,{<em>t</em><sub>1</sub>,<em>t</em><sub>2</sub>}] grows
+        regions in <em>marker</em> by adding pixels whose average intensity is also constrained within an interval {<em>t</em><sub>1</sub>,<em>t</em><sub>2</sub>}.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>MaxIterations, Method</p>

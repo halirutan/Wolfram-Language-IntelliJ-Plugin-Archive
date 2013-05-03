@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Check.html">Check</a></h3>
+<ul>
+    <li>Check[<em>expr</em>,<em>failexpr</em>] evaluates <em>expr</em>, and returns the result, unless messages were
+        generated, in which case it evaluates and returns <em>failexpr</em>.
+    <li>
+        Check[<em>expr</em>,<em>failexpr</em>,{<em>s</em><sub>1</sub>::<em>t</em><sub>1</sub>,<em>s</em><sub>2</sub>::<em>t</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] checks only for the specified messages.
+    <li>Check[<em>expr</em>,<em>failexpr</em>,"name"] checks only for messages in the named message group.
+</ul><p><b>Attributes:</b> HoldAll, Protected</p><p><b>Symbol has no options.</b></p>

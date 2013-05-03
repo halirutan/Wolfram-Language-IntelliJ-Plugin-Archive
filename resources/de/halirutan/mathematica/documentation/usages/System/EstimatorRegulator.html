@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/EstimatorRegulator.html">EstimatorRegulator</a></h3>
+<ul>
+    <li>EstimatorRegulator[<em>ssm</em>,{<em>l</em>,
+        <math>
+            <ms>&#954;</ms>
+        </math>
+        }] constructs the feedback regulator for the StateSpaceModel <em>ssm</em> with estimator and feedback gain
+        matrices <em>l</em> and
+        <math>
+            <ms>&#954;</ms>
+        </math>
+        , respectively.
+    <li>EstimatorRegulator[{<em>ssm</em>,<em>sensors</em>},{<em>l</em>,
+        <math>
+            <ms>&#954;</ms>
+        </math>
+        }] uses only <em>sensors</em> as the measured outputs of <em>ssm</em>.
+    <li>EstimatorRegulator[{<em>ssm</em>,<em>sensors</em>,<em>finputs</em>},{<em>l</em>,
+        <math>
+            <ms>&#954;</ms>
+        </math>
+        }] specifies <em>finputs</em> as the feedback inputs of <em>ssm</em>.
+    <li>EstimatorRegulator[{<em>ssm</em>,<em>sensors</em>,<em>finputs</em>,<em>einputs</em>},{<em>l</em>,
+        <math>
+            <ms>&#954;</ms>
+        </math>
+        }] specifies <em>einputs</em> as the exogenous deterministic inputs.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

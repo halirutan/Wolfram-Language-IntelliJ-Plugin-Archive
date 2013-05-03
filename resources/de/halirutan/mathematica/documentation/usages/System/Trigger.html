@@ -1,0 +1,20 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Trigger.html">Trigger</a></h3>
+<ul>
+    <li>Trigger[Dynamic[<em>u</em>]] represents a trigger that can be pressed to make the dynamically updated value of
+        <em>u</em> be continually increased with time from 0 to 1.
+    <li>Trigger[Dynamic[<em>u</em>],{<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>}] makes
+        <em>u</em> vary from <em>u</em><sub><em>min</em></sub> to <em>u</em><sub><em>max</em></sub> when triggered.
+    <li>Trigger[Dynamic[<em>u</em>],{<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>,<em>du</em>}]
+        makes <em>u</em> vary in steps <em>du</em> when triggered.
+    <li>Trigger[Dynamic[<em>u</em>],{<em>u</em><sub><em>min</em></sub>,<em>u</em><sub><em>max</em></sub>},<em>ups</em>]
+        makes the value of <em>u</em> increase at a rate of <em>ups</em> units per second when triggered.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Alignment, AnimationDirection, AnimationRate,
+    AnimationRepetitions, Appearance, AppearanceElements, AutoAction, Background, BaselinePosition, BaseStyle,
+    ContentPadding, ContinuousAction, DefaultBaseStyle, DefaultDuration, DisplayAllSteps, Enabled, Exclusions,
+    FrameMargins, ImageMargins, ImageSize, PausedTime, RefreshRate</p>

@@ -1,0 +1,15 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/$RelaxedTypeChecking.html">$RelaxedTypeChecking</a></h3>
+<ul>
+    <li>$RelaxedTypeChecking is a flag that can be set to True to speed up the validation performed in Mathematica (via
+        pattern tests) on arrays of data being sent as arguments to Java calls. For a very large matrix, it can be
+        expensive to test that it is, say, a rectangular matrix of integers before it is sent to Java. The speed is
+        gained by making the tests much less strict, so you must make sure that you pass methods exactly the arguments
+        they expect. The default value is False. You can set and reset the value whenever you want; a typical use would
+        be Block[{$RelaxedTypeChecking = True}, callToJava[largeMatrix]].
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

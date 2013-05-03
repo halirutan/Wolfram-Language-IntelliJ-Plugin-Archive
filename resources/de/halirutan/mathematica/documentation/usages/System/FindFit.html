@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FindFit.html">FindFit</a></h3>
+<ul>
+    <li>FindFit[<em>data</em>,<em>expr</em>,<em>pars</em>,<em>vars</em>] finds numerical values of the parameters <em>pars</em>
+        that make <em>expr</em> give a best fit to <em>data</em> as a function of <em>vars</em>. The data can have the
+        form {{<em>x</em><sub>1</sub>,<em>y</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>f</em><sub>1</sub>},{<em>x</em><sub>2</sub>,<em>y</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>f</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }, where the number of coordinates <em>x</em>, <em>y</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        is equal to the number of variables in the list <em>vars</em>. The data can also be of the form {<em>f</em><sub>1</sub>,<em>f</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }, with a single coordinate assumed to take values 1, 2,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>FindFit[<em>data</em>,{<em>expr</em>,<em>cons</em>},<em>pars</em>,<em>vars</em>] finds a best fit subject to the
+        parameter constraints <em>cons</em>.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Options: </b>AccuracyGoal, Compiled, EvaluationMonitor, Gradient,
+    MaxIterations, Method, NormFunction, PrecisionGoal, StepMonitor, WorkingPrecision</p>

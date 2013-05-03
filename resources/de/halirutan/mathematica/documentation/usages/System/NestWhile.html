@@ -1,0 +1,21 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NestWhile.html">NestWhile</a></h3>
+<ul>
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>] starts with <em>expr</em>, then repeatedly applies <em>f</em>
+        until applying <em>test</em> to the result no longer yields True.
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>,<em>m</em>] supplies the most recent <em>m</em> results as
+        arguments for <em>test</em> at each step.
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>,All] supplies all results so far as arguments for <em>test</em>
+        at each step.
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>,<em>m</em>,<em>max</em>] applies <em>f</em> at most
+        <em>max</em> times.
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>,<em>m</em>,<em>max</em>,<em>n</em>] applies <em>f</em> an extra
+        <em>n</em> times.
+    <li>NestWhile[<em>f</em>,<em>expr</em>,<em>test</em>,<em>m</em>,<em>max</em>,-<em>n</em>] returns the result found
+        when <em>f</em> had been applied <em>n</em> fewer times.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LQRegulatorGains.html">LQRegulatorGains</a></h3>
+<ul>
+    <li>LQRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>}] gives the optimal state feedback gain matrix for the
+        StateSpaceModel <em>ssm</em> and the quadratic cost function, with state and control weighting matrices
+        <em>q</em> and <em>r</em>.
+    <li>LQRegulatorGains[<em>ssm</em>,{<em>q</em>,<em>r</em>,<em>p</em>}] includes the state-control cross-coupling
+        matrix <em>p</em> in the cost function.
+    <li>LQRegulatorGains[{<em>ssm</em>,<em>finputs</em>},{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] specifies <em>finputs</em> as the feedback inputs of <em>ssm</em>.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Options: </b>Method</p>

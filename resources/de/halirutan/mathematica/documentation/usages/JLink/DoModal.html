@@ -1,0 +1,13 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/DoModal.html">DoModal</a></h3>
+<ul>
+    <li>DoModal[] does not return until the Java side sends an expression of the form EvaluatePacket[EndModal[___]]. Use
+        DoModal to have a program wait until some Java user-interface action signals that it can proceed. Typically,
+        this would be used to implement a modal dialog box that needs to return a result to Mathematica when it is
+        dismissed. DoModal returns the EndModal[args] expression.
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

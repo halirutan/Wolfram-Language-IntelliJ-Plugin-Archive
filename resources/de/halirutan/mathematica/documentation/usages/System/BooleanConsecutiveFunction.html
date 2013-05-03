@@ -1,0 +1,81 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3>
+    <a href="http://reference.wolfram.com/mathematica/ref/BooleanConsecutiveFunction.html">BooleanConsecutiveFunction</a>
+</h3>
+<ul>
+    <li>BooleanConsecutiveFunction[<em>k</em>,<em>n</em>] represents a Boolean function of <em>n</em> variables that
+        gives True if <em>k</em> consecutive variables are True.
+    <li>BooleanConsecutiveFunction[{<em>k</em><em>,</em>True},<em>n</em>] treats the variable list as cyclic.
+    <li>BooleanConsecutiveFunction[{<em>k</em><sub>1</sub>,<em>k</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>k</em><sub><em>d</em></sub>},{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>n</em><sub><em>d</em></sub>}] represents a Boolean function of <em>n</em><sub>1</sub>
+        <em>n</em><sub>2</sub>
+        <math>
+            <ms>&#8943;</ms>
+        </math>
+        <em>n</em><sub><em>d</em></sub> variables that gives True if all variables in a <em>k</em><sub>1</sub>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <em>k</em><sub>2</sub>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <em>k</em><sub><em>d</em></sub> block of the <em>n</em><sub>1</sub>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <em>n</em><sub>2</sub>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#10799;</ms>
+        </math>
+        <em>n</em><sub><em>d</em></sub> variable array are True.
+    <li>BooleanConsecutiveFunction[{{<em>k</em><sub>1</sub>,<em>k</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>k</em><sub><em>d</em></sub>},{<em>c</em><sub>1</sub>,<em>c</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>c</em><sub><em>d</em></sub>}},{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>n</em><sub><em>d</em></sub>}] treats the <em>i</em><sup>th</sup> level of the variable array as cyclic if
+        <em>c</em><sub><em>i</em></sub> is True.
+    <li>BooleanConsecutiveFunction[<em>spec</em>,{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the Boolean expression in variables <em>a</em><sub><em>i</em></sub> corresponding to the Boolean
+        consecutive function specified by <em>spec</em>.
+    <li>BooleanConsecutiveFunction[<em>spec</em>,{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>form</em>] gives the Boolean expression in the form specified by <em>form</em>.
+</ul><p><b>Attributes:</b> Protected</p><p><b>Symbol has no options.</b></p>

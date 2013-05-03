@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Root.html">Root</a></h3>
+<ul>
+    <li>Root[<em>f</em>,<em>k</em>] represents the exact <em>k</em><sup>th</sup> root of the polynomial equation
+        <em>f</em>[<em>x</em>]
+        <math>
+            <ms>&#10869;</ms>
+        </math>
+        0.
+    <li>Root[{<em>f</em><sub>1</sub>,<em>f</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{<em>k</em><sub>1</sub>,<em>k</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents the last coordinate of the exact vector {<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        } such that <em>a</em><sub><em>i</em></sub> is the <em>k</em><sub><em>i</em></sub><sup>th</sup> root of the
+        polynomial equation <em>f</em><sub><em>i</em></sub>[<em>a</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>a</em><sub><em>i-1</em></sub>,<em>x</em>]
+        <math>
+            <ms>&#10869;</ms>
+        </math>
+        0.
+    <li>Root[{<em>f</em>,<em>x</em><sub>0</sub>}] represents the exact root of the general equation
+        <em>f</em>[<em>x</em>]
+        <math>
+            <ms>&#10869;</ms>
+        </math>
+        0 near <em>x</em>=<em>x</em><sub>0</sub>.
+    <li>Root[{<em>f</em>,<em>x</em><sub>0</sub>,<em>n</em>}] represents <em>n</em> roots of the equation <em>f</em>[<em>x</em>]
+        <math>
+            <ms>&#10869;</ms>
+        </math>
+        0 near <em>x</em>=<em>x</em><sub>0</sub>.
+</ul><p><b>Attributes:</b> NHoldAll, Protected, ReadProtected</p><p><b>Options: </b>ExactRootIsolation</p>

@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Compile.html">Compile</a></h3>
+<ul>
+    <li>Compile[{<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>expr</em>] creates a compiled function that evaluates <em>expr</em> assuming numerical values of the
+        <em>x</em><sub><em>i</em></sub>.
+    <li>Compile[{{<em>x</em><sub>1</sub>,<em>t</em><sub>1</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>expr</em>] assumes that <em>x</em><sub><em>i</em></sub> is of a type that matches
+        <em>t</em><sub><em>i</em></sub>.
+    <li>Compile[{{<em>x</em><sub>1</sub>,<em>t</em><sub>1</sub>,<em>n</em><sub>1</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>expr</em>] assumes that <em>x</em><sub><em>i</em></sub> is a rank <em>n</em><sub><em>i</em></sub> array of
+        objects, each of a type that matches <em>t</em><sub><em>i</em></sub>.
+    <li>Compile[<em>vars</em>,<em>expr</em>,{{<em>p</em><sub>1</sub>,<em>pt</em><sub>1</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] assumes that subexpressions in <em>expr</em> that match <em>p</em><sub><em>i</em></sub> are of types that
+        match <em>pt</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b> HoldAll, Protected</p><p><b>Options: </b>CompilationOptions, CompilationTarget,
+    Parallelization, RuntimeAttributes, RuntimeOptions</p>

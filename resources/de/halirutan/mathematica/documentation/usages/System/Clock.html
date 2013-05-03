@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Clock.html">Clock</a></h3>
+<ul>
+    <li>Clock[] represents a clock variable whose value cycles continuously from 0 to 1 once per second when it appears
+        inside a dynamically updated object such as a Dynamic.
+    <li>Clock[<em>t</em>] cycles from 0 to <em>t</em> every <em>t</em> seconds.
+    <li>Clock[<em>v</em><sub><em>max</em></sub>,<em>t</em>] cycles from 0 to <em>v</em><sub><em>max</em></sub> every
+        <em>t</em> seconds.
+    <li>Clock[{<em>v</em><sub><em>min</em></sub>,<em>v</em><sub><em>max</em></sub>},<em>t</em>] cycles through the range
+        <em>v</em><sub><em>min</em></sub> to <em>v</em><sub><em>max</em></sub> every <em>t</em> seconds.
+    <li>Clock[{<em>v</em><sub><em>min</em></sub>,<em>v</em><sub><em>max</em></sub>}] cycles through the range <em>v</em><sub><em>min</em></sub>
+        to <em>v</em><sub><em>max</em></sub> over the course of
+        <em>v</em><sub><em>max</em></sub>-<em>v</em><sub><em>min</em></sub> seconds.
+    <li>Clock[{<em>v</em><sub><em>min</em></sub>,<em>v</em><sub><em>max</em></sub>,<em>dv</em>}] cycles from
+        <em>v</em><sub><em>min</em></sub> to <em>v</em><sub><em>max</em></sub> in steps of <em>dv</em>, spending
+        <em>dv</em> seconds at each value.
+    <li>Clock[{<em>v</em><sub><em>min</em></sub>,<em>v</em><sub><em>max</em></sub>,<em>dv</em>},<em>t</em>] cycles from
+        <em>v</em><sub><em>min</em></sub> to <em>v</em><sub><em>max</em></sub> in steps <em>dv</em> every <em>t</em>
+        seconds.
+    <li>Clock[<em>vals</em>,<em>t</em>,<em>n</em>] goes through the cycle only <em>n</em> times, then always yields only
+        the maximum value.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

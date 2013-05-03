@@ -1,0 +1,16 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/KeepJavaObject.html">KeepJavaObject</a></h3>
+<ul>
+    <li>KeepJavaObject[object] causes the specified object(s) not to be released when the current JavaBlock ends.
+        KeepJavaObject allows an object to "escape" from the current JavaBlock, and it only has an effect if the object
+        was in fact slated to be released by the current block. The object is promoted to the "release" list of the
+        next-enclosing JavaBlock, if there is one, so it will be released when that block ends (unless you call
+        KeepJavaObject again in the outer block). KeepJavaObject[object, Manual] causes the specified object to escape
+        from all enclosing JavaBlocks, meaning that the object will only be released if you manually call
+        ReleaseJavaObject.
+</ul><p><b>Attributes:</b></p><p><b>Symbol has no options.</b></p>

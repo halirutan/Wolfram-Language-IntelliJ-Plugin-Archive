@@ -1,0 +1,15 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/JLink/ref/ConnectToFrontEnd.html">ConnectToFrontEnd</a></h3>
+<ul>
+    <li>ConnectToFrontEnd[] establishes a link to the notebook front end for use by the UseFrontEnd[] function. It
+        returns True to indicate that the link was established correctly, and False otherwise. The front end will be
+        launched if required. Although UseFrontEnd will call ConnectToFrontEnd if necessary, ConnectToFrontEnd is
+        provided to allow programmers to conveniently control when the front end is launched and to receive a True/False
+        indication if it was successful. This function will typically be called only from an external program that is
+        driving the kernel, not from code executing in a front end notebook.
+</ul><p><b>Attributes:</b></p><p><b>Options: </b>ForceLaunch</p>

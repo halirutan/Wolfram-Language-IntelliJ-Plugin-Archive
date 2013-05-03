@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FindArgMax.html">FindArgMax</a></h3>
+<ul>
+    <li>FindArgMax[<em>f</em>,<em>x</em>] gives the position <em>x</em><sub><em>max</em></sub> of a local maximum of
+        <em>f</em>.
+    <li>FindArgMax[<em>f</em>,{<em>x</em>,<em>x</em><sub>0</sub>}] gives the position <em>x</em><sub><em>max</em></sub>
+        of a local maximum of <em>f</em>, found by a search starting from the point <em>x</em>=<em>x</em><sub>0</sub>.
+    <li>FindArgMax[<em>f</em>,{{<em>x</em>,<em>x</em><sub>0</sub>},{<em>y</em>,<em>y</em><sub>0</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the position {<em>x</em><sub><em>max</em></sub>,<em>y</em><sub><em>max</em></sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        } of a local maximum of a function of several variables.
+    <li>FindArgMax[{<em>f</em>,<em>cons</em>},{{<em>x</em>,<em>x</em><sub>0</sub>},{<em>y</em>,<em>y</em><sub>0</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the position of a local maximum subject to the constraints <em>cons</em>.
+    <li>FindArgMax[{<em>f</em>,<em>cons</em>},{<em>x</em>,<em>y</em>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] starts from a point within the region defined by the constraints.
+</ul><p><b>Attributes:</b> HoldAll, Protected</p><p><b>Options: </b>AccuracyGoal, Compiled, EvaluationMonitor, Gradient,
+    MaxIterations, Method, PrecisionGoal, StepMonitor, WorkingPrecision</p>

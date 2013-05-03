@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/StandbyDistribution.html">StandbyDistribution</a></h3>
+<ul>
+    <li>StandbyDistribution[<em>dist</em><sub>1</sub>,{<em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>dist</em><sub><em>n</em></sub>}] represents a standby distribution with component lifetime distributions
+        <em>dist</em><sub><em>i</em></sub>. When component <em>i</em> fails, component <em>i</em>+1 will become active.
+    <li>StandbyDistribution[<em>dist</em><sub>1</sub>,{<em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>dist</em><sub><em>n</em></sub>},<em>p</em>] represents a standby distribution where switching from
+        component <em>i</em> to component <em>i</em>+1 succeeds with probability <em>p</em>.
+    <li>StandbyDistribution[<em>dist</em><sub>1</sub>,{<em>dist</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>dist</em><sub><em>n</em></sub>},<em>sdist</em>] represents a standby distribution where the switch
+        component has lifetime distribution <em>sdist</em>.
+    <li>StandbyDistribution[<em>dist</em><sub>1</sub>,{
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,{<em>dist</em><sub><em>i,inactive</em></sub>,<em>dist</em><sub><em>i,active</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] represents a standby distribution where the <em>i</em><sup>th</sup> component lifetime distribution follows
+        <em>dist</em><sub><em>i,inactive</em></sub> in inactive mode and <em>dist</em><sub><em>i,active</em></sub> in
+        active mode.
+</ul><p><b>Attributes:</b> Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>
