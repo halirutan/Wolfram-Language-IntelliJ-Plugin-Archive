@@ -157,6 +157,17 @@ public class ParseletProvider {
         infixParsletToPsiElement.put(parselet, expressionToken);
     }
 
+    private static void registerPrefixExplicitly(IElementType token, IElementType expressionToken, PrefixParselet parselet) {
+        prefixParselets.put(token, parselet);
+        prefixToPsiElement.put(parselet, expressionToken);
+    }
+
+    private static void registerInfixExplicitly(IElementType token, IElementType expressionToken, InfixParselet parselet) {
+        infixParselets.put(token, parselet);
+        infixParsletToPsiElement.put(parselet, expressionToken);
+    }
+
+
     private static void postfix(IElementType token, IElementType expressionToken, int precedence) {
         register(token, expressionToken, new PostfixOperatorParselet(precedence));
     }

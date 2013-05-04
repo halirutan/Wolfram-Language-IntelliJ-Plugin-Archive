@@ -128,6 +128,8 @@ public interface MathematicaElementTypes {
     IElementType LINE_BREAK = new MathematicaElementType("LINE_BREAK");
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType COMMENT = new MathematicaElementType("COMMENT");
+    IElementType COMMENT_BEGIN = new MathematicaElementType("COMMENT_BEGIN");
+    IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
 
     IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
     IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");

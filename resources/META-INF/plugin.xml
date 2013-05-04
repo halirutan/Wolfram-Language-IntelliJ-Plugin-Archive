@@ -3,7 +3,7 @@
     <name>Mathematica Language Plugin</name>
     <category>Custom Language</category>
     <version>0.1</version>
-    <idea-version since-build="129"/>
+    <idea-version since-build="123.94"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
     <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation

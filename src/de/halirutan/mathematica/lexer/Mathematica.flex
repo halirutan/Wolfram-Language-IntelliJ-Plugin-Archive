@@ -2,6 +2,7 @@ package de.halirutan.mathematica.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import java.util.LinkedList;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 %%
@@ -13,6 +14,21 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 %type IElementType
 %eof{ return;
 %eof}
+
+%{
+    // This adds support for nested states. I'm no JFlex pro, so maybe this is overkill, but it works quite well.
+    private final LinkedList<Integer> states = new LinkedList();
+
+    private void yypushstate(int state) {
+        states.addFirst(yystate());
+        yybegin(state);
+    }
+    private void yypopstate() {
+        final int state = states.removeFirst();
+        yybegin(state);
+    }
+
+%}
 
 
 LineTerminator = \n | \r | \r\n
@@ -45,18 +61,18 @@ SlotSequence = "##" [0-9]*
 Out = "%"+
 
 
-%state IN_COMMENT
-%state IN_STRING
+%xstate IN_COMMENT
+%xstate IN_STRING
 
 %%
 
 <YYINITIAL> {
-	"(*"				{ yybegin(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
-	{WhiteSpace}+ 		{ yybegin(YYINITIAL); return MathematicaElementTypes.WHITE_SPACE; }
+	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
+	{WhiteSpace}+ 		{ return MathematicaElementTypes.WHITE_SPACE; }
     "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
-	{LineTerminator}+   { yybegin(YYINITIAL); return MathematicaElementTypes.LINE_BREAK; }
-	\"				 	{ yybegin(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
+	{LineTerminator}+   { return MathematicaElementTypes.LINE_BREAK; }
+	\"				 	{ yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 	{NamedCharacter}    { return MathematicaElementTypes.IDENTIFIER; }
@@ -169,12 +185,12 @@ Out = "%"+
 //<IN_STRING> {
 //	\\                  { return MathematicaElementTypes.STRING_LITERAL; }
 //	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
-//	\"					{ yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
+//	\"					{ yypushstate(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
 //
 //}
 
 <IN_STRING> {
-  \"                             { yybegin(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
+  \"                             { yypopstate(); return MathematicaElementTypes.STRING_LITERAL_END; }
   [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
   "\\"{LineTerminator}           { return MathematicaElementTypes.STRING_LITERAL; }
   "\\\\"                         {  return MathematicaElementTypes.STRING_LITERAL; }
@@ -182,9 +198,11 @@ Out = "%"+
   "\\"                           { return MathematicaElementTypes.STRING_LITERAL; }
 }
 
+
 <IN_COMMENT> {
+	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
 	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
-	"*)"				{ yybegin(YYINITIAL); return MathematicaElementTypes.COMMENT; }
+	"*)"				{ yypopstate(); return MathematicaElementTypes.COMMENT; }
 	[\*\)\(]			{ return MathematicaElementTypes.COMMENT; }
 	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
 

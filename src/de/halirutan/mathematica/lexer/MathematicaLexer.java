@@ -31,4 +31,7 @@ public class MathematicaLexer extends FlexAdapter {
         super(new _MathematicaLexer((Reader) null));
     }
 
+
+
+
 }
