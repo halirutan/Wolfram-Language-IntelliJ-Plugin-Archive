@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
@@ -41,7 +42,7 @@ public class PostfixOperatorParselet implements InfixParselet {
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
         IElementType token = parser.getTokenType();
         IElementType psiElement = ParseletProvider.getInfixPsiElement(this);
         PsiBuilder.Marker postfixMarker = left.getMark().precede();

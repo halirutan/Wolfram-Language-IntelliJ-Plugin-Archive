@@ -22,11 +22,17 @@
 
 package de.halirutan.mathematica.documentation;
 
+import com.intellij.codeInsight.lookup.LookupEx;
+import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiWhiteSpace;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -42,21 +47,9 @@ import java.util.regex.Pattern;
  */
 public class MathematicaDocumentationProvider extends AbstractDocumentationProvider {
 
-    private static String toHtmlName(String tokenName) {
-        String name = tokenName.toLowerCase();
-        Pattern pattern = Pattern.compile("_[a-z]");
-        Matcher matcher = pattern.matcher(name);
-        StringBuffer sb = new StringBuffer(name.length());
-
-        while (matcher.find()) {
-            String replacement = matcher.group().substring(1).toUpperCase();
-            matcher.appendReplacement(sb, replacement);
-        }
-
-        matcher.appendTail(sb);
-        String result = sb.toString();
-        return result.substring(0, 1).toUpperCase() + result.substring(1);
-    }
+    private static final Pattern SLOT_PATTERN = Pattern.compile("#[0-9]*");
+    private static final Pattern ALL_SLOT_PATTERN = Pattern.compile("#+[0-9]*");
+    private static final Pattern SLOT_SEQUENCE_PATTERN = Pattern.compile("##[0-9]*");
 
     @Nullable
     @Override
@@ -67,6 +60,17 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
         return null;
     }
 
+    /**
+     * Generates the documentation (if available) for element. This does two things, first it looks whether the
+     * element is a {@link Symbol}. If this is true it tries to load the usage message. If element is not a Symbol,
+     * it is possibly an operator. Then it tries to guess the usage message of the operator by converting the
+     * class name to a hopefully valid operator name.
+     * @param element Element which was possibly altered by {@link #getCustomDocumentationElement(Editor, PsiFile, PsiElement)} or
+     *                by {@link #getDocumentationElementForLookupItem(PsiManager, Object, PsiElement)} if the lookup was
+     *                active
+     * @param originalElement The original element for which the doc was called (possibly whitespace)
+     * @return The html string of the usage message or null if it could not be loaded
+     */
     @Nullable
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
@@ -75,14 +79,17 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
         if (element instanceof Symbol) {
             String context = ((Symbol) element).getMathematicaContext();
             String name = ((Symbol) element).getSymbolName();
-            path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
-        } else {
-            String operatorName = toHtmlName(element.getNode().getElementType().toString());
-            PsiElement parent = element.getParent();
-            if ((parent != null) && operatorName.equals(parent.toString())) {
-                path = "usages" + File.separatorChar + "System" + File.separatorChar + operatorName + ".html";
+            if (ALL_SLOT_PATTERN.matcher(name).matches()) {
+                if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
+                else if(SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
             }
+            path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
         }
+
+        if (element instanceof OperatorNameProvider) {
+            path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProvider) element).getOperatorName() + ".html";
+        }
+
         InputStream docFile = (path != null) ? MathematicaDocumentationProvider.class.getResourceAsStream(path) : null;
         if (docFile != null) {
             return new Scanner(docFile, "UTF-8").useDelimiter("\\A").next();
@@ -90,17 +97,70 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
         return null;
     }
 
+    /**
+     * Calculates the correct element for which the user wants documentation.
+     * @param editor The editor of the file
+     * @param file The file which is edited and where the doc call was made
+     * @param contextElement The element where the caret was when the doc was called
+     * @return The element for which the user wants documentation. If an item of the completion list is currently
+     * highlighted, then this element. If the cursor is over/beside an identifier, then the symbol element. As last
+     * thing it is determined whether the PsiElement is the operator-sign of an operation, then we get the corresponding
+     * operation psi implementation element back.
+     */
     @Nullable
     @Override
     public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-        if (contextElement == null) {
-            return null;
+
+        // Check whether there is a completion item which is currently active and give a Symbol element
+        // containing the lookup name back.
+        final LookupEx activeLookup = LookupManager.getActiveLookup(editor);
+        if ((activeLookup != null) && activeLookup.isFocused()) {
+            final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset() - 1);
+            Symbol lookup = new SymbolImpl(elementAt.getNode());
+            lookup.setName(activeLookup.getCurrentItem().getLookupString());
+            return lookup;
         }
 
-        PsiElement parent = contextElement.getParent();
-        if (parent instanceof Symbol) {
-            return new SymbolImpl(parent.getNode());
+        if (contextElement != null) {
+            PsiElement parent = contextElement.getParent();
+
+            if ((contextElement instanceof PsiWhiteSpace) || !((parent instanceof Symbol) || (parent instanceof OperatorNameProvider))) {
+                PsiElement elm = file.findElementAt(editor.getCaretModel().getOffset() - 1);
+                if (elm != null) {
+                    contextElement = elm;
+                    parent = elm.getParent();
+                }
+            }
+
+            if (parent instanceof Symbol) {
+                return new SymbolImpl(parent.getNode());
+            }
+
+            // Determine if the contextElement is the operator sign of an operation.
+            // See the doc to OperatorNameProvider.
+            if (parent instanceof OperatorNameProvider) {
+                if (((OperatorNameProvider) parent).isOperatorSign(contextElement)) {
+                    return parent;
+                }
+            }
         }
-        return contextElement;
+        return null;
     }
+
+    @Nullable
+    @Override
+    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
+        if (element != null) {
+            final LookupEx activeLookup = LookupManager.getActiveLookup(FileEditorManager.getInstance(element.getProject()).getSelectedTextEditor());
+            if (activeLookup.isFocused()) {
+                Symbol lookup = new SymbolImpl(element.getNode());
+                lookup.setName((String) object);
+                return lookup;
+            }
+        }
+        return null;
+    }
+
+
+
 }

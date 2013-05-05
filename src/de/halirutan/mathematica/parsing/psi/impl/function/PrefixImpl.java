@@ -23,14 +23,25 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PrefixImpl extends ExpressionImpl {
+public class PrefixImpl extends OperatorNameProvider {
     public PrefixImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public boolean isOperatorSign(PsiElement operatorSignElement) {
+        return operatorSignElement.toString().contains("PREFIX_CALL");
+    }
+
+    @Override
+    public String getOperatorName() {
+        return "Prefix";
     }
 }

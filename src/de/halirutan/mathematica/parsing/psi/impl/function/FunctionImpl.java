@@ -23,7 +23,7 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * Time: 11:25 PM
  * Purpose:
  */
-public class FunctionImpl extends ExpressionImpl {
+public class FunctionImpl extends OperatorNameProvider {
     public FunctionImpl(@NotNull ASTNode node) {
         super(node);
     }

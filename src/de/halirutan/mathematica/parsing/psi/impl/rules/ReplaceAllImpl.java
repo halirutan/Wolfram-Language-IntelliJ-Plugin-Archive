@@ -23,14 +23,27 @@
 package de.halirutan.mathematica.parsing.psi.impl.rules;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class ReplaceAllImpl extends ExpressionImpl {
+public class ReplaceAllImpl extends OperatorNameProvider {
+
     public ReplaceAllImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+//    public boolean isOperatorSign(PsiElement element) {
+//        return element.toString().contains(MathematicaElementTypes.REPLACE_ALL.toString());
+//    }
+
+
+    public String getOperatorName() {
+        return "ReplaceAll";
     }
 }

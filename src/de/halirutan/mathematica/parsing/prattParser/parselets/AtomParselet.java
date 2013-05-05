@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
 
@@ -35,7 +36,7 @@ public class AtomParselet implements PrefixParselet {
     private final int m_precedence;
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) {
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError{
         IElementType token = parser.getTokenType();
         PsiBuilder.Marker symbolMark = parser.mark();
         parser.advanceLexer();

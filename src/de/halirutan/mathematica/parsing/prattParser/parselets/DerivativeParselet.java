@@ -23,6 +23,7 @@
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
@@ -43,7 +44,7 @@ public class DerivativeParselet implements InfixParselet {
     }
 
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) {
+    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError{
         PsiBuilder.Marker derivativeMark = left.getMark().precede();
         boolean result = true;
 

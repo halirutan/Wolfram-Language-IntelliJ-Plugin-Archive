@@ -57,6 +57,10 @@ public class SymbolImpl  extends ExpressionImpl implements Symbol {
         return this;
     }
 
+    @Override
+    public String getName() {
+        return super.getName();
+    }
 
     @Override
     public String getText() {

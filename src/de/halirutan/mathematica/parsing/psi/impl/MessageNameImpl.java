@@ -23,6 +23,7 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,8 +33,18 @@ import org.jetbrains.annotations.NotNull;
  * Time: 11:25 PM
  * Purpose:
  */
-public class MessageNameImpl extends ExpressionImpl {
+public class MessageNameImpl extends OperatorNameProvider {
     public MessageNameImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public boolean isOperatorSign(PsiElement operatorSignElement) {
+        return operatorSignElement.toString().contains("DOUBLE_COLON");
+    }
+
+    @Override
+    public String getOperatorName() {
+        return "MessageName";
     }
 }

@@ -23,13 +23,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.comparison;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class GreaterEqualImpl extends ExpressionImpl {
+public class GreaterEqualImpl extends OperatorNameProvider {
     public GreaterEqualImpl(@NotNull ASTNode node) {
         super(node);
     }

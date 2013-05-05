@@ -23,13 +23,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.logical;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class AndImpl extends ExpressionImpl {
+public class AndImpl extends OperatorNameProvider {
     public AndImpl(@NotNull ASTNode node) {
         super(node);
     }

@@ -23,14 +23,25 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class Apply1Impl extends ExpressionImpl {
+public class Apply1Impl extends OperatorNameProvider {
     public Apply1Impl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public boolean isOperatorSign(PsiElement operatorSignElement) {
+        return operatorSignElement.toString().equals("PsiElement(APPLY1)");
+    }
+
+    @Override
+    public String getOperatorName() {
+        return "Apply";
     }
 }

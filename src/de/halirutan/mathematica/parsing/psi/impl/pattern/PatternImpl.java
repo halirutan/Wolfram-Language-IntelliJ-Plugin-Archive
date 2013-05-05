@@ -23,14 +23,26 @@
 package de.halirutan.mathematica.parsing.psi.impl.pattern;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PatternImpl extends ExpressionImpl {
+public class PatternImpl extends OperatorNameProvider {
     public PatternImpl(@NotNull ASTNode node) {
         super(node);
     }
+
+    @Override
+    public boolean isOperatorSign(PsiElement operatorSignElement) {
+        return operatorSignElement.toString().contains("COLON");
+    }
+
+    @Override
+    public String getOperatorName() {
+        return "Pattern";
+    }
+
 }

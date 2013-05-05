@@ -23,13 +23,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class UpSetDelayedImpl extends ExpressionImpl {
+public class UpSetDelayedImpl extends OperatorNameProvider {
     public UpSetDelayedImpl(@NotNull ASTNode node) {
         super(node);
     }

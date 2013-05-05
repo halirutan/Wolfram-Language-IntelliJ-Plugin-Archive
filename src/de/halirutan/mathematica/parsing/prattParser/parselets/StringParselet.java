@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
 
 /**
@@ -45,7 +46,7 @@ public class StringParselet implements PrefixParselet {
      * @return Information about the success of the parsing.
      */
     @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) {
+    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError{
         PsiBuilder.Marker stringMark = parser.mark();
         boolean parsedQ = true;
         parser.advanceLexer();

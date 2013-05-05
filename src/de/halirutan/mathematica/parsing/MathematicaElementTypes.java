@@ -37,7 +37,7 @@ import de.halirutan.mathematica.parsing.psi.impl.GroupImpl;
 import de.halirutan.mathematica.parsing.psi.impl.ListImpl;
 import de.halirutan.mathematica.parsing.psi.impl.MessageNameImpl;
 import de.halirutan.mathematica.parsing.psi.impl.NumberImpl;
-import de.halirutan.mathematica.parsing.psi.impl.PlusImpl;
+import de.halirutan.mathematica.parsing.psi.impl.arithmetic.PlusImpl;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import de.halirutan.mathematica.parsing.psi.impl.arithmetic.DivideImpl;
 import de.halirutan.mathematica.parsing.psi.impl.arithmetic.DotImpl;
@@ -128,8 +128,6 @@ public interface MathematicaElementTypes {
     IElementType LINE_BREAK = new MathematicaElementType("LINE_BREAK");
     IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
     IElementType COMMENT = new MathematicaElementType("COMMENT");
-    IElementType COMMENT_BEGIN = new MathematicaElementType("COMMENT_BEGIN");
-    IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
 
     IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
     IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");

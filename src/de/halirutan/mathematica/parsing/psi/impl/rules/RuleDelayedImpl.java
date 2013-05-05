@@ -23,13 +23,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.rules;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class RuleDelayedImpl extends ExpressionImpl {
+public class RuleDelayedImpl extends OperatorNameProvider {
     public RuleDelayedImpl(@NotNull ASTNode node) {
         super(node);
     }

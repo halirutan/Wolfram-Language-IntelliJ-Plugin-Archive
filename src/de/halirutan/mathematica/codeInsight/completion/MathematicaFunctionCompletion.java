@@ -27,6 +27,7 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

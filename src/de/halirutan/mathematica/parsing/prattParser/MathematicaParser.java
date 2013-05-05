@@ -175,7 +175,11 @@ public class MathematicaParser implements PsiParser {
         return new Result(null, null, false);
     }
 
-    public void advanceLexer() {
+    public void advanceLexer() throws CriticalParserError{
+        if (builder.eof()) {
+            builder.error("More input expected");
+            throw new CriticalParserError("Unexpected end of input.");
+        }
         whitespaceHandler.reset();
         builder.advanceLexer();
     }
