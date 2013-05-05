@@ -42,17 +42,16 @@ Detailed usage of features
 
 ### Documentation lookup
 
-- With Ctrl+Q (Cmd+j I think on Mac) you can get documentation of built-in Mathematica functions from System`
+- With `Ctrl+Q` (`Cmd+j` I think on Mac) you can get documentation of built-in Mathematica functions from the
+  <code>System`</code> context.
 - Shown are the html/MathML styled usage, Attributes and Options. Additionally, you can click the link to navigate to
   the online documentation of Wolfram
 - If a symbol has no online documentation, you automatically search this site for the symbol name and context
-- Currently, usage info of contexts Developer`, Experimental` and JLink` are provided too but you have to give the full
-  qualified name for this, e.g. JLink`AddToClassPath (Sorry, currently I don't extract the current contexts from the parse
-  tree. Additionally, autocompletion of contexts is not implemented yet).
-- Documentation even works on operators which have more than one letter. Try for instance /@ or =!= or __. The current
-  limitation that only operators with more than 2 letters are supported is only because then I can extract the token
-  easily. By inspecting the AST we can surely support this for all operators.
-
+- Currently, usage info of contexts <code>Developer`</code>, <code>Experimental`</code> and <code>JLink`</code>
+  are provided too but you have to give the full qualified name for this, e.g. ``JLink`AddToClassPath``
+  (Sorry, currently I don't extract the current contexts from the parse tree. Additionally, autocompletion of contexts is not implemented yet).
+- Documentation even works on operators (other than simple arithmetic like `+`).
+  Try for instance `/@` or `=!=` or `__`.
 ### Commenting
 
 - With Ctrl+/ you can comment or uncomment lines or selected blocks
