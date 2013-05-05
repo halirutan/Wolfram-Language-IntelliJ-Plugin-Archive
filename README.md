@@ -1,6 +1,23 @@
 Mathematica language plugin for IntelliJIDEA
 =============================================
 
+Important Links
+---------------
+
+- The most recent plugin is [Mathematica-IntelliJ-Plugin.jar](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar)
+  in the root of this repository.
+- If you find bugs or experience weird behavior please [create a new issue](http://halirutan.myjetbrains.com/youtrack/issues#newissue=yes)
+  on the ['Mathematica' bugtracker page](http://halirutan.myjetbrains.com/youtrack/issues/MMAP).
+- If you want to participate (there is a lot more to do then just code Java!) please read in [Mathematica Plugin Wiki](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki)
+  first, where I 'will' publish documentation which helps to get a smooth start. When you think you need to discuss stuff directly with
+  me, you can always reach me in the main chat at mathematica.stackexchange.com or in the
+  [IntelliJIDEA Mathematica plugin room](http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica) which
+  was created for that purpose.
+- Finally, you may want to read the [official post](http://mathematica.stackexchange.com/q/24556/187) on mathematica.stackexchange.com
+  where I announced the plugin.
+
+
+
 Feature list
 ------------
 
@@ -47,7 +64,7 @@ Detailed usage of features
 - Shown are the html/MathML styled usage, Attributes and Options. Additionally, you can click the link to navigate to
   the online documentation of Wolfram
 - If a symbol has no online documentation, you automatically search this site for the symbol name and context
-- Currently, usage info of contexts <code>Developer`</code>, <code>Experimental`</code> and <code>JLink`</code>
+- Currently, usage info of contexts ``Developer` ``, ``Experimental` `` and ``JLink` ``
   are provided too but you have to give the full qualified name for this, e.g. ``JLink`AddToClassPath``
   (Sorry, currently I don't extract the current contexts from the parse tree. Additionally, autocompletion of contexts is not implemented yet).
 - Documentation even works on operators (other than simple arithmetic like `+`).
