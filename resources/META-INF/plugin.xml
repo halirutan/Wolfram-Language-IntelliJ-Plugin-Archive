@@ -1,6 +1,6 @@
 <idea-plugin version="2">
     <id>de.halirutan.mathematica</id>
-    <name>Mathematica Language Plugin</name>
+    <name>Mathematica Support</name>
     <category>Custom Language</category>
     <version>0.1</version>
     <idea-version since-build="123.94"/>
