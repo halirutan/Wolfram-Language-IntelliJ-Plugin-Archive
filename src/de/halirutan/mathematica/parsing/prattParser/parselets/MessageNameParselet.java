@@ -35,10 +35,10 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  */
 public class MessageNameParselet implements InfixParselet {
 
-    private final int m_precedence;
+    private final int myPrecedence;
 
     public MessageNameParselet(int precedence) {
-        this.m_precedence = precedence;
+        this.myPrecedence = precedence;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MessageNameParselet implements InfixParselet {
         }
         PsiBuilder.Marker messageNameMarker = left.getMark().precede();
         parser.advanceLexer();
-        MathematicaParser.Result result = parser.parseExpression(m_precedence);
+        MathematicaParser.Result result = parser.parseExpression(myPrecedence);
 
         if (result.isParsed()) {
             // Check whether we have a symbol or a string in usage message
@@ -65,7 +65,7 @@ public class MessageNameParselet implements InfixParselet {
             // Check whether we have the form symbol::name::language
             if (parser.matchesToken(MathematicaElementTypes.DOUBLE_COLON)) {
                 parser.advanceLexer();
-                result = parser.parseExpression(m_precedence);
+                result = parser.parseExpression(myPrecedence);
                 if (result.isParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) ||
                         (!result.getToken().equals(MathematicaElementTypes.STRING_EXPRESSION)))) {
                     PsiBuilder.Marker errMark = result.getMark().precede();
@@ -82,6 +82,6 @@ public class MessageNameParselet implements InfixParselet {
 
     @Override
     public int getPrecedence() {
-        return m_precedence;
+        return myPrecedence;
     }
 }
