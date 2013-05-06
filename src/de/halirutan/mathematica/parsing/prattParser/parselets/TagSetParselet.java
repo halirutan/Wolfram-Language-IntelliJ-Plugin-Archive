@@ -55,7 +55,19 @@ public class TagSetParselet implements InfixParselet {
         // a /: b := c := d is then correctly parsed as a /: b := (c := d)
         MathematicaParser.Result expr1 = parser.parseExpression(m_precedence);
 
-        IElementType tokenType = parser.getTokenType();
+        if (!expr1.isValid()) {
+            parser.error("Missing 'expr' followed by ':=','=' or '=.' to complete TagSet");
+            tagSetMark.done(MathematicaElementTypes.TAG_SET_EXPRESSION);
+            return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
+        }
+
+        IElementType tokenType = parser.getTokenTypeSave(tagSetMark);
+
+        if (tokenType == null) {
+            parser.error("Missing ':=','=' or '=.' to complete TagSet");
+            tagSetMark.done(MathematicaElementTypes.TAG_SET_EXPRESSION);
+            return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
+        }
 
         // Form expr0 /: expr1 =. where nothing needs to be parsed right of the =.
         if (tokenType.equals(MathematicaElementTypes.UNSET)) {
@@ -66,11 +78,14 @@ public class TagSetParselet implements InfixParselet {
 
         // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
         if ((tokenType.equals(MathematicaElementTypes.SET)) || (tokenType.equals(MathematicaElementTypes.SET_DELAYED))) {
-
             parser.advanceLexer();
             MathematicaParser.Result expr2 = parser.parseExpression(m_precedence);
             IElementType endType = tokenType.equals(MathematicaElementTypes.SET) ? MathematicaElementTypes.TAG_SET_EXPRESSION : MathematicaElementTypes.TAG_SET_DELAYED_EXPRESSION;
-            tagSetMark.done(endType);
+            if (left.isValid() && expr1.isValid() && expr2.isValid()) {
+                tagSetMark.done(endType);
+            } else {
+                tagSetMark.error("Error in TagSet expression");
+            }
             return MathematicaParser.result(tagSetMark, endType, expr1.isParsed() && expr2.isParsed());
         }
 
