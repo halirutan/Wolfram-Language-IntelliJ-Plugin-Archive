@@ -33,10 +33,10 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  * @author patrick (3/27/13)
  */
 public class StringParselet implements PrefixParselet {
-    private final int m_precedence;
+    private final int myPrecedence;
 
     public StringParselet(int precedence) {
-        m_precedence = precedence;
+        myPrecedence = precedence;
     }
 
     /**
@@ -64,6 +64,6 @@ public class StringParselet implements PrefixParselet {
     }
 
     public int getPrecedence() {
-        return m_precedence;
+        return myPrecedence;
     }
 }
