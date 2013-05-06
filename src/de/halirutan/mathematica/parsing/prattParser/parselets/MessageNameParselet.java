@@ -50,7 +50,6 @@ public class MessageNameParselet implements InfixParselet {
             newmark.error("Usage message expects Symbol");
             left = MathematicaParser.result(newmark, left.getToken(), left.isParsed());
         }
-
         PsiBuilder.Marker messageNameMarker = left.getMark().precede();
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(m_precedence);
