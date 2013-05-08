@@ -23,7 +23,10 @@
 package de.halirutan.mathematica.codeInsight.editor;
 
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.module.ModuleType;
+import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 
 /**
  * @author patrick (4/8/13)
@@ -31,11 +34,78 @@ import com.intellij.openapi.module.ModuleType;
 public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
     public MathematicaModuleBuilder() {
-        super();
+        this(ProjectType.APPLICATION);
     }
 
     @Override
     public ModuleType getModuleType() {
         return MathematicaModuleType.getInstance();
     }
+
+    /**
+     * Additions by rsmenon (5/6/13)
+     * Will need rework to unify with the rest.
+     */
+
+    private String PROJECT_NAME;
+    private final ProjectType PROJECT_TYPE;
+
+    public MathematicaModuleBuilder(ProjectType type) {
+        PROJECT_TYPE = type;
+    }
+
+    public static class Basic extends MathematicaModuleBuilder {
+        public Basic() {
+            super(ProjectType.BASIC);
+        }
+
+        @Override
+        public String getBuilderId() {
+            return "mathematica.basic";
+        }
+
+        @Override
+        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                    ModulesProvider modulesProvider) {
+            return ModuleWizardStep.EMPTY_ARRAY;
+        }
+
+    }
+
+    public static class Application extends MathematicaModuleBuilder {
+        public Application() {
+            super(ProjectType.APPLICATION);
+        }
+
+        @Override
+        public String getBuilderId() {
+            return "mathematica.application";
+        }
+
+        @Override
+        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                    ModulesProvider modulesProvider) {
+            return ModuleWizardStep.EMPTY_ARRAY;
+        }
+
+    }
+
+    public static class Empty extends MathematicaModuleBuilder {
+        public Empty() {
+            super(ProjectType.EMPTY);
+        }
+
+        @Override
+        public String getBuilderId() {
+            return "mathematica.empty";
+        }
+
+        @Override
+        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                    ModulesProvider modulesProvider) {
+            return ModuleWizardStep.EMPTY_ARRAY;
+        }
+
+    }
+
 }
