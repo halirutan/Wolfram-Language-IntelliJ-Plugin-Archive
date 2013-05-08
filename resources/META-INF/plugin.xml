@@ -1,13 +1,17 @@
-<idea-plugin version="2">
+<idea-plugin url="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki" version="2">
     <id>de.halirutan.mathematica</id>
     <name>Mathematica Support</name>
     <category>Custom Language</category>
-    <version>0.1</version>
+    <version>0.1.1</version>
     <idea-version since-build="123.94"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
+
     <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
-        lookup and more.
+        lookup and more. This plugin is currently under heavy development. Therefore, the most recent version can
+        be found in the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
+        Here is a direct link to the plugin: <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar">
+        Mathematica-IntelliJ-Plugin.jar</a>.
       ]]></description>
 
     <extensions defaultExtensionNs="com.intellij">

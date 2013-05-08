@@ -22,10 +22,7 @@
 
 package de.halirutan.mathematica.parsing.prattParser;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiParser;
-import com.intellij.lang.WhitespaceSkippedCallback;
+import com.intellij.lang.*;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.prattParser.parselets.ImplicitMultiplicationParselet;
 import de.halirutan.mathematica.parsing.prattParser.parselets.InfixParselet;
@@ -66,13 +63,13 @@ public class MathematicaParser implements PsiParser {
                 Result expr = parseExpression();
 
                 if (!expr.isParsed()) {
-                    builder.error("Errors in the preceeding expression.");
+                   // builder.error("Errors in the preceeding expression.");
                     builder.advanceLexer();
                 }
             }
         } catch (CriticalParserError criticalParserError) {
             builder.error(criticalParserError.toString());
-            while (builder.eof()) {
+            while (!builder.eof()) {
                 builder.advanceLexer();
             }
         }
@@ -89,6 +86,9 @@ public class MathematicaParser implements PsiParser {
     public Result parseExpression(int precedence) throws CriticalParserError {
         if (builder.eof()) return notParsed();
         IElementType token = builder.getTokenType();
+        if (token == null) {
+            return notParsed();
+        }
         if (token.equals(LINE_BREAK)) {
             advanceLexer();
             token = builder.getTokenType();
@@ -151,9 +151,20 @@ public class MathematicaParser implements PsiParser {
         return builder.mark();
     }
 
-    public IElementType getTokenType() {
+    public IElementType getTokenType(){
         return builder.getTokenType();
     }
+
+    public IElementType getTokenTypeSave(PsiBuilder.Marker mark) throws CriticalParserError {
+        final IElementType tokenType = builder.getTokenType();
+        if (tokenType == null) {
+            builder.error("More input expected");
+            mark.drop();
+            throw new CriticalParserError("Unexpected end of file");
+        }
+        return tokenType;
+    }
+
 
     /**
      * Function to create a
@@ -185,11 +196,14 @@ public class MathematicaParser implements PsiParser {
     }
 
     public boolean matchesToken(IElementType token) {
-        return !builder.eof() && (builder.getTokenType().equals(token));
+        final IElementType testToken = builder.getTokenType();
+        return (testToken != null && testToken.equals(token));
     }
 
     public boolean matchesToken(IElementType token1, IElementType token2) {
-        return (builder.lookAhead(0).equals(token1)) && (builder.lookAhead(1).equals(token2));
+        final IElementType firstToken = builder.lookAhead(0);
+        final IElementType secondToken = builder.lookAhead(1);
+        return (firstToken != null && firstToken.equals(token1)) && (secondToken != null && secondToken.equals(token2));
     }
 
     /**

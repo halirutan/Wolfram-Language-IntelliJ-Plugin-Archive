@@ -7,7 +7,7 @@ Important Links
 - The most recent plugin is [Mathematica-IntelliJ-Plugin.jar](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar)
   in the root of this repository.
 - If you find bugs or experience weird behavior please [create a new issue](http://halirutan.myjetbrains.com/youtrack/issues#newissue=yes)
-  on the ['Mathematica' bugtracker page](http://halirutan.myjetbrains.com/youtrack/issues/MMAP).
+  on the [*Mathematica* bugtracker page](http://halirutan.myjetbrains.com/youtrack/issues/MMAP).
 - If you want to participate (there is a lot more to do then just code Java!) please read in [Mathematica Plugin Wiki](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki)
   first, where I 'will' publish documentation which helps to get a smooth start. When you think you need to discuss stuff directly with
   me, you can always reach me in the main chat at mathematica.stackexchange.com or in the
