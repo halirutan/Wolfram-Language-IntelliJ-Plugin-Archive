@@ -42,10 +42,9 @@
         <colorSettingsPage
                 implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaColorSettingsPage"/>
 
-        <moduleType id="MATHEMATICA_MODULE"
-                    implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
+        <projectTemplatesFactory implementation="de.halirutan.mathematica.projectsAndModules.MathematicaProjectTemplatesFactory"/>
     </extensions>
 
 
