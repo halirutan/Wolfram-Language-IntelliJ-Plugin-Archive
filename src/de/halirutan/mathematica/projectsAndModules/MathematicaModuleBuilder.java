@@ -20,27 +20,22 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.editor;
+package de.halirutan.mathematica.projectsAndModules;
 
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
+import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.projectsAndModules.ProjectType;
+
+import javax.swing.*;
 
 /**
  * @author patrick (4/8/13)
  */
 public class MathematicaModuleBuilder extends JavaModuleBuilder {
-
-    public MathematicaModuleBuilder() {
-        this(ProjectType.APPLICATION);
-    }
-
-    @Override
-    public ModuleType getModuleType() {
-        return MathematicaModuleType.getInstance();
-    }
 
     /**
      * Additions by rsmenon (5/6/13)
@@ -90,14 +85,14 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
     }
 
-    public static class Empty extends MathematicaModuleBuilder {
-        public Empty() {
-            super(ProjectType.EMPTY);
+    public static class Test extends MathematicaModuleBuilder {
+        public Test() {
+            super(ProjectType.TEST);
         }
 
         @Override
         public String getBuilderId() {
-            return "mathematica.empty";
+            return "mathematica.test";
         }
 
         @Override
@@ -108,4 +103,31 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
     }
 
+    public static class Documentation extends MathematicaModuleBuilder {
+        public Documentation() {
+            super(ProjectType.DOCUMENTATION);
+        }
+
+        @Override
+        public String getBuilderId() {
+            return "mathematica.documentation";
+        }
+
+        @Override
+        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                    ModulesProvider modulesProvider) {
+            return ModuleWizardStep.EMPTY_ARRAY;
+        }
+
+    }
+
+    @Override
+    public Icon getBigIcon() {
+        return MathematicaIcons.FILE_ICON;
+    }
+
+    @Override
+    public Icon getNodeIcon() {
+        return MathematicaIcons.FILE_ICON;
+    }
 }

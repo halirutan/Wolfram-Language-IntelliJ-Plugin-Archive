@@ -1,10 +1,13 @@
-package de.halirutan.mathematica.codeInsight.editor;
+package de.halirutan.mathematica.projectsAndModules;
 
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.projectsAndModules.MathematicaModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,9 +23,8 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
 
     public static final String MATHEMATICA = "Mathematica";
     public static final String BASIC_MODULE = "Basic Package";
-    public static final String APPLICATION_MODULE = "Application Project";
-    public static final String EMPTY_MODULE = "Empty Module";
-    public static final String TEST_MODULE = "Test Module";
+    public static final String APPLICATION_MODULE = "Mathematica Application";
+    public static final String TEST_MODULE = "Unit Test Module";
     public static final String DOCUMENTATION_MODULE = "Documentation Module";
 
     @NotNull
@@ -39,23 +41,38 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
     @NotNull
     @Override
     public ProjectTemplate[] createTemplates(String group, WizardContext context) {
-        ProjectTemplate[] templates = {
-                new BuilderBasedTemplate(new MathematicaModuleBuilder()),
+        ProjectTemplate[] project_templates = {
 
                 new MathematicaProjectTemplate(BASIC_MODULE,
                         "Basic Mathematica package",
                         new MathematicaModuleBuilder.Basic()),
 
                 new MathematicaProjectTemplate(APPLICATION_MODULE,
-                        "Mathematica application project",
-                        new MathematicaModuleBuilder.Application()),
-
-                new MathematicaProjectTemplate(EMPTY_MODULE,
-                        "Empty Mathematica project",
-                        new MathematicaModuleBuilder.Empty())
+                        "Mathematica application",
+                        new MathematicaModuleBuilder.Application())
         };
 
-        return templates;
+        if (context.getProject() == null) {
+            return project_templates;
+        }
+        else {
+            ProjectTemplate[] module_templates = {
+
+                    new MathematicaProjectTemplate(BASIC_MODULE,
+                            "Basic Mathematica package",
+                            new MathematicaModuleBuilder.Basic()),
+
+                    new MathematicaProjectTemplate(TEST_MODULE,
+                            "Unit test module",
+                            new MathematicaModuleBuilder.Test()),
+
+                    new MathematicaProjectTemplate(DOCUMENTATION_MODULE,
+                            "Documentation module",
+                            new MathematicaModuleBuilder.Documentation())
+            };
+
+            return module_templates;
+        }
     }
 
     private static class MathematicaProjectTemplate extends BuilderBasedTemplate {
