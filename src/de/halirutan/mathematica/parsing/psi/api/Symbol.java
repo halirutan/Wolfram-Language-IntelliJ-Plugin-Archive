@@ -22,7 +22,8 @@
 
 package de.halirutan.mathematica.parsing.psi.api;
 
-import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.*;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,8 +32,12 @@ import com.intellij.psi.PsiNamedElement;
  * Time: 12:33 AM
  * Purpose:
  */
-public interface Symbol extends PsiNamedElement {
+public interface Symbol extends PsiNameIdentifierOwner, PsiElement {
     String getMathematicaContext();
 
     String getSymbolName();
+
+    @Nullable
+    PsiReference getReference();
+
 }

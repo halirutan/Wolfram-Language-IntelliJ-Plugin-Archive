@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,4 +50,13 @@ public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
         }
         return classname;
     }
+
+    @Override
+    public PsiReference getReference() {
+        return super.getReference();
+    }
+
+
+
+
 }

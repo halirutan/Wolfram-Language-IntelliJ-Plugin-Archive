@@ -24,13 +24,14 @@ package de.halirutan.mathematica.parsing.psi.impl.pattern;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PatternImpl extends OperatorNameProvider {
+public class PatternImpl extends OperatorNameProvider implements Pattern {
     public PatternImpl(@NotNull ASTNode node) {
         super(node);
     }

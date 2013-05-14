@@ -23,6 +23,7 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,5 +36,10 @@ import org.jetbrains.annotations.NotNull;
 public class FunctionCallImpl extends ExpressionImpl {
     public FunctionCallImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Override
+    public PsiReference getReference() {
+        return super.getReference();
     }
 }
