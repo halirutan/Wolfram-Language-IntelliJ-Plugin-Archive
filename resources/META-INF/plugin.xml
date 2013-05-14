@@ -44,6 +44,7 @@
 
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
+        <fileTemplateGroup implementation="de.halirutan.mathematica.MathematicaFileTemplateProvider"/>
         <projectTemplatesFactory implementation="de.halirutan.mathematica.projectsAndModules.MathematicaProjectTemplatesFactory"/>
     </extensions>
 
