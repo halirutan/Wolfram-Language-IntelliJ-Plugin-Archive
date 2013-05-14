@@ -27,6 +27,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -46,6 +47,7 @@ import de.halirutan.mathematica.MathematicaFileTemplateProvider;
 import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.actions.CreateMathematicaFile;
 import de.halirutan.mathematica.projectsAndModules.ProjectType;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -131,6 +133,12 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
         catch (Exception e) {
 
         }
+    }
+
+    @Nullable
+    @Override
+    public ModuleWizardStep modifySettingsStep(final SettingsStep settingsStep) {
+       return new MathematicaModifiedSettingsStep(this, settingsStep);
     }
 
     public static class Basic extends MathematicaModuleBuilder {
