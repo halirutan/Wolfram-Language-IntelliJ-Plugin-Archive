@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.projectsAndModules;
+package de.halirutan.mathematica.module;
 
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.platform.ProjectTemplate;
@@ -32,11 +32,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * User: rsmenon
- * Date: 5/6/13
- * Time: 4:42 PM
+ * @author rsmenon (5/6/13)
  */
-
 public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory {
 
     public static final String MATHEMATICA = "Mathematica";

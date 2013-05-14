@@ -19,12 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.projectsAndModules;
+package de.halirutan.mathematica.module;
 
 /**
- * User: rsmenon
- * Date: 5/6/13
- * Time: 7:42 AM
+ * @author rsmenon (5/6/13)
  */
 public enum ProjectType {
     BASIC, APPLICATION, TEST, DOCUMENTATION, EMPTY
