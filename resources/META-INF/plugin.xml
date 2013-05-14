@@ -20,9 +20,8 @@
 
 
         <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
-        <lang.parserDefinition language="Mathematica"
-                               implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
-
+        <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaHighlightingAnnotator"/>
         <lang.commenter language="Mathematica"
                         implementationClass="de.halirutan.mathematica.codeInsight.MathematicaCommenter"/>
         <lang.braceMatcher language="Mathematica"
@@ -45,7 +44,6 @@
         <moduleType id="MATHEMATICA_MODULE"
                     implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaModuleType"/>
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
-
     </extensions>
 
 
