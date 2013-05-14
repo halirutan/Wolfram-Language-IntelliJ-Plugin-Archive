@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,14 +21,15 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Key;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.impl.source.tree.LeafElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -42,36 +42,35 @@ import org.jetbrains.annotations.Nullable;
  * Time: 12:32 AM
  * Purpose:
  */
-public class SymbolImpl  extends ExpressionImpl implements Symbol {
-    private String name;
+public class SymbolImpl  extends ASTWrapperPsiElement implements Symbol {
+    private String myName;
 
     public SymbolImpl(@NotNull ASTNode node) {
         super(node);
-        name = node.getText();
-
+        myName = node.getText();
     }
 
     @Override
     public PsiElement setName(@NonNls @NotNull String name) {
-        this.name = name;
+        this.myName = name;
         return this;
     }
 
     @Override
     public String getName() {
-        return super.getName();
+        return myName;
     }
 
     @Override
     public String getText() {
-        return name;
+        return myName;
     }
 
     @Override
     public String getMathematicaContext() {
         String context;
-        if (name.contains("`")) {
-            context = name.substring(0, name.lastIndexOf('`')+1);
+        if (myName.contains("`")) {
+            context = myName.substring(0, myName.lastIndexOf('`')+1);
         } else {
             context = "System`";
         }
@@ -80,11 +79,22 @@ public class SymbolImpl  extends ExpressionImpl implements Symbol {
 
     @Override
     public String getSymbolName() {
-        if (name.lastIndexOf('`') == -1) {
-            return name;
+        if (myName.lastIndexOf('`') == -1) {
+            return myName;
         } else {
-            return name.substring(name.lastIndexOf('`')+1, name.length());
+            return myName.substring(myName.lastIndexOf('`')+1, myName.length());
         }
+    }
+
+    @Override
+    public PsiReference getReference() {
+        return new SymbolPsiReference(this, this.getFirstChild().getTextRange());
+    }
+
+    @Nullable
+    @Override
+    public PsiElement getNameIdentifier() {
+        return this.getFirstChild();
     }
 
 }

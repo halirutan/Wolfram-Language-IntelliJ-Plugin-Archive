@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -62,7 +61,7 @@ public class ListParselet implements PrefixParselet {
             result = false;
         }
         listMarker.done(LIST_EXPRESSION);
-        return parser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
+        return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
     }
 
     public int getPrecedence() {
