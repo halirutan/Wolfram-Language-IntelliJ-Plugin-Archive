@@ -6,5 +6,5 @@ package de.halirutan.mathematica.projectsAndModules;
  * Time: 7:42 AM
  */
 public enum ProjectType {
-    BASIC, APPLICATION, TEST, DOCUMENTATION
+    BASIC, APPLICATION, TEST, DOCUMENTATION, EMPTY
 }
