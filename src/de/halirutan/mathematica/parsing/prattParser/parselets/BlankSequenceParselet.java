@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -45,12 +44,12 @@ public class BlankSequenceParselet implements InfixParselet {
 
     @Override
     public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return parser.notParsed();
+        if (!left.isValid()) return MathematicaParser.notParsed();
         PsiBuilder.Marker blankMark = left.getMark().precede();
         IElementType token = MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION;
         parser.advanceLexer();
         MathematicaParser.Result result = parser.parseExpression(precedence);
         blankMark.done(token);
-        return parser.result(blankMark, token, !result.isValid() || result.isParsed());
+        return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
     }
 }

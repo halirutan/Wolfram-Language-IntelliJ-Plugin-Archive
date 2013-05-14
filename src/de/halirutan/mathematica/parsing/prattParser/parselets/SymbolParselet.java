@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -41,7 +40,7 @@ public class SymbolParselet implements PrefixParselet {
         PsiBuilder.Marker symbolMark = parser.mark();
         parser.advanceLexer();
         symbolMark.done(MathematicaElementTypes.SYMBOL_EXPRESSION);
-        return parser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);
+        return MathematicaParser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);
     }
 
     public SymbolParselet(int precedence) {

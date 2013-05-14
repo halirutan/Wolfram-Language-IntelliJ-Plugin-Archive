@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -38,16 +37,39 @@ import java.awt.*;
  */
 public interface MathematicaSyntaxHighlighterColors {
 
+
     TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL", DefaultLanguageHighlighterColors.STATIC_FIELD);
     TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",  DefaultLanguageHighlighterColors.FUNCTION_CALL);
     TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS", DefaultLanguageHighlighterColors.NUMBER);
     TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
+    TextAttributesKey KEYWORDS = TextAttributesKey.createTextAttributesKey("MMA.KEYWORDS", new TextAttributes(
+            DefaultLanguageHighlighterColors.IDENTIFIER.getDefaultAttributes().getForegroundColor(),
+            DefaultLanguageHighlighterColors.IDENTIFIER.getDefaultAttributes().getBackgroundColor(),
+            null, null, Font.BOLD
+    ));
     TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(
             DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getForegroundColor(),
             DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getBackgroundColor(),
             null, null, Font.BOLD));
 
+    TextAttributesKey PATTERNS = TextAttributesKey.createTextAttributesKey("MMA.PATTERNS", DefaultLanguageHighlighterColors.DOC_COMMENT);
+
     TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
+
+//    TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+//    TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL", DefaultLanguageHighlighterColors.STRING);
+//    TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",  DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+//    TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS", DefaultLanguageHighlighterColors.NUMBER);
+//    TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
+//    TextAttributesKey KEYWORDS = TextAttributesKey.createTextAttributesKey("MMA.KEYWORDS", DefaultLanguageHighlighterColors.FUNCTION_CALL);
+//    TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(
+//            DefaultLanguageHighlighterColors.BRACKETS.getDefaultAttributes().getForegroundColor(),
+//            DefaultLanguageHighlighterColors.BRACKETS.getDefaultAttributes().getBackgroundColor(),
+//            null, null, Font.BOLD));
+//
+//    TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
+//
+//
 
 }

@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -40,7 +39,7 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getP
 public class MathematicaParser implements PsiParser {
 
     private PsiBuilder builder;
-    public ImportantWhitespaceHandler whitespaceHandler;
+    public final ImportantWhitespaceHandler whitespaceHandler;
     private int recursionDepth;
     private static final ImplicitMultiplicationParselet myImplicitMultiplicationParselet = new ImplicitMultiplicationParselet();
 

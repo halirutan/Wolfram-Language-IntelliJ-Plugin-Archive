@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2013 Patrick Scheibe
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -73,7 +72,7 @@ public class SpanParselet implements InfixParselet {
             } else {
                 spanMark.done(SPAN_EXPRESSION);
             }
-            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
+            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
         }
 
         MathematicaParser.Result expr1 = parser.parseExpression(m_precedence);
@@ -81,7 +80,7 @@ public class SpanParselet implements InfixParselet {
         // if we had expr0;;;;expr1
         if (skipped) {
             spanMark.done(SPAN_EXPRESSION);
-            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
+            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
         }
 
         if (parser.matchesToken(SPAN)) {
@@ -91,11 +90,11 @@ public class SpanParselet implements InfixParselet {
                 spanMark.done(SPAN_EXPRESSION);
             } else
                 spanMark.error("Expression expected after \"expr0;;expr1;;\"");
-            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed() && expr2.isParsed());
+            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed() && expr2.isParsed());
         } else {
             // we have the form expr0;;expr1
             spanMark.done(SPAN_EXPRESSION);
-            return parser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
+            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
         }
     }
 
