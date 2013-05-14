@@ -1,6 +1,9 @@
 (* Mathematica Package *)
+(* :Context: ${NAME}` *)
+(* :Author: ${USER} *)
+(* :Date: ${DATE} *)
 
-BeginPackage["Package`",]
+BeginPackage["${NAME}`",]
 (* Exported symbols added here with SymbolName::usage *)  
 
 Begin["`Private`"] (* Begin Private Context *) 
