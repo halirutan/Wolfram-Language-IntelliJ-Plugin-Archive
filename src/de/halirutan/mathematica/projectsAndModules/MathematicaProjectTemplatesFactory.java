@@ -44,11 +44,13 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
         ProjectTemplate[] project_templates = {
 
                 new MathematicaProjectTemplate(BASIC_MODULE,
-                        "Basic Mathematica package",
+                        "A basic Mathematica package provides a simple package file and a notebook. " +
+                                "Use this for simple or moderately sized Mathematica packages. ",
+                                // The descriptions should be reworked when the plugin is more mature
                         new MathematicaModuleBuilder.Basic()),
 
                 new MathematicaProjectTemplate(APPLICATION_MODULE,
-                        "Mathematica application",
+                        "A Mathematica application is used for large packages and more complicated applications. ",
                         new MathematicaModuleBuilder.Application())
         };
 
@@ -57,10 +59,6 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
         }
         else {
             ProjectTemplate[] module_templates = {
-
-                    new MathematicaProjectTemplate(BASIC_MODULE,
-                            "Basic Mathematica package",
-                            new MathematicaModuleBuilder.Basic()),
 
                     new MathematicaProjectTemplate(TEST_MODULE,
                             "Unit test module",
