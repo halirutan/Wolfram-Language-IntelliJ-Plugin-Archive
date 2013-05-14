@@ -1,0 +1,2 @@
+(* Mathematica Init file *)
+Get["${PROJECT_NAME}`${PROJECT_NAME}`"]
