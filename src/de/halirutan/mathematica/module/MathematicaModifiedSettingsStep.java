@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.projectsAndModules;
+package de.halirutan.mathematica.module;
 
 import com.intellij.ide.util.projectWizard.SdkSettingsStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
@@ -31,9 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 
 /**
- * User: rsmenon
- * Date: 5/13/13
- * Time: 6:36 PM
+ * @author rsmenon (5/13/13)
  */
 public class MathematicaModifiedSettingsStep extends SdkSettingsStep {
     protected final MathematicaModuleBuilder MODULE_BUILDER;

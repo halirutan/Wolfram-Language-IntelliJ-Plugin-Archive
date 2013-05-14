@@ -2,7 +2,7 @@
     <id>de.halirutan.mathematica</id>
     <name>Mathematica Support</name>
     <category>Custom Language</category>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <idea-version since-build="123.94"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
 
@@ -34,9 +34,9 @@
 
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
-        <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.projectsAndModules.MathematicaModuleType"/>
+        <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
         <fileTemplateGroup implementation="de.halirutan.mathematica.MathematicaFileTemplateProvider"/>
-        <projectTemplatesFactory implementation="de.halirutan.mathematica.projectsAndModules.MathematicaProjectTemplatesFactory"/>
+        <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
     </extensions>
 
