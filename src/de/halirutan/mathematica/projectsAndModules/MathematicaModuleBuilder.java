@@ -27,6 +27,7 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
@@ -201,6 +202,24 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
     }
 
+    public static class Empty extends MathematicaModuleBuilder {
+        public Empty() {
+            super(ProjectType.EMPTY);
+        }
+
+        @Override
+        public String getBuilderId() {
+            return "mathematica.empty";
+        }
+
+        @Override
+        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                    ModulesProvider modulesProvider) {
+            return ModuleWizardStep.EMPTY_ARRAY;
+        }
+
+    }
+
     @Override
     public Icon getBigIcon() {
         return MathematicaIcons.FILE_ICON;
@@ -209,5 +228,15 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     @Override
     public Icon getNodeIcon() {
         return MathematicaIcons.FILE_ICON;
+    }
+
+    @Override
+    public String getGroupName() {
+        return MathematicaProjectTemplatesFactory.MATHEMATICA;
+    }
+
+    @Override
+    public ModuleType getModuleType() {
+        return MathematicaModuleType.getInstance();
     }
 }
