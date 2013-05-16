@@ -116,7 +116,7 @@ Out = "%"+
 
 	"___"				{ return MathematicaElementTypes.BLANK_NULL_SEQUENCE; }
 	"__"				{ return MathematicaElementTypes.BLANK_SEQUENCE; }
-	"_."				{ return MathematicaElementTypes.OPTIONAL; }
+	"_."				{ return MathematicaElementTypes.DEFAULT; }
 	"_"					{ return MathematicaElementTypes.BLANK; }
 
 	"//"				{ return MathematicaElementTypes.POSTFIX; }
