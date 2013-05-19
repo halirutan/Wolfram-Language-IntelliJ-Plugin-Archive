@@ -29,6 +29,7 @@ import de.halirutan.mathematica.lexer.MathematicaLexer;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,7 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(colors, MathematicaElementTypes.OPERATORS, MathematicaSyntaxHighlighterColors.OPERATORS);
         fillMap(colors, MathematicaElementTypes.BRACES, MathematicaSyntaxHighlighterColors.BRACES);
         fillMap(colors, MathematicaElementTypes.LITERALS, MathematicaSyntaxHighlighterColors.LITERALS);
+        fillMap(colors, MathematicaElementTypes.SLOTS, MathematicaSyntaxHighlighterColors.PATTERNS);
 
         fillMap(colors, MathematicaSyntaxHighlighterColors.BAD_CHARACTER, MathematicaElementTypes.BAD_CHARACTER);
     }
@@ -70,6 +72,5 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
         return pack(colors.get(tokenType));
     }
-
 
 }
