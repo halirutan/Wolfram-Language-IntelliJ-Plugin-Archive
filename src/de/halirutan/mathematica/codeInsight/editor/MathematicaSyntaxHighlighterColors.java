@@ -1,24 +1,3 @@
-/*
- * Copyright (c) 2013 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 package de.halirutan.mathematica.codeInsight.editor;
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -26,50 +5,59 @@ import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 1/3/13 *
- * Purpose:
- * Time: 6:18 AM
+ * User: rsmenon
+ * Date: 5/17/13
  */
-public interface MathematicaSyntaxHighlighterColors {
 
+public class MathematicaSyntaxHighlighterColors {
 
-    TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL", DefaultLanguageHighlighterColors.STATIC_FIELD);
-    TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",  DefaultLanguageHighlighterColors.FUNCTION_CALL);
-    TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS", DefaultLanguageHighlighterColors.NUMBER);
-    TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
-    TextAttributesKey KEYWORDS = TextAttributesKey.createTextAttributesKey("MMA.KEYWORDS", new TextAttributes(
-            DefaultLanguageHighlighterColors.IDENTIFIER.getDefaultAttributes().getForegroundColor(),
-            DefaultLanguageHighlighterColors.IDENTIFIER.getDefaultAttributes().getBackgroundColor(),
-            null, null, Font.BOLD
-    ));
-    TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(
-            DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getForegroundColor(),
-            DefaultLanguageHighlighterColors.NUMBER.getDefaultAttributes().getBackgroundColor(),
-            null, null, Font.BOLD));
+    //Define colors from built-ins based on colorscheme
+    static boolean isDark = UIManager.getLookAndFeel().getName().contains("Darcula");
 
-    TextAttributesKey PATTERNS = TextAttributesKey.createTextAttributesKey("MMA.PATTERNS", DefaultLanguageHighlighterColors.DOC_COMMENT);
+    private static Color getFG(TextAttributesKey id) {
+        return id.getDefaultAttributes().getForegroundColor();
+    }
 
-    TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
+    private static Color getBG(TextAttributesKey id) {
+        return id.getDefaultAttributes().getBackgroundColor();
+    }
 
-//    TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-//    TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL", DefaultLanguageHighlighterColors.STRING);
-//    TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",  DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
-//    TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS", DefaultLanguageHighlighterColors.NUMBER);
-//    TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
-//    TextAttributesKey KEYWORDS = TextAttributesKey.createTextAttributesKey("MMA.KEYWORDS", DefaultLanguageHighlighterColors.FUNCTION_CALL);
-//    TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES", new TextAttributes(
-//            DefaultLanguageHighlighterColors.BRACKETS.getDefaultAttributes().getForegroundColor(),
-//            DefaultLanguageHighlighterColors.BRACKETS.getDefaultAttributes().getBackgroundColor(),
-//            null, null, Font.BOLD));
-//
-//    TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
-//
-//
+    static Color BLUE = getFG(DefaultLanguageHighlighterColors.NUMBER);
+    static Color GRAY = getFG(DefaultLanguageHighlighterColors.LINE_COMMENT);
+    static Color GREEN = isDark ?
+            getFG(DefaultLanguageHighlighterColors.DOC_COMMENT) :
+            getFG(DefaultLanguageHighlighterColors.STRING);
+    static Color PINK =  getFG(DefaultLanguageHighlighterColors.STATIC_FIELD);
+    static Color FOREGROUND = getFG(DefaultLanguageHighlighterColors.IDENTIFIER);
+    static Color BACKGROUND = getBG(DefaultLanguageHighlighterColors.IDENTIFIER);
 
+    public final static TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT",
+            new TextAttributes(GRAY, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING_LITERAL",
+            new TextAttributes(PINK, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS",
+            new TextAttributes(FOREGROUND, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey LITERALS = TextAttributesKey.createTextAttributesKey("MMA.LITERALS",
+            new TextAttributes(FOREGROUND, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey IDENTIFIER = TextAttributesKey.createTextAttributesKey("MMA.IDENTIFIER",
+            new TextAttributes(BLUE, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey KEYWORDS = TextAttributesKey.createTextAttributesKey("MMA.KEYWORDS",
+            new TextAttributes(FOREGROUND, BACKGROUND, null, null, Font.PLAIN ));
+
+    public final static TextAttributesKey BRACES = TextAttributesKey.createTextAttributesKey("MMA.BRACES",
+            new TextAttributes(FOREGROUND, BACKGROUND, null, null, Font.PLAIN));
+
+    public final static TextAttributesKey PATTERNS = TextAttributesKey.createTextAttributesKey("MMA.PATTERNS",
+            new TextAttributes(GREEN, BACKGROUND, null, null, Font.ITALIC));
+
+    public final static TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
 }
