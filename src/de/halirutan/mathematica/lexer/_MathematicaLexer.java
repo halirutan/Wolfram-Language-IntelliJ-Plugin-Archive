@@ -737,7 +737,7 @@ class _MathematicaLexer implements FlexLexer {
           }
         case 126: break;
         case 67: 
-          { return MathematicaElementTypes.OPTIONAL;
+          { return MathematicaElementTypes.DEFAULT;
           }
         case 127: break;
         case 77: 

@@ -193,7 +193,7 @@ public interface MathematicaElementTypes {
     IElementType REPEATED = new MathematicaElementType("REPEATED");
     IElementType REPEATED_NULL = new MathematicaElementType("REPEATED_NULL");
     IElementType CONDITION = new MathematicaElementType("CONDITION");
-    IElementType OPTIONAL = new MathematicaElementType("OPTIONAL");
+    IElementType DEFAULT = new MathematicaElementType("DEFAULT");
 
     IElementType COLON = new MathematicaElementType("COLON");
     IElementType DOUBLE_COLON = new MathematicaElementType("DOUBLE_COLON");
@@ -252,7 +252,7 @@ public interface MathematicaElementTypes {
             LESS, LESS_EQUAL,
             MAP, MINUS,
             NON_COMMUTATIVE_MULTIPLY,
-            OPTIONAL, OR, OUT,
+            DEFAULT, OR, OUT,
             PLUS, POSTFIX, PREFIX, PUT, PUT_APPEND,
             QUESTION_MARK,
             REPEATED, REPEATED_NULL, REPLACE_ALL, REPLACE_REPEATED, RULE, RULE_DELAYED,
@@ -467,6 +467,7 @@ public interface MathematicaElementTypes {
 
     IElementType PATTERN_EXPRESSION = new MathematicaElementType("PATTERN_EXPRESSION");
     IElementType OPTIONAL_EXPRESSION = new MathematicaElementType("OPTIONAL_EXPRESSION");
+    IElementType DEFAULT_EXPRESSION = new MathematicaElementType("DEFAULT_EXPRESSION");
 
     IElementType STRING_EXPRESSION_EXPRESSION = new MathematicaElementType("STRING_EXPRESSION_EXPRESSION");
 

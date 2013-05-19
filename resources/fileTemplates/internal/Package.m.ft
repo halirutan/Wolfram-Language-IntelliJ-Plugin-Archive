@@ -3,7 +3,7 @@
 (* :Author: ${USER} *)
 (* :Date: ${DATE} *)
 
-BeginPackage["${NAME}`",]
+BeginPackage["${NAME}`"]
 (* Exported symbols added here with SymbolName::usage *)  
 
 Begin["`Private`"] (* Begin Private Context *) 
