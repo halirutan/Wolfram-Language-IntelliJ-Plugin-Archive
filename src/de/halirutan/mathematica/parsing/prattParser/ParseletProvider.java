@@ -252,6 +252,7 @@ public class ParseletProvider {
         infixLeft(MathematicaElementTypes.MINUS,	MathematicaElementTypes.MINUS_EXPRESSION,	40); // Minus(-)
 
         register(MathematicaElementTypes.SPAN, MathematicaElementTypes.SPAN_EXPRESSION, new SpanParselet(38)); // Span(;;)
+        registerPrefixExplicitly(MathematicaElementTypes.SPAN, MathematicaElementTypes.SPAN_EXPRESSION, new PrefixSpanParselet(38)); // Span(;;)
 
         infixLeft(MathematicaElementTypes.EQUAL, MathematicaElementTypes.EQUAL_EXPRESSION, 36); // Equal(==)
         infixLeft(MathematicaElementTypes.UNEQUAL,	MathematicaElementTypes.UNEQUAL_EXPRESSION,	36); // Unequal(!=)

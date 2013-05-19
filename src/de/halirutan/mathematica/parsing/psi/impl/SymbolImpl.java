@@ -21,15 +21,9 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * Time: 12:32 AM
  * Purpose:
  */
-public class SymbolImpl  extends ASTWrapperPsiElement implements Symbol {
+public class SymbolImpl  extends ExpressionImpl implements Symbol {
     private String myName;
 
     public SymbolImpl(@NotNull ASTNode node) {
