@@ -270,6 +270,10 @@ public interface MathematicaElementTypes {
             RIGHT_BRACE, RIGHT_BRACKET, RIGHT_PAR
     );
 
+    TokenSet SLOTS = TokenSet.create(
+            SLOT, SLOT_SEQUENCE
+    );
+
     class Factory {
 
         public static PsiElement create(ASTNode node) {
