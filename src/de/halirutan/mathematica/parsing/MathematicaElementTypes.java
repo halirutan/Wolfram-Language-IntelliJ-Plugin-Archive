@@ -284,7 +284,7 @@ public interface MathematicaElementTypes {
 
             // Basic types
             if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
-            if (type.equals(STRING)) return new StringImpl(node);
+            if (type.equals(STRING_EXPRESSION)) return new StringImpl(node);
 
             // Arithmetic operations
             if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
