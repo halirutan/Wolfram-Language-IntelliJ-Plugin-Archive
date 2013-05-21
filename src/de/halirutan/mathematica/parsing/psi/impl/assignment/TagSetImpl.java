@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class TagSetImpl extends OperatorNameProvider {
-    public TagSetImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public TagSetImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

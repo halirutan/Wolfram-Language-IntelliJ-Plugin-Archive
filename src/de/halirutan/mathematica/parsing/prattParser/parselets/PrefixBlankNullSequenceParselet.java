@@ -34,19 +34,19 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.BLANK_NUL
  * @author patrick (3/27/13)
  */
 public class PrefixBlankNullSequenceParselet implements PrefixParselet {
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public PrefixBlankNullSequenceParselet(int precedence) {
-        this.m_precedence = precedence;
-    }
+  public PrefixBlankNullSequenceParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        PsiBuilder.Marker blankMark = parser.mark();
-        IElementType token = BLANK_NULL_SEQUENCE_EXPRESSION;
-        parser.advanceLexer();
-        MathematicaParser.Result result = parser.parseExpression(m_precedence);
-        blankMark.done(token);
-        return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
-    }
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker blankMark = parser.mark();
+    IElementType token = BLANK_NULL_SEQUENCE_EXPRESSION;
+    parser.advanceLexer();
+    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    blankMark.done(token);
+    return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
+  }
 }

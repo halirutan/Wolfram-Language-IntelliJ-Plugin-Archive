@@ -22,48 +22,44 @@
 package de.halirutan.mathematica.codeInsight;
 
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
- *
  * @author patrick (4/8/13)
  */
 public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
-    public MathematicaQuoteHandler() {
-        super(STRING_LITERAL, STRING_LITERAL_BEGIN, STRING_LITERAL_END);
+  public MathematicaQuoteHandler() {
+    super(STRING_LITERAL, STRING_LITERAL_BEGIN, STRING_LITERAL_END);
+  }
+
+  @Override
+  public boolean isInsideLiteral(HighlighterIterator iterator) {
+    return iterator.getTokenType().equals(STRING_LITERAL);
+  }
+
+  @Override
+  public boolean isClosingQuote(HighlighterIterator iterator, int offset) {
+    final IElementType tokenType = iterator.getTokenType();
+
+    if (tokenType.equals(STRING_LITERAL_END)) {
+      int start = iterator.getStart();
+      int end = iterator.getEnd();
+      return end - start >= 1 && offset == end - 1;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {
+    if (iterator.getTokenType().equals(STRING_LITERAL_BEGIN)) {
+      int start = iterator.getStart();
+      return offset == start;
     }
 
-    @Override
-    public boolean isInsideLiteral(HighlighterIterator iterator) {
-        return iterator.getTokenType().equals(STRING_LITERAL);
-    }
-
-    @Override
-    public boolean isClosingQuote(HighlighterIterator iterator, int offset) {
-        final IElementType tokenType = iterator.getTokenType();
-
-        if (tokenType.equals(STRING_LITERAL_END)){
-            int start = iterator.getStart();
-            int end = iterator.getEnd();
-            return end - start >= 1 && offset == end - 1;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {
-        if (iterator.getTokenType().equals(STRING_LITERAL_BEGIN)){
-            int start = iterator.getStart();
-            return offset == start;
-        }
-
-        return false;
-    }
+    return false;
+  }
 
 }

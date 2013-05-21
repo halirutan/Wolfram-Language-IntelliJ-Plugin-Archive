@@ -22,19 +22,10 @@
 package de.halirutan.mathematica.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
-import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -44,38 +35,37 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 public class MathematicaCompletionContributor extends CompletionContributor {
 
 
-    public MathematicaCompletionContributor() {
-        extend(CompletionType.BASIC, psiElement().withElementType(MathematicaElementTypes.IDENTIFIER), new MathematicaFunctionCompletion());
-    }
+  public MathematicaCompletionContributor() {
+    extend(CompletionType.BASIC, psiElement().withElementType(MathematicaElementTypes.IDENTIFIER), new MathematicaFunctionCompletion());
+  }
 
 
+  @Override
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
+    super.fillCompletionVariants(parameters, result);    //To change body of overridden methods use File | Settings | File Templates.
+  }
 
-    @Override
-    public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
-        super.fillCompletionVariants(parameters, result);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+  @Override
+  public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+    super.beforeCompletion(context);    //To change body of overridden methods use File | Settings | File Templates.
+  }
 
-    @Override
-    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
-        super.beforeCompletion(context);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+  @Nullable
+  @Override
+  public String handleEmptyLookup(@NotNull CompletionParameters parameters, Editor editor) {
+    return super.handleEmptyLookup(parameters, editor);    //To change body of overridden methods use File | Settings | File Templates.
+  }
 
-    @Nullable
-    @Override
-    public String handleEmptyLookup(@NotNull CompletionParameters parameters, Editor editor) {
-        return super.handleEmptyLookup(parameters, editor);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+  @Nullable
+  @Override
+  public AutoCompletionDecision handleAutoCompletionPossibility(AutoCompletionContext context) {
+    return super.handleAutoCompletionPossibility(context);    //To change body of overridden methods use File | Settings | File Templates.
+  }
 
-    @Nullable
-    @Override
-    public AutoCompletionDecision handleAutoCompletionPossibility(AutoCompletionContext context) {
-        return super.handleAutoCompletionPossibility(context);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void duringCompletion(@NotNull CompletionInitializationContext context) {
-        super.duringCompletion(context);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+  @Override
+  public void duringCompletion(@NotNull CompletionInitializationContext context) {
+    super.duringCompletion(context);    //To change body of overridden methods use File | Settings | File Templates.
+  }
 
 
 }

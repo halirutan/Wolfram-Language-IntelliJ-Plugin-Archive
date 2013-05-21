@@ -32,38 +32,38 @@ import javax.swing.*;
  */
 
 public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> {
-    public static final String MATHEMATICA_TYPE_ID = "MATHEMATICA_MODULE";
+  public static final String MATHEMATICA_TYPE_ID = "MATHEMATICA_MODULE";
 
-    public MathematicaModuleType() {
-        super(MATHEMATICA_TYPE_ID);
-    }
+  public MathematicaModuleType() {
+    super(MATHEMATICA_TYPE_ID);
+  }
 
-    public static MathematicaModuleType getInstance() {
-        return (MathematicaModuleType) ModuleTypeManager.getInstance().findByID(MATHEMATICA_TYPE_ID);
-    }
+  public static MathematicaModuleType getInstance() {
+    return (MathematicaModuleType) ModuleTypeManager.getInstance().findByID(MATHEMATICA_TYPE_ID);
+  }
 
-    @Override
-    public String getName() {
-        return "Empty Module";
-    }
+  @Override
+  public String getName() {
+    return "Empty Module";
+  }
 
-    @Override
-    public String getDescription() {
-        return "Creates an empty project or module for custom layouts.";
-    }
+  @Override
+  public String getDescription() {
+    return "Creates an empty project or module for custom layouts.";
+  }
 
-    @Override
-    public Icon getBigIcon() {
-        return MathematicaIcons.FILE_ICON;
-    }
+  @Override
+  public Icon getBigIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
 
-    @Override
-    public MathematicaModuleBuilder createModuleBuilder() {
-        return new MathematicaModuleBuilder.Empty();
-    }
+  @Override
+  public MathematicaModuleBuilder createModuleBuilder() {
+    return new MathematicaModuleBuilder.Empty();
+  }
 
-    @Override
-    public Icon getNodeIcon(@Deprecated boolean isOpened) {
-        return MathematicaIcons.FILE_ICON;
-    }
+  @Override
+  public Icon getNodeIcon(@Deprecated boolean isOpened) {
+    return MathematicaIcons.FILE_ICON;
+  }
 }

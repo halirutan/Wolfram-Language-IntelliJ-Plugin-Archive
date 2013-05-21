@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/13/13)
  */
-public class MinusImpl extends ExpressionImpl implements Minus{
-    public MinusImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+public class MinusImpl extends ExpressionImpl implements Minus {
+  public MinusImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

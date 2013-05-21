@@ -27,7 +27,7 @@ import com.intellij.lang.ASTNode;
  * @author patrick (4/1/13)
  */
 public class CompoundExpressionImpl extends ExpressionImpl {
-    public CompoundExpressionImpl(ASTNode node) {
-        super(node);
-    }
+  public CompoundExpressionImpl(ASTNode node) {
+    super(node);
+  }
 }

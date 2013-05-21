@@ -30,65 +30,55 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 3/28/13
- * Time: 12:32 AM
- * Purpose:
+ * @author patrick (3/28/13)
  */
-public class SymbolImpl  extends ExpressionImpl implements Symbol {
-    private String myName;
+public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-    public SymbolImpl(@NotNull ASTNode node) {
-        super(node);
-        myName = node.getText();
+  public SymbolImpl(@NotNull ASTNode node) {
+    super(node);
+  }
+
+
+  @Override
+  public PsiElement setName(@NonNls @NotNull String name) {
+    return MathematicaPsiUtililities.setSymbolName(this, name);
+  }
+
+  @Override
+  public String getName() {
+    return MathematicaPsiUtililities.getSymbolName(this);
+  }
+
+  @Override
+  public String getMathematicaContext() {
+    String myName = MathematicaPsiUtililities.getSymbolName(this);
+    String context;
+    if (myName.contains("`")) {
+      context = myName.substring(0, myName.lastIndexOf('`') + 1);
+    } else {
+      context = "System`";
     }
+    return context;
+  }
 
-    @Override
-    public PsiElement setName(@NonNls @NotNull String name) {
-        this.myName = name;
-        return this;
+  @Override
+  public String getSymbolName() {
+    String myName = MathematicaPsiUtililities.getSymbolName(this);
+    if (myName.lastIndexOf('`') == -1) {
+      return myName;
+    } else {
+      return myName.substring(myName.lastIndexOf('`') + 1, myName.length());
     }
+  }
 
-    @Override
-    public String getName() {
-        return myName;
-    }
+  @Nullable
+  @Override
+  public PsiElement getNameIdentifier() {
+    return this.getNode().getPsi();
+  }
 
-    @Override
-    public String getText() {
-        return myName;
-    }
-
-    @Override
-    public String getMathematicaContext() {
-        String context;
-        if (myName.contains("`")) {
-            context = myName.substring(0, myName.lastIndexOf('`')+1);
-        } else {
-            context = "System`";
-        }
-        return context;
-    }
-
-    @Override
-    public String getSymbolName() {
-        if (myName.lastIndexOf('`') == -1) {
-            return myName;
-        } else {
-            return myName.substring(myName.lastIndexOf('`')+1, myName.length());
-        }
-    }
-
-    @Override
-    public PsiReference getReference() {
-        return new SymbolPsiReference(this, this.getFirstChild().getTextRange());
-    }
-
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        return this.getFirstChild();
-    }
-
+  @Override
+  public PsiReference getReference() {
+    return new SymbolPsiReference(this, getTextRange());
+  }
 }

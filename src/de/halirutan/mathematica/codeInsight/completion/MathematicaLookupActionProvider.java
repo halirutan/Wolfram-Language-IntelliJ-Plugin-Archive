@@ -31,8 +31,8 @@ import com.intellij.util.Consumer;
  * @author patrick (4/7/13)
  */
 public class MathematicaLookupActionProvider implements LookupActionProvider {
-    @Override
-    public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
-        element.isValid();
-    }
+  @Override
+  public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
+    element.isValid();
+  }
 }

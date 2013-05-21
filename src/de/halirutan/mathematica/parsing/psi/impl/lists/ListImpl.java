@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class ListImpl extends ExpressionImpl {
-    public ListImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public ListImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

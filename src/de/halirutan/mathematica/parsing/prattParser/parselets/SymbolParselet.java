@@ -33,21 +33,21 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  */
 public class SymbolParselet implements PrefixParselet {
 
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError{
-        PsiBuilder.Marker symbolMark = parser.mark();
-        parser.advanceLexer();
-        symbolMark.done(MathematicaElementTypes.SYMBOL_EXPRESSION);
-        return MathematicaParser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);
-    }
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker symbolMark = parser.mark();
+    parser.advanceLexer();
+    symbolMark.done(MathematicaElementTypes.SYMBOL_EXPRESSION);
+    return MathematicaParser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);
+  }
 
-    public SymbolParselet(int precedence) {
-        this.m_precedence = precedence;
-    }
+  public SymbolParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
 
-    public int getPrecedence() {
-        return m_precedence;
-    }
+  public int getPrecedence() {
+    return myPrecedence;
+  }
 }

@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class DivideByImpl extends OperatorNameProvider {
-    public DivideByImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public DivideByImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

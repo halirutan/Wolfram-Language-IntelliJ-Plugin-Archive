@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class UnsameQImpl extends OperatorNameProvider {
-    public UnsameQImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public UnsameQImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

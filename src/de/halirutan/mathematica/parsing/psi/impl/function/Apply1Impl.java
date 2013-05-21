@@ -30,17 +30,17 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class Apply1Impl extends OperatorNameProvider {
-    public Apply1Impl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public Apply1Impl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public boolean isOperatorSign(PsiElement operatorSignElement) {
-        return operatorSignElement.toString().equals("PsiElement(APPLY1)");
-    }
+  @Override
+  public boolean isOperatorSign(PsiElement operatorSignElement) {
+    return operatorSignElement.toString().equals("PsiElement(APPLY1)");
+  }
 
-    @Override
-    public String getOperatorName() {
-        return "Apply";
-    }
+  @Override
+  public String getOperatorName() {
+    return "Apply";
+  }
 }

@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class StringJoinImpl extends OperatorNameProvider {
-    public StringJoinImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public StringJoinImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

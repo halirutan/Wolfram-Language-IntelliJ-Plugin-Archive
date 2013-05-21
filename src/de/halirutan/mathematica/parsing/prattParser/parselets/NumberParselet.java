@@ -22,13 +22,13 @@
 package de.halirutan.mathematica.parsing.prattParser.parselets;
 
 /**
- * Parselet for numbers. Does not need to do anything, because all kind of numbers are recognized by the lexer
- * and this parselet needs only to advance over the lexer token.
+ * Parselet for numbers. Does not need to do anything, because all kind of numbers are recognized by the lexer and this
+ * parselet needs only to advance over the lexer token.
  *
  * @author patrick (3/27/13)
  */
 public class NumberParselet extends AtomParselet {
-    public NumberParselet(int precedence) {
-        super(precedence);
-    }
+  public NumberParselet(int precedence) {
+    super(precedence);
+  }
 }

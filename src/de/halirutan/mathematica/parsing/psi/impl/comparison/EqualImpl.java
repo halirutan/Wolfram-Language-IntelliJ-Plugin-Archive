@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class EqualImpl extends OperatorNameProvider {
-    public EqualImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public EqualImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

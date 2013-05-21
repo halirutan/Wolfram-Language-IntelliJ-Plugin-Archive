@@ -31,36 +31,36 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  * @author patrick (3/27/13)
  */
 public class CompoundExpressionParselet implements InfixParselet {
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public CompoundExpressionParselet(int precedence) {
-        this.m_precedence = precedence;
+  public CompoundExpressionParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
+
+  @Override
+  public int getMyPrecedence() {
+    return myPrecedence;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    if (!left.isValid()) return MathematicaParser.notParsed();
+    PsiBuilder.Marker compoundExprMark = left.getMark().precede();
+    IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
+    parser.advanceLexer();
+
+    boolean ok = true;
+
+    while (true) {
+      MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+      if (!result.isValid()) break;
+      ok &= result.isParsed();
+      if (parser.matchesToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
+      else break;
     }
 
-    @Override
-    public int getPrecedence() {
-        return m_precedence;
-    }
+    compoundExprMark.done(token);
+    return MathematicaParser.result(compoundExprMark, token, ok);
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return MathematicaParser.notParsed();
-        PsiBuilder.Marker compoundExprMark = left.getMark().precede();
-        IElementType token = MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION;
-        parser.advanceLexer();
-
-        boolean ok = true;
-
-        while (true) {
-            MathematicaParser.Result result = parser.parseExpression(m_precedence);
-            if (!result.isValid()) break;
-            ok &= result.isParsed();
-            if (parser.matchesToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
-            else break;
-        }
-
-        compoundExprMark.done(token);
-        return MathematicaParser.result(compoundExprMark, token, ok);
-
-    }
+  }
 }

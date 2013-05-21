@@ -25,5 +25,5 @@ package de.halirutan.mathematica.module;
  * @author rsmenon (5/6/13)
  */
 public enum ProjectType {
-    BASIC, APPLICATION, TEST, DOCUMENTATION, EMPTY
+  BASIC, APPLICATION, TEST, DOCUMENTATION, EMPTY
 }

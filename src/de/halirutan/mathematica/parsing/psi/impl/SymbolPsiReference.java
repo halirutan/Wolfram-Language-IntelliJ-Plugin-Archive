@@ -21,90 +21,133 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.intellij.openapi.util.Key;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.lang.ASTNode;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author patrick (5/8/13)
  */
-public class SymbolPsiReference extends PsiReferenceBase<Symbol> {
+public class SymbolPsiReference extends PsiReferenceBase<Symbol> implements PsiPolyVariantReference{
 
-    public SymbolPsiReference(Symbol element, TextRange range) {
-        super(element, range);
+  private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+
+
+  public SymbolPsiReference(Symbol element, TextRange range) {
+    super(element, range);
+  }
+
+  @NotNull
+  @Override
+  public ResolveResult[] multiResolve(boolean incompleteCode) {
+    List<Symbol> result = null;
+    final PsiFile file = myElement.getContainingFile();
+    Symbol[] allSymbols = PsiTreeUtil.getChildrenOfType(file, Symbol.class);
+    if (allSymbols != null) {
+      for (Symbol currentSymbol : allSymbols) {
+        if (getValue().equals(currentSymbol.getSymbolName())) {
+          if (result == null) {
+            result = new ArrayList<Symbol>();
+          }
+          result.add(currentSymbol);
+        }
+      }
     }
 
-    @Nullable
-    @Override
-    public PsiElement resolve() {
-
-        return myElement;
+    List<ResolveResult> resolveResults = new ArrayList<ResolveResult>();
+    if (result != null) {
+      for (Symbol symbol : result) {
+        resolveResults.add(new PsiElementResolveResult(symbol));
+      }
     }
+    return resolveResults.toArray(new ResolveResult[resolveResults.size()]);
 
-    @Override
-    public void setRangeInElement(TextRange range) {
-        super.setRangeInElement(range);
-    }
+  }
 
-    @NotNull
-    @Override
-    public String getValue() {
-        return super.getValue();
-    }
+  @Nullable
+  @Override
+  public PsiElement resolve() {
+    ResolveResult[] resolveResults = multiResolve(false);
+    return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+  }
 
-    @Override
-    public Symbol getElement() {
-        return super.getElement();
-    }
+  @Override
+  public void setRangeInElement(TextRange range) {
+    super.setRangeInElement(range);
+  }
 
-    @Override
-    public TextRange getRangeInElement() {
-        return super.getRangeInElement();
-    }
+  @NotNull
+  @Override
+  public String getValue() {
+    return super.getValue();
+  }
 
-    @Override
-    protected TextRange calculateDefaultRangeInElement() {
-        return super.calculateDefaultRangeInElement();
-    }
+  @Override
+  public Symbol getElement() {
+    return super.getElement();
+  }
 
-    @NotNull
-    @Override
-    public String getCanonicalText() {
-        return super.getCanonicalText();
-    }
+  @Override
+  public TextRange getRangeInElement() {
+    return super.getRangeInElement();
+  }
 
-    @Override
-    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        return super.handleElementRename(newElementName);
-    }
+  @Override
+  protected TextRange calculateDefaultRangeInElement() {
+    return super.calculateDefaultRangeInElement();
+  }
 
-    @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return super.bindToElement(element);
-    }
+  @NotNull
+  @Override
+  public String getCanonicalText() {
+    return super.getCanonicalText();
+  }
 
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        return super.isReferenceTo(element);
-    }
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    return super.handleElementRename(newElementName);
+  }
 
-    @Override
-    public boolean isSoft() {
-        return super.isSoft();
-    }
+  @Override
+  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    return super.bindToElement(element);
+  }
 
-    @NotNull
-    @Override
-    public Object[] getVariants() {
-        return new Object[0];
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return super.isReferenceTo(element);
+  }
+
+  @Override
+  public boolean isSoft() {
+    return super.isSoft();
+  }
+
+  @NotNull
+  @Override
+  public Object[] getVariants() {
+    final PsiFile containingFile = myElement.getContainingFile();
+    final Symbol[] allSymbols = PsiTreeUtil.getChildrenOfType(containingFile, Symbol.class);
+    List<LookupElement> variants = new ArrayList<LookupElement>();
+    for (Symbol currentSymbol : allSymbols) {
+      if (!NAMES.contains(currentSymbol.getSymbolName())) {
+        variants.add(LookupElementBuilder.create(currentSymbol));
+      }
     }
+    return variants.toArray();
+  }
 }

@@ -21,7 +21,9 @@
 
 package de.halirutan.mathematica;
 
-import com.intellij.ide.fileTemplates.*;
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -34,51 +36,51 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Properties;
 
 /**
- * @author  rsmenon (5/13/13)
+ * @author rsmenon (5/13/13)
  */
 public class MathematicaFileTemplateProvider {
-    @NonNls
-    public static final String PACKAGE = "Package.m";
+  @NonNls
+  public static final String PACKAGE = "Package.m";
 
-    @NonNls
-    public static final String NOTEBOOK = "Notebook.nb";
+  @NonNls
+  public static final String NOTEBOOK = "Notebook.nb";
 
-    @NonNls
-    public static final String PLAIN = "Plain.m";
+  @NonNls
+  public static final String PLAIN = "Plain.m";
 
-    @NonNls
-    public static final String TEST = "Test.mt";
+  @NonNls
+  public static final String TEST = "Test.mt";
 
-    @NonNls
-    public static final String INIT = "init.m";
+  @NonNls
+  public static final String INIT = "init.m";
 
-    @Nullable
-    public static PsiElement createFromTemplate(@NotNull Project project,
-                                                @NotNull VirtualFile rootDir,
-                                                @NotNull String templateName,
-                                                @NotNull String fileName,
-                                                @NotNull Properties properties) throws Exception {
-        rootDir.refresh(false, false);
-        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(rootDir);
-        if (directory != null) {
-            return createFromTemplate(templateName, fileName, directory, properties);
-        }
-        return null;
+  @Nullable
+  public static PsiElement createFromTemplate(@NotNull Project project,
+                                              @NotNull VirtualFile rootDir,
+                                              @NotNull String templateName,
+                                              @NotNull String fileName,
+                                              @NotNull Properties properties) throws Exception {
+    rootDir.refresh(false, false);
+    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(rootDir);
+    if (directory != null) {
+      return createFromTemplate(templateName, fileName, directory, properties);
     }
+    return null;
+  }
 
-    @Nullable
-    public static PsiElement createFromTemplate(@NotNull Project project,
-                                                @NotNull VirtualFile rootDir,
-                                                @NotNull String templateName,
-                                                @NotNull String fileName) throws Exception {
-        return createFromTemplate(project, rootDir, templateName, fileName, FileTemplateManager.getInstance().getDefaultProperties(project));
-    }
+  @Nullable
+  public static PsiElement createFromTemplate(@NotNull Project project,
+                                              @NotNull VirtualFile rootDir,
+                                              @NotNull String templateName,
+                                              @NotNull String fileName) throws Exception {
+    return createFromTemplate(project, rootDir, templateName, fileName, FileTemplateManager.getInstance().getDefaultProperties(project));
+  }
 
-    public static PsiElement createFromTemplate(String templateName, String fileName, @NotNull PsiDirectory directory, Properties properties)
-            throws Exception {
-        FileTemplateManager manager = FileTemplateManager.getInstance();
-        FileTemplate template = manager.getInternalTemplate(templateName);
-        return FileTemplateUtil.createFromTemplate(template, fileName, properties, directory);
-    }
+  public static PsiElement createFromTemplate(String templateName, String fileName, @NotNull PsiDirectory directory, Properties properties)
+      throws Exception {
+    FileTemplateManager manager = FileTemplateManager.getInstance();
+    FileTemplate template = manager.getInternalTemplate(templateName);
+    return FileTemplateUtil.createFromTemplate(template, fileName, properties, directory);
+  }
 
 }

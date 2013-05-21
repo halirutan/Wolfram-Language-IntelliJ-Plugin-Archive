@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class AlternativeImpl extends OperatorNameProvider {
-    public AlternativeImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public AlternativeImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

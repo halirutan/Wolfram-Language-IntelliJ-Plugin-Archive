@@ -34,25 +34,25 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MathematicaBraceMatcher implements PairedBraceMatcher {
 
-    private static final BracePair[] PAIRS = new BracePair[]{
-            new BracePair(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.RIGHT_BRACE, true),
-            new BracePair(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.RIGHT_PAR, false),
-            new BracePair(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET, true),
-            new BracePair(MathematicaElementTypes.PART_BEGIN, MathematicaElementTypes.RIGHT_BRACKET, true)
-    };
+  private static final BracePair[] PAIRS = new BracePair[]{
+      new BracePair(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.RIGHT_BRACE, true),
+      new BracePair(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.RIGHT_PAR, false),
+      new BracePair(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET, true),
+      new BracePair(MathematicaElementTypes.PART_BEGIN, MathematicaElementTypes.RIGHT_BRACKET, true)
+  };
 
-    @Override
-    public BracePair[] getPairs() {
-        return PAIRS;
-    }
+  @Override
+  public BracePair[] getPairs() {
+    return PAIRS;
+  }
 
-    @Override
-    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
-        return true;
-    }
+  @Override
+  public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
+    return true;
+  }
 
-    @Override
-    public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
-        return openingBraceOffset;
-    }
+  @Override
+  public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
+    return openingBraceOffset;
+  }
 }

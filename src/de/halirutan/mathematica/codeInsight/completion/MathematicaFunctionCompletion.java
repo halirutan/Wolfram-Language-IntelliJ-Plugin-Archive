@@ -26,7 +26,6 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -36,30 +35,30 @@ import java.util.HashMap;
  */
 public class MathematicaFunctionCompletion extends CompletionProvider<CompletionParameters> {
 
-    @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-        HashMap<String,SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
+  @Override
+  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+    HashMap<String, SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
 
-        if (Character.isLowerCase(parameters.getPosition().getText().charAt(0))) {
-            result.stopHere();
-            return;
-        }
-
-        // We want to find a prefix which can contain $ since this is allowed in Mathematica
-        String prefix = CompletionUtil.findIdentifierPrefix(parameters.getPosition().getContainingFile(),
-                parameters.getOffset(),
-                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')),
-                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')));
-
-        CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
-
-        CompletionResultSet result2 = result.withPrefixMatcher(matcher);
-        for (String name : symbols.keySet()) {
-            if (name.length() < 3) continue;
-            LookupElementBuilder elm = LookupElementBuilder.create(name).withInsertHandler(MathematicaBracketInsertHandler.getInstance());
-            SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
-            result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
-        }
+    if (Character.isLowerCase(parameters.getPosition().getText().charAt(0))) {
+      result.stopHere();
+      return;
     }
+
+    // We want to find a prefix which can contain $ since this is allowed in Mathematica
+    String prefix = CompletionUtil.findIdentifierPrefix(parameters.getPosition().getContainingFile(),
+        parameters.getOffset(),
+        StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')),
+        StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')));
+
+    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
+
+    CompletionResultSet result2 = result.withPrefixMatcher(matcher);
+    for (String name : symbols.keySet()) {
+      if (name.length() < 3) continue;
+      LookupElementBuilder elm = LookupElementBuilder.create(name).withInsertHandler(MathematicaBracketInsertHandler.getInstance());
+      SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
+      result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
+    }
+  }
 
 }
