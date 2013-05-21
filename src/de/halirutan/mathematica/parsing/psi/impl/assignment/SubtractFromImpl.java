@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class SubtractFromImpl extends OperatorNameProvider {
-    public SubtractFromImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public SubtractFromImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

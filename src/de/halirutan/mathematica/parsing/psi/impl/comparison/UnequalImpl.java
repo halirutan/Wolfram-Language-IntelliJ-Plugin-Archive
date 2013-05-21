@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class UnequalImpl extends OperatorNameProvider {
-    public UnequalImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public UnequalImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class BlankSequenceImpl extends OperatorNameProvider implements BlankSequence {
-    public BlankSequenceImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public BlankSequenceImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

@@ -26,14 +26,10 @@ import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 3/27/13
- * Time: 11:25 PM
- * Purpose:
+ * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
 public class FunctionImpl extends OperatorNameProvider {
-    public FunctionImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public FunctionImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

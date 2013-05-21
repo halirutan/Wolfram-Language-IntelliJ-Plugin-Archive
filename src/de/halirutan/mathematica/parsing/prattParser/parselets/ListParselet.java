@@ -34,37 +34,37 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  */
 public class ListParselet implements PrefixParselet {
 
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public ListParselet(int precedence) {
-        m_precedence = precedence;
+  public ListParselet(int precedence) {
+    myPrecedence = precedence;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker listMarker = parser.mark();
+    boolean result = true;
+
+    if (parser.matchesToken(LEFT_BRACE)) {
+      parser.advanceLexer();
+    } else {
+      listMarker.drop();
+      throw new CriticalParserError("List parselet does not start with {");
     }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        PsiBuilder.Marker listMarker = parser.mark();
-        boolean result = true;
+    MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
 
-        if (parser.matchesToken(LEFT_BRACE)) {
-            parser.advanceLexer();
-        } else {
-            listMarker.drop();
-            throw new CriticalParserError("List parselet does not start with {");
-        }
-
-        MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
-
-        if (parser.matchesToken(RIGHT_BRACE)) {
-            parser.advanceLexer();
-        } else {
-            parser.error("Closing '}' expected");
-            result = false;
-        }
-        listMarker.done(LIST_EXPRESSION);
-        return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
+    if (parser.matchesToken(RIGHT_BRACE)) {
+      parser.advanceLexer();
+    } else {
+      parser.error("Closing '}' expected");
+      result = false;
     }
+    listMarker.done(LIST_EXPRESSION);
+    return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
+  }
 
-    public int getPrecedence() {
-        return m_precedence;
-    }
+  public int getPrecedence() {
+    return myPrecedence;
+  }
 }

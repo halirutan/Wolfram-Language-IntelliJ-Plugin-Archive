@@ -31,18 +31,18 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class PatternImpl extends OperatorNameProvider implements Pattern {
-    public PatternImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public PatternImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public boolean isOperatorSign(PsiElement operatorSignElement) {
-        return operatorSignElement.toString().contains("COLON");
-    }
+  @Override
+  public boolean isOperatorSign(PsiElement operatorSignElement) {
+    return operatorSignElement.toString().contains("COLON");
+  }
 
-    @Override
-    public String getOperatorName() {
-        return "Pattern";
-    }
+  @Override
+  public String getOperatorName() {
+    return "Pattern";
+  }
 
 }

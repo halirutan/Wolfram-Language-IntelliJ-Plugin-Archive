@@ -30,17 +30,17 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class InfixImpl extends OperatorNameProvider {
-    public InfixImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public InfixImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public boolean isOperatorSign(PsiElement operatorSignElement) {
-        return operatorSignElement.toString().contains("INFIX_CALL");
-    }
+  @Override
+  public boolean isOperatorSign(PsiElement operatorSignElement) {
+    return operatorSignElement.toString().contains("INFIX_CALL");
+  }
 
-    @Override
-    public String getOperatorName() {
-        return "Infix";
-    }
+  @Override
+  public String getOperatorName() {
+    return "Infix";
+  }
 }

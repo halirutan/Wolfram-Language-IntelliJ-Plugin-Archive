@@ -19,17 +19,28 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.assignment;
+package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFileFactory;
+import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (5/21/13)
  */
-public class DecrementImpl extends OperatorNameProvider {
-  public DecrementImpl(@NotNull ASTNode node) {
-    super(node);
+public class MathematicaSymbolFactory {
+  public static Symbol createSymbol(Project project, String name) {
+    final MathematicaPsiFileImpl file = createFile(project, name);
+    return (Symbol) file.getFirstChild();
   }
+
+  private static MathematicaPsiFileImpl createFile(Project project, String symbolName) {
+    String fileName = "dummy.m";
+    final PsiFileFactory psiFileFactory = PsiFileFactory.getInstance(project);
+    return (MathematicaPsiFileImpl) psiFileFactory.createFileFromText(fileName, MathematicaFileType.INSTANCE, symbolName);
+  }
+
+
 }

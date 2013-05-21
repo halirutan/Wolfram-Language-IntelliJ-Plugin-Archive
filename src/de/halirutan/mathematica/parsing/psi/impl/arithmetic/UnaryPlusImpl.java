@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/13/13)
  */
-public class UnaryPlusImpl extends ExpressionImpl implements UnaryPlus{
-    public UnaryPlusImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+public class UnaryPlusImpl extends ExpressionImpl implements UnaryPlus {
+  public UnaryPlusImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

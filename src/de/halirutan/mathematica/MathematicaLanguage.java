@@ -22,30 +22,16 @@
 package de.halirutan.mathematica;
 
 import com.intellij.lang.Language;
-import com.intellij.openapi.fileTypes.SingleLazyInstanceSyntaxHighlighterFactory;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
-import de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/4/13)
  */
 public class MathematicaLanguage extends Language {
 
-    public static final Language INSTANCE = new MathematicaLanguage();
+  public static final Language INSTANCE = new MathematicaLanguage();
 
-    public MathematicaLanguage() {
-        super(Mathematica.NAME);
-
-
-//        SyntaxHighlighterFactory.LANGUAGE_FACTORY.addExplicitExtension(this, new SingleLazyInstanceSyntaxHighlighterFactory() {
-//            @NotNull
-//            protected SyntaxHighlighter createHighlighter() {
-//                return new MathematicaSyntaxHighlighterColors();
-//            }
-//        });
-
-    }
+  public MathematicaLanguage() {
+    super(Mathematica.NAME);
+  }
 
 }

@@ -30,5 +30,5 @@ import javax.swing.*;
  */
 public interface MathematicaIcons {
 
-    Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
+  Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
 }

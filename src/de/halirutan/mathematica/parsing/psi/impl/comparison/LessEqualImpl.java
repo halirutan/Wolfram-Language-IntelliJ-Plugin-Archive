@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class LessEqualImpl extends OperatorNameProvider {
-    public LessEqualImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public LessEqualImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

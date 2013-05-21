@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class PreIncrementImpl extends OperatorNameProvider {
-    public PreIncrementImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public PreIncrementImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

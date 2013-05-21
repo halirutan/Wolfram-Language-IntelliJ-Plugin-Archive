@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DotImpl extends ExpressionImpl implements Dot {
 
-    public DotImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public DotImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

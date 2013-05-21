@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class PostfixImpl extends OperatorNameProvider {
-    public PostfixImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public PostfixImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

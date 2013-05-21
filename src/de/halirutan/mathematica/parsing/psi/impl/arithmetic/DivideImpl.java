@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/13/13)
  */
 public class DivideImpl extends ExpressionImpl implements Divide {
-    public DivideImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public DivideImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

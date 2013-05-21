@@ -35,36 +35,36 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class InfixOperatorParselet implements InfixParselet {
 
-    private final int m_precedence;
-    private final boolean m_rightAssociative;
+  private final int myPrecedence;
+  private final boolean myRightAssociative;
 
-    public InfixOperatorParselet(int precedence, boolean rightAssociative) {
-        this.m_precedence = precedence;
-        this.m_rightAssociative = rightAssociative;
+  public InfixOperatorParselet(int precedence, boolean rightAssociative) {
+    this.myPrecedence = precedence;
+    this.myRightAssociative = rightAssociative;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    if (!left.isValid()) return MathematicaParser.notParsed();
+    PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
+    IElementType token = ParseletProvider.getInfixPsiElement(this);
+
+    parser.advanceLexer();
+
+    MathematicaParser.Result result = parser.parseExpression(myPrecedence - (myRightAssociative ? 1 : 0));
+    if (result.isParsed()) {
+      infixOperationMarker.done(token);
+      result = MathematicaParser.result(infixOperationMarker, token, true);
+    } else {
+      parser.error("More input expected.");
+      infixOperationMarker.done(token);
     }
+    return result;
+  }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        if (!left.isValid()) return MathematicaParser.notParsed();
-        PsiBuilder.Marker infixOperationMarker = left.getMark().precede();
-        IElementType token = ParseletProvider.getInfixPsiElement(this);
-
-        parser.advanceLexer();
-
-        MathematicaParser.Result result = parser.parseExpression(m_precedence - (m_rightAssociative ? 1 : 0));
-        if (result.isParsed()) {
-            infixOperationMarker.done(token);
-            result = MathematicaParser.result(infixOperationMarker, token, true);
-        } else {
-            parser.error("More input expected.");
-            infixOperationMarker.done(token);
-        }
-        return result;
-    }
-
-    @Override
-    public int getPrecedence() {
-        return m_precedence;
-    }
+  @Override
+  public int getMyPrecedence() {
+    return myPrecedence;
+  }
 
 }

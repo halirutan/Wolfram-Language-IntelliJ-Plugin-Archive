@@ -30,10 +30,10 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/4/13)
  */
 public class MathematicaFileTypeFactory extends FileTypeFactory {
-    @Override
-    public void createFileTypes(@NotNull FileTypeConsumer consumer) {
-        consumer.consume(MathematicaFileType.INSTANCE, "m;mma;mt");
-    }
+  @Override
+  public void createFileTypes(@NotNull FileTypeConsumer consumer) {
+    consumer.consume(MathematicaFileType.INSTANCE, "m;mb;mt");
+  }
 
 }
 

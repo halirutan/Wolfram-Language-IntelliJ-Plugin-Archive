@@ -30,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/2/13)
  */
 public class MathematicaCompletionConfidence extends CompletionConfidence {
-    @NotNull
-    @Override
-    public ThreeState shouldFocusLookup(@NotNull CompletionParameters parameters) {
-        return ThreeState.YES;
-    }
+  @NotNull
+  @Override
+  public ThreeState shouldFocusLookup(@NotNull CompletionParameters parameters) {
+    return ThreeState.YES;
+  }
 }

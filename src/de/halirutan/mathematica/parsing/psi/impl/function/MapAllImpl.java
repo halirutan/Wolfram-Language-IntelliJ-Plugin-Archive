@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class MapAllImpl extends OperatorNameProvider {
-    public MapAllImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public MapAllImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

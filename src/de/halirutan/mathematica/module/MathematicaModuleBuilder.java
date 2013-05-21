@@ -46,196 +46,190 @@ import java.io.IOException;
  */
 public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
-    /**
-     * Additions by rsmenon (5/6/13)
-     * Will need some more reworking to implement checkboxes for Test/Documentation.
-     */
+  /**
+   * Additions by rsmenon (5/6/13) Will need some more reworking to implement checkboxes for Test/Documentation.
+   */
 
-    private String PROJECT_NAME;
-    private final ProjectType PROJECT_TYPE;
+  private String myProjectName;
+  private final ProjectType myProjectType;
 
-    public MathematicaModuleBuilder(ProjectType type) {
-        PROJECT_TYPE = type;
-    }
+  public MathematicaModuleBuilder(ProjectType type) {
+    myProjectType = type;
+  }
 
-    public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
-        super.setupRootModel(rootModel);
+  public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
+    super.setupRootModel(rootModel);
 
-        VirtualFile[] files = rootModel.getContentRoots();
-        if (files.length > 0) {
-            final VirtualFile contentRoot = files[0];
+    VirtualFile[] files = rootModel.getContentRoots();
+    if (files.length > 0) {
+      final VirtualFile contentRoot = files[0];
 
-            final Project project = rootModel.getProject();
-            PROJECT_NAME = project.getName();
+      final Project project = rootModel.getProject();
+      myProjectName = project.getName();
 
-            StartupManager.getInstance(project).runWhenProjectIsInitialized(new DumbAwareRunnable() {
+      StartupManager.getInstance(project).runWhenProjectIsInitialized(new DumbAwareRunnable() {
+        public void run() {
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+            public void run() {
+              ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 public void run() {
-                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                        public void run() {
-                            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                                public void run() {
-                                    createProject(project, contentRoot);
-                                }
-                            });
-                        }
-                    });
+                  createProject(project, contentRoot);
                 }
-            });
+              });
+            }
+          });
         }
+      });
     }
+  }
 
-    private void createProject(Project project, VirtualFile contentRoot) {
+  private void createProject(Project project, VirtualFile contentRoot) {
 
-        switch (PROJECT_TYPE) {
-            case APPLICATION:
-                createKernelFiles(project, contentRoot);
-                createProjectFiles(project, contentRoot);
+    switch (myProjectType) {
+      case APPLICATION:
+        createKernelFiles(project, contentRoot);
+        createProjectFiles(project, contentRoot);
 
-            case BASIC:
-                createProjectFiles(project, contentRoot);
+      case BASIC:
+        createProjectFiles(project, contentRoot);
 
-            default:
-
-        }
-    }
-
-    private void createKernelFiles(Project project, VirtualFile contentRoot) {
-        try {
-            final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
-            MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT, "init");
-        }
-
-        catch (IOException ignored) {
-        }
-        catch (Exception ignored) {
-        }
-    }
-
-    private void createProjectFiles(Project project, VirtualFile contentRoot) {
-        //Create a .m and .nb file with the project's name
-        try {
-            MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACKAGE, PROJECT_NAME);
-            MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK, PROJECT_NAME);
-        }
-
-        catch (Exception ignored) {
-
-        }
-    }
-
-    @Nullable
-    @Override
-    public ModuleWizardStep modifySettingsStep(final SettingsStep settingsStep) {
-       return new MathematicaModifiedSettingsStep(this, settingsStep);
-    }
-
-    public static class Basic extends MathematicaModuleBuilder {
-        public Basic() {
-            super(ProjectType.BASIC);
-        }
-
-        @Override
-        public String getBuilderId() {
-            return "mathematica.basic";
-        }
-
-        @Override
-        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                    ModulesProvider modulesProvider) {
-            return ModuleWizardStep.EMPTY_ARRAY;
-        }
+      default:
 
     }
+  }
 
-    public static class Application extends MathematicaModuleBuilder {
-        public Application() {
-            super(ProjectType.APPLICATION);
-        }
+  private void createKernelFiles(Project project, VirtualFile contentRoot) {
+    try {
+      final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
+      MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT, "init");
+    } catch (IOException ignored) {
+    } catch (Exception ignored) {
+    }
+  }
 
-        @Override
-        public String getBuilderId() {
-            return "mathematica.application";
-        }
-
-        @Override
-        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                    ModulesProvider modulesProvider) {
-            return ModuleWizardStep.EMPTY_ARRAY;
-        }
+  private void createProjectFiles(Project project, VirtualFile contentRoot) {
+    //Create a .m and .nb file with the project's name
+    try {
+      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACKAGE, myProjectName);
+      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK, myProjectName);
+    } catch (Exception ignored) {
 
     }
+  }
 
-    public static class Test extends MathematicaModuleBuilder {
-        public Test() {
-            super(ProjectType.TEST);
-        }
+  @Nullable
+  @Override
+  public ModuleWizardStep modifySettingsStep(final SettingsStep settingsStep) {
+    return new MathematicaModifiedSettingsStep(this, settingsStep);
+  }
 
-        @Override
-        public String getBuilderId() {
-            return "mathematica.test";
-        }
-
-        @Override
-        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                    ModulesProvider modulesProvider) {
-            return ModuleWizardStep.EMPTY_ARRAY;
-        }
-
-    }
-
-    public static class Documentation extends MathematicaModuleBuilder {
-        public Documentation() {
-            super(ProjectType.DOCUMENTATION);
-        }
-
-        @Override
-        public String getBuilderId() {
-            return "mathematica.documentation";
-        }
-
-        @Override
-        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                    ModulesProvider modulesProvider) {
-            return ModuleWizardStep.EMPTY_ARRAY;
-        }
-
-    }
-
-    public static class Empty extends MathematicaModuleBuilder {
-        public Empty() {
-            super(ProjectType.EMPTY);
-        }
-
-        @Override
-        public String getBuilderId() {
-            return "mathematica.empty";
-        }
-
-        @Override
-        public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                    ModulesProvider modulesProvider) {
-            return ModuleWizardStep.EMPTY_ARRAY;
-        }
-
+  public static class Basic extends MathematicaModuleBuilder {
+    public Basic() {
+      super(ProjectType.BASIC);
     }
 
     @Override
-    public Icon getBigIcon() {
-        return MathematicaIcons.FILE_ICON;
+    public String getBuilderId() {
+      return "mathematica.basic";
     }
 
     @Override
-    public Icon getNodeIcon() {
-        return MathematicaIcons.FILE_ICON;
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                ModulesProvider modulesProvider) {
+      return ModuleWizardStep.EMPTY_ARRAY;
+    }
+
+  }
+
+  public static class Application extends MathematicaModuleBuilder {
+    public Application() {
+      super(ProjectType.APPLICATION);
     }
 
     @Override
-    public String getGroupName() {
-        return MathematicaProjectTemplatesFactory.MATHEMATICA;
+    public String getBuilderId() {
+      return "mathematica.application";
     }
 
     @Override
-    public ModuleType getModuleType() {
-        return MathematicaModuleType.getInstance();
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                ModulesProvider modulesProvider) {
+      return ModuleWizardStep.EMPTY_ARRAY;
     }
+
+  }
+
+  public static class Test extends MathematicaModuleBuilder {
+    public Test() {
+      super(ProjectType.TEST);
+    }
+
+    @Override
+    public String getBuilderId() {
+      return "mathematica.test";
+    }
+
+    @Override
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                ModulesProvider modulesProvider) {
+      return ModuleWizardStep.EMPTY_ARRAY;
+    }
+
+  }
+
+  public static class Documentation extends MathematicaModuleBuilder {
+    public Documentation() {
+      super(ProjectType.DOCUMENTATION);
+    }
+
+    @Override
+    public String getBuilderId() {
+      return "mathematica.documentation";
+    }
+
+    @Override
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                ModulesProvider modulesProvider) {
+      return ModuleWizardStep.EMPTY_ARRAY;
+    }
+
+  }
+
+  public static class Empty extends MathematicaModuleBuilder {
+    public Empty() {
+      super(ProjectType.EMPTY);
+    }
+
+    @Override
+    public String getBuilderId() {
+      return "mathematica.empty";
+    }
+
+    @Override
+    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
+                                                ModulesProvider modulesProvider) {
+      return ModuleWizardStep.EMPTY_ARRAY;
+    }
+
+  }
+
+  @Override
+  public Icon getBigIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
+
+  @Override
+  public Icon getNodeIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
+
+  @Override
+  public String getGroupName() {
+    return MathematicaProjectTemplatesFactory.MATHEMATICA;
+  }
+
+  @Override
+  public ModuleType getModuleType() {
+    return MathematicaModuleType.getInstance();
+  }
 }

@@ -34,24 +34,24 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class PostfixOperatorParselet implements InfixParselet {
 
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public PostfixOperatorParselet(int precedence) {
-        this.m_precedence = precedence;
-    }
+  public PostfixOperatorParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-        IElementType token = parser.getTokenType();
-        IElementType psiElement = ParseletProvider.getInfixPsiElement(this);
-        PsiBuilder.Marker postfixMarker = left.getMark().precede();
-        parser.advanceLexer();
-        postfixMarker.done(psiElement);
-        return MathematicaParser.result(postfixMarker, token, true);
-    }
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    IElementType token = parser.getTokenType();
+    IElementType psiElement = ParseletProvider.getInfixPsiElement(this);
+    PsiBuilder.Marker postfixMarker = left.getMark().precede();
+    parser.advanceLexer();
+    postfixMarker.done(psiElement);
+    return MathematicaParser.result(postfixMarker, token, true);
+  }
 
-    @Override
-    public int getPrecedence() {
-        return m_precedence;
-    }
+  @Override
+  public int getMyPrecedence() {
+    return myPrecedence;
+  }
 }

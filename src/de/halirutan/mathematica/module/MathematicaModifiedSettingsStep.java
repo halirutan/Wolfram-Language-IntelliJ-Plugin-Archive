@@ -34,27 +34,27 @@ import java.util.Collections;
  * @author rsmenon (5/13/13)
  */
 public class MathematicaModifiedSettingsStep extends SdkSettingsStep {
-    protected final MathematicaModuleBuilder MODULE_BUILDER;
+  protected final MathematicaModuleBuilder myModuleBuilder;
 
-    MathematicaModifiedSettingsStep(@NotNull final MathematicaModuleBuilder builder, @NotNull SettingsStep settingsStep) {
-        super(settingsStep, builder, new Condition<SdkTypeId>() {
-            @Override
-            public boolean value(SdkTypeId sdkType) {
-                return builder.isSuitableSdkType(sdkType);
-            }
-        });
-        MODULE_BUILDER = builder;
+  MathematicaModifiedSettingsStep(@NotNull final MathematicaModuleBuilder builder, @NotNull SettingsStep settingsStep) {
+    super(settingsStep, builder, new Condition<SdkTypeId>() {
+      @Override
+      public boolean value(SdkTypeId sdkType) {
+        return builder.isSuitableSdkType(sdkType);
+      }
+    });
+    myModuleBuilder = builder;
+  }
+
+  @Override
+  public void updateDataModel() {
+    super.updateDataModel();
+    final String path = myModuleBuilder.getContentEntryPath();
+
+    if (path != null) {
+      //don't create an src file
+      myModuleBuilder.setSourcePaths(Collections.singletonList(Pair.create(path, "")));
     }
-
-    @Override
-    public void updateDataModel() {
-        super.updateDataModel();
-        final String path = MODULE_BUILDER.getContentEntryPath();
-
-        if (path != null) {
-            //don't create an src file
-            MODULE_BUILDER.setSourcePaths(Collections.singletonList(Pair.create(path, "")));
-        }
-    }
+  }
 
 }

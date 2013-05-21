@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class UpSetDelayedImpl extends OperatorNameProvider {
-    public UpSetDelayedImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public UpSetDelayedImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

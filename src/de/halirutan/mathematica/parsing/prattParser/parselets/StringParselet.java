@@ -32,37 +32,37 @@ import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
  * @author patrick (3/27/13)
  */
 public class StringParselet implements PrefixParselet {
-    private final int myPrecedence;
+  private final int myPrecedence;
 
-    public StringParselet(int precedence) {
-        myPrecedence = precedence;
-    }
+  public StringParselet(int precedence) {
+    myPrecedence = precedence;
+  }
 
-    /**
-     * Tries to parse a string consisting of beginning ", string content and final ".
-     *
-     * @param parser The main parser object.
-     * @return Information about the success of the parsing.
-     */
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError{
-        PsiBuilder.Marker stringMark = parser.mark();
-        boolean parsedQ = true;
-        parser.advanceLexer();
-        while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL)) {
-            parser.advanceLexer();
-        }
-        if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {
-            parser.advanceLexer();
-        } else {
-            parser.error("\" expected");
-            parsedQ = false;
-        }
-        stringMark.done(MathematicaElementTypes.STRING_EXPRESSION);
-        return MathematicaParser.result(stringMark, MathematicaElementTypes.STRING_EXPRESSION, parsedQ);
+  /**
+   * Tries to parse a string consisting of beginning ", string content and final ".
+   *
+   * @param parser The main parser object.
+   * @return Information about the success of the parsing.
+   */
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker stringMark = parser.mark();
+    boolean parsedQ = true;
+    parser.advanceLexer();
+    while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL)) {
+      parser.advanceLexer();
     }
+    if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {
+      parser.advanceLexer();
+    } else {
+      parser.error("\" expected");
+      parsedQ = false;
+    }
+    stringMark.done(MathematicaElementTypes.STRING_EXPRESSION);
+    return MathematicaParser.result(stringMark, MathematicaElementTypes.STRING_EXPRESSION, parsedQ);
+  }
 
-    public int getPrecedence() {
-        return myPrecedence;
-    }
+  public int getPrecedence() {
+    return myPrecedence;
+  }
 }

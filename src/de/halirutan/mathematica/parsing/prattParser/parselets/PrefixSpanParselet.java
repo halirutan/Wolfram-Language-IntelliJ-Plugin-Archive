@@ -30,67 +30,67 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SPAN_EXPR
 import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getPrefixParselet;
 
 /**
- * Parses <code>Span</code> constructs like <code>list[[;;]]</code> or <code>list[[;;i]]</code>
- * where <code>;;</code> is a prefix operator.
+ * Parses <code>Span</code> constructs like <code>list[[;;]]</code> or <code>list[[;;i]]</code> where <code>;;</code> is
+ * a prefix operator.
  *
  * @author patrick (3/27/13)
  */
 public class PrefixSpanParselet implements PrefixParselet {
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public PrefixSpanParselet(int precedence) {
-        this.m_precedence = precedence;
+  public PrefixSpanParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    final PsiBuilder.Marker spanMark = parser.mark();
+    boolean skipped = false;
+
+    if (parser.matchesToken(SPAN)) {
+      parser.advanceLexer();
+    } else {
+      spanMark.drop();
+      throw new CriticalParserError("SPAN token ';;' expected");
     }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        final PsiBuilder.Marker spanMark = parser.mark();
-        boolean skipped = false;
-
-        if (parser.matchesToken(SPAN)) {
-            parser.advanceLexer();
-        } else {
-            spanMark.drop();
-            throw new CriticalParserError("SPAN token ';;' expected");
-        }
-
-        // if we meet a second ;; right after the first ;; we just skip it
-        if (parser.matchesToken(SPAN)) {
-            skipped = true;
-            parser.advanceLexer();
-        }
-
-        PrefixParselet nextPrefix = getPrefixParselet(parser.getTokenType());
-        if (nextPrefix == null) {
-            if (skipped) {
-                spanMark.error("Expression expected after  \";; ;;\"");
-            } else {
-                spanMark.done(SPAN_EXPRESSION);
-            }
-            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, !skipped);
-        }
-
-        MathematicaParser.Result expr1 = parser.parseExpression(m_precedence);
-
-        // if we had ;;;;expr1
-        if (skipped) {
-            spanMark.done(SPAN_EXPRESSION);
-            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
-        }
-
-        if (parser.matchesToken(SPAN)) {
-            parser.advanceLexer();
-            MathematicaParser.Result expr2 = parser.parseExpression(m_precedence);
-            if (expr2.isParsed()) {
-                spanMark.done(SPAN_EXPRESSION);
-            } else
-                spanMark.error("Expression expected after \";;expr1;;\"");
-            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed() && expr2.isParsed());
-        } else {
-            // we have the form expr0;;expr1
-            spanMark.done(SPAN_EXPRESSION);
-            return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
-        }
+    // if we meet a second ;; right after the first ;; we just skip it
+    if (parser.matchesToken(SPAN)) {
+      skipped = true;
+      parser.advanceLexer();
     }
+
+    PrefixParselet nextPrefix = getPrefixParselet(parser.getTokenType());
+    if (nextPrefix == null) {
+      if (skipped) {
+        spanMark.error("Expression expected after  \";; ;;\"");
+      } else {
+        spanMark.done(SPAN_EXPRESSION);
+      }
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, !skipped);
+    }
+
+    MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
+
+    // if we had ;;;;expr1
+    if (skipped) {
+      spanMark.done(SPAN_EXPRESSION);
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
+    }
+
+    if (parser.matchesToken(SPAN)) {
+      parser.advanceLexer();
+      MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
+      if (expr2.isParsed()) {
+        spanMark.done(SPAN_EXPRESSION);
+      } else
+        spanMark.error("Expression expected after \";;expr1;;\"");
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed() && expr2.isParsed());
+    } else {
+      // we have the form expr0;;expr1
+      spanMark.done(SPAN_EXPRESSION);
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
+    }
+  }
 
 }

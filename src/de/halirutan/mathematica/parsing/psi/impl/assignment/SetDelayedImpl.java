@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class SetDelayedImpl extends OperatorNameProvider {
-    public SetDelayedImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public SetDelayedImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

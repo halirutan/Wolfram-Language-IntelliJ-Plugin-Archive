@@ -21,53 +21,44 @@
 
 package de.halirutan.mathematica.actions;
 
-import com.intellij.ide.actions.CreateElementActionBase;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.internal.statistic.UsageTrigger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.ex.FileTypeChooser;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.MathematicaIcons;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (4/8/13)
  */
-public class CreateMathematicaFile extends CreateFileFromTemplateAction implements DumbAware{
-    private static final String NEW_M_FILE = "New Mathematica file";
+public class CreateMathematicaFile extends CreateFileFromTemplateAction implements DumbAware {
+  private static final String NEW_M_FILE = "New Mathematica file";
 
-    public CreateMathematicaFile() {
-        super(NEW_M_FILE, "Creates a new .m Mathematica package file", MathematicaIcons.FILE_ICON);
-    }
+  public CreateMathematicaFile() {
+    super(NEW_M_FILE, "Creates a new .m Mathematica package file", MathematicaIcons.FILE_ICON);
+  }
 
-    @Override
-    protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-        builder.setTitle(NEW_M_FILE).addKind("Notebook", MathematicaIcons.FILE_ICON, "Notebook");
-        builder.setTitle(NEW_M_FILE).addKind("Package", MathematicaIcons.FILE_ICON, "Package");
-        builder.setTitle(NEW_M_FILE).addKind("Plain", MathematicaIcons.FILE_ICON, "Plain");
-        builder.setTitle(NEW_M_FILE).addKind("Test", MathematicaIcons.FILE_ICON, "Test");
-    }
+  @Override
+  protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
+    builder.setTitle(NEW_M_FILE).addKind("Notebook", MathematicaIcons.FILE_ICON, "Notebook");
+    builder.setTitle(NEW_M_FILE).addKind("Package", MathematicaIcons.FILE_ICON, "Package");
+    builder.setTitle(NEW_M_FILE).addKind("Plain", MathematicaIcons.FILE_ICON, "Plain");
+    builder.setTitle(NEW_M_FILE).addKind("Test", MathematicaIcons.FILE_ICON, "Test");
+  }
 
-    @Override
-    protected String getActionName(PsiDirectory directory, String newName, String templateName) {
-        return NEW_M_FILE;
-    }
+  @Override
+  protected String getActionName(PsiDirectory directory, String newName, String templateName) {
+    return NEW_M_FILE;
+  }
 
-    @Override
-    public int hashCode() {
-        return 0;
-    }
+  @Override
+  public int hashCode() {
+    return 0;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof CreateMathematicaFile;
-    }
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof CreateMathematicaFile;
+  }
 
 }

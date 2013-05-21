@@ -33,20 +33,20 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  * @author patrick (3/27/13)
  */
 public class PrefixOperatorParselet implements PrefixParselet {
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    public PrefixOperatorParselet(int precedence) {
-        this.m_precedence = precedence;
-    }
+  public PrefixOperatorParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        PsiBuilder.Marker mark = parser.mark();
-        parser.advanceLexer();
-        IElementType token = ParseletProvider.getPrefixPsiElement(this);
-        MathematicaParser.Result result = parser.parseExpression(m_precedence);
-        mark.done(token);
-        return MathematicaParser.result(mark, token, result.isParsed());
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker mark = parser.mark();
+    parser.advanceLexer();
+    IElementType token = ParseletProvider.getPrefixPsiElement(this);
+    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    mark.done(token);
+    return MathematicaParser.result(mark, token, result.isParsed());
 
-    }
+  }
 }

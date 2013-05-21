@@ -35,43 +35,43 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class GroupParselet implements PrefixParselet {
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        // should never happen
-        if (!parser.getTokenType().equals(MathematicaElementTypes.LEFT_PAR)) {
-            return MathematicaParser.notParsed();
-        }
-        IElementType token = ParseletProvider.getPrefixPsiElement(this);
-        PsiBuilder.Marker groupMark = parser.mark();
-        parser.advanceLexer();
-
-        if (parser.eof()) {
-            parser.error("More input expected");
-            groupMark.drop();
-            return MathematicaParser.notParsed();
-        }
-
-        MathematicaParser.Result result = parser.parseExpression();
-        if (parser.matchesToken(MathematicaElementTypes.RIGHT_PAR)) {
-            parser.advanceLexer();
-            groupMark.done(token);
-
-            // if we find a closing ) we return the group as parsed successful, no matter whether
-            // the containing expression was parsed. Errors in the expression are marked there anyway.
-            result = MathematicaParser.result(groupMark, token, true);
-        } else {
-            // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
-            // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
-            // broken.
-            if (result.isParsed()) {
-                parser.error("')' expected");
-                groupMark.done(token);
-                result = MathematicaParser.result(groupMark, token, false);
-            } else {
-                result = MathematicaParser.notParsed();
-                groupMark.drop();
-            }
-        }
-        return result;
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    // should never happen
+    if (!parser.getTokenType().equals(MathematicaElementTypes.LEFT_PAR)) {
+      return MathematicaParser.notParsed();
     }
+    IElementType token = ParseletProvider.getPrefixPsiElement(this);
+    PsiBuilder.Marker groupMark = parser.mark();
+    parser.advanceLexer();
+
+    if (parser.eof()) {
+      parser.error("More input expected");
+      groupMark.drop();
+      return MathematicaParser.notParsed();
+    }
+
+    MathematicaParser.Result result = parser.parseExpression();
+    if (parser.matchesToken(MathematicaElementTypes.RIGHT_PAR)) {
+      parser.advanceLexer();
+      groupMark.done(token);
+
+      // if we find a closing ) we return the group as parsed successful, no matter whether
+      // the containing expression was parsed. Errors in the expression are marked there anyway.
+      result = MathematicaParser.result(groupMark, token, true);
+    } else {
+      // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
+      // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
+      // broken.
+      if (result.isParsed()) {
+        parser.error("')' expected");
+        groupMark.done(token);
+        result = MathematicaParser.result(groupMark, token, false);
+      } else {
+        result = MathematicaParser.notParsed();
+        groupMark.drop();
+      }
+    }
+    return result;
+  }
 }

@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/13/13)
  */
-public class FactorialImpl extends ExpressionImpl implements Factorial{
-    public FactorialImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+public class FactorialImpl extends ExpressionImpl implements Factorial {
+  public FactorialImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

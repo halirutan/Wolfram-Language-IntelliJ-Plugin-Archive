@@ -26,19 +26,15 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created with IntelliJ IDEA.
- * User: patrick
- * Date: 3/27/13
- * Time: 11:25 PM
- * Purpose:
+ * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
 public class FunctionCallImpl extends ExpressionImpl {
-    public FunctionCallImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public FunctionCallImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public PsiReference getReference() {
-        return super.getReference();
-    }
+  @Override
+  public PsiReference getReference() {
+    return super.getReference();
+  }
 }

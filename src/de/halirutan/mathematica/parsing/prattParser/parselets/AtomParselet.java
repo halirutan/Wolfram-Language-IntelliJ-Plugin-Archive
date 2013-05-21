@@ -32,22 +32,22 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class AtomParselet implements PrefixParselet {
 
-    private final int m_precedence;
+  private final int myPrecedence;
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError{
-        IElementType token = parser.getTokenType();
-        PsiBuilder.Marker symbolMark = parser.mark();
-        parser.advanceLexer();
-        symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
-        return MathematicaParser.result(symbolMark, token, true);
-    }
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    IElementType token = parser.getTokenType();
+    PsiBuilder.Marker symbolMark = parser.mark();
+    parser.advanceLexer();
+    symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
+    return MathematicaParser.result(symbolMark, token, true);
+  }
 
-    public AtomParselet(int precedence) {
-        this.m_precedence = precedence;
-    }
+  public AtomParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
 
-    public int getPrecedence() {
-        return m_precedence;
-    }
+  public int getPrecedence() {
+    return myPrecedence;
+  }
 }

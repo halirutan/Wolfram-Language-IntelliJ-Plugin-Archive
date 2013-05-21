@@ -19,17 +19,34 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.assignment;
+package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (5/21/13)
  */
-public class DecrementImpl extends OperatorNameProvider {
-  public DecrementImpl(@NotNull ASTNode node) {
-    super(node);
+public class MathematicaPsiUtililities {
+
+  public static String getSymbolName(Symbol element) {
+    ASTNode symbolNode = element.getNode().getFirstChildNode();
+    if (symbolNode != null) {
+      return symbolNode.getText();
+    }
+    return null;
   }
+
+  //TODO: Node types are wrong.
+  public static PsiElement setSymbolName(Symbol element, String newName) {
+    ASTNode symbolNode = element.getNode();
+    if (symbolNode != null) {
+      Symbol newSymbol = MathematicaSymbolFactory.createSymbol(element.getProject(), newName);
+      ASTNode newSymbolNode = newSymbol.getNode();
+      element.getNode().replaceChild(symbolNode, newSymbolNode);
+    }
+    return element;
+  }
+
 }

@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class StringImpl extends OperatorNameProvider implements MString {
-    public StringImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public StringImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

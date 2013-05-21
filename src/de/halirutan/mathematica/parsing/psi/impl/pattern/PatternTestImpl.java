@@ -30,18 +30,18 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/14/13)
  */
 public class PatternTestImpl extends OperatorNameProvider {
-    public PatternTestImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public PatternTestImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public boolean isOperatorSign(PsiElement operatorSignElement) {
-        return operatorSignElement.toString().contains("QUESTION_MARK");
-    }
+  @Override
+  public boolean isOperatorSign(PsiElement operatorSignElement) {
+    return operatorSignElement.toString().contains("QUESTION_MARK");
+  }
 
-    @Override
-    public String getOperatorName() {
-        return "PatternTest";
-    }
+  @Override
+  public String getOperatorName() {
+    return "PatternTest";
+  }
 
 }

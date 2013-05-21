@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @author patrick (4/13/13)
  */
 public class TimesImpl extends ExpressionImpl implements Times {
-    public TimesImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public TimesImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

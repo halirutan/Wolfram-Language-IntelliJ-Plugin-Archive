@@ -37,51 +37,51 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MathematicaBracketInsertHandler implements InsertHandler<LookupElement> {
 
-    public static final MathematicaBracketInsertHandler INSTANCE = new MathematicaBracketInsertHandler();
-    private static final char OPEN_BRACKET = '[';
-    private static final char CLOSING_BRACKET = ']';
+  public static final MathematicaBracketInsertHandler INSTANCE = new MathematicaBracketInsertHandler();
+  private static final char OPEN_BRACKET = '[';
+  private static final char CLOSING_BRACKET = ']';
 
-    protected MathematicaBracketInsertHandler() {
-    }
+  protected MathematicaBracketInsertHandler() {
+  }
 
-    public static MathematicaBracketInsertHandler getInstance() {
-        return INSTANCE;
-    }
+  public static MathematicaBracketInsertHandler getInstance() {
+    return INSTANCE;
+  }
 
-    private static boolean isToken(@Nullable PsiElement element, String text) {
-        return (element != null) && text.equals(element.getText());
-    }
+  private static boolean isToken(@Nullable PsiElement element, String text) {
+    return (element != null) && text.equals(element.getText());
+  }
 
-    @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-        Editor editor = context.getEditor();
-        Document document = editor.getDocument();
-        context.commitDocument();
+  @Override
+  public void handleInsert(InsertionContext context, LookupElement item) {
+    Editor editor = context.getEditor();
+    Document document = editor.getDocument();
+    context.commitDocument();
 
-        char completionChar = context.getCompletionChar();
-        context.setAddCompletionChar(false);
+    char completionChar = context.getCompletionChar();
+    context.setAddCompletionChar(false);
 
 //        if (completionChar == Lookup.NORMAL_SELECT_CHAR) {
 ////            editor.getCaretModel().moveToOffset(context.getTailOffset());
 //        }
 
-        if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
-            SymbolInformationProvider.SymbolInformation symbol = SymbolInformationProvider.getSymbolNames().get(item.getLookupString());
-            boolean insertBrackets = (symbol != null) && symbol.function;
-            if (insertBrackets) {
-                document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));
-                editor.getCaretModel().moveToOffset(context.getTailOffset());
-                document.insertString(context.getTailOffset(), Character.toString(CLOSING_BRACKET));
-            } else {
-                document.insertString(context.getTailOffset(), " ");
-                editor.getCaretModel().moveToOffset(context.getTailOffset());
-            }
+    if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
+      SymbolInformationProvider.SymbolInformation symbol = SymbolInformationProvider.getSymbolNames().get(item.getLookupString());
+      boolean insertBrackets = (symbol != null) && symbol.function;
+      if (insertBrackets) {
+        document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));
+        editor.getCaretModel().moveToOffset(context.getTailOffset());
+        document.insertString(context.getTailOffset(), Character.toString(CLOSING_BRACKET));
+      } else {
+        document.insertString(context.getTailOffset(), " ");
+        editor.getCaretModel().moveToOffset(context.getTailOffset());
+      }
 
-        }
-
-        if (completionChar == ' ') {
-            context.setAddCompletionChar(true);
-        }
     }
+
+    if (completionChar == ' ') {
+      context.setAddCompletionChar(true);
+    }
+  }
 
 }
