@@ -22,13 +22,18 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class FunctionCallImpl extends ExpressionImpl {
+public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -36,5 +41,17 @@ public class FunctionCallImpl extends ExpressionImpl {
   @Override
   public PsiReference getReference() {
     return super.getReference();
+  }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    final PsiElement head = getFirstChild();
+    if (head instanceof Symbol) {
+      final String symbolName = ((Symbol) head).getSymbolName();
+      if (symbolName.equals("Module") || symbolName.equals("Block") || symbolName.equals("With")) {
+        return processor.execute(this, state);
+      }
+    }
+    return true;
   }
 }

@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.lists;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.api.lists.Part;
 import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PartImpl extends ExpressionImpl {
+public class PartImpl extends ExpressionImpl implements Part {
   public PartImpl(@NotNull ASTNode node) {
     super(node);
   }

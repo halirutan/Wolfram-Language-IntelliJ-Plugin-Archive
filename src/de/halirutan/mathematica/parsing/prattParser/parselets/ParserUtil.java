@@ -79,13 +79,12 @@ public final class ParserUtil {
       // Note, when the comma is directly followed by the closing ] (or }) then we mark it with an error since
       // something like f[expr1,expr2,] is not considered to be a bug.
       if (parser.matchesToken(MathematicaElementTypes.COMMA)) {
-        parser.advanceLexer();
-        if (parser.matchesToken(rightDel)) {
-          parser.advanceLexer();
+        if (parser.matchesToken(MathematicaElementTypes.COMMA, rightDel)) {
           parser.error("unexpected ','");
-          // now advance over the closing bracket
+          parser.advanceLexer();
           break;
         }
+        parser.advanceLexer();
       }
 
       if (parser.matchesToken(rightDel)) {

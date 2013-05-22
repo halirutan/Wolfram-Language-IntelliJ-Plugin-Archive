@@ -21,8 +21,11 @@
 
 package de.halirutan.mathematica.parsing.psi.api.assignment;
 
+import com.intellij.psi.PsiElement;
+
 /**
  * @author patrick (4/14/13)
  */
-public interface SetDelayed {
+public interface SetDelayed extends PsiElement {
+
 }

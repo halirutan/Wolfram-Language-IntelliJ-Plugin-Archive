@@ -19,30 +19,53 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.assignment;
+package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.intellij.lang.ASTNode;
+import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.scope.BaseScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (5/22/13)
  */
-public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
-  public SetDelayedImpl(@NotNull ASTNode node) {
-    super(node);
+public class SymbolVariantProcessor extends BaseScopeProcessor {
+
+  private final List<Symbol> mySymbols = Lists.newLinkedList();
+  private final Symbol myStartElement;
+
+  public SymbolVariantProcessor(Symbol myStartElement) {
+    super();
+    this.myStartElement = myStartElement;
   }
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return processor.execute(this, state);
+  public boolean execute(@NotNull PsiElement element, ResolveState state) {
+    if (element instanceof Set || element instanceof SetDelayed) {
+      Symbol assignee = MathematicaPsiUtililities.getAssignmentSymbol(element);
+      if (assignee != null) {
+        mySymbols.add(assignee);
+      }
+    }
+
+    if (element instanceof FunctionCall) {
+      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
+      if (declaredSymbols.size() > 0) {
+        mySymbols.addAll(declaredSymbols);
+      }
+    }
+    return true;
+  }
+
+  public List<Symbol> getSymbols() {
+    mySymbols.remove(myStartElement);
+    return mySymbols;
   }
 }

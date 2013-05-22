@@ -76,7 +76,7 @@ public class SymbolInformationProvider {
       }
 
       if (parts.length > 4) {
-        options = parts[4].replace("{", "").replace("}", "").trim().split(" ");
+        options = parts[4].replace("{", "").replace("}", "").trim().split(", ");
       }
 
       if (!pattern.equals("")) {

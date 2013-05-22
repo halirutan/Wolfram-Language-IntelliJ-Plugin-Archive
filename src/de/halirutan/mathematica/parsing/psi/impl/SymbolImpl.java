@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -79,6 +80,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public PsiReference getReference() {
-    return new SymbolPsiReference(this, getTextRange());
+    return new SymbolPsiReference(this, TextRange.from(0, getFirstChild().getTextLength()));
   }
 }
