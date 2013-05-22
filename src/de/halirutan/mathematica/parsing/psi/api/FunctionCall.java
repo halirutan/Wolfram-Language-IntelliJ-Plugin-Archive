@@ -19,16 +19,13 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.api;
 
-import com.intellij.lang.ASTNode;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiElement;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
+ * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
-public class ListImpl extends ExpressionImpl {
-  public ListImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+public interface FunctionCall extends PsiElement {
+
 }

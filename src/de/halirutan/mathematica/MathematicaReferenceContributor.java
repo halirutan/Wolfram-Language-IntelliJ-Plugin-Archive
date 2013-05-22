@@ -24,7 +24,9 @@ package de.halirutan.mathematica;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,12 +36,13 @@ import org.jetbrains.annotations.NotNull;
 public class MathematicaReferenceContributor extends PsiReferenceContributor {
   @Override
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
+    System.out.println(registrar.toString());
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(SymbolImpl.class),
         new PsiReferenceProvider() {
           @NotNull
           @Override
           public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-            Symbol symbol = (Symbol) element;
+            SymbolImpl symbol = (SymbolImpl) element;
             String symbolName = symbol.getSymbolName();
             if (symbolName != null) {
               return new PsiReference[]{new SymbolPsiReference(symbol, symbol.getTextRange())};

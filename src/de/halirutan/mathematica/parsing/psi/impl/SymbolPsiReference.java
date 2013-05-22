@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
+import com.google.common.collect.Lists;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
@@ -141,13 +142,20 @@ public class SymbolPsiReference extends PsiReferenceBase<Symbol> implements PsiP
   @Override
   public Object[] getVariants() {
     final PsiFile containingFile = myElement.getContainingFile();
-    final Symbol[] allSymbols = PsiTreeUtil.getChildrenOfType(containingFile, Symbol.class);
-    List<LookupElement> variants = new ArrayList<LookupElement>();
-    for (Symbol currentSymbol : allSymbols) {
+
+    List<Symbol> variants = Lists.newArrayList();
+
+    final SymbolVariantProcessor processor = new SymbolVariantProcessor(getElement());
+    PsiTreeUtil.treeWalkUp(processor, getElement(), containingFile, ResolveState.initial());
+
+    variants.addAll(processor.getSymbols());
+
+    List<LookupElement> lookupElements = new ArrayList<LookupElement>();
+    for (Symbol currentSymbol : variants) {
       if (!NAMES.contains(currentSymbol.getSymbolName())) {
-        variants.add(LookupElementBuilder.create(currentSymbol));
+        lookupElements.add(LookupElementBuilder.create(currentSymbol));
       }
     }
-    return variants.toArray();
+    return lookupElements.toArray();
   }
 }

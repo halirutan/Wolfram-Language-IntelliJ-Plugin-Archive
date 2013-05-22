@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.lists;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.api.lists.Span;
 import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class SpanImpl extends ExpressionImpl {
+public class SpanImpl extends ExpressionImpl implements Span {
   public SpanImpl(@NotNull ASTNode node) {
     super(node);
   }

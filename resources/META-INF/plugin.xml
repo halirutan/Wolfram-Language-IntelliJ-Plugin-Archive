@@ -26,8 +26,11 @@
         <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaCommenter"/>
         <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaBraceMatcher"/>
         <quoteHandler fileType="Mathematica" className="de.halirutan.mathematica.codeInsight.MathematicaQuoteHandler"/>
-        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionContributor"/>
+        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaBuiltInFunctionCompletionContributor"/>
+        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaBuiltInOptionCompletionContributor"/>
+        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaLocalizedSymbolCompletionContributor"/>
         <completion.confidence language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
+
         <typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler" id="MathematicaBinary"/>
         <lang.syntaxHighlighterFactory key="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighterFactory"/>
         <lang.documentationProvider language="Mathematica" implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>

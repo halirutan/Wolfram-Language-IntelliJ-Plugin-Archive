@@ -37,6 +37,7 @@ import de.halirutan.mathematica.parsing.psi.impl.files.GetImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutAppendImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutImpl;
 import de.halirutan.mathematica.parsing.psi.impl.function.*;
+import de.halirutan.mathematica.parsing.psi.impl.lists.ListImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.PartImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.SpanImpl;
 import de.halirutan.mathematica.parsing.psi.impl.logical.AndImpl;

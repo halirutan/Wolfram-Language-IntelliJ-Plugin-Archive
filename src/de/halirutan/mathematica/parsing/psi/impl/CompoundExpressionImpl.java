@@ -22,6 +22,10 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/1/13)
@@ -29,5 +33,17 @@ import com.intellij.lang.ASTNode;
 public class CompoundExpressionImpl extends ExpressionImpl {
   public CompoundExpressionImpl(ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    PsiElement children[] = getChildren();
+    for (PsiElement child : children) {
+      if (child.equals(lastParent)) {
+        break;
+      }
+      if( !processor.execute(child, state) ) return false;
+    }
+    return true;
   }
 }
