@@ -29,7 +29,10 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 /**
  * @author patrick (5/21/13)
@@ -55,29 +58,72 @@ public class MathematicaPsiUtililities {
     return element;
   }
 
-
   /**
-   * Extracts the assignment symbol from assignment operations, g[x_]:=x^2 should return the x
-   * a = 2 returns a
+   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the x and <code>a
+   * = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
+   * variables.
+   *
    * @param element PsiElement of the assignment
-   * @return Symbol which is assigned
+   * @return List of symbols which are assigned.
    */
   @Nullable
-  public static Symbol getAssignmentSymbol(PsiElement element) {
+  public static java.util.List<Symbol> getAssignmentSymbols(PsiElement element) {
     final PsiElement firstChild = element.getFirstChild();
+    final java.util.List<Symbol> assignees = Lists.newArrayList();
 
     if (element instanceof SetDelayed || element instanceof Set) {
       if (firstChild instanceof Symbol) {
-        return (Symbol) firstChild;
-      } else if (firstChild instanceof FunctionCall) {
+        assignees.add((Symbol) firstChild);
+      }
+      if (firstChild instanceof FunctionCall) {
         if (firstChild.getFirstChild() instanceof Symbol) {
-          return (Symbol) firstChild.getFirstChild();
+          assignees.add((Symbol) firstChild.getFirstChild());
+        }
+      }
+      if (firstChild instanceof List) {
+        assignees.addAll(getSymbolsFromNestedList(firstChild));
+      }
+
+    }
+    return assignees;
+  }
+
+  /**
+   * Simple version to extract Symbols from a nested list up to level 2. For the following examples all symbols a,b,c,d
+   * would be extracted successfully: <ul > <li ><code>{a,b,c,d}</code></li> <li ><code>{{a,b},c,d}</code></li> <li
+   * ><code>{{a},b,{c},d}</code></li> </ul>
+   *
+   * @param listHead List to extract from
+   * @return List of extracted {@link Symbol} PsiElement's.
+   */
+  @NotNull
+  private static java.util.List<Symbol> getSymbolsFromNestedList(PsiElement listHead) {
+    java.util.List<Symbol> assignees = Lists.newArrayList();
+    PsiElement children[] = listHead.getChildren();
+
+    for (PsiElement child : children) {
+      if (child instanceof Symbol) {
+        assignees.add((Symbol) child);
+      }
+      if (child instanceof List) {
+        for (PsiElement childLevel2 : child.getChildren()) {
+          if (child instanceof Symbol) {
+            assignees.add((Symbol) child);
+          }
         }
       }
     }
-    return null;
+    return assignees;
   }
 
+  /**
+   * This function tries to extract all localized variables inside a <code>Module</code>, <code>Block</code> or <code
+   * >With</code> construct. The variables can either be just declared like in <code >Block[{a,b,c},..]</code>.
+   *
+   * @param element The {@link FunctionCall} PsiElement containing the scoping construct.
+   * @return List of localized variables. For <code >Module[{a,b:=3,c=2}</code> the list contains the PsiElements for a,
+   *         b, and c.
+   */
   public static java.util.List<Symbol> extractLocalizedVariables(PsiElement element) {
     java.util.List<Symbol> localVariables = Lists.newArrayList();
 
@@ -96,9 +142,9 @@ public class MathematicaPsiUtililities {
                 if (child instanceof Symbol) {
                   localVariables.add((Symbol) child);
                 } else {
-                  Symbol tmp = getAssignmentSymbol(child);
+                  java.util.List<Symbol> tmp = getAssignmentSymbols(child);
                   if (tmp != null) {
-                    localVariables.add(tmp);
+                    localVariables.addAll(tmp);
                   }
                 }
               }
