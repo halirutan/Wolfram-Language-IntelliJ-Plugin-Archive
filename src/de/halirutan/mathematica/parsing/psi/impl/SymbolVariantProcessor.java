@@ -49,9 +49,9 @@ public class SymbolVariantProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed) {
-      Symbol assignee = MathematicaPsiUtililities.getAssignmentSymbol(element);
+      List<Symbol> assignee = MathematicaPsiUtililities.getAssignmentSymbols(element);
       if (assignee != null) {
-        mySymbols.add(assignee);
+        mySymbols.addAll(assignee);
       }
     }
 
