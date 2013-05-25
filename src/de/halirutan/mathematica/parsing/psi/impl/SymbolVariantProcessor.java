@@ -65,6 +65,9 @@ public class SymbolVariantProcessor extends BaseScopeProcessor {
   }
 
   public List<Symbol> getSymbols() {
+
+
+
     mySymbols.remove(myStartElement);
     return mySymbols;
   }

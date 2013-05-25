@@ -40,9 +40,9 @@ public class CompoundExpressionImpl extends ExpressionImpl {
     PsiElement children[] = getChildren();
     for (PsiElement child : children) {
       if (child.equals(lastParent)) {
-        break;
+        continue;
       }
-      if( !processor.execute(child, state) ) return false;
+      if( !child.processDeclarations(processor,state,this,place)) return false;
     }
     return true;
   }

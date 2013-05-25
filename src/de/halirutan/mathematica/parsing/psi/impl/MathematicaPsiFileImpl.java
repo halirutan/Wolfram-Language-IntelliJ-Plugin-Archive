@@ -24,6 +24,9 @@ package de.halirutan.mathematica.parsing.psi.impl;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.MathematicaLanguage;
 import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
@@ -43,4 +46,19 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
   public FileType getFileType() {
     return MathematicaFileType.INSTANCE;
   }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    PsiElement children[] = getChildren();
+    for (PsiElement child : children) {
+      if (child.equals(lastParent)) {
+        continue;
+      }
+      if( !child.processDeclarations(processor,state, this, place)) return false;
+    }
+    return true;
+  }
+
+
+
 }
