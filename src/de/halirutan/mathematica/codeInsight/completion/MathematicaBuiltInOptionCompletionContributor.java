@@ -29,7 +29,9 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -40,31 +42,45 @@ public class MathematicaBuiltInOptionCompletionContributor extends CompletionCon
 
 
   public MathematicaBuiltInOptionCompletionContributor() {
-    extend(CompletionType.SMART, psiElement().withSuperParent(2, FunctionCall.class), new CompletionProvider<CompletionParameters>() {
+    extend(CompletionType.SMART, psiElement().withSuperParent(2, FunctionCall.class), new OptionCompletionProvider());
+  }
 
-      HashMap<String, SymbolInformationProvider.SymbolInformation> symbolInformation = SymbolInformationProvider.getSymbolNames();
+  private static class OptionCompletionProvider extends CompletionProvider<CompletionParameters> {
+
+    static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
+
+    static HashSet<String> ourOptionsWithSetDelayed = null;
+
+    static final String[] SET_DELAYED_OPTIONS = {
+        "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
+        "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"};
 
 
-      @Override
-      protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-        final PsiElement position = parameters.getPosition();
-        final PsiElement function = position.getParent().getParent();
-        if (function instanceof FunctionCall) {
-          String functionName = ((Symbol) function.getFirstChild()).getSymbolName();
-          if (symbolInformation.containsKey(functionName) && symbolInformation.get(functionName).function) {
-            final SymbolInformationProvider.SymbolInformation functionInformation = symbolInformation.get(functionName);
-            final String callPattern = functionInformation.callPattern;
-            final String[] options = functionInformation.options;
-            if (options != null) {
-              for (String opt : options) {
-                result.addElement(LookupElementBuilder.create(opt + " -> "));
-              }
+    @Override
+    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+
+      if (ourOptionsWithSetDelayed == null) {
+        ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(SET_DELAYED_OPTIONS));
+      }
+
+
+      final PsiElement position = parameters.getPosition();
+      final PsiElement function = position.getParent().getParent();
+      if (function instanceof FunctionCall) {
+        String functionName = ((Symbol) function.getFirstChild()).getSymbolName();
+        if (ourSymbolInformation.containsKey(functionName) && ourSymbolInformation.get(functionName).function) {
+          final SymbolInformationProvider.SymbolInformation functionInformation = ourSymbolInformation.get(functionName);
+          final String[] options = functionInformation.options;
+          if (options != null) {
+            for (String opt : options) {
+              String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
+              result.addElement(LookupElementBuilder.create(opt + ruleSymbol));
             }
           }
         }
-
-
       }
-    });
+
+
+    }
   }
 }
