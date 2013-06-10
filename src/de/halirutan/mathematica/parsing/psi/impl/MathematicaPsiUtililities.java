@@ -28,11 +28,12 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.lists.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author patrick (5/21/13)
@@ -67,9 +68,9 @@ public class MathematicaPsiUtililities {
    * @return List of symbols which are assigned.
    */
   @Nullable
-  public static java.util.List<Symbol> getAssignmentSymbols(PsiElement element) {
+  public static List<Symbol> getAssignmentSymbols(PsiElement element) {
     final PsiElement firstChild = element.getFirstChild();
-    final java.util.List<Symbol> assignees = Lists.newArrayList();
+    final List<Symbol> assignees = Lists.newArrayList();
 
     if (element instanceof SetDelayed || element instanceof Set) {
       if (firstChild instanceof Symbol) {
@@ -80,7 +81,7 @@ public class MathematicaPsiUtililities {
           assignees.add((Symbol) firstChild.getFirstChild());
         }
       }
-      if (firstChild instanceof List) {
+      if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
         assignees.addAll(getSymbolsFromNestedList(firstChild));
       }
 
@@ -97,8 +98,8 @@ public class MathematicaPsiUtililities {
    * @return List of extracted {@link Symbol} PsiElement's.
    */
   @NotNull
-  private static java.util.List<Symbol> getSymbolsFromNestedList(PsiElement listHead) {
-    java.util.List<Symbol> assignees = Lists.newArrayList();
+  private static List<Symbol> getSymbolsFromNestedList(PsiElement listHead) {
+    List<Symbol> assignees = Lists.newArrayList();
     PsiElement children[] = listHead.getChildren();
 
     for (PsiElement child : children) {
@@ -124,8 +125,8 @@ public class MathematicaPsiUtililities {
    * @return List of localized variables. For <code >Module[{a,b:=3,c=2}</code> the list contains the PsiElements for a,
    *         b, and c.
    */
-  public static java.util.List<Symbol> extractLocalizedVariables(PsiElement element) {
-    java.util.List<Symbol> localVariables = Lists.newArrayList();
+  public static List<Symbol> extractLocalizedVariables(PsiElement element) {
+    List<Symbol> localVariables = Lists.newArrayList();
 
     // Do we have a function call and is the first child a symbol like f[..]
     if (element instanceof FunctionCall && element.getFirstChild() instanceof Symbol) {
@@ -142,7 +143,7 @@ public class MathematicaPsiUtililities {
                 if (child instanceof Symbol) {
                   localVariables.add((Symbol) child);
                 } else {
-                  java.util.List<Symbol> tmp = getAssignmentSymbols(child);
+                  List<Symbol> tmp = getAssignmentSymbols(child);
                   if (tmp != null) {
                     localVariables.addAll(tmp);
                   }
@@ -155,4 +156,9 @@ public class MathematicaPsiUtililities {
     }
     return localVariables;
   }
+
+  public static List<Symbol> extractFunctionVariables(PsiElement element) {
+    return Collections.emptyList();
+  }
+
 }
