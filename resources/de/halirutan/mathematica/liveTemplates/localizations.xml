@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="localizations">
+    <template resource-bundle="messages.CodeInsightBundle" key="livetemplate.description.serr"
+              name="serr" toReformat="true" toShortenFQNames="true" value="Module[{$END$}, ]">
+    </template>
+</templateSet>
