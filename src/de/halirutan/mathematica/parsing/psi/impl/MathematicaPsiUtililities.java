@@ -108,7 +108,7 @@ public class MathematicaPsiUtililities {
       }
       if (child instanceof List) {
         for (PsiElement childLevel2 : child.getChildren()) {
-          if (child instanceof Symbol) {
+          if (childLevel2 instanceof Symbol) {
             assignees.add((Symbol) child);
           }
         }
