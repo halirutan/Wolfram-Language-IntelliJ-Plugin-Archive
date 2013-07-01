@@ -40,9 +40,6 @@ import java.util.Set;
  */
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
-  public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-      new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
-
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -67,6 +64,8 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
         return processor.execute(this, state);
       }
     }
+
+
     return true;
   }
 }

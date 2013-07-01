@@ -60,7 +60,7 @@ public class MathematicaBuiltInFunctionCompletionContributor extends CompletionC
         CompletionResultSet result2 = result.withPrefixMatcher(matcher);
         for (String name : symbols.keySet()) {
           if (name.length() < 3) continue;
-          LookupElementBuilder elm = LookupElementBuilder.create(name).withInsertHandler(MathematicaBracketInsertHandler.getInstance());
+          LookupElementBuilder elm = LookupElementBuilder.create(name).withInsertHandler(MathematicaBracketInsertHandler.getInstance()).withTypeText("BuiltIn");
           SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
           result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
         }
