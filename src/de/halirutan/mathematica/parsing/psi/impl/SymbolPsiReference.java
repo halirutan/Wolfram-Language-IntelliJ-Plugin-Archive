@@ -150,6 +150,7 @@ public class SymbolPsiReference extends PsiReferenceBase<Symbol> implements PsiP
 
     variants.addAll(processor.getSymbols());
 
+
     List<LookupElement> lookupElements = new ArrayList<LookupElement>();
     for (Symbol currentSymbol : variants) {
       if (!NAMES.contains(currentSymbol.getSymbolName())) {

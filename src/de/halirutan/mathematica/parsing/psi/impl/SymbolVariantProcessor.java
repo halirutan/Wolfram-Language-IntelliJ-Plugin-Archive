@@ -31,6 +31,9 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -64,11 +67,42 @@ public class SymbolVariantProcessor extends BaseScopeProcessor {
     return true;
   }
 
+  /**
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run.
+   * Before returning the list, it removes duplicates, so that no entry appears more than once in the autocompletion
+   * window.
+   * @return Sorted and cleaned list of collected symbols.
+   */
   public List<Symbol> getSymbols() {
 
+    Collections.sort(mySymbols, new SymbolComparator());
+    Symbol tmp = null;
+    for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
+      Symbol next = symbolIterator.next();
+      if (tmp == null) {
+        tmp = next;
+        continue;
+      }
 
+      if (tmp.getSymbolName().equals(next.getSymbolName())) {
+        symbolIterator.remove();
+      } else {
+        tmp = next;
+      }
+
+    }
 
     mySymbols.remove(myStartElement);
     return mySymbols;
   }
+
+  class SymbolComparator implements Comparator<Symbol> {
+
+    @Override
+    public int compare(Symbol o1, Symbol o2) {
+      return (o1.getSymbolName().compareTo(o2.getSymbolName()));
+    }
+
+  }
+
 }

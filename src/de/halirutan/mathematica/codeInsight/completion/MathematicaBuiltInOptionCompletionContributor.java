@@ -74,7 +74,7 @@ public class MathematicaBuiltInOptionCompletionContributor extends CompletionCon
           if (options != null) {
             for (String opt : options) {
               String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
-              result.addElement(LookupElementBuilder.create(opt + ruleSymbol));
+              result.addElement(LookupElementBuilder.create(opt + ruleSymbol).withTypeText("Opt"));
             }
           }
         }

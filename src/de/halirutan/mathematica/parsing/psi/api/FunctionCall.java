@@ -23,9 +23,17 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
 public interface FunctionCall extends PsiElement {
+
+  public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+      new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
+
 
 }

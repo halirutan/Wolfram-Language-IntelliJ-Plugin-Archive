@@ -24,21 +24,36 @@ package de.halirutan.mathematica.parsing.psi.impl;
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.impl.source.tree.TreeUtil;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.ui.ListUtil;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author patrick (5/21/13)
  */
 public class MathematicaPsiUtililities {
+
+  public static final java.util.Set<String> MODULE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+      new String[]{"Module", "Block", "With"}));
+
+  public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+      new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
+
+
 
   public static String getSymbolName(Symbol element) {
     ASTNode symbolNode = element.getNode().getFirstChildNode();
@@ -60,7 +75,7 @@ public class MathematicaPsiUtililities {
   }
 
   /**
-   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the x and <code>a
+   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and <code>a
    * = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
    * variables.
    *
@@ -80,6 +95,13 @@ public class MathematicaPsiUtililities {
         if (firstChild.getFirstChild() instanceof Symbol) {
           assignees.add((Symbol) firstChild.getFirstChild());
         }
+
+        final List<PsiElement> arguments = getArguments(firstChild);
+        for (int i = 0; i < arguments.size(); i++) {
+          PsiElement currentArgument = arguments.get(i);
+          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
+        }
+
       }
       if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
         assignees.addAll(getSymbolsFromNestedList(firstChild));
@@ -87,6 +109,11 @@ public class MathematicaPsiUtililities {
 
     }
     return assignees;
+  }
+
+  public static List<Symbol> getSymbolsFromArgumentPattern(PsiElement element) {
+    // TODO: Implement the extraction of symbols from patterns as Leonid suggested.
+    return new ArrayList<Symbol>(0);
   }
 
   /**
@@ -109,7 +136,7 @@ public class MathematicaPsiUtililities {
       if (child instanceof List) {
         for (PsiElement childLevel2 : child.getChildren()) {
           if (childLevel2 instanceof Symbol) {
-            assignees.add((Symbol) child);
+            assignees.add((Symbol) childLevel2);
           }
         }
       }
@@ -128,16 +155,16 @@ public class MathematicaPsiUtililities {
   public static List<Symbol> extractLocalizedVariables(PsiElement element) {
     List<Symbol> localVariables = Lists.newArrayList();
 
-    // Do we have a function call and is the first child a symbol like f[..]
+    // Do we have a function call and is the fi1rst child a symbol like f[..]
     if (element instanceof FunctionCall && element.getFirstChild() instanceof Symbol) {
       String scopingConstructName = ((Symbol) element.getFirstChild()).getSymbolName();
       // Do we have Module[..] Block[..] or With[..]
-      if (scopingConstructName.equals("Module") || scopingConstructName.equals("Block") || scopingConstructName.equals("With")) {
+      if (MODULE_LIKE_CONSTRUCTS.contains(scopingConstructName)) {
         // The general structure in the parse tree is FunctionCall(Module, [, ...,])
-        final PsiElement openingBracket = element.getFirstChild().getNextSibling();
+        final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
         if (openingBracket != null) {
-          final PsiElement initList = openingBracket.getNextSibling();
-          if (initList instanceof List) {
+          final PsiElement initList = getNextSiblingSkippingWhitespace(openingBracket);
+          if (initList instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
             if (initList.getChildren().length > 0) {
               for (PsiElement child : initList.getChildren()) {
                 if (child instanceof Symbol) {
@@ -153,12 +180,94 @@ public class MathematicaPsiUtililities {
           }
         }
       }
+
+      if (TABLE_LIKE_CONSTRUCTS.contains(scopingConstructName)) {
+        final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
+        if (openingBracket != null) {
+          final PsiElement body = getNextSiblingSkippingWhitespace(openingBracket);
+          PsiElement initList = body != null ?  getNextArgument(body) : null;
+          while (initList instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+              PsiElement arg1 = getFirstListElement(initList);
+              if (arg1 instanceof Symbol) {
+                localVariables.add((Symbol) arg1);
+
+            }
+            initList = getNextArgument(initList);
+          }
+        }
+      }
+
+
     }
     return localVariables;
   }
 
-  public static List<Symbol> extractFunctionVariables(PsiElement element) {
-    return Collections.emptyList();
+
+  public static PsiElement getNextSiblingSkippingWhitespace(@Nullable PsiElement elm) {
+    if(elm == null) return null;
+    PsiElement sibling = elm.getNextSibling();
+    while (sibling instanceof PsiWhiteSpace) {
+      sibling = sibling.getNextSibling();
+    }
+    return sibling;
   }
+
+  public static PsiElement getFirstListElement(@Nullable PsiElement list) {
+    if (list == null) {
+      return null;
+    }
+    PsiElement brace = list.getFirstChild();
+    if (brace == null || !brace.getNode().getText().equals("{")) {
+      return null;
+    }
+    return getNextSiblingSkippingWhitespace(brace);
+  }
+
+  public static List<PsiElement> getArguments(@Nullable PsiElement func) {
+    if (func == null) {
+      return null;
+    }
+
+    PsiElement head = func.getFirstChild();
+    if (head == null) {
+      return null;
+    }
+
+    PsiElement bracket = head.getNextSibling();
+    if (bracket == null || !bracket.getNode().getElementType().equals(MathematicaElementTypes.LEFT_BRACKET)) {
+      return null;
+    }
+
+    List<PsiElement> allArguments = new LinkedList<PsiElement>();
+    boolean skipHead = true;
+    for (PsiElement child: func.getChildren()) {
+      final IElementType type = child.getNode().getElementType();
+      if (MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(type) || type.equals(MathematicaElementTypes.COMMA)) {
+        continue;
+      }
+      if (skipHead) {
+        skipHead = false;
+        continue;
+      }
+
+      allArguments.add(child);
+  }
+
+    return allArguments;
+  }
+
+  public static PsiElement getNextArgument(@Nullable PsiElement arg) {
+    if (arg == null) {
+      return null;
+    }
+
+    PsiElement comma = getNextSiblingSkippingWhitespace(arg);
+    if (comma != null && comma.getNode().getElementType().equals(MathematicaElementTypes.COMMA)) {
+      return getNextSiblingSkippingWhitespace(comma);
+    }
+
+    return null;
+  }
+
 
 }

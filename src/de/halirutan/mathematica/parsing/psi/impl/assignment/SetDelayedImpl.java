@@ -43,6 +43,10 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return processor.execute(this, state);
+    PsiElement assignee = getFirstChild();
+    if (assignee instanceof Symbol || assignee instanceof FunctionCall) {
+      return processor.execute(this, state);
+    }
+    return true;
   }
 }
