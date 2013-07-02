@@ -19,18 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.pattern;
-
-import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.api.pattern.Alternative;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import org.jetbrains.annotations.NotNull;
+package de.halirutan.mathematica.parsing.psi.api.pattern;
 
 /**
  * @author patrick (4/14/13)
  */
-public class AlternativeImpl extends OperatorNameProvider implements Alternative{
-  public AlternativeImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+public interface Default {
 }

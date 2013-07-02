@@ -309,6 +309,7 @@ public interface MathematicaElementTypes {
       if (type.equals(PATTERN_TEST_EXPRESSION)) return new PatternTestImpl(node);
       if (type.equals(REPEATED_POSTFIX)) return new RepeatedImpl(node);
       if (type.equals(REPEATED_NULL_POSTFIX)) return new RepeatedNullImpl(node);
+      if (type.equals(DEFAULT_EXPRESSION)) return new DefaultImpl(node);
 
       // Rules
       if (type.equals(REPLACE_ALL_EXPRESSION)) return new ReplaceAllImpl(node);
