@@ -29,6 +29,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiUtililities;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,9 +44,12 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (lastParent.getParent() != this) {
+      return true;
+    }
     PsiElement assignee = getFirstChild();
-    if (assignee instanceof Symbol || assignee instanceof FunctionCall) {
-      return processor.execute(this, state);
+    if (assignee instanceof FunctionCall) {
+        return processor.execute(this, state);
     }
     return true;
   }

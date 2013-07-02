@@ -24,23 +24,23 @@ package de.halirutan.mathematica.parsing.psi.impl;
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.ui.ListUtil;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-
-import org.apache.commons.lang.ArrayUtils;
+import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author patrick (5/21/13)
@@ -49,11 +49,8 @@ public class MathematicaPsiUtililities {
 
   public static final java.util.Set<String> MODULE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
       new String[]{"Module", "Block", "With"}));
-
   public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
       new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
-
-
 
   public static String getSymbolName(Symbol element) {
     ASTNode symbolNode = element.getNode().getFirstChildNode();
@@ -97,8 +94,7 @@ public class MathematicaPsiUtililities {
         }
 
         final List<PsiElement> arguments = getArguments(firstChild);
-        for (int i = 0; i < arguments.size(); i++) {
-          PsiElement currentArgument = arguments.get(i);
+        for (PsiElement currentArgument : arguments) {
           assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
         }
 
@@ -111,9 +107,64 @@ public class MathematicaPsiUtililities {
     return assignees;
   }
 
-  public static List<Symbol> getSymbolsFromArgumentPattern(PsiElement element) {
-    // TODO: Implement the extraction of symbols from patterns as Leonid suggested.
-    return new ArrayList<Symbol>(0);
+  @Nullable
+  public static List<Symbol> getSymbolsFromFunctionCallPattern(PsiElement element) {
+    final PsiElement firstChild = element.getFirstChild();
+    final List<Symbol> assignees = Lists.newArrayList();
+
+    if (element instanceof SetDelayed || element instanceof Set) {
+      if (firstChild instanceof FunctionCall) {
+        final List<PsiElement> arguments = getArguments(firstChild);
+        for (PsiElement currentArgument : arguments) {
+          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
+        }
+      }
+    }
+    return assignees;
+  }
+
+
+  public static List<Symbol> getSymbolsFromArgumentPattern(@Nullable PsiElement element) {
+    final LinkedList<Symbol> result = new LinkedList<Symbol>();
+    if (element == null) {
+      return result;
+    }
+
+    PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
+
+      private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
+
+      @Override
+      public void visitElement(PsiElement element) {
+        if (element instanceof Blank ||
+            element instanceof BlankSequence ||
+            element instanceof BlankNullSequence ||
+            element instanceof Pattern) {
+          PsiElement possibleSymbol = element.getFirstChild();
+          if (possibleSymbol instanceof Symbol) {
+            result.add((Symbol) possibleSymbol);
+          }
+        } else if (element instanceof Optional || element instanceof Condition || element instanceof PatternTest) {
+          PsiElement firstChild = element.getFirstChild();
+          if (firstChild != null) {
+            firstChild.accept(this);
+          }
+        } else if (element instanceof FunctionCall) {
+          PsiElement head = element.getFirstChild();
+          if (myDiveInFirstChild.contains(head.getNode().getText())) {
+            List<PsiElement> args = getArguments(element);
+            if (args.size() > 0) {
+              args.get(0).accept(this);
+            }
+          }
+        } else {
+          element.acceptChildren(this);
+        }
+      }
+    };
+
+    patternVisitor.visitElement(element);
+    return result;
   }
 
   /**
@@ -185,11 +236,11 @@ public class MathematicaPsiUtililities {
         final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
         if (openingBracket != null) {
           final PsiElement body = getNextSiblingSkippingWhitespace(openingBracket);
-          PsiElement initList = body != null ?  getNextArgument(body) : null;
+          PsiElement initList = body != null ? getNextArgument(body) : null;
           while (initList instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
-              PsiElement arg1 = getFirstListElement(initList);
-              if (arg1 instanceof Symbol) {
-                localVariables.add((Symbol) arg1);
+            PsiElement arg1 = getFirstListElement(initList);
+            if (arg1 instanceof Symbol) {
+              localVariables.add((Symbol) arg1);
 
             }
             initList = getNextArgument(initList);
@@ -202,9 +253,8 @@ public class MathematicaPsiUtililities {
     return localVariables;
   }
 
-
   public static PsiElement getNextSiblingSkippingWhitespace(@Nullable PsiElement elm) {
-    if(elm == null) return null;
+    if (elm == null) return null;
     PsiElement sibling = elm.getNextSibling();
     while (sibling instanceof PsiWhiteSpace) {
       sibling = sibling.getNextSibling();
@@ -240,7 +290,7 @@ public class MathematicaPsiUtililities {
 
     List<PsiElement> allArguments = new LinkedList<PsiElement>();
     boolean skipHead = true;
-    for (PsiElement child: func.getChildren()) {
+    for (PsiElement child : func.getChildren()) {
       final IElementType type = child.getNode().getElementType();
       if (MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(type) || type.equals(MathematicaElementTypes.COMMA)) {
         continue;
@@ -251,7 +301,7 @@ public class MathematicaPsiUtililities {
       }
 
       allArguments.add(child);
-  }
+    }
 
     return allArguments;
   }

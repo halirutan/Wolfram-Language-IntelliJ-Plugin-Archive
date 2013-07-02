@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author patrick (5/22/13)
@@ -52,7 +53,7 @@ public class SymbolVariantProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed) {
-      List<Symbol> assignee = MathematicaPsiUtililities.getAssignmentSymbols(element);
+      List<Symbol> assignee = MathematicaPsiUtililities.getSymbolsFromFunctionCallPattern(element);
       if (assignee != null) {
         mySymbols.addAll(assignee);
       }
@@ -76,9 +77,16 @@ public class SymbolVariantProcessor extends BaseScopeProcessor {
   public List<Symbol> getSymbols() {
 
     Collections.sort(mySymbols, new SymbolComparator());
+    Pattern pattern = Pattern.compile(myStartElement.getSymbolName().substring(0,1)+".*");
     Symbol tmp = null;
     for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
       Symbol next = symbolIterator.next();
+
+      if(!pattern.matcher(next.getSymbolName()).matches()) {
+        symbolIterator.remove();
+        continue;
+      }
+
       if (tmp == null) {
         tmp = next;
         continue;

@@ -278,6 +278,7 @@ public class ParseletProvider {
     infixLeft(MathematicaElementTypes.ALTERNATIVE, MathematicaElementTypes.ALTERNATIVE_EXPRESSION, 24); // Alternative(|)
 
     infixLeft(MathematicaElementTypes.COLON, MathematicaElementTypes.PATTERN_EXPRESSION, 22); // Optional(:) and Patter (:)
+    register(MathematicaElementTypes.COLON, MathematicaElementTypes.PATTERN_EXPRESSION, new PatternParselet(22)); // MessageName(::)
 
     infixLeft(MathematicaElementTypes.STRING_EXPRESSION, MathematicaElementTypes.STRING_EXPRESSION_EXPRESSION, 20); // StringExpression(~~)
 
