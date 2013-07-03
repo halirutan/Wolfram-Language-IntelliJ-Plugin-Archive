@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>A Mathematica Plugin for IntelliJ IDEA</TITLE>
+</HEAD>
+<BODY>
+This document is not an API documentation, because there is no API; instead it is a collection of implementation notes.
+
+I tried to put as much useful information in the java comments as possible to explain how algorithms are working
+and how the IDEA openAPI was used implement the various features. Therefore, these pages are for people who want to
+extend the code with additional functionality or for people creating their own custom language plugin. Those people
+might find some useful tips regarding the use of the openAPI, the implementation of a Mathematica parser, how
+highlighting and code annotation work or other things.<br>
+
+<h2>Where to start</h2>
+In a first step in order to compile the plugin you need to setup IDEA for plugin development. For this purpose I wrote
+an article explaining this step by step which can be found in the
+<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki/Join-the-development">Wiki of the plugins GitHub
+    repository.</a><br>
+
+Otherwise, I suggest start at plugin.xml in the resources directory and just skim through it.
+You'll see, that every feature is registered in this file and from there you can navigate with Ctrl+Click on the
+implementing classes. You'll see that many features are easy and require almost no logic while others (like
+lang.parserDefinition) require a lot of code if you follow all implementations.
+
+
+
+
+</BODY>
+</HTML>

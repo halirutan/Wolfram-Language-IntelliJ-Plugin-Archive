@@ -25,36 +25,50 @@ import com.intellij.lang.Commenter;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 3/22/13 Time: 4:13 AM Purpose:
+ * Provides the functionality of automatic commenting of code-blocks, lines and selected regions.
+ * The only thing required here is to define appropriate Strings which are used to mark code as comment. In
+ * Mathematica everything between <code >(*</code> and <code >*)</code> is ignored and regarded as comment.
+ * Note, that this class is registered in the file /META-INF/plugin.xml as <code >lang.commenter</code> extension.
+ *
+ * @author patrick (3/22/13)
  */
 public class MathematicaCommenter implements Commenter {
-  @Nullable
-  @Override
-  public String getLineCommentPrefix() {
-    return null;
-  }
+    @Nullable
+    @Override
+    public String getLineCommentPrefix() {
+        return null;
+    }
 
-  @Nullable
-  @Override
-  public String getBlockCommentPrefix() {
-    return "(*";
-  }
+    /**
+     * Returns the opening string for a comment. In Java and C this is <code >&#47;*</code>, in Mathematica it is
+     * <code >(*</code>
+     * @return the comment opening string
+     */
+    @Nullable
+    @Override
+    public String getBlockCommentPrefix() {
+        return "(*";
+    }
 
-  @Nullable
-  @Override
-  public String getBlockCommentSuffix() {
-    return "*)";
-  }
+    /**
+     * Returns the closing string for a block comment. In Java and C this is <code >*&#47;</code>
+     * @return the block comment closing string
+     */
+    @Nullable
+    @Override
+    public String getBlockCommentSuffix() {
+        return "*)";
+    }
 
-  @Nullable
-  @Override
-  public String getCommentedBlockCommentPrefix() {
-    return null;
-  }
+    @Nullable
+    @Override
+    public String getCommentedBlockCommentPrefix() {
+        return null;
+    }
 
-  @Nullable
-  @Override
-  public String getCommentedBlockCommentSuffix() {
-    return null;
-  }
+    @Nullable
+    @Override
+    public String getCommentedBlockCommentSuffix() {
+        return null;
+    }
 }

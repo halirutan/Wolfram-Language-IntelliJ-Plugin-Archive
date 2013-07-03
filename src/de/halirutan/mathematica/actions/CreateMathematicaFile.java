@@ -29,6 +29,7 @@ import com.intellij.psi.PsiDirectory;
 import de.halirutan.mathematica.MathematicaIcons;
 
 /**
+ * Provides the creation of new Mathematica files through the IDEA  <em >new...</em> action.
  * @author patrick (4/8/13)
  */
 public class CreateMathematicaFile extends CreateFileFromTemplateAction implements DumbAware {
