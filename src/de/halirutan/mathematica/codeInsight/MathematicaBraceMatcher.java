@@ -30,29 +30,39 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Provides the highlighting of paired braces.
+ * This works as follows: When you navigate the cursor near a brace/bracket/parenthesis then its corresponding
+ * closing (or opening, if you are over the closing one) brace changes its color, so that you see which portion of
+ * the code is embraced.
+ *
  * @author patrick (4/2/13)
  */
 public class MathematicaBraceMatcher implements PairedBraceMatcher {
 
-  private static final BracePair[] PAIRS = new BracePair[]{
-      new BracePair(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.RIGHT_BRACE, true),
-      new BracePair(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.RIGHT_PAR, false),
-      new BracePair(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET, true),
-      new BracePair(MathematicaElementTypes.PART_BEGIN, MathematicaElementTypes.RIGHT_BRACKET, true)
-  };
+    private static final BracePair[] PAIRS = new BracePair[]{
+            new BracePair(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.RIGHT_BRACE, true),
+            new BracePair(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.RIGHT_PAR, false),
+            new BracePair(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET, true),
+            new BracePair(MathematicaElementTypes.PART_BEGIN, MathematicaElementTypes.RIGHT_BRACKET, true)
+    };
 
-  @Override
-  public BracePair[] getPairs() {
-    return PAIRS;
-  }
+    /**
+     * This functions returns a list of {@link IElementType} pairs which correspond to the opening and closing
+     * brace lexer tokens.
+     * @return List of the matching brace lexer token pairs.
+     */
+    @Override
+    public BracePair[] getPairs() {
+        return PAIRS;
+    }
 
-  @Override
-  public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
-    return true;
-  }
+    @Override
+    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType contextType) {
+        return true;
+    }
 
-  @Override
-  public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
-    return openingBraceOffset;
-  }
+    @Override
+    public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
+        return openingBraceOffset;
+    }
 }

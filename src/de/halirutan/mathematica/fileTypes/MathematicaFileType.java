@@ -32,7 +32,7 @@ import javax.swing.*;
 
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 12/23/12 Time: 9:55 PM Purpose:
+ * @author patrick (12/23/12)
  */
 public class MathematicaFileType extends LanguageFileType {
 

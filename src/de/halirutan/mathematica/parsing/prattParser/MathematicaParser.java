@@ -86,9 +86,9 @@ public class MathematicaParser implements PsiParser {
   /**
    * This is the main entry point for the parsing a file. Every tme
    *
-   * @param root
-   * @param builder
-   * @return
+   * @param root The root node of the AST
+   * @param builder Through this, the AST is built up by placing markers.
+   * @return The parsed AST
    */
   @NotNull
   @Override

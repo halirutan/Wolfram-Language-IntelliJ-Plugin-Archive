@@ -23,6 +23,7 @@ package de.halirutan.mathematica.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
@@ -31,7 +32,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * This is almost completely stolen from {@link com.intellij.codeInsight.completion.util.ParenthesesInsertHandler}
+ * This is almost completely stolen from {@link ParenthesesInsertHandler}
  *
  * @author patrick (4/3/13)
  */
