@@ -2,7 +2,7 @@
     <id>de.halirutan.mathematica</id>
     <name>Mathematica Support</name>
     <category>Custom Language</category>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <idea-version since-build="123.94"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
 
@@ -13,6 +13,37 @@
         Here is a direct link to the plugin: <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar">
         Mathematica-IntelliJ-Plugin.jar</a>.
       ]]></description>
+
+    <change-notes>
+        <![CDATA[
+            <p>0.1.4</p>
+            <ul>
+              <li >Smart completion of built-in options to functions</li>
+              <li>Completion of localized variables (Block/Module and patterns in function definitions)</li>
+              <li>Bugfixes</li>
+            </ul>
+            <p>0.1.3</p>
+            <ul >
+                <li >Creation of Mathematica SDK types</li>
+                <li>Consistent colors for Default and Darcula scheme</li>
+                <li >Bugfixes</li>
+            </ul>
+            <p >0.1.2</p>
+            <ul >
+                <li >Commenter</li>
+                <li >Create Mathematica files</li>
+                <li >Color setting page</li>
+            </ul>
+            <p >0.1:</p>
+            <ul >
+                <li >Syntax highlighting</li>
+                <li >Autocompletion for built-in functions</li>
+                <li >Paired brace matching and smart quote inserting</li>
+                <li >Documentation lookup of built-in functions</li>
+            </ul>
+        ]]>
+    </change-notes>
+
 
     <extensions defaultExtensionNs="com.intellij">
 

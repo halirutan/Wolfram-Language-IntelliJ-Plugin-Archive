@@ -1,9 +1,10 @@
-Mathematica language plugin for IntelliJIDEA
+Mathematica language plugin for IntelliJ IDEA
 =============================================
 
 Important Links
 ---------------
 
+- The official website for plugin users is [hosted here](http://halirutan.de/start).
 - The most recent plugin is [Mathematica-IntelliJ-Plugin.jar](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar)
   in the root of this repository.
 - If you find bugs or experience weird behavior please [create a new issue](http://halirutan.myjetbrains.com/youtrack/issues#newissue=yes)
@@ -13,6 +14,7 @@ Important Links
   me, you can always reach me in the main chat at mathematica.stackexchange.com or in the
   [IntelliJIDEA Mathematica plugin room](http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica) which
   was created for that purpose.
+- The extracted java documentation can be found under [halirutan.github.io/Mathematica-IntelliJ-Plugin](http://halirutan.github.io/Mathematica-IntelliJ-Plugin/).
 - Finally, you may want to read the [official post](http://mathematica.stackexchange.com/q/24556/187) on mathematica.stackexchange.com
   where I announced the plugin.
 
@@ -23,6 +25,8 @@ Feature list
 
 - Syntax highlighter
 - CamelHump autocompletion for all built-in Mathematica symbols
+- Smart completion of built in options of functions
+- Completion of locally defined variables, like Module/Block variables or pattern arguments in function definitions.
 - Smart expansion depending whether it is a function or not
 - Importance sorted completion suggestions
 - Highlighting brace/bracket/parenthesis matcher
