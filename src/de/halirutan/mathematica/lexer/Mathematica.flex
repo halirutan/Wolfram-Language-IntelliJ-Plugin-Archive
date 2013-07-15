@@ -114,11 +114,6 @@ Out = "%"+
 	">>"				{ return MathematicaElementTypes.PUT; }
 	"<<"				{ return MathematicaElementTypes.GET; }
 
-	"___"				{ return MathematicaElementTypes.BLANK_NULL_SEQUENCE; }
-	"__"				{ return MathematicaElementTypes.BLANK_SEQUENCE; }
-	"_."				{ return MathematicaElementTypes.DEFAULT; }
-	"_"					{ return MathematicaElementTypes.BLANK; }
-
 	"//"				{ return MathematicaElementTypes.POSTFIX; }
 
 	"==="				{ return MathematicaElementTypes.SAME_Q; }
@@ -160,6 +155,12 @@ Out = "%"+
 	";"					{ return MathematicaElementTypes.SEMICOLON; }
 	"::"				{ return MathematicaElementTypes.DOUBLE_COLON; }
 	":"					{ return MathematicaElementTypes.COLON; }
+
+    "___"				{ return MathematicaElementTypes.BLANK_NULL_SEQUENCE; }
+    "__"				{ return MathematicaElementTypes.BLANK_SEQUENCE; }
+    "_."				{ return MathematicaElementTypes.DEFAULT; }
+    "_"					{ return MathematicaElementTypes.BLANK; }
+
 
 	"="					{ return MathematicaElementTypes.SET; }
 
