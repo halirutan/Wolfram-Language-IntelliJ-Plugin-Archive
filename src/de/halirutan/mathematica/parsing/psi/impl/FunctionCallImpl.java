@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.google.common.collect.Sets;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -31,41 +30,37 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
- */
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
-  public FunctionCallImpl(@NotNull ASTNode node) {
-    super(node);
-  }
-
-  @Override
-  public PsiReference getReference() {
-    return super.getReference();
-  }
-
-  @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    final PsiElement head = getFirstChild();
-    if (head instanceof Symbol) {
-      // In a tree-up-walk, we only consider declarations of Module, Block, .. when we come from inside this Module.
-      // Therefore, we need to check whether our last position was inside and if not, we don't consider the declarations
-      // of this.
-      if (lastParent.getParent() != this) {
-        return true;
-      }
-      final String symbolName = ((Symbol) head).getSymbolName();
-      if (SCOPING_CONSTRUCTS.contains(symbolName)) {
-        return processor.execute(this, state);
-      }
+    public FunctionCallImpl(@NotNull ASTNode node) {
+        super(node);
     }
 
+    @Override
+    public PsiReference getReference() {
+        return super.getReference();
+    }
 
-    return true;
-  }
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        final PsiElement head = getFirstChild();
+        if (head instanceof Symbol) {
+            // In a tree-up-walk, we only consider declarations of Module, Block, .. when we come from inside this Module.
+            // Therefore, we need to check whether our last position was inside and if not, we don't consider the declarations
+            // of this.
+            if (lastParent.getParent() != this) {
+                return true;
+            }
+            final String symbolName = ((Symbol) head).getSymbolName();
+            if (SCOPING_CONSTRUCTS.contains(symbolName)) {
+                return processor.execute(this, state);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void subtreeChanged() {
+        clearUserData();
+    }
 }
