@@ -19,18 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.function;
-
-import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import org.jetbrains.annotations.NotNull;
+package de.halirutan.mathematica.parsing.psi.api.function;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
+ * @author patrick (4/14/13)
  */
-public class FunctionImpl extends OperatorNameProvider implements Function{
-  public FunctionImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+public interface Function {
 }
