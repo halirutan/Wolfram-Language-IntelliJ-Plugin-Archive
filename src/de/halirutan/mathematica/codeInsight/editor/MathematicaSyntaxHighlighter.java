@@ -54,7 +54,7 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
     fillMap(colors, MathematicaElementTypes.OPERATORS, MathematicaSyntaxHighlighterColors.OPERATORS);
     fillMap(colors, MathematicaElementTypes.BRACES, MathematicaSyntaxHighlighterColors.BRACES);
     fillMap(colors, MathematicaElementTypes.LITERALS, MathematicaSyntaxHighlighterColors.LITERALS);
-    fillMap(colors, MathematicaElementTypes.SLOTS, MathematicaSyntaxHighlighterColors.PATTERNS);
+//    fillMap(colors, MathematicaElementTypes.SLOTS, MathematicaSyntaxHighlighterColors.PATTERNS);
 
     fillMap(colors, MathematicaSyntaxHighlighterColors.BAD_CHARACTER, MathematicaElementTypes.BAD_CHARACTER);
   }
