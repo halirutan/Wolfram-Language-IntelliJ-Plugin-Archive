@@ -21,26 +21,25 @@
 
 package de.halirutan.mathematica.codeInsight.editor;
 
-import com.google.common.collect.Lists;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.intellij.psi.impl.source.tree.TreeUtil;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.api.pattern.*;
+import de.halirutan.mathematica.parsing.psi.api.pattern.Blank;
+import de.halirutan.mathematica.parsing.psi.api.pattern.BlankNullSequence;
+import de.halirutan.mathematica.parsing.psi.api.pattern.BlankSequence;
+import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -55,15 +54,15 @@ public class MathematicaHighlightingAnnotator implements Annotator {
         if (element instanceof Symbol) {
             PsiElement id = element.getFirstChild();
 
-            if (NAMES.contains(id.getText())) {
-                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.KEYWORDS);
+            if ( NAMES.contains(id.getText())) {
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
             }
         } else if (element instanceof Pattern) {
             PsiElement fst = element.getFirstChild();
             if (fst != null && !(fst instanceof Pattern))
-                setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERNS);
+                setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
         } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
-            setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERNS);
+            setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
         } else if (element instanceof Function) {
             holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION));
 
@@ -71,7 +70,7 @@ public class MathematicaHighlightingAnnotator implements Annotator {
                 @Override
                 public void visitElement(PsiElement element) {
                     if (element instanceof Symbol && MathematicaElementTypes.SLOTS.contains(element.getNode().getFirstChildNode().getElementType())) {
-                        setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERNS);
+                        setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
                     } else {
                         element.acceptChildren(this);
                     }
@@ -79,7 +78,19 @@ public class MathematicaHighlightingAnnotator implements Annotator {
             };
 
             patternVisitor.visitElement(element);
+        } else if (element instanceof MessageName) {
+            highlightMessageName(element, holder);
         }
+    }
+
+    private void highlightMessageName(PsiElement message, final AnnotationHolder holder) {
+        new PsiRecursiveElementVisitor(){
+            @Override
+            public void visitElement(PsiElement element) {
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MESSAGE);
+                super.visitElement(element);
+            }
+        }.visitElement(message);
     }
 
     private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {

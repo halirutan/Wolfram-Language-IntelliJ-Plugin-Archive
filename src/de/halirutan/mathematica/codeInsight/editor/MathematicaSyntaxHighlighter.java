@@ -52,9 +52,9 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_END);
     fillMap(colors, MathematicaSyntaxHighlighterColors.IDENTIFIER, MathematicaElementTypes.IDENTIFIER);
     fillMap(colors, MathematicaElementTypes.OPERATORS, MathematicaSyntaxHighlighterColors.OPERATORS);
-    fillMap(colors, MathematicaElementTypes.BRACES, MathematicaSyntaxHighlighterColors.BRACES);
-    fillMap(colors, MathematicaElementTypes.LITERALS, MathematicaSyntaxHighlighterColors.LITERALS);
-//    fillMap(colors, MathematicaElementTypes.SLOTS, MathematicaSyntaxHighlighterColors.PATTERNS);
+    fillMap(colors, MathematicaElementTypes.BRACES, MathematicaSyntaxHighlighterColors.BRACE);
+    fillMap(colors, MathematicaElementTypes.LITERALS, MathematicaSyntaxHighlighterColors.LITERAL);
+//    fillMap(colors, MathematicaElementTypes.SLOTS, MathematicaSyntaxHighlighterColors.PATTERN);
 
     fillMap(colors, MathematicaSyntaxHighlighterColors.BAD_CHARACTER, MathematicaElementTypes.BAD_CHARACTER);
   }

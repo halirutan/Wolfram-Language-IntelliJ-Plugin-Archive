@@ -19,28 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import org.jetbrains.annotations.NotNull;
+package de.halirutan.mathematica.parsing.psi.api;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
+ * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
  */
-public class MessageNameImpl extends OperatorNameProvider implements MessageName{
-  public MessageNameImpl(@NotNull ASTNode node) {
-    super(node);
-  }
-
-  @Override
-  public boolean isOperatorSign(PsiElement operatorSignElement) {
-    return operatorSignElement.toString().contains("DOUBLE_COLON");
-  }
-
-  @Override
-  public String getOperatorName() {
-    return "MessageName";
-  }
+public interface MessageName{
 }
