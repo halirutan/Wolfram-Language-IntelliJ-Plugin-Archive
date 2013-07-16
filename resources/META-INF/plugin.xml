@@ -18,6 +18,10 @@
         <![CDATA[
             <p>0.1.4</p>
             <ul>
+                <li>Anonymous functions are made italic </li>
+            </ul>
+            <p>0.1.4</p>
+            <ul>
               <li >Smart completion of built-in options to functions</li>
               <li>Completion of localized variables (Block/Module and patterns in function definitions)</li>
               <li>Bugfixes</li>
@@ -72,6 +76,9 @@
         <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
         <fileTemplateGroup implementation="de.halirutan.mathematica.MathematicaFileTemplateProvider"/>
         <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
+
+        <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
+        <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
 
     </extensions>
 
