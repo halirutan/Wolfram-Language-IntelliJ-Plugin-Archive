@@ -19,12 +19,31 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api;
+package de.halirutan.mathematica.codeInsight.completion;
 
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.psi.PsiElement;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
+ * @author patrick (7/18/13)
  */
-public interface MessageName extends PsiElement{
+abstract public class MathematicaCompletionProvider extends CompletionProvider<CompletionParameters> {
+
+    abstract void addTo(CompletionContributor contributor);
+
+    protected String findOriginalText(PsiElement element) {
+        return element.getText();
+    }
+
+    protected String findCurrentText(CompletionParameters parameters, PsiElement element) {
+        String originalText = findOriginalText(element);
+        int elementOffset = parameters.getOffset() - element.getTextOffset();
+
+        return (elementOffset >= 0) && (elementOffset < originalText.length())
+                ? originalText.substring(0, elementOffset)
+                : originalText;
+    }
+
 }

@@ -25,12 +25,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/1/13)
  */
-public class CompoundExpressionImpl extends ExpressionImpl {
+public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
   public CompoundExpressionImpl(ASTNode node) {
     super(node);
   }

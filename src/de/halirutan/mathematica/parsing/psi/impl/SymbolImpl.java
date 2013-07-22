@@ -80,6 +80,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public PsiReference getReference() {
-    return new SymbolPsiReference(this, TextRange.from(0, getFirstChild().getTextLength()));
+    return new SymbolPsiReference(this);
   }
 }

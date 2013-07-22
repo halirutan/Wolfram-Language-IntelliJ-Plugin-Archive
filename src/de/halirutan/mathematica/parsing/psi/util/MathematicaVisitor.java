@@ -19,32 +19,28 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.completion;
+package de.halirutan.mathematica.parsing.psi.util;
 
-import com.intellij.codeInsight.completion.*;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.SharedProcessingContext;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import org.jetbrains.annotations.NotNull;
-
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.parsing.psi.api.MessageName;
 
 /**
- * @author patrick (4/2/13)
+ * @author patrick (7/19/13)
  */
-public class MathematicaLocalizedSymbolCompletionContributor extends CompletionContributor {
-
-
-  public MathematicaLocalizedSymbolCompletionContributor() {
-    extend(CompletionType.BASIC, PlatformPatterns.psiElement().withParent(Symbol.class), new LocalVariableProvider());
-  }
-
-  private class LocalVariableProvider extends CompletionProvider {
+public class MathematicaVisitor extends PsiElementVisitor {
     @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-      final SharedProcessingContext sharedContext = context.getSharedContext();
-
+    public void visitElement(PsiElement element) {
+        super.visitElement(element);    //To change body of overridden methods use File | Settings | File Templates.
     }
-  }
 
+    @Override
+    public void visitFile(PsiFile file) {
+        super.visitFile(file);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    public void visitMessageName(MessageName messageName) {
+        visitElement(messageName);
+    }
 }

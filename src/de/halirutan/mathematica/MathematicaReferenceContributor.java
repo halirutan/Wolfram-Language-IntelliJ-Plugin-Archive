@@ -45,7 +45,7 @@ public class MathematicaReferenceContributor extends PsiReferenceContributor {
             SymbolImpl symbol = (SymbolImpl) element;
             String symbolName = symbol.getSymbolName();
             if (symbolName != null) {
-              return new PsiReference[]{new SymbolPsiReference(symbol, symbol.getTextRange())};
+              return new PsiReference[]{new SymbolPsiReference(symbol)};
             }
             return new PsiReference[0];
           }

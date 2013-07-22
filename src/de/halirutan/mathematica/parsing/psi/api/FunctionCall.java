@@ -35,5 +35,7 @@ public interface FunctionCall extends PsiElement {
   public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
       new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
 
+  public boolean isScopingConstruct();
+
 
 }

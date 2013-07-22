@@ -22,6 +22,12 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +35,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class FunctionImpl extends OperatorNameProvider implements Function{
+public class FunctionImpl extends OperatorNameProvider implements Function {
+
+
   public FunctionImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (place instanceof Symbol) {
+      if (MathematicaElementTypes.SLOTS.contains(place.getFirstChild().getNode().getElementType())) {
+        return processor.execute(this, state);
+      }
+    }
+    return true;
   }
 }
