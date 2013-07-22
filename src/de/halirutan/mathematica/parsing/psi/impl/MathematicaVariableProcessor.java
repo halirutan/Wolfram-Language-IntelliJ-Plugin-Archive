@@ -25,92 +25,58 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
-import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * @author patrick (5/22/13)
  */
-public class SymbolVariantProcessor extends BaseScopeProcessor {
+public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
-  private final List<Symbol> mySymbols = Lists.newLinkedList();
+  private final List<PsiElement> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
 
-  public SymbolVariantProcessor(Symbol myStartElement) {
-    super();
+  public MathematicaVariableProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
   }
 
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
-    if (element instanceof Set || element instanceof SetDelayed) {
-      List<Symbol> assignee = MathematicaPsiUtililities.getSymbolsFromFunctionCallPattern(element);
-      if (assignee != null) {
-        mySymbols.addAll(assignee);
-      }
-    }
-
     if (element instanceof FunctionCall) {
-      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
-      if (declaredSymbols.size() > 0) {
-        mySymbols.addAll(declaredSymbols);
+      if (((FunctionCall) element).isScopingConstruct()) {
+        final List<Symbol> vars = MathematicaPsiUtililities.extractLocalizedVariables(element);
+        for (Symbol v : vars) {
+          if (v.getSymbolName().equals(myStartElement.getSymbolName()) && v != myStartElement) {
+            mySymbols.add(v);
+            return false;
+          }
+        }
+      }
+    } else if (element instanceof Function) {
+      if(myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
+        mySymbols.add(element);
+        return false;
       }
     }
     return true;
   }
 
+
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run.
+   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()} run.
    * Before returning the list, it removes duplicates, so that no entry appears more than once in the autocompletion
    * window.
+   *
    * @return Sorted and cleaned list of collected symbols.
    */
-  public List<Symbol> getSymbols() {
-
-    Collections.sort(mySymbols, new SymbolComparator());
-    Pattern pattern = Pattern.compile(myStartElement.getSymbolName().substring(0,1)+".*");
-    Symbol tmp = null;
-    for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
-      Symbol next = symbolIterator.next();
-
-      if(!pattern.matcher(next.getSymbolName()).matches()) {
-        symbolIterator.remove();
-        continue;
-      }
-
-      if (tmp == null) {
-        tmp = next;
-        continue;
-      }
-
-      if (tmp.getSymbolName().equals(next.getSymbolName())) {
-        symbolIterator.remove();
-      } else {
-        tmp = next;
-      }
-
-    }
-
-    mySymbols.remove(myStartElement);
+  public List<PsiElement> getSymbols() {
     return mySymbols;
   }
 
-  class SymbolComparator implements Comparator<Symbol> {
-
-    @Override
-    public int compare(Symbol o1, Symbol o2) {
-      return (o1.getSymbolName().compareTo(o2.getSymbolName()));
-    }
-
-  }
 
 }

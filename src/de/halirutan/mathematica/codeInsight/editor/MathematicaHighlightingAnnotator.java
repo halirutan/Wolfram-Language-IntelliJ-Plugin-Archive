@@ -93,6 +93,14 @@ public class MathematicaHighlightingAnnotator implements Annotator {
         }.visitElement(message);
     }
 
+    private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
+        PsiElement id = symbol.getFirstChild();
+
+        if ( !(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
+            setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+        }
+    }
+
     private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
         holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
         holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key));

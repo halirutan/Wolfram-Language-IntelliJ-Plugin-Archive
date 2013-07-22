@@ -23,11 +23,10 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -60,13 +59,13 @@ public class MathematicaPsiUtililities {
     return null;
   }
 
-  //TODO: Node types are wrong.
   public static PsiElement setSymbolName(Symbol element, String newName) {
-    ASTNode symbolNode = element.getNode();
-    if (symbolNode != null) {
-      Symbol newSymbol = MathematicaSymbolFactory.createSymbol(element.getProject(), newName);
-      ASTNode newSymbolNode = newSymbol.getNode();
-      element.getNode().replaceChild(symbolNode, newSymbolNode);
+    ASTNode identifierNode = element.getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+    final PsiFileFactory fileFactory = PsiFileFactory.getInstance(element.getProject());
+    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, newName);
+    ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+    if (identifierNode != null && newElm != null) {
+      element.getNode().replaceChild(identifierNode, newElm);
     }
     return element;
   }
@@ -247,6 +246,8 @@ public class MathematicaPsiUtililities {
           }
         }
       }
+
+
 
 
     }

@@ -19,12 +19,30 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api;
+package de.halirutan.mathematica.refactoring;
 
+import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
+ * @author patrick (7/22/13)
  */
-public interface MessageName extends PsiElement{
+public class MathematicaRefactoringSupport extends RefactoringSupportProvider {
+
+  @Override
+  public boolean isAvailable(@NotNull PsiElement context) {
+    return true;
+  }
+
+  @Override
+  public boolean isInplaceRenameAvailable(PsiElement element, PsiElement context) {
+    return false;
+  }
+
+  @Override
+  public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
+    return true;
+  }
 }

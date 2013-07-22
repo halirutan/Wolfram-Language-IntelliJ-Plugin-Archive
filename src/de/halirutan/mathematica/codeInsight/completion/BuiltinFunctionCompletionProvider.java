@@ -24,7 +24,9 @@ package de.halirutan.mathematica.codeInsight.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
@@ -36,35 +38,44 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 /**
  * @author patrick (4/2/13)
  */
-public class MathematicaBuiltInFunctionCompletionContributor extends CompletionContributor {
+public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
 
+    @Override
+    void addTo(CompletionContributor contributor) {
+        final PsiElementPattern.Capture<PsiElement> psiElementCapture = psiElement().withElementType(MathematicaElementTypes.IDENTIFIER);
+        contributor.extend(CompletionType.BASIC, psiElementCapture, this);
+    }
 
-  public MathematicaBuiltInFunctionCompletionContributor() {
-    extend(CompletionType.BASIC, psiElement().withElementType(MathematicaElementTypes.IDENTIFIER), new CompletionProvider<CompletionParameters>() {
-      @Override
-      protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+    @Override
+    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
         HashMap<String, SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
 
         if (Character.isLowerCase(parameters.getPosition().getText().charAt(0))) {
-          return;
+            return;
         }
 
         // We want to find a prefix which can contain $ since this is allowed in Mathematica
-        String prefix = CompletionUtil.findIdentifierPrefix(parameters.getPosition().getContainingFile(),
-            parameters.getOffset(),
-            StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')),
-            StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')));
+//        String prefix = CompletionUtil.findIdentifierPrefix(parameters.getPosition().getContainingFile(),
+//                parameters.getOffset(),
+//                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')),
+//                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')));
+
+        String prefix = findCurrentText(parameters, parameters.getPosition());
+
+
 
         CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
 
         CompletionResultSet result2 = result.withPrefixMatcher(matcher);
         for (String name : symbols.keySet()) {
-          if (name.length() < 3) continue;
-          LookupElementBuilder elm = LookupElementBuilder.create(name).withInsertHandler(MathematicaBracketInsertHandler.getInstance()).withTypeText("BuiltIn");
-          SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
-          result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
+            if (name.length() < 3) continue;
+            SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
+            LookupElementBuilder elm = LookupElementBuilder
+                    .create(name)
+                    .withInsertHandler(MathematicaBracketInsertHandler.getInstance())
+                    .withTypeText(symbol.context+"`")
+                    .withPresentableText(symbol.nameWithoutContext);
+            result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
         }
-      }
-    });
-  }
+    }
 }

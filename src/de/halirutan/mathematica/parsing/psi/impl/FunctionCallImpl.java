@@ -32,35 +32,51 @@ import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
-    public FunctionCallImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public FunctionCallImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    @Override
-    public PsiReference getReference() {
-        return super.getReference();
-    }
+  @Override
+  public PsiReference getReference() {
+    return super.getReference();
+  }
 
-    @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-        final PsiElement head = getFirstChild();
-        if (head instanceof Symbol) {
-            // In a tree-up-walk, we only consider declarations of Module, Block, .. when we come from inside this Module.
-            // Therefore, we need to check whether our last position was inside and if not, we don't consider the declarations
-            // of this.
-            if (lastParent.getParent() != this) {
-                return true;
-            }
-            final String symbolName = ((Symbol) head).getSymbolName();
-            if (SCOPING_CONSTRUCTS.contains(symbolName)) {
-                return processor.execute(this, state);
-            }
-        }
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    final PsiElement head = getFirstChild();
+    if (head instanceof Symbol) {
+      // In a tree-up-walk, we only consider declarations of Module, Block, .. when we come from inside this Module.
+      // Therefore, we need to check whether our last position was inside and if not, we don't consider the declarations
+      // of this.
+      if (lastParent.getParent() != this) {
         return true;
+      }
+      final String symbolName = ((Symbol) head).getSymbolName();
+      if (SCOPING_CONSTRUCTS.contains(symbolName)) {
+        return processor.execute(this, state);
+      }
     }
+    return true;
+  }
 
-    @Override
-    public void subtreeChanged() {
-        clearUserData();
+  @Override
+  public void subtreeChanged() {
+    clearUserData();
+  }
+
+  /**
+   * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}.
+   * This can lead to various false negatives. E.g. <code >(Block)[{..},..]</code> returns false, although after <em >evaluating</em>
+   * the code in Mathematica, it's of course found to be a correct scoping construct. Btw, the Mathematica front end has the same
+   * issues.
+   * @return True iff the head is a symbol defining the function as scoping construct like <code >Block[{..},..]</code>.
+   */
+  @Override
+  public boolean isScopingConstruct() {
+    PsiElement head = getFirstChild();
+    if (head instanceof Symbol) {
+      return SCOPING_CONSTRUCTS.contains(((Symbol) head).getSymbolName());
     }
+    return false;
+  }
 }

@@ -19,12 +19,35 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api;
+package de.halirutan.mathematica.codeInsight.completion;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.patterns.StandardPatterns;
+import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
+ * @author patrick (4/2/13)
  */
-public interface MessageName extends PsiElement{
+public class MathematicaCompletionContributor extends CompletionContributor {
+
+    public MathematicaCompletionContributor() {
+        new BuiltinFunctionCompletionProvider().addTo(this);
+        new BuiltinOptionCompletionProvider().addTo(this);
+        new VariableNameCompletionProvider().addTo(this);
+    }
+
+    @Override
+    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+        context.setDummyIdentifier("ZZZ");
+    }
+
+
 }
