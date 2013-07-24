@@ -40,12 +40,12 @@ import java.util.regex.Pattern;
 /**
  * @author patrick (5/22/13)
  */
-public class MathematicaVariantProcessor extends BaseScopeProcessor {
+public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
 
   private final List<Symbol> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
 
-  public MathematicaVariantProcessor(Symbol myStartElement) {
+  public MathematicaDefinedSymbolsProcessor(Symbol myStartElement) {
     super();
     this.myStartElement = myStartElement;
   }

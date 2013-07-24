@@ -33,7 +33,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.MathematicaVariantProcessor;
+import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProcessor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +72,7 @@ public class VariableNameCompletionProvider extends MathematicaCompletionProvide
         List<Symbol> variants = Lists.newArrayList();
         Symbol element = (Symbol) parameters.getPosition().getParent();
 
-        final MathematicaVariantProcessor processor = new MathematicaVariantProcessor(element);
+        final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(element);
         PsiTreeUtil.treeWalkUp(processor, element, containingFile, ResolveState.initial());
 
         variants.addAll(processor.getSymbols());

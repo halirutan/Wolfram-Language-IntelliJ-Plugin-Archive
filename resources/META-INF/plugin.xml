@@ -56,7 +56,6 @@
 
         <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
         <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
-        <!--<psi.referenceContributor implementation="de.halirutan.mathematica.MathematicaReferenceContributor"/>-->
         <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaHighlightingAnnotator"/>
         <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaCommenter"/>
         <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaBraceMatcher"/>
