@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -30,6 +29,7 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -38,11 +38,13 @@ import java.util.List;
  */
 public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
-  private final List<PsiElement> mySymbols = Lists.newLinkedList();
+  private PsiElement referringSymbol;
   private final Symbol myStartElement;
 
   public MathematicaVariableProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
+    this.referringSymbol = null;
+
   }
 
   @Override
@@ -52,14 +54,14 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         final List<Symbol> vars = MathematicaPsiUtililities.extractLocalizedVariables(element);
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName()) && v != myStartElement) {
-            mySymbols.add(v);
+            referringSymbol = v;
             return false;
           }
         }
       }
     } else if (element instanceof Function) {
       if(myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
-        mySymbols.add(element);
+        referringSymbol = element;
         return false;
       }
     }
@@ -74,8 +76,9 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
    *
    * @return Sorted and cleaned list of collected symbols.
    */
-  public List<PsiElement> getSymbols() {
-    return mySymbols;
+  @Nullable
+  public PsiElement getReferringSymbol() {
+    return referringSymbol;
   }
 
 

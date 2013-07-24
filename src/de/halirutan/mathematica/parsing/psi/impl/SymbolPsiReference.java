@@ -21,24 +21,16 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
-import com.google.common.collect.Lists;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -57,10 +49,17 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Nullable
   @Override
   public PsiElement resolveInner() {
+    if (variable.cachedResolve()) {
+      return variable.getResolveElement();
+    }
     MathematicaVariableProcessor processor = new MathematicaVariableProcessor(variable);
     PsiTreeUtil.treeWalkUp(processor, variable, variable.getContainingFile(), ResolveState.initial());
-    final List<PsiElement> result = processor.getSymbols();
-    return result != null && !result.isEmpty() ? result.get(0) : null;
+    final PsiElement referringSymbol = processor.getReferringSymbol();
+    if (referringSymbol != null) {
+      variable.setReferringElement(referringSymbol);
+      return referringSymbol;
+    }
+    return null;
   }
 
 
@@ -133,10 +132,10 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 //
 //    List<Symbol> variants = Lists.newArrayList();
 //
-//    final MathematicaVariantProcessor processor = new MathematicaVariantProcessor(getElement());
+//    final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(getElement());
 //    PsiTreeUtil.treeWalkUp(processor, getElement(), containingFile, ResolveState.initial());
 //
-//    variants.addAll(processor.getSymbols());
+//    variants.addAll(processor.getReferringSymbol());
 //
 //
 //    List<LookupElement> lookupElements = new ArrayList<LookupElement>();

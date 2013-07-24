@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -31,12 +30,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in Mathematica are not
+ * only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the functions you call like <code>Sqrt[2]</code>
+ * are expression having a symbol as head (the <code>Sqrt</code>).
+ *
+ * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class provides methods to
+ * separate the parts.
  * @author patrick (3/28/13)
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
+  private boolean myHasCachedResolver;
+  private LocalizationConstruct myLocalization;
+  private PsiElement myDefinitionElement;
+
   public SymbolImpl(@NotNull ASTNode node) {
     super(node);
+    myLocalization = null;
+    myDefinitionElement = null;
+    myHasCachedResolver = false;
   }
 
 
@@ -81,5 +93,28 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public PsiReference getReference() {
     return new SymbolPsiReference(this);
+  }
+
+  @Override
+  public void subtreeChanged() {
+    myHasCachedResolver = false;
+  }
+
+  public boolean cachedResolve() {
+    return myHasCachedResolver;
+  }
+
+  public PsiElement getResolveElement() {
+    return myDefinitionElement;
+  }
+
+
+  public LocalizationConstruct getLocalizationConstruct() {
+    return myLocalization;
+  }
+
+  @Override
+  public void setReferringElement(PsiElement referringSymbol) {
+
   }
 }
