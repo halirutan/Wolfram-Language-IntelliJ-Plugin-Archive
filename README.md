@@ -63,7 +63,7 @@ Detailed usage of features
 
 ### Documentation lookup
 
-- With `Ctrl+Q` (`Cmd+j` I think on Mac) you can get documentation of built-in Mathematica functions from the
+- With `Ctrl+Q` (`Ctrl+J` on Mac) you can get documentation of built-in Mathematica functions from the
   <code>System`</code> context.
 - Shown are the html/MathML styled usage, Attributes and Options. Additionally, you can click the link to navigate to
   the online documentation of Wolfram
