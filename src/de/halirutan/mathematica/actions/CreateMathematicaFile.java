@@ -23,10 +23,14 @@ package de.halirutan.mathematica.actions;
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.MathematicaIcons;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Provides the creation of new Mathematica files through the IDEA  <em >new...</em> action.
@@ -60,6 +64,15 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
   @Override
   public boolean equals(Object obj) {
     return obj instanceof CreateMathematicaFile;
+  }
+
+  private String fileName;
+
+  @Override
+  protected PsiFile createFile(String name, String templateName, PsiDirectory dir) {
+    final FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+    fileName = FilenameUtils.removeExtension(name);
+    return createFileFromTemplate(fileName, template, dir);
   }
 
 }
