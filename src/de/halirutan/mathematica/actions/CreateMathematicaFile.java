@@ -30,10 +30,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.MathematicaIcons;
-import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
 
 /**
  * Provides the creation of new Mathematica files through the IDEA  <em >new...</em> action.
+ *
  * @author patrick (4/8/13)
  */
 public class CreateMathematicaFile extends CreateFileFromTemplateAction implements DumbAware {
@@ -66,13 +68,38 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
     return obj instanceof CreateMathematicaFile;
   }
 
-  private String fileName;
-
   @Override
   protected PsiFile createFile(String name, String templateName, PsiDirectory dir) {
     final FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
-    fileName = FilenameUtils.removeExtension(name);
+    String fileName = removeExtension(name);
     return createFileFromTemplate(fileName, template, dir);
+  }
+
+  /**
+   * This is stolen from here {@link http://stackoverflow.com/a/990492/1078614}
+   *
+   * @param s filename with possible extension
+   * @return filename without extension
+   */
+  public static String removeExtension(String s) {
+
+    String separator = File.separator;
+    String filename;
+
+    // Remove the path up to the filename.
+    int lastSeparatorIndex = s.lastIndexOf(separator);
+    if (lastSeparatorIndex == -1) {
+      filename = s;
+    } else {
+      filename = s.substring(lastSeparatorIndex + 1);
+    }
+
+    // Remove the extension.
+    int extensionIndex = filename.lastIndexOf(".");
+    if (extensionIndex == -1)
+      return filename;
+
+    return filename.substring(0, extensionIndex);
   }
 
 }
