@@ -42,13 +42,7 @@ public class MessageNameParselet implements InfixParselet {
 
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-    if (left.isValid() && (!left.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION))) {
-      PsiBuilder.Marker mark = left.getMark();
-      PsiBuilder.Marker newMark = mark.precede();
-      mark.drop();
-      newMark.error("Usage message expects Symbol");
-      left = MathematicaParser.result(newMark, left.getToken(), left.isParsed());
-    }
+
     PsiBuilder.Marker messageNameMarker = left.getMark().precede();
     parser.advanceLexer();
     MathematicaParser.Result result = parser.parseExpression(myPrecedence);
