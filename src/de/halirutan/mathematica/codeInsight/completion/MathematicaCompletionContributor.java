@@ -34,20 +34,23 @@ import java.util.HashMap;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
+ * Provides the implementation of the extension point which is registered in /META-INF/plugin.xml. It adds all kinds of
+ * completion providers to the plugin.
+ *
  * @author patrick (4/2/13)
  */
 public class MathematicaCompletionContributor extends CompletionContributor {
 
-    public MathematicaCompletionContributor() {
-        new BuiltinFunctionCompletionProvider().addTo(this);
-        new BuiltinOptionCompletionProvider().addTo(this);
-        new VariableNameCompletionProvider().addTo(this);
-    }
+  public MathematicaCompletionContributor() {
+    new BuiltinFunctionCompletionProvider().addTo(this);
+    new BuiltinOptionCompletionProvider().addTo(this);
+    new VariableNameCompletionProvider().addTo(this);
+  }
 
-    @Override
-    public void beforeCompletion(@NotNull CompletionInitializationContext context) {
-        context.setDummyIdentifier("ZZZ");
-    }
+  @Override
+  public void beforeCompletion(@NotNull CompletionInitializationContext context) {
+    context.setDummyIdentifier("ZZZ");
+  }
 
 
 }
