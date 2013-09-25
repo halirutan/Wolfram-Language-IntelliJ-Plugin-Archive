@@ -54,16 +54,7 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
             return;
         }
 
-        // We want to find a prefix which can contain $ since this is allowed in Mathematica
-//        String prefix = CompletionUtil.findIdentifierPrefix(parameters.getPosition().getContainingFile(),
-//                parameters.getOffset(),
-//                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')),
-//                StandardPatterns.character().andOr(StandardPatterns.character().letterOrDigit(), StandardPatterns.character().equalTo('$')));
-
         String prefix = findCurrentText(parameters, parameters.getPosition());
-
-
-
         CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
 
         CompletionResultSet result2 = result.withPrefixMatcher(matcher);

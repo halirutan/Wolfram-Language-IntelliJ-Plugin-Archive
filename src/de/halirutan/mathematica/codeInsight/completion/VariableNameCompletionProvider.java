@@ -37,7 +37,7 @@ import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProces
 import de.halirutan.mathematica.parsing.psi.util.MathematicaVisitor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
 
 
 /**
@@ -45,45 +45,46 @@ import java.util.*;
  */
 public class VariableNameCompletionProvider extends MathematicaCompletionProvider {
 
-    private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+  private static final double LOCAL_VARIABLE_PRIORITY = 3000;
+  private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
 
-    @Override
-    void addTo(CompletionContributor contributor) {
-        final PsiElementPattern.Capture<PsiElement> symbolPattern = PlatformPatterns.psiElement().withParent(Symbol.class);
-        contributor.extend(CompletionType.BASIC, symbolPattern, this);
-    }
+  @Override
+  void addTo(CompletionContributor contributor) {
+    final PsiElementPattern.Capture<PsiElement> symbolPattern = PlatformPatterns.psiElement().withParent(Symbol.class);
+    contributor.extend(CompletionType.BASIC, symbolPattern, this);
+  }
 
-    @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+  @Override
+  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
 //        final SharedProcessingContext sharedContext = context.getSharedContext();
 //
-        final PsiFile containingFile = parameters.getOriginalFile();
+    final PsiFile containingFile = parameters.getOriginalFile();
 
 
-        MathematicaVisitor visitor = new MathematicaVisitor(){
-            @Override
-            public void visitMessageName(MessageName name) {
-                    PsiElement var = name.getFirstChild();
-            }
-        };
-        visitor.visitFile(containingFile);
+    MathematicaVisitor visitor = new MathematicaVisitor() {
+      @Override
+      public void visitMessageName(MessageName name) {
+        PsiElement var = name.getFirstChild();
+      }
+    };
+    visitor.visitFile(containingFile);
 
-        List<Symbol> variants = Lists.newArrayList();
-        Symbol element = (Symbol) parameters.getPosition().getParent();
+    List<Symbol> variants = Lists.newArrayList();
+    Symbol element = (Symbol) parameters.getPosition().getParent();
 
-        final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(element);
-        PsiTreeUtil.treeWalkUp(processor, element, containingFile, ResolveState.initial());
+    final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(element);
+    PsiTreeUtil.treeWalkUp(processor, element, containingFile, ResolveState.initial());
 
-        variants.addAll(processor.getSymbols());
+    variants.addAll(processor.getSymbols());
 
 
-        for (Symbol currentSymbol : variants) {
-            if (!NAMES.contains(currentSymbol.getSymbolName())) {
-                result.addElement(LookupElementBuilder.create(currentSymbol));
-            }
-        }
+    for (Symbol currentSymbol : variants) {
+      if (!NAMES.contains(currentSymbol.getSymbolName())) {
+        result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), LOCAL_VARIABLE_PRIORITY));
+      }
     }
+  }
 
 
 }
