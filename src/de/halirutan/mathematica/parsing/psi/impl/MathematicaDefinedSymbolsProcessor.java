@@ -29,6 +29,7 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -65,24 +66,24 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
         mySymbols.addAll(declaredSymbols);
       }
     }
-      return true;
+    return true;
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run.
-   * Before returning the list, it removes duplicates, so that no entry appears more than once in the autocompletion
-   * window.
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning the list, it removes
+   * duplicates, so that no entry appears more than once in the auto-completion window.
+   *
    * @return Sorted and cleaned list of collected symbols.
    */
   public List<Symbol> getSymbols() {
 
     Collections.sort(mySymbols, new SymbolComparator());
-    Pattern pattern = Pattern.compile(myStartElement.getSymbolName().substring(0,1)+".*");
+    Pattern pattern = Pattern.compile(myStartElement.getSymbolName().substring(0, 1) + ".*");
     Symbol tmp = null;
     for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
       Symbol next = symbolIterator.next();
 
-      if(!pattern.matcher(next.getSymbolName()).matches()) {
+      if (!pattern.matcher(next.getSymbolName()).matches()) {
         symbolIterator.remove();
         continue;
       }

@@ -34,6 +34,7 @@ import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProcessor;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +47,7 @@ import java.util.List;
 public class VariableNameCompletionProvider extends MathematicaCompletionProvider {
 
   private static final double LOCAL_VARIABLE_PRIORITY = 3000;
+  private static final double GLOBAL_VARIABLE_PRIORITY = 2900;
   private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
 
   @Override
@@ -60,17 +62,16 @@ public class VariableNameCompletionProvider extends MathematicaCompletionProvide
 //        final SharedProcessingContext sharedContext = context.getSharedContext();
 //
     final PsiFile containingFile = parameters.getOriginalFile();
-
-
-    MathematicaVisitor visitor = new MathematicaVisitor() {
-      @Override
-      public void visitMessageName(MessageName name) {
-        PsiElement var = name.getFirstChild();
-      }
-    };
-    visitor.visitFile(containingFile);
-
     List<Symbol> variants = Lists.newArrayList();
+
+    MathematicaTopLevelFunctionVisitor visitor = new MathematicaTopLevelFunctionVisitor();
+    containingFile.accept(visitor);
+    for (String name : visitor.getFunctionsNames()) {
+      if (!NAMES.contains(name)) {
+        result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
+      }
+    }
+
     Symbol element = (Symbol) parameters.getPosition().getParent();
 
     final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(element);

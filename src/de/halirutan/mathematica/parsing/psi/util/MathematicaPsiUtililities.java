@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
@@ -33,6 +33,7 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
+import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiFileImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +72,7 @@ public class MathematicaPsiUtililities {
   }
 
   /**
-   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and <code>a
+   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and  x <code>a
    * = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
    * variables.
    *
@@ -92,10 +93,10 @@ public class MathematicaPsiUtililities {
           assignees.add((Symbol) firstChild.getFirstChild());
         }
 
-        final List<PsiElement> arguments = getArguments(firstChild);
-        for (PsiElement currentArgument : arguments) {
-          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
-        }
+//        final List<PsiElement> arguments = getArguments(firstChild);
+//        for (PsiElement currentArgument : arguments) {
+//          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
+//        }
 
       }
       if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {

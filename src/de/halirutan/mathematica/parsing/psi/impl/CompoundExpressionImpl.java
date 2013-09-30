@@ -23,9 +23,11 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -46,5 +48,14 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
       if( !child.processDeclarations(processor,state,this,place)) return false;
     }
     return true;
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
+      ((MathematicaTopLevelFunctionVisitor) visitor).visitCompoundExpression(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }
