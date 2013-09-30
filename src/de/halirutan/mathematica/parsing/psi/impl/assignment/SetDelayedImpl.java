@@ -23,16 +23,14 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiUtililities;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (4/14/13)
@@ -48,9 +46,15 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
       return true;
     }
     PsiElement assignee = getFirstChild();
-    if (assignee instanceof FunctionCall) {
-        return processor.execute(this, state);
+    return !(assignee instanceof FunctionCall) || processor.execute(this, state);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
+      ((MathematicaTopLevelFunctionVisitor) visitor).visitSetDelayed(this);
+    } else {
+      super.accept(visitor);
     }
-    return true;
   }
 }

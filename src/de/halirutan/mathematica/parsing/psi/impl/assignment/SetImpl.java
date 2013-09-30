@@ -23,16 +23,18 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class SetImpl extends OperatorNameProvider implements Set{
+public class SetImpl extends OperatorNameProvider implements Set {
   public SetImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -41,4 +43,14 @@ public class SetImpl extends OperatorNameProvider implements Set{
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
     return processor.execute(this, state);
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
+      ((MathematicaTopLevelFunctionVisitor) visitor).visitSet(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }

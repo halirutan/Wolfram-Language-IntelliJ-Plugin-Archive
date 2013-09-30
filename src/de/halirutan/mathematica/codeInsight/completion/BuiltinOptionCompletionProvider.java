@@ -42,43 +42,43 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 public class BuiltinOptionCompletionProvider extends MathematicaCompletionProvider {
 
 
-    static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-    static HashSet<String> ourOptionsWithSetDelayed = null;
-    static final String[] SET_DELAYED_OPTIONS = {
-            "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
-            "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"};
+  static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
+  static HashSet<String> ourOptionsWithSetDelayed = null;
+  static final String[] SET_DELAYED_OPTIONS = {
+    "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
+    "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"};
 
-    @Override
-    void addTo(CompletionContributor contributor) {
-        final PsiElementPattern.Capture<PsiElement> funcPattern = psiElement().withSuperParent(2, FunctionCall.class);
-        contributor.extend(CompletionType.SMART, funcPattern, this);
+  @Override
+  void addTo(CompletionContributor contributor) {
+    final PsiElementPattern.Capture<PsiElement> funcPattern = psiElement().withSuperParent(2, FunctionCall.class);
+    contributor.extend(CompletionType.SMART, funcPattern, this);
+  }
+
+  @Override
+  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+
+    if (ourOptionsWithSetDelayed == null) {
+      ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(SET_DELAYED_OPTIONS));
     }
 
-    @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
 
-        if (ourOptionsWithSetDelayed == null) {
-            ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(SET_DELAYED_OPTIONS));
+    final PsiElement position = parameters.getPosition();
+    final PsiElement function = position.getParent().getParent();
+    if (function instanceof FunctionCall) {
+      String functionName = ((Symbol) function.getFirstChild()).getSymbolName();
+      if (ourSymbolInformation.containsKey(functionName) && ourSymbolInformation.get(functionName).function) {
+        final SymbolInformationProvider.SymbolInformation functionInformation = ourSymbolInformation.get(functionName);
+        final String[] options = functionInformation.options;
+        if (options != null) {
+          for (String opt : options) {
+            String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
+            result.addElement(LookupElementBuilder.create(opt + ruleSymbol).withTypeText("Opt"));
+          }
         }
-
-
-        final PsiElement position = parameters.getPosition();
-        final PsiElement function = position.getParent().getParent();
-        if (function instanceof FunctionCall) {
-            String functionName = ((Symbol) function.getFirstChild()).getSymbolName();
-            if (ourSymbolInformation.containsKey(functionName) && ourSymbolInformation.get(functionName).function) {
-                final SymbolInformationProvider.SymbolInformation functionInformation = ourSymbolInformation.get(functionName);
-                final String[] options = functionInformation.options;
-                if (options != null) {
-                    for (String opt : options) {
-                        String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
-                        result.addElement(LookupElementBuilder.create(opt + ruleSymbol).withTypeText("Opt"));
-                    }
-                }
-            }
-        }
-
-
+      }
     }
+
+
+  }
 }
 
