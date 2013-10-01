@@ -16,6 +16,13 @@
 
     <change-notes>
         <![CDATA[
+            <p>0.1.5</p>
+            <ul>
+                <li >Local variable completion</li>
+                <li >Smart completion of Options to functions</li>
+                <li>Basic reference resolving of local variables</li>
+                <li>Renaming of variables with partial reference resolving</li>
+            </ul>
             <p>0.1.4</p>
             <ul>
                 <li>Anonymous functions are made italic </li>
