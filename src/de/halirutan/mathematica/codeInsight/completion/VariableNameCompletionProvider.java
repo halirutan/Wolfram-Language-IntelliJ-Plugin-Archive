@@ -31,14 +31,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProcessor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -48,7 +47,7 @@ public class VariableNameCompletionProvider extends MathematicaCompletionProvide
 
   private static final double LOCAL_VARIABLE_PRIORITY = 3000;
   private static final double GLOBAL_VARIABLE_PRIORITY = 2900;
-  private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+  private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
 
   @Override
   void addTo(CompletionContributor contributor) {

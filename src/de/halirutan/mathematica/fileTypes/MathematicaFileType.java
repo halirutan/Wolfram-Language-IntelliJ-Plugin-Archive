@@ -58,7 +58,7 @@ public class MathematicaFileType extends LanguageFileType {
   @NotNull
   @Override
   public String getDefaultExtension() {
-    return MathematicaFileType.DEFAULT_EXTENSIONS[0];
+    return DEFAULT_EXTENSIONS[0];
   }
 
   @Nullable

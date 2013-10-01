@@ -31,7 +31,6 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,23 +39,23 @@ import java.util.Set;
 public class SymbolPsiReference extends CachingReference implements PsiReference {
 
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
-  private final Symbol variable;
+  private final Symbol myVariable;
 
   public SymbolPsiReference(Symbol element) {
-    variable = element;
+    myVariable = element;
   }
 
   @Nullable
   @Override
   public PsiElement resolveInner() {
-    if (variable.cachedResolve()) {
-      return variable.getResolveElement();
+    if (myVariable.cachedResolve()) {
+      return myVariable.getResolveElement();
     }
-    MathematicaVariableProcessor processor = new MathematicaVariableProcessor(variable);
-    PsiTreeUtil.treeWalkUp(processor, variable, variable.getContainingFile(), ResolveState.initial());
-    final PsiElement referringSymbol = processor.getReferringSymbol();
+    MathematicaVariableProcessor processor = new MathematicaVariableProcessor(myVariable);
+    PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
+    final PsiElement referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol != null) {
-      variable.setReferringElement(referringSymbol);
+      myVariable.setReferringElement(referringSymbol);
       return referringSymbol;
     }
     return null;
@@ -65,12 +64,12 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 
   @Override
   public Symbol getElement() {
-    return variable;
+    return myVariable;
   }
 
   @Override
   public TextRange getRangeInElement() {
-    return TextRange.from(0, variable.getFirstChild().getNode().getTextLength());
+    return TextRange.from(0, myVariable.getFirstChild().getNode().getTextLength());
   }
 
 //  @Override
@@ -81,28 +80,28 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getCanonicalText() {
-    return variable.getMathematicaContext()+"`"+variable.getSymbolName();
+    return myVariable.getMathematicaContext()+"`"+ myVariable.getSymbolName();
   }
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    return variable.setName(newElementName);
+    return myVariable.setName(newElementName);
   }
 
   @Override
   public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
     if (isReferenceTo(element)) {
-      return variable;
+      return myVariable;
     }
     return handleElementRename(element.getText());
   }
 
   @Override
   public boolean isReferenceTo(PsiElement element) {
-    if (NAMES.contains(variable.getSymbolName())) {
+    if (NAMES.contains(myVariable.getSymbolName())) {
       return false;
     }
-    if (element instanceof Symbol && ((Symbol) element).getSymbolName().equals(variable.getSymbolName())) {
+    if (element instanceof Symbol && ((Symbol) element).getSymbolName().equals(myVariable.getSymbolName())) {
       return super.isReferenceTo(element);
     }
     return false;
@@ -135,7 +134,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 //    final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(getElement());
 //    PsiTreeUtil.treeWalkUp(processor, getElement(), containingFile, ResolveState.initial());
 //
-//    variants.addAll(processor.getReferringSymbol());
+//    variants.addAll(processor.getMyReferringSymbol());
 //
 //
 //    List<LookupElement> lookupElements = new ArrayList<LookupElement>();
