@@ -54,7 +54,7 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed) {
-      List<Symbol> assignee = MathematicaPsiUtililities.getSymbolsFromFunctionCallPattern(element);
+      List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
       if (assignee != null) {
         mySymbols.addAll(assignee);
       }

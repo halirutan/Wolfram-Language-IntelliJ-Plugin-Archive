@@ -46,20 +46,9 @@ public class MathematicaBinaryTypedHandler extends TypedHandlerDelegate
 
 {
 
-  @Override
-  public TypedHandlerDelegate.Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
-    if (!(file instanceof MathematicaPsiFile)) return super.charTyped(c, project, editor, file);
-
-    if ((c != '<') || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
-      return TypedHandlerDelegate.Result.CONTINUE;
-    }
-    insertMatchedBinaryBraces(project, editor, file);
-    return TypedHandlerDelegate.Result.CONTINUE;
-  }
-
   /**
-   * this is almost complete c'n'p from TypedHandler, This code should be generalized into BraceMatchingUtil to
-   * support custom matching braces for plugin developers
+   * this is almost complete c'n'p from TypedHandler, This code should be generalized into BraceMatchingUtil to support
+   * custom matching braces for plugin developers
    *
    * @see TypedHandler
    * @see BraceMatchingUtil
@@ -105,5 +94,16 @@ public class MathematicaBinaryTypedHandler extends TypedHandlerDelegate
     if (!BraceMatchingUtil.matchBrace(fileText, fileType, iterator, true, true)) {
       editor.getDocument().insertString(offset, ">>");
     }
+  }
+
+  @Override
+  public Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
+    if (!(file instanceof MathematicaPsiFile)) return super.charTyped(c, project, editor, file);
+
+    if ((c != '<') || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
+      return Result.CONTINUE;
+    }
+    insertMatchedBinaryBraces(project, editor, file);
+    return Result.CONTINUE;
   }
 }

@@ -27,6 +27,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NotNull;
@@ -39,12 +40,12 @@ import java.util.List;
  */
 public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
-  private PsiElement referringSymbol;
+  private PsiElement myReferringSymbol;
   private final Symbol myStartElement;
 
   public MathematicaVariableProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
-    this.referringSymbol = null;
+    this.myReferringSymbol = null;
 
   }
 
@@ -55,15 +56,25 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         final List<Symbol> vars = MathematicaPsiUtililities.extractLocalizedVariables(element);
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName()) && v != myStartElement) {
-            referringSymbol = v;
+            myReferringSymbol = v;
             return false;
           }
         }
       }
     } else if (element instanceof Function) {
       if(myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
-        referringSymbol = element;
+        myReferringSymbol = element;
         return false;
+      }
+    } else if (element instanceof SetDelayed) {
+      final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
+      if (patterns != null) {
+        for (Symbol p : patterns) {
+          if (p.getSymbolName().equals(myStartElement.getSymbolName()) && p != myStartElement) {
+            myReferringSymbol = p;
+            return false;
+          }
+        }
       }
     }
     return true;
@@ -71,15 +82,15 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
 
   /**
-   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()} run.
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run.
    * Before returning the list, it removes duplicates, so that no entry appears more than once in the autocompletion
    * window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */
   @Nullable
-  public PsiElement getReferringSymbol() {
-    return referringSymbol;
+  public PsiElement getMyReferringSymbol() {
+    return myReferringSymbol;
   }
 
 

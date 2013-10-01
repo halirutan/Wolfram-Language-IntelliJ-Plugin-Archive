@@ -25,7 +25,6 @@ import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
@@ -72,8 +71,8 @@ public class MathematicaPsiUtililities {
   }
 
   /**
-   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and  x <code>a
-   * = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
+   * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and  x
+   * <code>a = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
    * variables.
    *
    * @param element PsiElement of the assignment
@@ -93,10 +92,10 @@ public class MathematicaPsiUtililities {
           assignees.add((Symbol) firstChild.getFirstChild());
         }
 
-//        final List<PsiElement> arguments = getArguments(firstChild);
-//        for (PsiElement currentArgument : arguments) {
-//          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
-//        }
+        final List<PsiElement> arguments = getArguments(firstChild);
+        for (PsiElement currentArgument : arguments) {
+          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
+        }
 
       }
       if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
@@ -108,7 +107,7 @@ public class MathematicaPsiUtililities {
   }
 
   @Nullable
-  public static List<Symbol> getSymbolsFromFunctionCallPattern(PsiElement element) {
+  public static List<Symbol> getPatternSymbols(PsiElement element) {
     final PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
 
@@ -122,7 +121,6 @@ public class MathematicaPsiUtililities {
     }
     return assignees;
   }
-
 
   public static List<Symbol> getSymbolsFromArgumentPattern(@Nullable PsiElement element) {
     final LinkedList<Symbol> result = new LinkedList<Symbol>();
@@ -247,8 +245,6 @@ public class MathematicaPsiUtililities {
           }
         }
       }
-
-
 
 
     }

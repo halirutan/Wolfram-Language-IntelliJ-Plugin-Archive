@@ -106,7 +106,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   }
 
   public PsiElement getResolveElement() {
-    return myDefinitionElement;
+    if (myHasCachedResolver) {
+      return myDefinitionElement;
+    }
+    return null;
   }
 
 
@@ -116,6 +119,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public void setReferringElement(PsiElement referringSymbol) {
-
+    myDefinitionElement = referringSymbol;
+    myHasCachedResolver = true;
   }
 }
