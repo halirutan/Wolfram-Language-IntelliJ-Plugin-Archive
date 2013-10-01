@@ -29,6 +29,7 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
+import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +56,7 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
       if (((FunctionCall) element).isScopingConstruct()) {
         final List<Symbol> vars = MathematicaPsiUtililities.extractLocalizedVariables(element);
         for (Symbol v : vars) {
-          if (v.getSymbolName().equals(myStartElement.getSymbolName()) && v != myStartElement) {
+          if (v.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = v;
             return false;
           }
@@ -70,12 +71,23 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
       final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
       if (patterns != null) {
         for (Symbol p : patterns) {
-          if (p.getSymbolName().equals(myStartElement.getSymbolName()) && p != myStartElement) {
+          if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = p;
             return false;
           }
         }
       }
+    } else if (element instanceof RuleDelayed) {
+        PsiElement lhs = element.getFirstChild();
+        List<Symbol> symbolsFromArgumentPattern = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
+        for (Symbol symbol : symbolsFromArgumentPattern) {
+            if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
+                myReferringSymbol = symbol;
+                return false;
+            }
+        }
+
+
     }
     return true;
   }
