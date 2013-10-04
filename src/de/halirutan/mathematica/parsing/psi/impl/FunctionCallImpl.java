@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -31,6 +32,9 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
+
+  private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
+
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
@@ -52,7 +56,8 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
         return true;
       }
       final String symbolName = ((Symbol) head).getSymbolName();
-      if (SCOPING_CONSTRUCTS.contains(symbolName)) {
+      cacheScopingConstruct(symbolName);
+      if (isScopingConstruct()) {
         return processor.execute(this, state);
       }
     }
@@ -65,18 +70,44 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   }
 
   /**
-   * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}. This can lead to various false
-   * negatives. E.g. <code >(Block)[{..},..]</code> returns false, although after <em >evaluating</em> the code in Mathematica, it's of
-   * course found to be a correct scoping construct. Btw, the Mathematica front end has the same issues.
+   * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}. This can
+   * lead to various false negatives. E.g. <code >(Block)[{..},..]</code> returns false, although after <em
+   * >evaluating</em> the code in Mathematica, it's of course found to be a correct scoping construct. Btw, the
+   * Mathematica front end has the same issues.
    *
-   * @return True iff the head is a symbol defining the function as scoping construct like <code >Block[{..},..]</code>.
+   * @return True iff the head is a symbol defining the function as scoping construct like <code
+   *         >Block[{..},..]</code>.
    */
+
   @Override
   public boolean isScopingConstruct() {
+
+    if (isUserDataEmpty()) {
+      cacheScopingConstruct();
+    }
+    LocalizationConstruct.ConstructType type = (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
+    return type != null && !type.equals(LocalizationConstruct.ConstructType.NULL);
+  }
+
+  public LocalizationConstruct.ConstructType getScopingConstruct() {
+    if (isUserDataEmpty()) {
+      cacheScopingConstruct();
+    }
+    return (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
+  }
+
+  private void cacheScopingConstruct() {
     PsiElement head = getFirstChild();
     if (head instanceof Symbol) {
-      return SCOPING_CONSTRUCTS.contains(((Symbol) head).getSymbolName());
+      cacheScopingConstruct(((Symbol) head).getSymbolName());
+    } else {
+      putUserData(myScopeKey, LocalizationConstruct.ConstructType.NULL);
     }
-    return false;
+  }
+
+  private void cacheScopingConstruct(String functionName) {
+    if (isUserDataEmpty()) {
+      putUserData(myScopeKey, LocalizationConstruct.getType(functionName));
+    }
   }
 }

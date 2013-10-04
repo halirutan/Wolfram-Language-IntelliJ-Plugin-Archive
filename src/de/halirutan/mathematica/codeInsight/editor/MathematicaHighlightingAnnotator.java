@@ -29,6 +29,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
@@ -38,6 +39,7 @@ import de.halirutan.mathematica.parsing.psi.api.pattern.Blank;
 import de.halirutan.mathematica.parsing.psi.api.pattern.BlankNullSequence;
 import de.halirutan.mathematica.parsing.psi.api.pattern.BlankSequence;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
+import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -47,63 +49,93 @@ import java.util.Set;
  */
 public class MathematicaHighlightingAnnotator implements Annotator {
 
-    private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+  private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
 
-    @Override
-    public void annotate(@NotNull PsiElement element, @NotNull final AnnotationHolder holder) {
-        if (element instanceof Symbol) {
-            PsiElement id = element.getFirstChild();
+  private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
+    holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
+    holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key));
+  }
 
-            if ( NAMES.contains(id.getText())) {
-                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+  @Override
+  public void annotate(@NotNull PsiElement element, @NotNull final AnnotationHolder holder) {
+    if (element instanceof Symbol) {
+//      final LocalizationConstruct.ConstructType localizationConstruct = ((Symbol) element).getLocalizationConstruct();
+//      if (localizationConstruct != LocalizationConstruct.ConstructType.NULL) {
+//        switch (localizationConstruct) {
+//          case MODULE:
+//            setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+//            break;
+//        }
+//      } else {
+      PsiElement id = element.getFirstChild();
+
+      if (NAMES.contains(id.getText())) {
+        setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+      } else {
+        PsiReference ref = element.getReference();
+        if (ref != null) {
+          PsiElement referenceElement = ref.resolve();
+          if (referenceElement instanceof Symbol) {
+            final LocalizationConstruct.ConstructType scope = ((Symbol) referenceElement).getLocalizationConstruct();
+            switch (scope) {
+              case MODULE:
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+                break;
+              case BLOCK:
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED);
+                break;
+              case SETDELAYEDPATTERN:
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
+                break;
+              default:
+                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+                break;
             }
-        } else if (element instanceof Pattern) {
-            PsiElement fst = element.getFirstChild();
-            if (fst != null && !(fst instanceof Pattern))
-                setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-        } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
+          }
+        }
+      }
+    } else if (element instanceof Pattern) {
+      PsiElement fst = element.getFirstChild();
+      if (fst != null && !(fst instanceof Pattern))
+        setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
+    } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
+      setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
+    } else if (element instanceof Function) {
+      holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION));
+
+      PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
+        @Override
+        public void visitElement(PsiElement element) {
+          if (element instanceof Symbol && MathematicaElementTypes.SLOTS.contains(element.getNode().getFirstChildNode().getElementType())) {
             setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-        } else if (element instanceof Function) {
-            holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION));
-
-            PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
-                @Override
-                public void visitElement(PsiElement element) {
-                    if (element instanceof Symbol && MathematicaElementTypes.SLOTS.contains(element.getNode().getFirstChildNode().getElementType())) {
-                        setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-                    } else {
-                        element.acceptChildren(this);
-                    }
-                }
-            };
-
-            patternVisitor.visitElement(element);
-        } else if (element instanceof MessageName) {
-            highlightMessageName(element, holder);
+          } else {
+            element.acceptChildren(this);
+          }
         }
-    }
+      };
 
-    private void highlightMessageName(PsiElement message, final AnnotationHolder holder) {
-        new PsiRecursiveElementVisitor(){
-            @Override
-            public void visitElement(PsiElement element) {
-                setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MESSAGE);
-                super.visitElement(element);
-            }
-        }.visitElement(message);
+      patternVisitor.visitElement(element);
+    } else if (element instanceof MessageName) {
+      highlightMessageName(element, holder);
     }
+  }
 
-    private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
-        PsiElement id = symbol.getFirstChild();
+  private void highlightMessageName(PsiElement message, final AnnotationHolder holder) {
+    new PsiRecursiveElementVisitor() {
+      @Override
+      public void visitElement(PsiElement element) {
+        setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MESSAGE);
+        super.visitElement(element);
+      }
+    }.visitElement(message);
+  }
 
-        if ( !(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
-            setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-        }
+  private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
+    PsiElement id = symbol.getFirstChild();
+
+    if (!(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
+      setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
     }
-
-    private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
-        holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
-        holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key));
-    }
+  }
 
 }

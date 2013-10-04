@@ -55,7 +55,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
     final PsiElement referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol != null) {
-      myVariable.setReferringElement(referringSymbol);
+      myVariable.setReferringElement(referringSymbol, processor.getMyLocalization());
       return referringSymbol;
     }
     return null;
