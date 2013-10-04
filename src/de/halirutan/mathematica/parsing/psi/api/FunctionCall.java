@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,10 +33,12 @@ import java.util.Set;
  */
 public interface FunctionCall extends PsiElement {
 
-  public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-      new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
+//  public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+//      new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
 
   public boolean isScopingConstruct();
+
+  public LocalizationConstruct.ConstructType getScopingConstruct();
 
 
 }

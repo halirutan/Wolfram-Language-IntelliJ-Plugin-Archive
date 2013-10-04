@@ -31,18 +31,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in Mathematica are not
- * only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the functions you call like <code>Sqrt[2]</code>
- * are expression having a symbol as head (the <code>Sqrt</code>).
+ * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
+ * Mathematica are not only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the
+ * functions you call like <code>Sqrt[2]</code> are expression having a symbol as head (the <code>Sqrt</code>).
+ * <p/>
+ * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class
+ * provides methods to separate the parts.
  *
- * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class provides methods to
- * separate the parts.
  * @author patrick (3/28/13)
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   private boolean myHasCachedResolver;
-  private LocalizationConstruct myLocalization;
+  private LocalizationConstruct.ConstructType myLocalization;
   private PsiElement myDefinitionElement;
 
   public SymbolImpl(@NotNull ASTNode node) {
@@ -51,7 +52,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     myDefinitionElement = null;
     myHasCachedResolver = false;
   }
-
 
   @Override
   public PsiElement setName(@NonNls @NotNull String name) {
@@ -99,6 +99,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public void subtreeChanged() {
     myHasCachedResolver = false;
+    myLocalization = null;
   }
 
   public boolean cachedResolve() {
@@ -112,14 +113,17 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     return null;
   }
 
-
-  public LocalizationConstruct getLocalizationConstruct() {
-    return myLocalization;
+  public LocalizationConstruct.ConstructType getLocalizationConstruct() {
+    if (myHasCachedResolver && myLocalization != null) {
+      return myLocalization;
+    }
+    return LocalizationConstruct.ConstructType.NULL;
   }
 
   @Override
-  public void setReferringElement(PsiElement referringSymbol) {
+  public void setReferringElement(PsiElement referringSymbol, LocalizationConstruct.ConstructType type) {
     myDefinitionElement = referringSymbol;
+    myLocalization = type;
     myHasCachedResolver = true;
   }
 }

@@ -83,11 +83,13 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
         if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
         else if (SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
       }
-      path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
+//      path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
+      path = "usages/" + context.replace('`', '/') + name + ".html";
     }
 
     if (element instanceof OperatorNameProvider) {
-      path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProvider) element).getOperatorName() + ".html";
+//      path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProvider) element).getOperatorName() + ".html";
+      path = "usages/System/" + ((OperatorNameProvider) element).getOperatorName() + ".html";
     }
 
     InputStream docFile = (path != null) ? MathematicaDocumentationProvider.class.getResourceAsStream(path) : null;

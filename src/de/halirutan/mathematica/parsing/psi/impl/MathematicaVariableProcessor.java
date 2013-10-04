@@ -41,12 +41,14 @@ import java.util.List;
  */
 public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
-  private PsiElement myReferringSymbol;
   private final Symbol myStartElement;
+  private PsiElement myReferringSymbol;
+  private LocalizationConstruct.ConstructType myLocalization;
 
   public MathematicaVariableProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
     this.myReferringSymbol = null;
+    this.myLocalization = LocalizationConstruct.ConstructType.NULL;
 
   }
 
@@ -58,13 +60,14 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = v;
+            myLocalization = ((FunctionCall) element).getScopingConstruct();
             return false;
           }
         }
       }
     } else if (element instanceof Function) {
-      if(myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
-        myReferringSymbol = element;
+      if (myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
+        myReferringSymbol = element.getLastChild();
         return false;
       }
     } else if (element instanceof SetDelayed) {
@@ -73,30 +76,30 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         for (Symbol p : patterns) {
           if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = p;
+            myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
             return false;
           }
         }
       }
     } else if (element instanceof RuleDelayed) {
-        PsiElement lhs = element.getFirstChild();
-        List<Symbol> symbolsFromArgumentPattern = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
-        for (Symbol symbol : symbolsFromArgumentPattern) {
-            if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
-                myReferringSymbol = symbol;
-                return false;
-            }
+      PsiElement lhs = element.getFirstChild();
+      List<Symbol> symbolsFromArgumentPattern = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
+      for (Symbol symbol : symbolsFromArgumentPattern) {
+        if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
+          myReferringSymbol = symbol;
+          myLocalization = LocalizationConstruct.ConstructType.RULEDELAYED;
+          return false;
         }
+      }
 
 
     }
     return true;
   }
 
-
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run.
-   * Before returning the list, it removes duplicates, so that no entry appears more than once in the autocompletion
-   * window.
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning
+   * the list, it removes duplicates, so that no entry appears more than once in the autocompletion window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */
@@ -105,5 +108,7 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
     return myReferringSymbol;
   }
 
-
+  public LocalizationConstruct.ConstructType getMyLocalization() {
+    return myLocalization;
+  }
 }

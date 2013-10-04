@@ -32,6 +32,7 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
+import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
 import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiFileImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,10 +47,10 @@ import java.util.List;
  */
 public class MathematicaPsiUtililities {
 
-  public static final java.util.Set<String> MODULE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-      new String[]{"Module", "Block", "With"}));
-  public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-      new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
+//  public static final java.util.Set<String> MODULE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+//      new String[]{"Module", "Block", "With"}));
+//  public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
+//      new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
 
   public static String getSymbolName(Symbol element) {
     ASTNode symbolNode = element.getNode().getFirstChildNode();
@@ -208,7 +209,7 @@ public class MathematicaPsiUtililities {
     if (element instanceof FunctionCall && element.getFirstChild() instanceof Symbol) {
       String scopingConstructName = ((Symbol) element.getFirstChild()).getSymbolName();
       // Do we have Module[..] Block[..] or With[..]
-      if (MODULE_LIKE_CONSTRUCTS.contains(scopingConstructName)) {
+      if (LocalizationConstruct.isModuleLike(scopingConstructName)) {
         // The general structure in the parse tree is FunctionCall(Module, [, ...,])
         final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
         if (openingBracket != null) {
@@ -230,7 +231,7 @@ public class MathematicaPsiUtililities {
         }
       }
 
-      if (TABLE_LIKE_CONSTRUCTS.contains(scopingConstructName)) {
+      if (LocalizationConstruct.isTableLike(scopingConstructName)) {
         final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
         if (openingBracket != null) {
           final PsiElement body = getNextSiblingSkippingWhitespace(openingBracket);

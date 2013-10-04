@@ -72,7 +72,7 @@ public interface Symbol extends PsiNameIdentifierOwner {
    *
    * @return type of localization
    */
-  LocalizationConstruct getLocalizationConstruct();
+  LocalizationConstruct.ConstructType getLocalizationConstruct();
 
   /**
    * Caches the resolved referring symbol for later use.
@@ -80,5 +80,5 @@ public interface Symbol extends PsiNameIdentifierOwner {
    *                        <code>Module[{x=3}, x+x]</code> the <code>x</code> in the braces is the definition for both <code>x</code>
    *                        in the <code>Module</code> body.
    */
-  void setReferringElement(PsiElement referringSymbol);
+  void setReferringElement(PsiElement referringSymbol, LocalizationConstruct.ConstructType type);
 }

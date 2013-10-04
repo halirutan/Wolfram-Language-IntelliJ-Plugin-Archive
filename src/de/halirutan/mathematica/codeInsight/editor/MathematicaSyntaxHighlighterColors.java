@@ -65,6 +65,7 @@ public class MathematicaSyntaxHighlighterColors {
     public final static TextAttributesKey MESSAGE = TextAttributesKey.createTextAttributesKey("MMA.MESSAGE");
     public final static TextAttributesKey USAGE_MESSAGE = TextAttributesKey.createTextAttributesKey("MMA.USAGE_MESSAGE");
     public final static TextAttributesKey MODULE_LOCALIZED = TextAttributesKey.createTextAttributesKey("MMA.MODULE_LOCALIZED");
+    public final static TextAttributesKey BLOCK_LOCALIZED = TextAttributesKey.createTextAttributesKey("MMA.BLOCK_LOCALIZED");
     public final static TextAttributesKey BAD_CHARACTER = HighlighterColors.BAD_CHARACTER;
 
 }

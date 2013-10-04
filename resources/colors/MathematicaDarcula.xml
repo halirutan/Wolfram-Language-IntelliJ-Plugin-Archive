@@ -79,13 +79,14 @@
 
     <option name="MMA.MODULE_LOCALIZED">
         <value>
-            <option name="FOREGROUND" value="526D4A" />
+            <!--<option name="FOREGROUND" value="526D4A" />-->
+            <option name="FOREGROUND" value="62976e" />
         </value>
     </option>
 
     <option name="MMA.BLOCK_LOCALIZED">
         <value>
-            <option name="FOREGROUND" value="8a653b" />
+            <option name="FOREGROUND" value="629782" />
         </value>
     </option>
 
