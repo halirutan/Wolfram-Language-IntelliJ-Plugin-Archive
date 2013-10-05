@@ -28,6 +28,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,9 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
       return true;
     }
     PsiElement assignee = getFirstChild();
-    return !(assignee instanceof FunctionCall) || processor.execute(this, state);
+    if (!(assignee instanceof FunctionCall) && !(assignee instanceof Condition))
+      return false;
+    return  processor.execute(this, state);
   }
 
   @Override
