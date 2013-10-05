@@ -35,10 +35,6 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.api.pattern.Blank;
-import de.halirutan.mathematica.parsing.psi.api.pattern.BlankNullSequence;
-import de.halirutan.mathematica.parsing.psi.api.pattern.BlankSequence;
-import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 
@@ -94,12 +90,12 @@ public class MathematicaHighlightingAnnotator implements Annotator {
           }
         }
       }
-    } else if (element instanceof Pattern) {
-      PsiElement fst = element.getFirstChild();
-      if (fst != null && !(fst instanceof Pattern))
-        setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-    } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
-      setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
+//    } else if (element instanceof Pattern) {
+//      PsiElement fst = element.getFirstChild();
+//      if (fst != null && !(fst instanceof Pattern))
+//        setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
+//    } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
+//      setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
     } else if (element instanceof Function) {
       holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION));
 
@@ -130,12 +126,12 @@ public class MathematicaHighlightingAnnotator implements Annotator {
     }.visitElement(message);
   }
 
-  private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
-    PsiElement id = symbol.getFirstChild();
-
-    if (!(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
-      setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-    }
-  }
+//  private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
+//    PsiElement id = symbol.getFirstChild();
+//
+//    if (!(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
+//      setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+//    }
+//  }
 
 }

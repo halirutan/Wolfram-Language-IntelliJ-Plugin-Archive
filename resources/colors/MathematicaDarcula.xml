@@ -80,7 +80,7 @@
     <option name="MMA.MODULE_LOCALIZED">
         <value>
             <!--<option name="FOREGROUND" value="526D4A" />-->
-            <option name="FOREGROUND" value="62976e" />
+            <option name="FOREGROUND" value="629755" />
         </value>
     </option>
 
@@ -116,4 +116,12 @@
             <option name="FONT_TYPE" value="2"/>
         </value>
     </option>
+    <option name="MATCHED_BRACE_ATTRIBUTES">
+        <value>
+            <!--<option name="FOREGROUND" value="CC7832" />-->
+            <option name="BACKGROUND" value="6B7988" />
+        </value>
+    </option>
+
+
 </list>

@@ -37,8 +37,6 @@ import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiFileImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -109,8 +107,12 @@ public class MathematicaPsiUtililities {
 
   @Nullable
   public static List<Symbol> getPatternSymbols(PsiElement element) {
-    final PsiElement firstChild = element.getFirstChild();
+    PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
+
+    if (firstChild instanceof Condition) {
+      firstChild = firstChild.getFirstChild();
+    }
 
     if (element instanceof SetDelayed || element instanceof Set) {
       if (firstChild instanceof FunctionCall) {
@@ -132,6 +134,7 @@ public class MathematicaPsiUtililities {
     PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
 
       private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
+      private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
 
       @Override
       public void visitElement(PsiElement element) {
@@ -143,20 +146,30 @@ public class MathematicaPsiUtililities {
           if (possibleSymbol instanceof Symbol) {
             result.add((Symbol) possibleSymbol);
           }
+
+          if (element instanceof Pattern) {
+            element.acceptChildren(this);
+          }
+
         } else if (element instanceof Optional || element instanceof Condition || element instanceof PatternTest) {
           PsiElement firstChild = element.getFirstChild();
           if (firstChild != null) {
             firstChild.accept(this);
           }
-        } else if (element instanceof FunctionCall) {
+        }
+        else if (element instanceof FunctionCall) {
           PsiElement head = element.getFirstChild();
-          if (myDiveInFirstChild.contains(head.getNode().getText())) {
+          final String name = head.getNode().getText();
+          if (myDiveInFirstChild.contains(name)) {
             List<PsiElement> args = getArguments(element);
             if (args.size() > 0) {
               args.get(0).accept(this);
             }
+          } else if (!myDoNotDiveIn.contains(name)) {
+            element.acceptChildren(this);
           }
-        } else {
+        }
+      else {
           element.acceptChildren(this);
         }
       }

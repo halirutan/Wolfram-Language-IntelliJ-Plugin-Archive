@@ -46,7 +46,7 @@ import java.util.Set;
 public class VariableNameCompletionProvider extends MathematicaCompletionProvider {
 
   private static final double LOCAL_VARIABLE_PRIORITY = 3000;
-  private static final double GLOBAL_VARIABLE_PRIORITY = 2900;
+  private static final double GLOBAL_VARIABLE_PRIORITY = 2500;
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
 
   @Override
