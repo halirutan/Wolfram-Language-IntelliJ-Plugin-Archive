@@ -24,7 +24,6 @@ package de.halirutan.mathematica.parsing.psi.util;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.CompoundExpressionImpl;
@@ -38,7 +37,7 @@ import java.util.Set;
  */
 public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
 
-  private Set<String> myCollectedFunctionNames;
+  private final Set<String> myCollectedFunctionNames;
 
   public MathematicaTopLevelFunctionVisitor() {
     super();
@@ -50,11 +49,6 @@ public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
     file.acceptChildren(this);
   }
 
-  @Override
-  public void visitElement(PsiElement element) {
-    super.visitElement(element);
-  }
-
   public void visitCompoundExpression(CompoundExpressionImpl elm) {
     elm.acceptChildren(this);
   }
@@ -64,19 +58,7 @@ public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
   }
 
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set element) {
-    final PsiElement firstChild = element.getFirstChild();
-    if (firstChild instanceof MessageName) {
-      final PsiElement[] args = element.getFirstChild().getChildren();
-      if (args.length == 2) {
-        final PsiElement symbol = args[0];
-        final PsiElement msg = args[1];
-        if (symbol instanceof Symbol && msg instanceof Symbol) {
-          myCollectedFunctionNames.add(((Symbol) symbol).getSymbolName() + "::" + ((Symbol) msg).getSymbolName());
-        }
-      }
-    } else {
-      cacheAssignedSymbols(element);
-    }
+    cacheAssignedSymbols(element);
   }
 
   public Set<String> getFunctionsNames() {
