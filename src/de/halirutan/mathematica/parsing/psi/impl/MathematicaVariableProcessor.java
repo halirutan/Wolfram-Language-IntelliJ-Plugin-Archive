@@ -44,6 +44,7 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
   private LocalizationConstruct.ConstructType myLocalization;
+  private PsiElement myLocalizationSymbol;
 
   public MathematicaVariableProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
@@ -60,6 +61,7 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = v;
+            myLocalizationSymbol = element.getFirstChild();
             myLocalization = ((FunctionCall) element).getScopingConstruct();
             return false;
           }
@@ -110,5 +112,9 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
 
   public LocalizationConstruct.ConstructType getMyLocalization() {
     return myLocalization;
+  }
+
+  public PsiElement getMyLocalizationSymbol() {
+    return myLocalizationSymbol;
   }
 }

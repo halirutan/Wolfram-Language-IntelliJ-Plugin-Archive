@@ -22,14 +22,23 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * @author patrick (4/14/13)
  */
-public class TagSetImpl extends OperatorNameProvider {
+public class TagSetImpl extends OperatorNameProvider implements TagSet {
   public TagSetImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public Set<Symbol> getAssignedSymbols() {
+    return null;
   }
 }

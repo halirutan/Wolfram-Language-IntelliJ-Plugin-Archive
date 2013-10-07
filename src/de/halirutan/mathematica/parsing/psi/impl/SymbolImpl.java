@@ -42,15 +42,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-  private boolean myHasCachedResolver;
+  private boolean myIsUpToDate;
   private LocalizationConstruct.ConstructType myLocalization;
-  private PsiElement myDefinitionElement;
+  private Symbol myDefinitionElement;
+  private PsiElement myLocalizationElement;
 
   public SymbolImpl(@NotNull ASTNode node) {
     super(node);
-    myLocalization = null;
+    myLocalization = LocalizationConstruct.ConstructType.NULL;
     myDefinitionElement = null;
-    myHasCachedResolver = false;
+    myIsUpToDate = false;
   }
 
   @Override
@@ -60,24 +61,28 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public String getName() {
-    return MathematicaPsiUtililities.getSymbolName(this);
+//    return MathematicaPsiUtililities.getSymbolName(this);
+    return getText();
   }
 
   @Override
   public String getMathematicaContext() {
-    String myName = MathematicaPsiUtililities.getSymbolName(this);
-    String context;
-    if (myName.contains("`")) {
-      context = myName.substring(0, myName.lastIndexOf('`') + 1);
-    } else {
-      context = "System`";
+//    String myName = MathematicaPsiUtililities.getSymbolName(this);
+    String myName = getName();
+    String context = "System`";
+    if (myName != null) {
+      if (myName.contains("`")) {
+        context = myName.substring(0, myName.lastIndexOf('`') + 1);
+      }
     }
     return context;
   }
 
   @Override
   public String getSymbolName() {
-    String myName = MathematicaPsiUtililities.getSymbolName(this);
+//    String myName = MathematicaPsiUtililities.getSymbolName(this);
+    String myName = getName();
+    if (myName == null) return "";
     if (myName.lastIndexOf('`') == -1) {
       return myName;
     } else {
@@ -88,7 +93,8 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Nullable
   @Override
   public PsiElement getNameIdentifier() {
-    return this.getNode().getPsi();
+//    return this.getNode().getPsi();
+    return this;
   }
 
   @Override
@@ -98,32 +104,37 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public void subtreeChanged() {
-    myHasCachedResolver = false;
-    myLocalization = null;
+    if (myLocalizationElement instanceof SymbolImpl) {
+      ((SymbolImpl) myLocalizationElement).subtreeChanged();
+    }
+    myIsUpToDate = false;
+    myLocalizationElement = null;
+    myLocalization = LocalizationConstruct.ConstructType.NULL;
   }
 
   public boolean cachedResolve() {
-    return myHasCachedResolver;
+    return myIsUpToDate;
   }
 
-  public PsiElement getResolveElement() {
-    if (myHasCachedResolver) {
+  public Symbol getResolveElement() {
+    if (myIsUpToDate) {
       return myDefinitionElement;
     }
     return null;
   }
 
   public LocalizationConstruct.ConstructType getLocalizationConstruct() {
-    if (myHasCachedResolver && myLocalization != null) {
+    if (myIsUpToDate && myLocalization != null) {
       return myLocalization;
     }
     return LocalizationConstruct.ConstructType.NULL;
   }
 
   @Override
-  public void setReferringElement(PsiElement referringSymbol, LocalizationConstruct.ConstructType type) {
+  public void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement) {
     myDefinitionElement = referringSymbol;
+    myLocalizationElement = localizationElement;
     myLocalization = type;
-    myHasCachedResolver = true;
+    myIsUpToDate = true;
   }
 }

@@ -26,6 +26,6 @@ import com.intellij.psi.PsiElement;
 /**
  * @author patrick (4/14/13)
  */
-public interface SetDelayed extends PsiElement {
+public interface SetDelayed extends PsiElement, Assignment {
 
 }
