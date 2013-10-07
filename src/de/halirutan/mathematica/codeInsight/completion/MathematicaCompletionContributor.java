@@ -22,14 +22,7 @@
 package de.halirutan.mathematica.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.StandardPatterns;
-import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -43,8 +36,8 @@ public class MathematicaCompletionContributor extends CompletionContributor {
 
   public MathematicaCompletionContributor() {
     new BuiltinFunctionCompletionProvider().addTo(this);
-    new BuiltinOptionCompletionProvider().addTo(this);
-    new VariableNameCompletionProvider().addTo(this);
+    new SmartContextAwareCompletion().addTo(this);
+    new VariableNameCompletion().addTo(this);
   }
 
   @Override

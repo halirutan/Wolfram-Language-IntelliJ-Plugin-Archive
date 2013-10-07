@@ -21,32 +21,39 @@
 
 package de.halirutan.mathematica.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * @author patrick (4/2/13)
  */
-public class BuiltinOptionCompletionProvider extends MathematicaCompletionProvider {
+public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
 
   static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-  static HashSet<String> ourOptionsWithSetDelayed = null;
-  static final String[] SET_DELAYED_OPTIONS = {
-    "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
-    "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"};
+  static HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
+      "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
+      "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"
+  }));
 
   @Override
   void addTo(CompletionContributor contributor) {
@@ -55,12 +62,7 @@ public class BuiltinOptionCompletionProvider extends MathematicaCompletionProvid
   }
 
   @Override
-  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-
-    if (ourOptionsWithSetDelayed == null) {
-      ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(SET_DELAYED_OPTIONS));
-    }
-
+  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull final CompletionResultSet result) {
 
     final PsiElement position = parameters.getPosition();
     final PsiElement function = position.getParent().getParent();
@@ -76,6 +78,30 @@ public class BuiltinOptionCompletionProvider extends MathematicaCompletionProvid
           }
         }
       }
+
+      if (functionName.equals("Message")) {
+        final Set<LookupElement> usages = new com.intellij.util.containers.hash.HashSet<LookupElement>();
+        PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
+          @Override
+          public void visitElement(PsiElement element) {
+            if (element instanceof MessageName) {
+              final PsiElement[] args = element.getChildren();
+              if (args.length == 2) {
+                final PsiElement symbol = args[0];
+                final PsiElement msg = args[1];
+                if (symbol instanceof Symbol && msg instanceof Symbol) {
+                  usages.add(LookupElementBuilder.create(((Symbol) symbol).getSymbolName() + "::" + ((Symbol) msg).getSymbolName()).
+                      withTypeText("Msg"));
+                }
+              }
+            }
+            element.acceptChildren(this);
+          }
+        };
+        visitor.visitFile(parameters.getOriginalFile());
+        result.addAllElements(usages);
+      }
+
     }
 
 

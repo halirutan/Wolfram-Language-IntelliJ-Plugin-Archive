@@ -28,9 +28,11 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProcessor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
@@ -43,7 +45,7 @@ import java.util.Set;
 /**
  * @author patrick (4/2/13)
  */
-public class VariableNameCompletionProvider extends MathematicaCompletionProvider {
+public class VariableNameCompletion extends MathematicaCompletionProvider {
 
   private static final double LOCAL_VARIABLE_PRIORITY = 3000;
   private static final double GLOBAL_VARIABLE_PRIORITY = 2500;
@@ -57,32 +59,51 @@ public class VariableNameCompletionProvider extends MathematicaCompletionProvide
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+    final Symbol callingSymbol = (Symbol) parameters.getPosition().getParent();
+    final String callingSymbolName = callingSymbol.getSymbolName();
 
-//        final SharedProcessingContext sharedContext = context.getSharedContext();
-//
-    final PsiFile containingFile = parameters.getOriginalFile();
-    List<Symbol> variants = Lists.newArrayList();
+    if (!parameters.isExtendedCompletion()) {
+      final PsiFile containingFile = parameters.getOriginalFile();
+      List<Symbol> variants = Lists.newArrayList();
 
-    MathematicaTopLevelFunctionVisitor visitor = new MathematicaTopLevelFunctionVisitor();
-    containingFile.accept(visitor);
-    for (String name : visitor.getFunctionsNames()) {
-      if (!NAMES.contains(name)) {
-        result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
+      MathematicaTopLevelFunctionVisitor visitor = new MathematicaTopLevelFunctionVisitor();
+      containingFile.accept(visitor);
+      for (String name : visitor.getFunctionsNames()) {
+        if (!NAMES.contains(name)) {
+          result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
+        }
       }
-    }
-
-    Symbol element = (Symbol) parameters.getPosition().getParent();
-
-    final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(element);
-    PsiTreeUtil.treeWalkUp(processor, element, containingFile, ResolveState.initial());
-
-    variants.addAll(processor.getSymbols());
 
 
-    for (Symbol currentSymbol : variants) {
-      if (!NAMES.contains(currentSymbol.getSymbolName())) {
-        result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), LOCAL_VARIABLE_PRIORITY));
+      final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(callingSymbol);
+      PsiTreeUtil.treeWalkUp(processor, callingSymbol, containingFile, ResolveState.initial());
+
+      variants.addAll(processor.getSymbols());
+
+
+      for (Symbol currentSymbol : variants) {
+        if (!NAMES.contains(currentSymbol.getSymbolName())) {
+          result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), LOCAL_VARIABLE_PRIORITY));
+        }
       }
+    } else {
+      final Set<String> allSymbols = new HashSet<String>();
+      PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
+        @Override
+        public void visitElement(PsiElement element) {
+          if (element instanceof Symbol && !callingSymbolName.equals(((Symbol) element).getSymbolName() + "ZZZ")) {
+            allSymbols.add(((Symbol) element).getSymbolName());
+          }
+          element.acceptChildren(this);
+        }
+      };
+      visitor.visitFile(parameters.getOriginalFile());
+      for (String currentSymbol : allSymbols) {
+        if (!NAMES.contains(currentSymbol)) {
+          result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), GLOBAL_VARIABLE_PRIORITY));
+        }
+      }
+
     }
   }
 
