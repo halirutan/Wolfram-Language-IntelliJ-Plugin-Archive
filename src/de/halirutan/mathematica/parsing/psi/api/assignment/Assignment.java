@@ -19,29 +19,24 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.api.assignment;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import org.jetbrains.annotations.NotNull;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
+
+import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:42 AM Purpose:
+ * @author patrick (10/6/13)
  */
-public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
-//  final ASTNode myNode;
+public interface Assignment {
 
-  public ExpressionImpl(@NotNull ASTNode node) {
-    super(node);
-//    myNode = node;
-  }
+  /**
+   * All operators that assign values to <em>right hand sides</em> should implement this method to return all symbols
+   * which are assigned. Some examples: <code>func[x_,y_] := x+y</code>, here <code>func</code> is assigned, while the
+   * arguments x and y are not. <code>{x,y,z} = {1,2,3}</code>, here all three variables are assigned.
+   *
+   * @return The set of symbols which are assigned in this call.
+   */
+  public Set<Symbol> getAssignedSymbols();
 
-  public String toString() {
-    String classname = getClass().getSimpleName();
-    if (classname.endsWith("Impl")) {
-      classname = classname.substring(0, classname.length() - "Impl".length());
-    }
-    return classname;
-  }
 }

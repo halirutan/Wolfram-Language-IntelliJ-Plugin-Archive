@@ -49,13 +49,18 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public PsiElement resolveInner() {
     if (myVariable.cachedResolve()) {
-      return myVariable.getResolveElement();
+      if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName())) {
+        return myVariable.getResolveElement();
+      } else {
+        myVariable.subtreeChanged();
+      }
+
     }
     MathematicaVariableProcessor processor = new MathematicaVariableProcessor(myVariable);
     PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
     final PsiElement referringSymbol = processor.getMyReferringSymbol();
-    if (referringSymbol != null) {
-      myVariable.setReferringElement(referringSymbol, processor.getMyLocalization());
+    if (referringSymbol instanceof Symbol) {
+      myVariable.setReferringElement((Symbol) referringSymbol, processor.getMyLocalization(), processor.getMyLocalizationSymbol());
       return referringSymbol;
     }
     return null;

@@ -24,5 +24,5 @@ package de.halirutan.mathematica.parsing.psi.api.assignment;
 /**
  * @author patrick (4/14/13)
  */
-public interface TagSet {
+public interface TagSet extends Assignment {
 }
