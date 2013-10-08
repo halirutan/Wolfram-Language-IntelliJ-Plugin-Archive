@@ -54,7 +54,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   @Override
   public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
     if (element instanceof Symbol) {
-      return "Hello you..";
+      return "Hello you...";
     }
     return null;
   }
