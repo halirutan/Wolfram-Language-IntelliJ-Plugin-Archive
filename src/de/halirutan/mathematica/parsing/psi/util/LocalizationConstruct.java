@@ -19,10 +19,11 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import com.google.common.collect.Sets;
+import com.intellij.psi.PsiElement;
+
 import java.util.Set;
 
 /**
@@ -30,35 +31,74 @@ import java.util.Set;
  */
 public class LocalizationConstruct {
 
-  private static final Set<String> myModuleLike = new HashSet<String>(Arrays.asList(new String[]{
-      "Module", "Block", "With", "Function", "DynamicModule"}));
-  private static final Set<String> myTableLike = new HashSet<String>(Arrays.asList(new String[]{
-      "Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D", "ContourPlot", "ContourPlot3D",}));
-  private static final Set<String> myLimitLike = new HashSet<String>(Arrays.asList(new String[]{"Limit"}));
-  private static final Set<String> myRuleLike = new HashSet<String>(Arrays.asList(new String[]{
-      "RuleDelayed"}));
+  private static final Set<String> myModuleLike = Sets.newHashSet("Module", "Block", "With", "DynamicModule");
+  private static final Set<String> myFunctionLike = Sets.newHashSet("Function");
+  private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D", "ContourPlot", "ContourPlot3D");
+  private static final Set<String> myLimitLike = Sets.newHashSet("Limit");
+  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
 
   public static boolean isLocalizationConstruct(String elementName) {
     return myModuleLike.contains(elementName) ||
         myTableLike.contains(elementName) ||
         myLimitLike.contains(elementName) ||
-        myRuleLike.contains(elementName);
+        myRuleLike.contains(elementName) ||
+        myFunctionLike.contains(elementName);
   }
 
   public static boolean isModuleLike(String name) {
     return myModuleLike.contains(name);
   }
 
+  public static boolean isModuleLike(ConstructType scopingConstruct) {
+    for (String s : myModuleLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
+  }
+
   public static boolean isTableLike(String name) {
     return myTableLike.contains(name);
+  }
+
+  public static boolean isTableLike(ConstructType scopingConstruct) {
+    for (String s : myTableLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
   }
 
   public static boolean isRuleLike(String name) {
     return myRuleLike.contains(name);
   }
 
+  public static boolean isRuleLike(ConstructType scopingConstruct) {
+    for (String s : myRuleLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
+  }
+
   public static boolean isLimitLike(String name) {
     return myLimitLike.contains(name);
+  }
+
+  public static boolean isLimitLike(ConstructType scopingConstruct) {
+    for (String s : myLimitLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
+  }
+
+  public static boolean isFunctionLike(ConstructType scopingConstruct) {
+    for (String s : myFunctionLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
   }
 
   public static ConstructType getType(String name) {

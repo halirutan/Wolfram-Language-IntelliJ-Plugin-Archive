@@ -35,7 +35,7 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;

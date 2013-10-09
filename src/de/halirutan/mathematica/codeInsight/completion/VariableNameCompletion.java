@@ -34,7 +34,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.MathematicaDefinedSymbolsProcessor;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaDefinedSymbolsProcessor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
