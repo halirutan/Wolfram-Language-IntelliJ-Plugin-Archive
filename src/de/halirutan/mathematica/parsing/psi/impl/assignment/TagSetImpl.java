@@ -22,9 +22,11 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -41,4 +43,14 @@ public class TagSetImpl extends OperatorNameProvider implements TagSet {
   public Set<Symbol> getAssignedSymbols() {
     return null;
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
+      ((MathematicaTopLevelFunctionVisitor) visitor).visitTagSet(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }

@@ -26,6 +26,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.CompoundExpressionImpl;
 
 import java.util.HashSet;
@@ -58,6 +60,14 @@ public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
   }
 
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set element) {
+    cacheAssignedSymbols(element);
+  }
+
+  public void visitTagSet(TagSet element) {
+    cacheAssignedSymbols(element);
+  }
+
+  public void visitTagSetDelayed(TagSetDelayed element) {
     cacheAssignedSymbols(element);
   }
 

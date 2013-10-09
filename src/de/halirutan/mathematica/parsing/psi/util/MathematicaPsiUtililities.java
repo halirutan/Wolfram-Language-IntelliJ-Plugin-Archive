@@ -22,16 +22,16 @@
 package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Lists;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -79,28 +79,32 @@ public class MathematicaPsiUtililities {
    */
   @Nullable
   public static List<Symbol> getAssignmentSymbols(PsiElement element) {
-    final PsiElement firstChild = element.getFirstChild();
+    PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
 
     if (element instanceof SetDelayed || element instanceof Set) {
       if (firstChild instanceof Symbol) {
         assignees.add((Symbol) firstChild);
       }
+
+      // extract f from f[arg,..] := blub
       if (firstChild instanceof FunctionCall) {
+        // test for SubValues definition f[][] := ...
+        if (firstChild.getFirstChild() instanceof FunctionCall)
+          firstChild = firstChild.getFirstChild();
+
         if (firstChild.getFirstChild() instanceof Symbol) {
           assignees.add((Symbol) firstChild.getFirstChild());
         }
-
-        final List<PsiElement> arguments = getArguments(firstChild);
-        for (PsiElement currentArgument : arguments) {
-          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
+      } else
+        // extract a,b,c,d from things like {{a,b},{c,d}} = {{1,2},{3,4}}
+        if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+          assignees.addAll(getSymbolsFromNestedList(firstChild));
         }
-
+    } else if (element instanceof TagSetDelayed || element instanceof TagSet) {
+      if (firstChild instanceof Symbol) {
+        assignees.add((Symbol) firstChild);
       }
-      if (firstChild instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
-        assignees.addAll(getSymbolsFromNestedList(firstChild));
-      }
-
     }
     return assignees;
   }
@@ -116,10 +120,22 @@ public class MathematicaPsiUtililities {
 
     if (element instanceof SetDelayed || element instanceof Set) {
       if (firstChild instanceof FunctionCall) {
+        // Do we have a SubValues call?
+        if (firstChild.getFirstChild() instanceof FunctionCall) {
+          for (PsiElement psiElement : getArguments(firstChild.getFirstChild())) {
+            assignees.addAll(getSymbolsFromArgumentPattern(psiElement));
+          }
+        }
         final List<PsiElement> arguments = getArguments(firstChild);
         for (PsiElement currentArgument : arguments) {
           assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
         }
+      }
+    } else if (element instanceof TagSet || element instanceof TagSetDelayed) {
+      PsiElement nextElm = getNextSiblingSkippingWhitespace(firstChild);
+      if (nextElm != null) {
+        PsiElement tagPattern  = getNextSiblingSkippingWhitespace(nextElm);
+        assignees.addAll(getSymbolsFromArgumentPattern(tagPattern));
       }
     }
     return assignees;
@@ -269,7 +285,7 @@ public class MathematicaPsiUtililities {
    * arg1+arg2]</code> extracts <code>arg1,arg2</code></li> <li><code>Function[#+#]</code> extracts nothing</li>
    * <li><code>Function[Null, #+#, {Listable}]</code> extracts nothing</li> </ul>
    *
-   * @param functionElement The {@link PsiElement} of the function call
+   * @param element The {@link PsiElement} of the function call
    * @return The set of localized function arguments
    */
   public static List<Symbol> getLocalFunctionVariables(@NotNull FunctionCall element) {
@@ -329,7 +345,7 @@ public class MathematicaPsiUtililities {
             localVariables.add((Symbol) e);
           }
           if (e instanceof Set || e instanceof SetDelayed) {
-            if(e.getFirstChild() instanceof Symbol) localVariables.add((Symbol) e.getFirstChild());
+            if (e.getFirstChild() instanceof Symbol) localVariables.add((Symbol) e.getFirstChild());
           }
         }
       }
@@ -394,7 +410,7 @@ public class MathematicaPsiUtililities {
   public static PsiElement getNextSiblingSkippingWhitespace(@Nullable PsiElement elm) {
     if (elm == null) return null;
     PsiElement sibling = elm.getNextSibling();
-    while (sibling instanceof PsiWhiteSpace) {
+    while (sibling instanceof PsiWhiteSpace || sibling instanceof PsiComment) {
       sibling = sibling.getNextSibling();
     }
     return sibling;
