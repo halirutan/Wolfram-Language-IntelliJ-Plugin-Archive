@@ -22,18 +22,18 @@
 package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Lists;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
-import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
-import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiFileImpl;
+import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,25 +49,25 @@ public class MathematicaPsiUtililities {
 //      new String[]{"Module", "Block", "With"}));
 //  public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
 //      new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
+//
+//  public static String getSymbolName(Symbol element) {
+//    ASTNode symbolNode = element.getNode().getFirstChildNode();
+//    if (symbolNode != null) {
+//      return symbolNode.getText();
+//    }
+//    return null;
+//  }
 
-  public static String getSymbolName(Symbol element) {
-    ASTNode symbolNode = element.getNode().getFirstChildNode();
-    if (symbolNode != null) {
-      return symbolNode.getText();
-    }
-    return null;
-  }
-
-  public static PsiElement setSymbolName(Symbol element, String newName) {
-    ASTNode identifierNode = element.getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
-    final PsiFileFactory fileFactory = PsiFileFactory.getInstance(element.getProject());
-    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, newName);
-    ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
-    if (identifierNode != null && newElm != null) {
-      element.getNode().replaceChild(identifierNode, newElm);
-    }
-    return element;
-  }
+//  public static PsiElement setSymbolName(Symbol element, String newName) {
+//    ASTNode identifierNode = element.getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+//    final PsiFileFactory fileFactory = PsiFileFactory.getInstance(element.getProject());
+//    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, newName);
+//    ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+//    if (identifierNode != null && newElm != null) {
+//      element.getNode().replaceChild(identifierNode, newElm);
+//    }
+//    return element;
+//  }
 
   /**
    * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and  x
@@ -105,7 +105,7 @@ public class MathematicaPsiUtililities {
     return assignees;
   }
 
-  @Nullable
+  @NotNull
   public static List<Symbol> getPatternSymbols(PsiElement element) {
     PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
@@ -156,8 +156,7 @@ public class MathematicaPsiUtililities {
           if (firstChild != null) {
             firstChild.accept(this);
           }
-        }
-        else if (element instanceof FunctionCall) {
+        } else if (element instanceof FunctionCall) {
           PsiElement head = element.getFirstChild();
           final String name = head.getNode().getText();
           if (myDiveInFirstChild.contains(name)) {
@@ -168,8 +167,7 @@ public class MathematicaPsiUtililities {
           } else if (!myDoNotDiveIn.contains(name)) {
             element.acceptChildren(this);
           }
-        }
-      else {
+        } else {
           element.acceptChildren(this);
         }
       }
@@ -265,6 +263,134 @@ public class MathematicaPsiUtililities {
     return localVariables;
   }
 
+  /**
+   * This extracts the local defined arguments of a <code>Function</code> call. Examples are <ul>
+   * <li><code>Function[arg, arg^2]</code> extracts <code>arg</code></li> <li><code>Function[{arg1,arg2},
+   * arg1+arg2]</code> extracts <code>arg1,arg2</code></li> <li><code>Function[#+#]</code> extracts nothing</li>
+   * <li><code>Function[Null, #+#, {Listable}]</code> extracts nothing</li> </ul>
+   *
+   * @param functionElement The {@link PsiElement} of the function call
+   * @return The set of localized function arguments
+   */
+  public static List<Symbol> getLocalFunctionVariables(@NotNull FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && element.getScopingConstruct().equals(LocalizationConstruct.ConstructType.FUNCTION)) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 1) {
+        return localVariables;
+      }
+
+      final PsiElement firstArgument = arguments.get(0);
+      switch (arguments.size()) {
+        case 1:
+          break;
+        case 2:
+          if (firstArgument instanceof Symbol) {
+            localVariables.add((Symbol) firstArgument);
+          } else if (firstArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+            localVariables = getSymbolsFromNestedList(firstArgument);
+          }
+          break;
+        case 3:
+          if (firstArgument instanceof Symbol && !((Symbol) firstArgument).getSymbolName().equals("Null")) {
+            localVariables.add((Symbol) firstArgument);
+          } else if (firstArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+            localVariables = getSymbolsFromNestedList(firstArgument);
+          }
+          break;
+      }
+    }
+    return localVariables;
+
+  }
+
+  /**
+   * This extracts the local defined arguments of a <code>Module</code>, <code>Block</code>, ... call. Examples are <ul>
+   * <li><code>Module[{arg}, arg^2]</code> extracts <code>arg</code></li> <li><code>With[{a=1,b=2}, a*b]</code> extracts
+   * <code>a,b</code></li> </ul>
+   *
+   * @param element The {@link PsiElement} of the function call
+   * @return The set of localized function arguments
+   */
+  public static List<Symbol> getLocalModuleLikeVariables(@NotNull FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && LocalizationConstruct.isModuleLike(element.getScopingConstruct())) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 1) {
+        return localVariables;
+      }
+
+      final PsiElement firstArgument = arguments.get(0);
+      if (firstArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+        for (PsiElement e : firstArgument.getChildren()) {
+          if (e instanceof Symbol) {
+            localVariables.add((Symbol) e);
+          }
+          if (e instanceof Set || e instanceof SetDelayed) {
+            if(e.getFirstChild() instanceof Symbol) localVariables.add((Symbol) e.getFirstChild());
+          }
+        }
+      }
+    }
+    return localVariables;
+  }
+
+  /**
+   * This extracts the local defined arguments of a <code>Table</code>, <code>Sum</code>, ... call. Examples are <ul>
+   * <li><code>Table[i,{i,10}]</code> extracts <code>i</code></li> <li><code>NSum[a+b,{a,0,10},{b,0,10}]</code> extracts
+   * <code>a,b</code></li> </ul>
+   *
+   * @param element The {@link PsiElement} of the function call
+   * @return The set of localized function arguments
+   */
+  public static List<Symbol> getLocalTableLikeVariables(FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && LocalizationConstruct.isTableLike(element.getScopingConstruct())) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 2) {
+        return localVariables;
+      }
+
+      for (int i = 1; i < arguments.size(); i++) {
+        final PsiElement currentArgument = arguments.get(i);
+        if (currentArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+          final PsiElement firstListElement = getFirstListElement(currentArgument);
+          if (firstListElement instanceof Symbol) {
+            localVariables.add((Symbol) firstListElement);
+          }
+        }
+      }
+    }
+    return localVariables;
+  }
+
+  /**
+   * This extracts the local defined argument for a <code>Limit[Sin[x]/x, x-> 0]</code> call. Note that the returned
+   * list has always only one element since <code>Limit</code> always uses only one variable.
+   *
+   * @param element The {@link PsiElement} of the function call
+   * @return The localized argument
+   */
+  public static List<Symbol> getLocalLimitVariables(FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && LocalizationConstruct.isLimitLike(element.getScopingConstruct())) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 2) {
+        return localVariables;
+      }
+
+      final PsiElement rule = arguments.get(1);
+      if (rule instanceof Rule && rule.getFirstChild() instanceof Symbol) {
+        localVariables.add((Symbol) rule.getFirstChild());
+      }
+    }
+    return localVariables;
+  }
+
   public static PsiElement getNextSiblingSkippingWhitespace(@Nullable PsiElement elm) {
     if (elm == null) return null;
     PsiElement sibling = elm.getNextSibling();
@@ -285,8 +411,54 @@ public class MathematicaPsiUtililities {
     return getNextSiblingSkippingWhitespace(brace);
   }
 
+
+  /**
+   * Returns the first argument of a function call <code>func[arg1,arg2,...]</code>.
+   *
+   * @param func {@link FunctionCall} element
+   * @return First argument if available, <code>null</code> otherwise
+   */
+  @Nullable
+  public static PsiElement getFirstArgument(@Nullable PsiElement func) {
+    if (!(func instanceof FunctionCall)) {
+      return null;
+    }
+
+    PsiElement head = func.getFirstChild();
+    if (head == null) {
+      return null;
+    }
+
+    PsiElement bracket = head.getNextSibling();
+    if (bracket == null || !bracket.getNode().getElementType().equals(MathematicaElementTypes.LEFT_BRACKET)) {
+      return null;
+    }
+
+    List<PsiElement> allArguments = new LinkedList<PsiElement>();
+    boolean skipHead = true;
+    for (PsiElement child : func.getChildren()) {
+      final IElementType type = child.getNode().getElementType();
+      if (MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(type) || type.equals(MathematicaElementTypes.COMMA)) {
+        continue;
+      }
+      if (skipHead) {
+        skipHead = false;
+        continue;
+      }
+      return child;
+    }
+    return null;
+  }
+
+  /**
+   * Takes the complete {@link PsiElement} of a function-call like <code>f[x,y,z]</code> or <code>Plot[x,{x,0,1}]</code>
+   * and skips over function-head, whitespaces and commas to give you only the arguments.
+   *
+   * @param func {@link FunctionCall} element from which you want the arguments
+   * @return List of arguments
+   */
   public static List<PsiElement> getArguments(@Nullable PsiElement func) {
-    if (func == null) {
+    if (!(func instanceof FunctionCall)) {
       return null;
     }
 
@@ -330,6 +502,4 @@ public class MathematicaPsiUtililities {
 
     return null;
   }
-
-
 }

@@ -23,7 +23,7 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
-import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:

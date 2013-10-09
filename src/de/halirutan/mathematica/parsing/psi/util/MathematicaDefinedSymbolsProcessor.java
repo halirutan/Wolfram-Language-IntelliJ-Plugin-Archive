@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
@@ -29,7 +29,7 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
+import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Provides a processor to collect all variables in the current scope to suggest them for autocompletion.
+ *
  * @author patrick (5/22/13)
  */
 public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
@@ -55,23 +57,45 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed) {
       List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
-      if (assignee != null) {
-        mySymbols.addAll(assignee);
-      }
-    }
+      mySymbols.addAll(assignee);
+    } else if (element instanceof FunctionCall) {
+      final FunctionCall functionCall = (FunctionCall) element;
+      if (functionCall.isScopingConstruct()) {
+        List<Symbol> vars = Lists.newArrayList();
+        final LocalizationConstruct.ConstructType scopingConstruct = functionCall.getScopingConstruct();
 
-    if (element instanceof FunctionCall) {
-      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
-      if (declaredSymbols.size() > 0) {
-        mySymbols.addAll(declaredSymbols);
+        if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalFunctionVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isModuleLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalModuleLikeVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isTableLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalTableLikeVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
+        }
+
+//      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
+        if (vars.size() > 0) {
+          mySymbols.addAll(vars);
+        }
       }
+    } else if (element instanceof RuleDelayed) {
+      final List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(element.getFirstChild());
+      mySymbols.addAll(patternSymbols);
     }
     return true;
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning the list, it removes
-   * duplicates, so that no entry appears more than once in the auto-completion window.
+   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()}
+   * run. Before returning the list, it removes duplicates, so that no entry appears more than once in the
+   * auto-completion window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */

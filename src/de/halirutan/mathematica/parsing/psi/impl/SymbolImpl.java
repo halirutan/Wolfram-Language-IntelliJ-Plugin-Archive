@@ -23,8 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
+import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +60,14 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public PsiElement setName(@NonNls @NotNull String name) {
-    return MathematicaPsiUtililities.setSymbolName(this, name);
+    ASTNode identifierNode = getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+    final PsiFileFactory fileFactory = PsiFileFactory.getInstance(getProject());
+    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, name);
+    ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
+    if (identifierNode != null && newElm != null) {
+      getNode().replaceChild(identifierNode, newElm);
+    }
+    return this;
   }
 
   @Override

@@ -29,6 +29,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {

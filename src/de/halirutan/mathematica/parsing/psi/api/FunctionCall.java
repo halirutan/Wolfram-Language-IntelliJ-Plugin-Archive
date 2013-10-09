@@ -22,11 +22,7 @@
 package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.impl.LocalizationConstruct;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:

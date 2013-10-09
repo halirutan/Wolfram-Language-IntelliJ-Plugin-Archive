@@ -19,8 +19,9 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.util;
 
+import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -30,7 +31,6 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,13 +56,32 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof FunctionCall) {
-      if (((FunctionCall) element).isScopingConstruct()) {
-        final List<Symbol> vars = MathematicaPsiUtililities.extractLocalizedVariables(element);
+      final FunctionCall functionCall = (FunctionCall) element;
+      if (functionCall.isScopingConstruct()) {
+        List<Symbol> vars = Lists.newArrayList();
+        final LocalizationConstruct.ConstructType scopingConstruct = functionCall.getScopingConstruct();
+
+        if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalFunctionVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isModuleLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalModuleLikeVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isTableLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalTableLikeVariables(functionCall);
+        }
+
+        if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
+        }
+
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = v;
             myLocalizationSymbol = element.getFirstChild();
-            myLocalization = ((FunctionCall) element).getScopingConstruct();
+            myLocalization = scopingConstruct;
             return false;
           }
         }
@@ -74,19 +93,17 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
       }
     } else if (element instanceof SetDelayed) {
       final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
-      if (patterns != null) {
-        for (Symbol p : patterns) {
-          if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
-            myReferringSymbol = p;
-            myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
-            return false;
-          }
+      for (Symbol p : patterns) {
+        if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
+          myReferringSymbol = p;
+          myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
+          return false;
         }
       }
     } else if (element instanceof RuleDelayed) {
       PsiElement lhs = element.getFirstChild();
-      List<Symbol> symbolsFromArgumentPattern = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
-      for (Symbol symbol : symbolsFromArgumentPattern) {
+      List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
+      for (Symbol symbol : patternSymbols) {
         if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = symbol;
           myLocalization = LocalizationConstruct.ConstructType.RULEDELAYED;
@@ -100,8 +117,9 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning
-   * the list, it removes duplicates, so that no entry appears more than once in the autocompletion window.
+   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()}
+   * run. Before returning the list, it removes duplicates, so that no entry appears more than once in the
+   * autocompletion window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */
