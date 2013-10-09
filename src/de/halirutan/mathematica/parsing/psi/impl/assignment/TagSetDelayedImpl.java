@@ -22,9 +22,11 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -37,8 +39,20 @@ public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDel
     super(node);
   }
 
+  //TODO: Implement processDeclarations
+
   @Override
   public Set<Symbol> getAssignedSymbols() {
     return null;
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
+      ((MathematicaTopLevelFunctionVisitor) visitor).visitTagSetDelayed(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }

@@ -29,6 +29,8 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +57,7 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
 
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
-    if (element instanceof Set || element instanceof SetDelayed) {
+    if (element instanceof Set || element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof TagSet) {
       List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
       mySymbols.addAll(assignee);
     } else if (element instanceof FunctionCall) {

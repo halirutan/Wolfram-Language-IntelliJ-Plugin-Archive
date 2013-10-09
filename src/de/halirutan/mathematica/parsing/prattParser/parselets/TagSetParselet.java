@@ -60,7 +60,8 @@ public class TagSetParselet implements InfixParselet {
       return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
     }
 
-    IElementType tokenType = parser.getTokenTypeSave(tagSetMark);
+//    IElementType tokenType = parser.getTokenTypeSave(tagSetMark);
+    IElementType tokenType = parser.getTokenType();
 
     if (tokenType == null) {
       parser.error("Missing ':=','=' or '=.' to complete TagSet");
@@ -80,11 +81,11 @@ public class TagSetParselet implements InfixParselet {
       parser.advanceLexer();
       MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
       IElementType endType = tokenType.equals(MathematicaElementTypes.SET) ? MathematicaElementTypes.TAG_SET_EXPRESSION : MathematicaElementTypes.TAG_SET_DELAYED_EXPRESSION;
-      if (left.isValid() && expr1.isValid() && expr2.isValid()) {
-        tagSetMark.done(endType);
-      } else {
-        tagSetMark.error("Error in TagSet expression");
+      if (!expr2.isValid()) {
+        parser.error("Expression expected");
       }
+
+      tagSetMark.done(endType);
       return MathematicaParser.result(tagSetMark, endType, expr1.isParsed() && expr2.isParsed());
     }
 
