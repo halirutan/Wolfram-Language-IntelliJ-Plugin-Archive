@@ -23,10 +23,11 @@ package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
@@ -50,5 +51,14 @@ public class FunctionImpl extends OperatorNameProvider implements Function {
       }
     }
     return true;
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitFunction(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

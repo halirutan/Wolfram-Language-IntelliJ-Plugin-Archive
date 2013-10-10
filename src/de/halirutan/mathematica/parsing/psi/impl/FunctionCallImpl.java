@@ -24,9 +24,10 @@ package de.halirutan.mathematica.parsing.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
@@ -39,11 +40,6 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
-  }
-
-  @Override
-  public PsiReference getReference() {
-    return super.getReference();
   }
 
   @Override
@@ -109,6 +105,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   private void cacheScopingConstruct(String functionName) {
     if (isUserDataEmpty()) {
       putUserData(myScopeKey, LocalizationConstruct.getType(functionName));
+    }
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitFunctionCall(this);
+    } else {
+      super.accept(visitor);
     }
   }
 }

@@ -22,11 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -34,12 +37,18 @@ import java.util.Set;
 /**
  * @author patrick (4/14/13)
  */
-public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDelayed{
+public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDelayed {
   public TagSetDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  //TODO: Implement processDeclarations
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (lastParent.getParent() != this) {
+      return true;
+    }
+    return processor.execute(this, state);
+  }
 
   @Override
   public Set<Symbol> getAssignedSymbols() {
@@ -48,8 +57,8 @@ public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDel
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
-      ((MathematicaTopLevelFunctionVisitor) visitor).visitTagSetDelayed(this);
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitTagSetDelayed(this);
     } else {
       super.accept(visitor);
     }

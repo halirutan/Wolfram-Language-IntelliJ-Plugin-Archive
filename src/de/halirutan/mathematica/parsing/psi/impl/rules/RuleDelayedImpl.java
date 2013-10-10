@@ -23,9 +23,10 @@ package de.halirutan.mathematica.parsing.psi.impl.rules;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/14/13)
  */
-public class RuleDelayedImpl extends OperatorNameProvider implements RuleDelayed{
+public class RuleDelayedImpl extends OperatorNameProvider implements RuleDelayed {
   public RuleDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -44,5 +45,14 @@ public class RuleDelayedImpl extends OperatorNameProvider implements RuleDelayed
       return true;
     }
     return processor.execute(this, state);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitRuleDelayed(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

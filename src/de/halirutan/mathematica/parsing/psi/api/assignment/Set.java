@@ -21,10 +21,10 @@
 
 package de.halirutan.mathematica.parsing.psi.api.assignment;
 
-import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.Expression;
 
 /**
  * @author patrick (4/14/13)
  */
-public interface Set extends PsiElement, Assignment {
+public interface Set extends Expression, Assignment {
 }

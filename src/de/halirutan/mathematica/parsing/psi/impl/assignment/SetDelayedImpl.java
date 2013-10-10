@@ -26,12 +26,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -52,13 +52,13 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
     PsiElement assignee = getFirstChild();
     if (!(assignee instanceof FunctionCall) && !(assignee instanceof Condition))
       return false;
-    return  processor.execute(this, state);
+    return processor.execute(this, state);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
-      ((MathematicaTopLevelFunctionVisitor) visitor).visitSetDelayed(this);
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitSetDelayed(this);
     } else {
       super.accept(visitor);
     }

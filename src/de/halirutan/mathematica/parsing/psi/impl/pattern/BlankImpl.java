@@ -22,6 +22,8 @@
 package de.halirutan.mathematica.parsing.psi.impl.pattern;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Blank;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -32,5 +34,14 @@ import org.jetbrains.annotations.NotNull;
 public class BlankImpl extends OperatorNameProvider implements Blank {
   public BlankImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitBlank(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

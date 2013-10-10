@@ -26,5 +26,5 @@ import com.intellij.psi.PsiElement;
 /**
  * @author patrick (4/14/13)
  */
-public interface TagSetDelayed extends PsiElement, Assignment{
+public interface TagSetDelayed extends PsiElement, Assignment {
 }

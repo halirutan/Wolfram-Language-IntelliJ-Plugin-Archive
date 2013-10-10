@@ -24,7 +24,6 @@ package de.halirutan.mathematica.parsing.psi.util;
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -134,7 +133,7 @@ public class MathematicaPsiUtililities {
     } else if (element instanceof TagSet || element instanceof TagSetDelayed) {
       PsiElement nextElm = getNextSiblingSkippingWhitespace(firstChild);
       if (nextElm != null) {
-        PsiElement tagPattern  = getNextSiblingSkippingWhitespace(nextElm);
+        PsiElement tagPattern = getNextSiblingSkippingWhitespace(nextElm);
         assignees.addAll(getSymbolsFromArgumentPattern(tagPattern));
       }
     }

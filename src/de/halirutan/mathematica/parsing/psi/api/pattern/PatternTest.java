@@ -21,8 +21,10 @@
 
 package de.halirutan.mathematica.parsing.psi.api.pattern;
 
+import de.halirutan.mathematica.parsing.psi.api.Expression;
+
 /**
  * @author patrick (4/14/13)
  */
-public interface PatternTest {
+public interface PatternTest extends Expression {
 }

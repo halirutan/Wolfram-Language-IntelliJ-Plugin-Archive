@@ -29,7 +29,6 @@ import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtililities;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

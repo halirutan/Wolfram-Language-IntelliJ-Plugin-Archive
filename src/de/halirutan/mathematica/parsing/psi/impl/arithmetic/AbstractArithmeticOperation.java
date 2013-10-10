@@ -19,28 +19,28 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.util;
+package de.halirutan.mathematica.parsing.psi.impl.arithmetic;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.arithmetic.ArithmeticOperation;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (7/19/13)
+ * @author patrick (10/9/13)
  */
-public class MathematicaVisitor extends PsiElementVisitor {
-    @Override
-    public void visitElement(PsiElement element) {
-        super.visitElement(element);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+abstract class AbstractArithmeticOperation extends ExpressionImpl implements ArithmeticOperation {
 
-    @Override
-    public void visitFile(PsiFile file) {
-        super.visitFile(file);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+  AbstractArithmeticOperation(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    public void visitMessageName(MessageName messageName) {
-        visitElement(messageName);
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitArithmeticOperation(this);
     }
+  }
 }

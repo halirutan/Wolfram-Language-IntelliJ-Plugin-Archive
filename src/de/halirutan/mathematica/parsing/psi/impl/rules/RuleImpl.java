@@ -22,14 +22,26 @@
 package de.halirutan.mathematica.parsing.psi.impl.rules;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class RuleImpl extends OperatorNameProvider {
+public class RuleImpl extends OperatorNameProvider implements Rule {
   public RuleImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitRule(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

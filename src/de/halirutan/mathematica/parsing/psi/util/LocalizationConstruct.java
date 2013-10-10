@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Sets;
-import com.intellij.psi.PsiElement;
 
 import java.util.Set;
 

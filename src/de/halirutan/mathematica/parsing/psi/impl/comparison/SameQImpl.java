@@ -22,13 +22,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.comparison;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.comparison.SameQ;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class SameQImpl extends OperatorNameProvider {
+public class SameQImpl extends AbstractComparisonOperation implements SameQ {
   public SameQImpl(@NotNull ASTNode node) {
     super(node);
   }

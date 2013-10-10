@@ -22,11 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -45,9 +48,17 @@ public class TagSetImpl extends OperatorNameProvider implements TagSet {
   }
 
   @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (lastParent.getParent() != this) {
+      return true;
+    }
+    return processor.execute(this, state);
+  }
+
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
-      ((MathematicaTopLevelFunctionVisitor) visitor).visitTagSet(this);
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitTagSet(this);
     } else {
       super.accept(visitor);
     }

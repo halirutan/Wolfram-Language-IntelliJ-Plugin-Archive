@@ -23,13 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl.arithmetic;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.Divide;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/13/13)
  */
-public class DivideImpl extends ExpressionImpl implements Divide {
+public class DivideImpl extends AbstractArithmeticOperation implements Divide {
   public DivideImpl(@NotNull ASTNode node) {
     super(node);
   }

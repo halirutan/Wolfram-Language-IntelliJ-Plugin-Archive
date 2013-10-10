@@ -23,13 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl.arithmetic;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.Power;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/13/13)
  */
-public class PowerImpl extends ExpressionImpl implements Power {
+public class PowerImpl extends AbstractArithmeticOperation implements Power {
   public PowerImpl(@NotNull ASTNode node) {
     super(node);
   }

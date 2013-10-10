@@ -54,11 +54,10 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
       if (child.equals(lastParent)) {
         continue;
       }
-      if( !child.processDeclarations(processor,state, this, place)) return false;
+      if (!child.processDeclarations(processor, state, this, place)) return false;
     }
     return true;
   }
-
 
 
 }

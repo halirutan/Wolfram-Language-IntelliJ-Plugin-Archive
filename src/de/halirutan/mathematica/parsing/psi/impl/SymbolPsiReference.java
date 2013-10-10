@@ -22,7 +22,9 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -86,7 +88,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myVariable.getMathematicaContext()+"`"+ myVariable.getSymbolName();
+    return myVariable.getMathematicaContext() + "`" + myVariable.getSymbolName();
   }
 
   @Override

@@ -22,6 +22,8 @@
 package de.halirutan.mathematica.parsing.psi.impl.lists;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
@@ -32,5 +34,14 @@ import org.jetbrains.annotations.NotNull;
 public class ListImpl extends ExpressionImpl implements List {
   public ListImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitList(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

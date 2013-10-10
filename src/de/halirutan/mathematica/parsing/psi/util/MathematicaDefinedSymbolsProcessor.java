@@ -32,6 +32,7 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -58,8 +59,11 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof TagSet) {
-      List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
-      mySymbols.addAll(assignee);
+//      List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
+      MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+      element.accept(patternVisitor);
+      mySymbols.addAll(patternVisitor.getMyPatternSymbols());
+
     } else if (element instanceof FunctionCall) {
       final FunctionCall functionCall = (FunctionCall) element;
       if (functionCall.isScopingConstruct()) {
@@ -95,9 +99,8 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()}
-   * run. Before returning the list, it removes duplicates, so that no entry appears more than once in the
-   * auto-completion window.
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning
+   * the list, it removes duplicates, so that no entry appears more than once in the auto-completion window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */
@@ -131,7 +134,7 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
     return mySymbols;
   }
 
-  class SymbolComparator implements Comparator<Symbol> {
+  private class SymbolComparator implements Comparator<Symbol> {
 
     @Override
     public int compare(Symbol o1, Symbol o2) {
