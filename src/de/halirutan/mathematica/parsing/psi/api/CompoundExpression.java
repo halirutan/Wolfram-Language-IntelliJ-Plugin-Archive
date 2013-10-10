@@ -21,10 +21,8 @@
 
 package de.halirutan.mathematica.parsing.psi.api;
 
-import com.intellij.psi.PsiElement;
-
 /**
  * @author patrick (7/19/13)
  */
-public interface CompoundExpression extends PsiElement {
+public interface CompoundExpression extends Expression {
 }

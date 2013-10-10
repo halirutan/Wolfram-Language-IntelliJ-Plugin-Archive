@@ -39,13 +39,13 @@ public class OperatorNameProvider extends ExpressionImpl {
   }
 
   /**
-   * Checks whether operatorSignElement is the correct sign for our operation. Example: You wrote code like a <code >@@</code> b and
-   * you are inside <code >@@@</code> with the cursor and call QuickDocumentation. Then PsiElement is "PsiElement(APPLY)" and the
-   * parent element in the parse tree is an instance of {@link Apply}. Now the method checks this and concludes, that
-   * <code >@@</code> is indeed the operator sign to Apply.
+   * Checks whether operatorSignElement is the correct sign for our operation. Example: You wrote code like a <code
+   * >@@</code> b and you are inside <code >@@@</code> with the cursor and call QuickDocumentation. Then PsiElement is
+   * "PsiElement(APPLY)" and the parent element in the parse tree is an instance of {@link Apply}. Now the method checks
+   * this and concludes, that <code >@@</code> is indeed the operator sign to Apply.
    * <p/>
-   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of List
-   * and the function returns false.
+   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of List and
+   * the function returns false.
    *
    * @param operatorSignElement Operator sign to check
    * @return true if operatorSignElement is the operator sign of this expression

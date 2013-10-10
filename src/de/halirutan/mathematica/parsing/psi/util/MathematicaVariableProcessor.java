@@ -29,8 +29,10 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,9 +93,13 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         myReferringSymbol = element.getLastChild();
         return false;
       }
-    } else if (element instanceof SetDelayed) {
-      final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
-      for (Symbol p : patterns) {
+    } else if (element instanceof SetDelayed || element instanceof TagSetDelayed) {
+
+      MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+      element.accept(patternVisitor);
+
+//      final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
+      for (Symbol p : patternVisitor.getMyPatternSymbols()) {
         if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = p;
           myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
@@ -102,8 +108,11 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
       }
     } else if (element instanceof RuleDelayed) {
       PsiElement lhs = element.getFirstChild();
-      List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
-      for (Symbol symbol : patternSymbols) {
+      MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+      lhs.accept(patternVisitor);
+
+//      List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
+      for (Symbol symbol : patternVisitor.getMyPatternSymbols()) {
         if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = symbol;
           myLocalization = LocalizationConstruct.ConstructType.RULEDELAYED;
@@ -117,9 +126,8 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference#getVariants()}
-   * run. Before returning the list, it removes duplicates, so that no entry appears more than once in the
-   * autocompletion window.
+   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning
+   * the list, it removes duplicates, so that no entry appears more than once in the autocompletion window.
    *
    * @return Sorted and cleaned list of collected symbols.
    */

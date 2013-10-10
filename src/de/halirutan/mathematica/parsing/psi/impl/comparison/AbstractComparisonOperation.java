@@ -19,41 +19,28 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.impl.comparison;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/1/13)
+ * @author patrick (10/10/13)
  */
-public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
-  public CompoundExpressionImpl(ASTNode node) {
-    super(node);
-  }
+abstract class AbstractComparisonOperation extends OperatorNameProvider implements ComparisonOperation {
 
-  @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    PsiElement children[] = getChildren();
-    for (PsiElement child : children) {
-      if (child.equals(lastParent)) {
-        continue;
-      }
-      if (!child.processDeclarations(processor, state, this, place)) return false;
-    }
-    return true;
+  AbstractComparisonOperation(@NotNull ASTNode node) {
+    super(node);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof MathematicaVisitor) {
-      ((MathematicaVisitor) visitor).visitCompoundExpression(this);
+      ((MathematicaVisitor) visitor).visitComparisonOperation(this);
     } else {
       super.accept(visitor);
     }

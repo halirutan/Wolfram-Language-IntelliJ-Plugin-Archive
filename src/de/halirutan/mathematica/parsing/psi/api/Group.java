@@ -19,17 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.comparison;
-
-import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.api.comparison.Less;
-import org.jetbrains.annotations.NotNull;
+package de.halirutan.mathematica.parsing.psi.api;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (10/10/13)
  */
-public class LessImpl extends AbstractComparisonOperation implements Less {
-  public LessImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+public interface Group extends Expression {
 }

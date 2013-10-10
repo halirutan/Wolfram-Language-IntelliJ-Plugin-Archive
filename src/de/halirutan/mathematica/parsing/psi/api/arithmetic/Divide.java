@@ -24,5 +24,5 @@ package de.halirutan.mathematica.parsing.psi.api.arithmetic;
 /**
  * @author patrick (4/13/13)
  */
-public interface Divide {
+public interface Divide extends ArithmeticOperation {
 }

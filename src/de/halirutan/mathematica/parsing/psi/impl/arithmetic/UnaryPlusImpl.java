@@ -23,13 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl.arithmetic;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.UnaryPlus;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/13/13)
  */
-public class UnaryPlusImpl extends ExpressionImpl implements UnaryPlus {
+public class UnaryPlusImpl extends AbstractArithmeticOperation implements UnaryPlus {
   public UnaryPlusImpl(@NotNull ASTNode node) {
     super(node);
   }

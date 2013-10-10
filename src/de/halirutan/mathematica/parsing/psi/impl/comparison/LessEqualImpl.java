@@ -22,13 +22,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.comparison;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.comparison.LessEqual;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class LessEqualImpl extends OperatorNameProvider {
+public class LessEqualImpl extends AbstractComparisonOperation implements LessEqual {
   public LessEqualImpl(@NotNull ASTNode node) {
     super(node);
   }

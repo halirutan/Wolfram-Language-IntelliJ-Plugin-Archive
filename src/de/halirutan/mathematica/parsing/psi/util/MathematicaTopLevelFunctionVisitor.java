@@ -22,13 +22,13 @@
 package de.halirutan.mathematica.parsing.psi.util;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.CompoundExpressionImpl;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * @author patrick (9/27/13)
  */
-public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
+public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
 
   private final Set<String> myCollectedFunctionNames;
 
@@ -46,29 +46,28 @@ public class MathematicaTopLevelFunctionVisitor extends PsiElementVisitor {
     myCollectedFunctionNames = new HashSet<String>();
   }
 
-  @Override
   public void visitFile(PsiFile file) {
     file.acceptChildren(this);
   }
 
-  public void visitCompoundExpression(CompoundExpressionImpl elm) {
-    elm.acceptChildren(this);
+  public void visitCompoundExpression(CompoundExpression compoundExpression) {
+    compoundExpression.acceptChildren(this);
   }
 
-  public void visitSetDelayed(SetDelayed element) {
-    cacheAssignedSymbols(element);
+  public void visitSetDelayed(SetDelayed setDelayed) {
+    cacheAssignedSymbols(setDelayed);
   }
 
-  public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set element) {
-    cacheAssignedSymbols(element);
+  public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
+    cacheAssignedSymbols(set);
   }
 
   public void visitTagSet(TagSet element) {
     cacheAssignedSymbols(element);
   }
 
-  public void visitTagSetDelayed(TagSetDelayed element) {
-    cacheAssignedSymbols(element);
+  public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
+    cacheAssignedSymbols(tagSetDelayed);
   }
 
   public Set<String> getFunctionsNames() {

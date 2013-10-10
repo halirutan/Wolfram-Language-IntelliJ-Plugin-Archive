@@ -26,10 +26,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,8 +47,8 @@ public class SetImpl extends OperatorNameProvider implements Set {
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof MathematicaTopLevelFunctionVisitor) {
-      ((MathematicaTopLevelFunctionVisitor) visitor).visitSet(this);
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitSet(this);
     } else {
       super.accept(visitor);
     }

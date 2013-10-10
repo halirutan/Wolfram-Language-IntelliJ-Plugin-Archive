@@ -22,13 +22,13 @@
 package de.halirutan.mathematica.parsing.psi.impl.comparison;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.comparison.Equal;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class EqualImpl extends OperatorNameProvider {
+public class EqualImpl extends AbstractComparisonOperation implements Equal {
   public EqualImpl(@NotNull ASTNode node) {
     super(node);
   }

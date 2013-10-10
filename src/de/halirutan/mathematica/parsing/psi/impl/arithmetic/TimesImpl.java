@@ -23,13 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl.arithmetic;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.Times;
-import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/13/13)
  */
-public class TimesImpl extends ExpressionImpl implements Times {
+public class TimesImpl extends AbstractArithmeticOperation implements Times {
   public TimesImpl(@NotNull ASTNode node) {
     super(node);
   }

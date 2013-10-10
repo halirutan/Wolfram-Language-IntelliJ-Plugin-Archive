@@ -22,6 +22,8 @@
 package de.halirutan.mathematica.parsing.psi.impl.pattern;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Alternative;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +31,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/14/13)
  */
-public class AlternativeImpl extends OperatorNameProvider implements Alternative{
+public class AlternativeImpl extends OperatorNameProvider implements Alternative {
   public AlternativeImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitAlternative(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

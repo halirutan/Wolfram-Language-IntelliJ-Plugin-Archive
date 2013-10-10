@@ -23,6 +23,8 @@ package de.halirutan.mathematica.parsing.psi.impl.pattern;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +45,15 @@ public class PatternImpl extends OperatorNameProvider implements Pattern {
   @Override
   public String getOperatorName() {
     return "Pattern";
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitPattern(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 
 }

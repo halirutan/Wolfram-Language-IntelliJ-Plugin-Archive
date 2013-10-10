@@ -24,5 +24,5 @@ package de.halirutan.mathematica.parsing.psi.api.comparison;
 /**
  * @author patrick (4/14/13)
  */
-public interface Less {
+public interface Less extends ComparisonOperation {
 }

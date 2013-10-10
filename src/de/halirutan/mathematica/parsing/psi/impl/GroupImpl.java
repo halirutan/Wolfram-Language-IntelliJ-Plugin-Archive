@@ -22,13 +22,27 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.Group;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class GroupImpl extends ExpressionImpl {
+public class GroupImpl extends ExpressionImpl implements Group {
   public GroupImpl(@NotNull ASTNode node) {
     super(node);
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitGroup(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
+
 }

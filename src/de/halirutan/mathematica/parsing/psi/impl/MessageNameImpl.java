@@ -23,13 +23,15 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class MessageNameImpl extends OperatorNameProvider implements MessageName{
+public class MessageNameImpl extends OperatorNameProvider implements MessageName {
   public MessageNameImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -42,5 +44,14 @@ public class MessageNameImpl extends OperatorNameProvider implements MessageName
   @Override
   public String getOperatorName() {
     return "MessageName";
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitMessageName(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

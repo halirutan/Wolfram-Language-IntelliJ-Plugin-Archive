@@ -22,14 +22,27 @@
 package de.halirutan.mathematica.parsing.psi.impl.rules;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceRepeated;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class ReplaceRepeatedImpl extends OperatorNameProvider {
+public class ReplaceRepeatedImpl extends OperatorNameProvider implements ReplaceRepeated {
   public ReplaceRepeatedImpl(@NotNull ASTNode node) {
     super(node);
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitReplaceRepeated(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }
