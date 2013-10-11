@@ -46,12 +46,7 @@ public class DerivativeParselet implements InfixParselet {
     PsiBuilder.Marker derivativeMark = left.getMark().precede();
     boolean result = true;
 
-    if (left.getToken().equals(SYMBOL_EXPRESSION)) {
-      parser.error("Derivative expects symbol");
-      result = false;
-    }
-
-    while (parser.getTokenType().equals(DERIVATIVE)) {
+    while (!parser.eof() && parser.getTokenType().equals(DERIVATIVE)) {
       parser.advanceLexer();
     }
     derivativeMark.done(DERIVATIVE_EXPRESSION);

@@ -42,6 +42,7 @@ import java.util.Set;
 public class MathematicaPatternVisitor extends MathematicaVisitor {
 
   private final Set<Symbol> myPatternSymbols = Sets.newHashSet();
+  private final Set<Symbol> myDefinitionSymbols = Sets.newHashSet();
   private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
   private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
 

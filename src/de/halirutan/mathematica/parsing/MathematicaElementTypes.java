@@ -287,6 +287,7 @@ public interface MathematicaElementTypes {
       if (type.equals(POSTFIX_EXPRESSION)) return new PostfixImpl(node);
       if (type.equals(PREFIX_CALL_EXPRESSION)) return new PrefixImpl(node);
       if (type.equals(FUNCTION_POSTFIX)) return new FunctionImpl(node);
+      if (type.equals(DERIVATIVE_EXPRESSION)) return new DerivativeImpl(node);
 
       // List related
       if (type.equals(LIST_EXPRESSION)) return new ListImpl(node);
