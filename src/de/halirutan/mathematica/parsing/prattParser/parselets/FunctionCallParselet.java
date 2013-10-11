@@ -74,7 +74,7 @@ public class FunctionCallParselet implements InfixParselet {
         parser.advanceLexer();
         parser.advanceLexer();
         mainMark.done(MathematicaElementTypes.PART_EXPRESSION);
-        return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isParsed() && hasArgs);
+        return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isMyParsed() && hasArgs);
       } else if (isPartExpr) {
         parser.advanceLexer();
         parser.error("Closing ']' expected");

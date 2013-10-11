@@ -45,7 +45,7 @@ public class ImplicitMultiplicationParselet implements InfixParselet {
 
 
     MathematicaParser.Result result = parser.parseExpression(PRECEDENCE);
-    if (result.isParsed()) {
+    if (result.isMyParsed()) {
       timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
       result = MathematicaParser.result(timesMarker, MathematicaElementTypes.TIMES_EXPRESSION, true);
     } else {

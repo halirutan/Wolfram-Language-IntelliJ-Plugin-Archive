@@ -36,10 +36,10 @@ import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getP
  * @author patrick (3/27/13)
  */
 public class SpanParselet implements InfixParselet {
-  private final int m_precedence;
+  private final int myPrecedence;
 
   public SpanParselet(int precedence) {
-    this.m_precedence = precedence;
+    this.myPrecedence = precedence;
   }
 
 
@@ -72,34 +72,34 @@ public class SpanParselet implements InfixParselet {
       } else {
         spanMark.done(SPAN_EXPRESSION);
       }
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && !skipped);
     }
 
-    MathematicaParser.Result expr1 = parser.parseExpression(m_precedence);
+    MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
 
     // if we had expr0;;;;expr1
     if (skipped) {
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed());
     }
 
     if (parser.matchesToken(SPAN)) {
       parser.advanceLexer();
-      MathematicaParser.Result expr2 = parser.parseExpression(m_precedence);
-      if (expr2.isParsed()) {
+      MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
+      if (expr2.isMyParsed()) {
         spanMark.done(SPAN_EXPRESSION);
       } else
         spanMark.error("Expression expected after \"expr0;;expr1;;\"");
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed() && expr2.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed() && expr2.isMyParsed());
     } else {
       // we have the form expr0;;expr1
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed());
     }
   }
 
   @Override
   public int getMyPrecedence() {
-    return m_precedence;
+    return myPrecedence;
   }
 }

@@ -44,29 +44,6 @@ import java.util.List;
  */
 public class MathematicaPsiUtililities {
 
-//  public static final java.util.Set<String> MODULE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-//      new String[]{"Module", "Block", "With"}));
-//  public static final java.util.Set<String> TABLE_LIKE_CONSTRUCTS = new HashSet<String>(Arrays.asList(
-//      new String[]{"Table", "Integrate", "NIntegrate", "Sum", "NSum"}));
-//
-//  public static String getSymbolName(Symbol element) {
-//    ASTNode symbolNode = element.getNode().getFirstChildNode();
-//    if (symbolNode != null) {
-//      return symbolNode.getText();
-//    }
-//    return null;
-//  }
-
-//  public static PsiElement setSymbolName(Symbol element, String newName) {
-//    ASTNode identifierNode = element.getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
-//    final PsiFileFactory fileFactory = PsiFileFactory.getInstance(element.getProject());
-//    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, newName);
-//    ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
-//    if (identifierNode != null && newElm != null) {
-//      element.getNode().replaceChild(identifierNode, newElm);
-//    }
-//    return element;
-//  }
 
   /**
    * Extracts the assignment symbol from assignment operations, <code>g[x_]:=x^2</code> should return the g and  x
@@ -103,38 +80,6 @@ public class MathematicaPsiUtililities {
     } else if (element instanceof TagSetDelayed || element instanceof TagSet) {
       if (firstChild instanceof Symbol) {
         assignees.add((Symbol) firstChild);
-      }
-    }
-    return assignees;
-  }
-
-  @NotNull
-  public static List<Symbol> getPatternSymbols(PsiElement element) {
-    PsiElement firstChild = element.getFirstChild();
-    final List<Symbol> assignees = Lists.newArrayList();
-
-    if (firstChild instanceof Condition) {
-      firstChild = firstChild.getFirstChild();
-    }
-
-    if (element instanceof SetDelayed || element instanceof Set) {
-      if (firstChild instanceof FunctionCall) {
-        // Do we have a SubValues call?
-        if (firstChild.getFirstChild() instanceof FunctionCall) {
-          for (PsiElement psiElement : getArguments(firstChild.getFirstChild())) {
-            assignees.addAll(getSymbolsFromArgumentPattern(psiElement));
-          }
-        }
-        final List<PsiElement> arguments = getArguments(firstChild);
-        for (PsiElement currentArgument : arguments) {
-          assignees.addAll(getSymbolsFromArgumentPattern(currentArgument));
-        }
-      }
-    } else if (element instanceof TagSet || element instanceof TagSetDelayed) {
-      PsiElement nextElm = getNextSiblingSkippingWhitespace(firstChild);
-      if (nextElm != null) {
-        PsiElement tagPattern = getNextSiblingSkippingWhitespace(nextElm);
-        assignees.addAll(getSymbolsFromArgumentPattern(tagPattern));
       }
     }
     return assignees;
@@ -325,9 +270,9 @@ public class MathematicaPsiUtililities {
   }
 
   /**
-   * This extracts the local defined arguments of a <code>Manipulate</code>. There are many variations for the definition
-   * of a <code>Manipulate</code> variable and I'm not sure whether this works in all circumstance. What I haven't implemented
-   * is the usage of <code>Control[...]</code> objects.
+   * This extracts the local defined arguments of a <code>Manipulate</code>. There are many variations for the
+   * definition of a <code>Manipulate</code> variable and I'm not sure whether this works in all circumstance. What I
+   * haven't implemented is the usage of <code>Control[...]</code> objects.
    *
    * @param element The {@link PsiElement} of the function call
    * @return The set of localized function arguments for this <code>Manipulate</code>
@@ -403,45 +348,6 @@ public class MathematicaPsiUtililities {
     return getNextSiblingSkippingWhitespace(brace);
   }
 
-
-  /**
-   * Returns the first argument of a function call <code>func[arg1,arg2,...]</code>.
-   *
-   * @param func {@link FunctionCall} element
-   * @return First argument if available, <code>null</code> otherwise
-   */
-  @Nullable
-  public static PsiElement getFirstArgument(@Nullable PsiElement func) {
-    if (!(func instanceof FunctionCall)) {
-      return null;
-    }
-
-    PsiElement head = func.getFirstChild();
-    if (head == null) {
-      return null;
-    }
-
-    PsiElement bracket = head.getNextSibling();
-    if (bracket == null || !bracket.getNode().getElementType().equals(MathematicaElementTypes.LEFT_BRACKET)) {
-      return null;
-    }
-
-    List<PsiElement> allArguments = new LinkedList<PsiElement>();
-    boolean skipHead = true;
-    for (PsiElement child : func.getChildren()) {
-      final IElementType type = child.getNode().getElementType();
-      if (MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(type) || type.equals(MathematicaElementTypes.COMMA)) {
-        continue;
-      }
-      if (skipHead) {
-        skipHead = false;
-        continue;
-      }
-      return child;
-    }
-    return null;
-  }
-
   /**
    * Takes the complete {@link PsiElement} of a function-call like <code>f[x,y,z]</code> or <code>Plot[x,{x,0,1}]</code>
    * and skips over function-head, whitespaces and commas to give you only the arguments.
@@ -449,22 +355,24 @@ public class MathematicaPsiUtililities {
    * @param func {@link FunctionCall} element from which you want the arguments
    * @return List of arguments
    */
+  @NotNull
   public static List<PsiElement> getArguments(@Nullable PsiElement func) {
+    List<PsiElement> allArguments = Lists.newLinkedList();
+
     if (!(func instanceof FunctionCall)) {
-      return null;
+      return allArguments;
     }
 
     PsiElement head = func.getFirstChild();
     if (head == null) {
-      return null;
+      return allArguments;
     }
 
     PsiElement bracket = head.getNextSibling();
     if (bracket == null || !bracket.getNode().getElementType().equals(MathematicaElementTypes.LEFT_BRACKET)) {
-      return null;
+      return allArguments;
     }
 
-    List<PsiElement> allArguments = new LinkedList<PsiElement>();
     boolean skipHead = true;
     for (PsiElement child : func.getChildren()) {
       final IElementType type = child.getNode().getElementType();
@@ -482,16 +390,15 @@ public class MathematicaPsiUtililities {
     return allArguments;
   }
 
+  @Nullable
   public static PsiElement getNextArgument(@Nullable PsiElement arg) {
     if (arg == null) {
       return null;
     }
-
     PsiElement comma = getNextSiblingSkippingWhitespace(arg);
     if (comma != null && comma.getNode().getElementType().equals(MathematicaElementTypes.COMMA)) {
       return getNextSiblingSkippingWhitespace(comma);
     }
-
     return null;
   }
 }

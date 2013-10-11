@@ -55,14 +55,7 @@ public class MathematicaHighlightingAnnotator implements Annotator {
   @Override
   public void annotate(@NotNull PsiElement element, @NotNull final AnnotationHolder holder) {
     if (element instanceof Symbol) {
-//      final LocalizationConstruct.ConstructType localizationConstruct = ((Symbol) element).getLocalizationConstruct();
-//      if (localizationConstruct != LocalizationConstruct.ConstructType.NULL) {
-//        switch (localizationConstruct) {
-//          case MODULE:
-//            setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
-//            break;
-//        }
-//      } else {
+
       PsiElement id = element.getFirstChild();
 
       if (NAMES.contains(id.getText())) {

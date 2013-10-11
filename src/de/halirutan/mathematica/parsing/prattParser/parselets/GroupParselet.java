@@ -35,6 +35,12 @@ import de.halirutan.mathematica.parsing.prattParser.ParseletProvider;
  */
 public class GroupParselet implements PrefixParselet {
 
+  final int myPrecedence;
+
+  public GroupParselet(int myPrecedence) {
+    this.myPrecedence = myPrecedence;
+  }
+
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
     // should never happen
@@ -63,7 +69,7 @@ public class GroupParselet implements PrefixParselet {
       // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
       // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
       // broken.
-      if (result.isParsed()) {
+      if (result.isMyParsed()) {
         parser.error("')' expected");
         groupMark.done(token);
         result = MathematicaParser.result(groupMark, token, false);
@@ -73,5 +79,9 @@ public class GroupParselet implements PrefixParselet {
       }
     }
     return result;
+  }
+
+  public int getPrecedence() {
+    return myPrecedence;
   }
 }

@@ -73,7 +73,7 @@ public class TagSetParselet implements InfixParselet {
     if (tokenType.equals(MathematicaElementTypes.UNSET)) {
       parser.advanceLexer();
       tagSetMark.done(MathematicaElementTypes.TAG_UNSET_EXPRESSION);
-      return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_UNSET_EXPRESSION, expr1.isParsed());
+      return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_UNSET_EXPRESSION, expr1.isMyParsed());
     }
 
     // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
@@ -86,7 +86,7 @@ public class TagSetParselet implements InfixParselet {
       }
 
       tagSetMark.done(endType);
-      return MathematicaParser.result(tagSetMark, endType, expr1.isParsed() && expr2.isParsed());
+      return MathematicaParser.result(tagSetMark, endType, expr1.isMyParsed() && expr2.isMyParsed());
     }
 
     // if we are here, the second operator (:=, = or =.) is missing and we give up

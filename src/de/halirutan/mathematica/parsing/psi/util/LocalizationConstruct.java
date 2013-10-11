@@ -34,7 +34,7 @@ public class LocalizationConstruct {
   private static final Set<String> myFunctionLike = Sets.newHashSet("Function");
   private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D", "ContourPlot", "ContourPlot3D");
   private static final Set<String> myLimitLike = Sets.newHashSet("Limit");
-  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed", "Rule");
+  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
   private static final Set<String> myManipulateLike = Sets.newHashSet("Manipulate");
 
   public static boolean isLocalizationConstruct(String elementName) {
@@ -46,20 +46,12 @@ public class LocalizationConstruct {
         myFunctionLike.contains(elementName);
   }
 
-  public static boolean isModuleLike(String name) {
-    return myModuleLike.contains(name);
-  }
-
   public static boolean isModuleLike(ConstructType scopingConstruct) {
     for (String s : myModuleLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
     }
     return false;
-  }
-
-  public static boolean isTableLike(String name) {
-    return myTableLike.contains(name);
   }
 
   public static boolean isTableLike(ConstructType scopingConstruct) {
@@ -70,10 +62,6 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isManipulateLike(String name) {
-    return myManipulateLike.contains(name);
-  }
-
   public static boolean isManipulateLike(ConstructType scopingConstruct) {
     for (String s : myManipulateLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
@@ -82,20 +70,12 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isRuleLike(String name) {
-    return myRuleLike.contains(name);
-  }
-
   public static boolean isRuleLike(ConstructType scopingConstruct) {
     for (String s : myRuleLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
     }
     return false;
-  }
-
-  public static boolean isLimitLike(String name) {
-    return myLimitLike.contains(name);
   }
 
   public static boolean isLimitLike(ConstructType scopingConstruct) {
