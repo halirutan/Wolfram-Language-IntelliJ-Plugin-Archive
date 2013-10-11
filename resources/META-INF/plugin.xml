@@ -8,10 +8,9 @@
 
     <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
-        lookup and more. This plugin is currently under heavy development. Therefore, the most recent version can
-        be found in the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
-        Here is a direct link to the plugin: <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/raw/master/Mathematica-IntelliJ-Plugin.jar">
-        Mathematica-IntelliJ-Plugin.jar</a>.
+        lookup and more. This plugin is currently under heavy development. If you want to help, check out the 
+        <a href="http://www.halirutan.de/start">Official Website</a> or take a look at the open-source
+        <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
       ]]></description>
 
     <change-notes>
