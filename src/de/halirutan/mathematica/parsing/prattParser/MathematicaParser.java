@@ -99,7 +99,7 @@ public class MathematicaParser implements PsiParser {
     try {
       while (!builder.eof()) {
         Result expr = parseExpression();
-        if (!expr.isParsed()) {
+        if (!expr.isMyParsed()) {
           builder.error("The last expression could not be parsed correctly.");
           builder.advanceLexer();
         }
@@ -135,14 +135,14 @@ public class MathematicaParser implements PsiParser {
     }
 
     PrefixParselet prefix = getPrefixParselet(token);
-    if (prefix == null) {
+    if (prefix == null || precedence >= prefix.getPrecedence()) {
       return notParsed();
     }
 
     increaseRecursionDepth();
     Result left = prefix.parse(this);
 
-    while (left.isParsed()) {
+    while (left.isMyParsed()) {
       token = myBuilder.getTokenType();
       InfixParselet infix = getInfixOrMultiplyParselet(token);
       if (infix == null) {
@@ -191,16 +191,6 @@ public class MathematicaParser implements PsiParser {
     return myBuilder.getTokenType();
   }
 
-  public IElementType getTokenTypeSave(PsiBuilder.Marker mark) throws CriticalParserError {
-    final IElementType tokenType = myBuilder.getTokenType();
-    if (tokenType == null) {
-      myBuilder.error("More input expected");
-      mark.drop();
-      throw new CriticalParserError("Unexpected end of file");
-    }
-    return tokenType;
-  }
-
   public void advanceLexer() throws CriticalParserError {
     if (myBuilder.eof()) {
       myBuilder.error("More input expected");
@@ -240,30 +230,30 @@ public class MathematicaParser implements PsiParser {
    */
   public static final class Result {
 
-    private final PsiBuilder.Marker leftMark;
-    private final IElementType leftToken;
-    private final boolean parsed;
+    private final PsiBuilder.Marker myLeftMark;
+    private final IElementType myLeftToken;
+    private final boolean myParsed;
 
     private Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean parsed) {
-      this.leftMark = leftMark;
-      this.leftToken = leftToken;
-      this.parsed = parsed;
+      this.myLeftMark = leftMark;
+      this.myLeftToken = leftToken;
+      this.myParsed = parsed;
     }
 
     public PsiBuilder.Marker getMark() {
-      return leftMark;
+      return myLeftMark;
     }
 
     public IElementType getToken() {
-      return leftToken;
+      return myLeftToken;
     }
 
-    public boolean isParsed() {
-      return parsed;
+    public boolean isMyParsed() {
+      return myParsed;
     }
 
     public boolean isValid() {
-      return (leftMark != null) && (leftToken != null);
+      return (myLeftMark != null) && (myLeftToken != null);
     }
   }
 

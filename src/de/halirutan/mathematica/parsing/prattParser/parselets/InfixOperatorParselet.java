@@ -52,7 +52,7 @@ public class InfixOperatorParselet implements InfixParselet {
     parser.advanceLexer();
 
     MathematicaParser.Result result = parser.parseExpression(myPrecedence - (myRightAssociative ? 1 : 0));
-    if (result.isParsed()) {
+    if (result.isMyParsed()) {
       infixOperationMarker.done(token);
       result = MathematicaParser.result(infixOperationMarker, token, true);
     } else {

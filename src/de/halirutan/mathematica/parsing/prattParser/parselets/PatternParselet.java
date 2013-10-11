@@ -27,21 +27,13 @@ import com.intellij.psi.tree.TokenSet;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattParser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattParser.MathematicaParser;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
 
 /**
- * Parselet for MessageName's like blub::usage or Sin::argx. There are some specialties about this because the left
- * operand is required to be a symbol. The right operand can be a symbol or a string.
+ * Parselet for Pattern.
  *
  * @author patrick (7/1/13)
  */
 public class PatternParselet implements InfixParselet {
-  private static final TokenSet PATTERN_ELEMENTS = TokenSet.create(
-      MathematicaElementTypes.BLANK_EXPRESSION,
-      MathematicaElementTypes.BLANK_SEQUENCE_EXPRESSION,
-      MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION,
-      MathematicaElementTypes.PATTERN_EXPRESSION
-  );
   private final int myPrecedence;
 
   public PatternParselet(int precedence) {
@@ -61,12 +53,12 @@ public class PatternParselet implements InfixParselet {
     IElementType expressionType = left.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION) ?
         MathematicaElementTypes.PATTERN_EXPRESSION : MathematicaElementTypes.OPTIONAL_EXPRESSION;
 
-    if (!result.isParsed()) {
+    if (!result.isMyParsed()) {
       parser.error("Could not parse Pattern/Optional expression.");
     }
 
     patternOptional.done(expressionType);
-    return MathematicaParser.result(patternOptional, expressionType, result.isParsed());
+    return MathematicaParser.result(patternOptional, expressionType, result.isMyParsed());
   }
 
   @Override

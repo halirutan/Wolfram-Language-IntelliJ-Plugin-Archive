@@ -66,11 +66,11 @@ public final class ParserUtil {
         break;
       }
       result = parser.parseExpression();
-      sequenceParsed &= result.isParsed();
+      sequenceParsed &= result.isMyParsed();
 
       // if we couldn't parseSequence the argument expression and the next token is neither a comma nor
       // a closing brace/bracket, then we are lost at this point and should not try further to parseSequence something.
-      if (!result.isParsed() && !(parser.matchesToken(MathematicaElementTypes.COMMA) || parser.matchesToken(rightDel))) {
+      if (!result.isMyParsed() && !(parser.matchesToken(MathematicaElementTypes.COMMA) || parser.matchesToken(rightDel))) {
         sequenceParsed = false;
         break;
       }

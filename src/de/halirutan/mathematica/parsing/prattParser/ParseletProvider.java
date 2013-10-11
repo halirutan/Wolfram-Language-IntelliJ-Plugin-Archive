@@ -40,14 +40,16 @@ import java.util.Map;
  */
 public class ParseletProvider {
 
-  private static ParseletProvider s_instance = null;
-
   private static final Map<IElementType, PrefixParselet> PREFIX_PARSELETS = new HashMap<IElementType, PrefixParselet>();
   private static final Map<IElementType, InfixParselet> INFIX_PARSELETS = new HashMap<IElementType, InfixParselet>();
-
   private static final Map<PrefixParselet, IElementType> PREFIX_TO_PSI_ELEMENT = new HashMap<PrefixParselet, IElementType>();
   private static final Map<InfixParselet, IElementType> INFIX_PARSELET_TO_PSI_ELEMENT = new HashMap<InfixParselet, IElementType>();
+  private static ParseletProvider ourInstance = null;
 
+
+  private ParseletProvider() {
+    registerAll();
+  }
 
   /**
    * Provides the prefix-parselet which is connected to the specified token.
@@ -56,8 +58,8 @@ public class ParseletProvider {
    * @return The {@link PrefixParselet} if available for this token and {@code null} otherwise.
    */
   public static PrefixParselet getPrefixParselet(IElementType token) {
-    if (s_instance == null) {
-      s_instance = new ParseletProvider();
+    if (ourInstance == null) {
+      ourInstance = new ParseletProvider();
     }
     return PREFIX_PARSELETS.get(token);
   }
@@ -69,8 +71,8 @@ public class ParseletProvider {
    * @return The {@link InfixParselet} if available for this token and {@code null} otherwise.
    */
   public static InfixParselet getInfixParselet(IElementType token) {
-    if (s_instance == null) {
-      s_instance = new ParseletProvider();
+    if (ourInstance == null) {
+      ourInstance = new ParseletProvider();
     }
     return INFIX_PARSELETS.get(token);
   }
@@ -82,8 +84,8 @@ public class ParseletProvider {
    * @return The precedence of the specified token or 0 whether the precedence is not available.
    */
   public static int getPrecedence(IElementType token) {
-    if (s_instance == null) {
-      s_instance = new ParseletProvider();
+    if (ourInstance == null) {
+      ourInstance = new ParseletProvider();
     }
     InfixParselet parselet = INFIX_PARSELETS.get(token);
     if (parselet != null) {
@@ -99,8 +101,8 @@ public class ParseletProvider {
    * @return The precedence of the specified token or 0 whether the precedence is not available.
    */
   public static int getPrecedence(PsiBuilder builder) {
-    if (s_instance == null) {
-      s_instance = new ParseletProvider();
+    if (ourInstance == null) {
+      ourInstance = new ParseletProvider();
     }
     IElementType token = builder.getTokenType();
     if (token == null) {
@@ -114,11 +116,11 @@ public class ParseletProvider {
   }
 
   /**
-   * Provides the parselet with the element type of the node for the AST. When an expression was parsed with a
-   * specific {@link InfixParselet} the node in the AST is then the {@link IElementType} which is returned by this
-   * method. E.g. When a PLUS token arises in the lexer token stream first the infix-parselet of the PLUS token is
-   * extracted with {@link #getInfixParselet(IElementType)} which parses the left and right operand. Afterwards it
-   * marks the whole expression a+b in the AST tree as being a node of type returned by this method.
+   * Provides the parselet with the element type of the node for the AST. When an expression was parsed with a specific
+   * {@link InfixParselet} the node in the AST is then the {@link IElementType} which is returned by this method. E.g.
+   * When a PLUS token arises in the lexer token stream first the infix-parselet of the PLUS token is extracted with
+   * {@link #getInfixParselet(IElementType)} which parses the left and right operand. Afterwards it marks the whole
+   * expression a+b in the AST tree as being a node of type returned by this method.
    *
    * @param parselet The parselet for which the node type is wanted
    * @return The node type.
@@ -145,10 +147,6 @@ public class ParseletProvider {
     return elm;
   }
 
-  private ParseletProvider() {
-    registerAll();
-  }
-
   private static void register(IElementType token, IElementType expressionToken, PrefixParselet parselet) {
     PREFIX_PARSELETS.put(token, parselet);
     PREFIX_TO_PSI_ELEMENT.put(parselet, expressionToken);
@@ -163,12 +161,6 @@ public class ParseletProvider {
     PREFIX_PARSELETS.put(token, parselet);
     PREFIX_TO_PSI_ELEMENT.put(parselet, expressionToken);
   }
-
-  private static void registerInfixExplicitly(IElementType token, IElementType expressionToken, InfixParselet parselet) {
-    INFIX_PARSELETS.put(token, parselet);
-    INFIX_PARSELET_TO_PSI_ELEMENT.put(parselet, expressionToken);
-  }
-
 
   private static void postfix(IElementType token, IElementType expressionToken, int precedence) {
     register(token, expressionToken, new PostfixOperatorParselet(precedence));
@@ -190,7 +182,7 @@ public class ParseletProvider {
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
 
   private void registerAll() {
-    register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet()); // Group(()
+    register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
     register(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.LIST_EXPRESSION, new ListParselet(82)); // Group(()
 
     register(MathematicaElementTypes.NUMBER, MathematicaElementTypes.NUMBER_EXPRESSION, new NumberParselet(80)); // Number(123)

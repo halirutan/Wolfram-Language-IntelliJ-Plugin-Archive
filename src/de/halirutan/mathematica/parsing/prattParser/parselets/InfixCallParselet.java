@@ -52,10 +52,10 @@ public class InfixCallParselet implements InfixParselet {
       parser.advanceLexer();
       MathematicaParser.Result operand2 = parser.parseExpression(myPrecedence);
       infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
-      return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
+      return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isMyParsed() && operand2.isMyParsed());
     } else {
       // if the operator was not parsed successfully we will not display a parsing error
-      if (operator.isParsed()) {
+      if (operator.isMyParsed()) {
         parser.error("'~' expected in infix notation");
       } else {
         parser.error("Operator expected for infix notation");

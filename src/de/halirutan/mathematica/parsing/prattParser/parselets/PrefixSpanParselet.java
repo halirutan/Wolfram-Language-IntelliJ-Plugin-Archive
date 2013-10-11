@@ -75,22 +75,26 @@ public class PrefixSpanParselet implements PrefixParselet {
     // if we had ;;;;expr1
     if (skipped) {
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isMyParsed());
     }
 
     if (parser.matchesToken(SPAN)) {
       parser.advanceLexer();
       MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
-      if (expr2.isParsed()) {
+      if (expr2.isMyParsed()) {
         spanMark.done(SPAN_EXPRESSION);
       } else
         spanMark.error("Expression expected after \";;expr1;;\"");
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed() && expr2.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isMyParsed() && expr2.isMyParsed());
     } else {
       // we have the form expr0;;expr1
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, expr1.isMyParsed());
     }
+  }
+
+  public int getPrecedence() {
+    return myPrecedence;
   }
 
 }

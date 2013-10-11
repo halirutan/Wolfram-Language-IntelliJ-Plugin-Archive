@@ -47,7 +47,7 @@ public class MessageNameParselet implements InfixParselet {
     parser.advanceLexer();
     MathematicaParser.Result result = parser.parseExpression(myPrecedence);
 
-    if (result.isParsed()) {
+    if (result.isMyParsed()) {
       // Check whether we have a symbol or a string in usage message
       if ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
           (!result.getToken().equals(MathematicaElementTypes.STRING_EXPRESSION))) {
@@ -59,7 +59,7 @@ public class MessageNameParselet implements InfixParselet {
       if (parser.matchesToken(MathematicaElementTypes.DOUBLE_COLON)) {
         parser.advanceLexer();
         result = parser.parseExpression(myPrecedence);
-        if (result.isParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) ||
+        if (result.isMyParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) ||
             (!result.getToken().equals(MathematicaElementTypes.STRING_EXPRESSION)))) {
           PsiBuilder.Marker errMark = result.getMark().precede();
           errMark.error("Usage message exprects Symbol or String");
@@ -69,7 +69,7 @@ public class MessageNameParselet implements InfixParselet {
       parser.error("Symbol or String expected as Name in Symbol::Name");
     }
     messageNameMarker.done(MathematicaElementTypes.MESSAGE_NAME_EXPRESSION);
-    return MathematicaParser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, result.isParsed());
+    return MathematicaParser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, result.isMyParsed());
 
   }
 

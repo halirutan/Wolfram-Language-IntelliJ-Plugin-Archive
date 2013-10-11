@@ -61,7 +61,7 @@ public class ListParselet implements PrefixParselet {
       result = false;
     }
     listMarker.done(LIST_EXPRESSION);
-    return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
+    return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isMyParsed());
   }
 
   public int getPrecedence() {
