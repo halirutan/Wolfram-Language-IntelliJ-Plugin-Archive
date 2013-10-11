@@ -221,64 +221,6 @@ public class MathematicaPsiUtililities {
   }
 
   /**
-   * This function tries to extract all localized variables inside a <code>Module</code>, <code>Block</code> or <code
-   * >With</code> construct. The variables can either be just declared like in <code >Block[{a,b,c},..]</code>.
-   *
-   * @param element The {@link FunctionCall} PsiElement containing the scoping construct.
-   * @return List of localized variables. For <code >Module[{a,b:=3,c=2}</code> the list contains the PsiElements for a,
-   *         b, and c.
-   */
-  public static List<Symbol> extractLocalizedVariables(PsiElement element) {
-    List<Symbol> localVariables = Lists.newArrayList();
-
-    // Do we have a function call and is the fi1rst child a symbol like f[..]
-    if (element instanceof FunctionCall && element.getFirstChild() instanceof Symbol) {
-      String scopingConstructName = ((Symbol) element.getFirstChild()).getSymbolName();
-      // Do we have Module[..] Block[..] or With[..]
-      if (LocalizationConstruct.isModuleLike(scopingConstructName)) {
-        // The general structure in the parse tree is FunctionCall(Module, [, ...,])
-        final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
-        if (openingBracket != null) {
-          final PsiElement initList = getNextSiblingSkippingWhitespace(openingBracket);
-          if (initList instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
-            if (initList.getChildren().length > 0) {
-              for (PsiElement child : initList.getChildren()) {
-                if (child instanceof Symbol) {
-                  localVariables.add((Symbol) child);
-                } else {
-                  List<Symbol> tmp = getAssignmentSymbols(child);
-                  if (tmp != null) {
-                    localVariables.addAll(tmp);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      if (LocalizationConstruct.isTableLike(scopingConstructName)) {
-        final PsiElement openingBracket = getNextSiblingSkippingWhitespace(element.getFirstChild());
-        if (openingBracket != null) {
-          final PsiElement body = getNextSiblingSkippingWhitespace(openingBracket);
-          PsiElement initList = body != null ? getNextArgument(body) : null;
-          while (initList instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
-            PsiElement arg1 = getFirstListElement(initList);
-            if (arg1 instanceof Symbol) {
-              localVariables.add((Symbol) arg1);
-
-            }
-            initList = getNextArgument(initList);
-          }
-        }
-      }
-
-
-    }
-    return localVariables;
-  }
-
-  /**
    * This extracts the local defined arguments of a <code>Function</code> call. Examples are <ul>
    * <li><code>Function[arg, arg^2]</code> extracts <code>arg</code></li> <li><code>Function[{arg1,arg2},
    * arg1+arg2]</code> extracts <code>arg1,arg2</code></li> <li><code>Function[#+#]</code> extracts nothing</li>
@@ -375,6 +317,41 @@ public class MathematicaPsiUtililities {
           final PsiElement firstListElement = getFirstListElement(currentArgument);
           if (firstListElement instanceof Symbol) {
             localVariables.add((Symbol) firstListElement);
+          }
+        }
+      }
+    }
+    return localVariables;
+  }
+
+  /**
+   * This extracts the local defined arguments of a <code>Manipulate</code>. There are many variations for the definition
+   * of a <code>Manipulate</code> variable and I'm not sure whether this works in all circumstance. What I haven't implemented
+   * is the usage of <code>Control[...]</code> objects.
+   *
+   * @param element The {@link PsiElement} of the function call
+   * @return The set of localized function arguments for this <code>Manipulate</code>
+   */
+  public static List<Symbol> getLocalManipulateLikeVariables(FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && LocalizationConstruct.isManipulateLike(element.getScopingConstruct())) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 2) {
+        return localVariables;
+      }
+
+      for (int i = 1; i < arguments.size(); i++) {
+        final PsiElement currentArgument = arguments.get(i);
+        if (currentArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+          final PsiElement firstListElement = getFirstListElement(currentArgument);
+          if (firstListElement instanceof Symbol) {
+            localVariables.add((Symbol) firstListElement);
+          } else if (firstListElement instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+            final PsiElement subListArg = getFirstListElement(firstListElement);
+            if (subListArg instanceof Symbol) {
+              localVariables.add((Symbol) subListArg);
+            }
           }
         }
       }

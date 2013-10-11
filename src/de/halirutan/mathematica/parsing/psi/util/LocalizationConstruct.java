@@ -34,13 +34,15 @@ public class LocalizationConstruct {
   private static final Set<String> myFunctionLike = Sets.newHashSet("Function");
   private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D", "ContourPlot", "ContourPlot3D");
   private static final Set<String> myLimitLike = Sets.newHashSet("Limit");
-  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
+  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed", "Rule");
+  private static final Set<String> myManipulateLike = Sets.newHashSet("Manipulate");
 
   public static boolean isLocalizationConstruct(String elementName) {
     return myModuleLike.contains(elementName) ||
         myTableLike.contains(elementName) ||
         myLimitLike.contains(elementName) ||
         myRuleLike.contains(elementName) ||
+        myManipulateLike.contains(elementName) ||
         myFunctionLike.contains(elementName);
   }
 
@@ -62,6 +64,18 @@ public class LocalizationConstruct {
 
   public static boolean isTableLike(ConstructType scopingConstruct) {
     for (String s : myTableLike) {
+      if (s.equalsIgnoreCase(scopingConstruct.toString()))
+        return true;
+    }
+    return false;
+  }
+
+  public static boolean isManipulateLike(String name) {
+    return myManipulateLike.contains(name);
+  }
+
+  public static boolean isManipulateLike(ConstructType scopingConstruct) {
+    for (String s : myManipulateLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
     }
@@ -109,7 +123,7 @@ public class LocalizationConstruct {
 
   public enum ConstructType {
     MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
-    LIMIT, RULEDELAYED, SETDELAYEDPATTERN
+    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE
   }
 
 
