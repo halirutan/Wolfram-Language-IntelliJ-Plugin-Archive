@@ -82,6 +82,10 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
           vars = MathematicaPsiUtililities.getLocalTableLikeVariables(functionCall);
         }
 
+        if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalCompileLikeVariables(functionCall);
+        }
+
         if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
           vars = MathematicaPsiUtililities.getLocalManipulateLikeVariables(functionCall);
         }

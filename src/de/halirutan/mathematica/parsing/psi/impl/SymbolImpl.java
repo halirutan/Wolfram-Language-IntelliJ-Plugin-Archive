@@ -23,10 +23,12 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.fileTypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NonNls;
@@ -146,5 +148,14 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     myLocalizationElement = localizationElement;
     myLocalization = type;
     myIsUpToDate = true;
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitSymbol(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

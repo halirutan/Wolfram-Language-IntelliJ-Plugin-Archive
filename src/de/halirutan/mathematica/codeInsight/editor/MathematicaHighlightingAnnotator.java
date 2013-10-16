@@ -32,6 +32,7 @@ import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
@@ -83,22 +84,19 @@ public class MathematicaHighlightingAnnotator implements Annotator {
           }
         }
       }
-//    } else if (element instanceof Pattern) {
-//      PsiElement fst = element.getFirstChild();
-//      if (fst != null && !(fst instanceof Pattern))
-//        setHighlighting(fst, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-//    } else if (element instanceof Blank || element instanceof BlankSequence || element instanceof BlankNullSequence) {
-//      setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
     } else if (element instanceof Function) {
       holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION));
 
-      PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
+      PsiElementVisitor patternVisitor = new MathematicaVisitor() {
         @Override
         public void visitElement(PsiElement element) {
-          if (element instanceof Symbol && MathematicaElementTypes.SLOTS.contains(element.getNode().getFirstChildNode().getElementType())) {
-            setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
-          } else {
-            element.acceptChildren(this);
+          element.acceptChildren(this);
+        }
+
+        @Override
+        public void visitSymbol(Symbol symbol) {
+          if (MathematicaElementTypes.SLOTS.contains(symbol.getNode().getFirstChildNode().getElementType())) {
+            setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.PATTERN);
           }
         }
       };
@@ -118,13 +116,4 @@ public class MathematicaHighlightingAnnotator implements Annotator {
       }
     }.visitElement(message);
   }
-
-//  private void highlightSymbol(PsiElement symbol, final AnnotationHolder holder) {
-//    PsiElement id = symbol.getFirstChild();
-//
-//    if (!(symbol.getParent() instanceof MessageName) && NAMES.contains(id.getText())) {
-//      setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-//    }
-//  }
-
 }

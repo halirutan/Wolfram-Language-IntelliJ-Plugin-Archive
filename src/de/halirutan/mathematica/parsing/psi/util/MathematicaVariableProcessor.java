@@ -25,12 +25,10 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +37,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
+ * Provides the functionality of resolving references. This means, this class takes care to find out where a local
+ * variable was defined and it can be used to find all references of a variable inside a scope.
+ *
  * @author patrick (5/22/13)
  */
 public class MathematicaVariableProcessor extends BaseScopeProcessor {
@@ -78,6 +79,11 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
         if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
           vars = MathematicaPsiUtililities.getLocalManipulateLikeVariables(functionCall);
         }
+
+        if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
+          vars = MathematicaPsiUtililities.getLocalCompileLikeVariables(functionCall);
+        }
+
         if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
           vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
         }
@@ -91,17 +97,10 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
           }
         }
       }
-    } else if (element instanceof Function) {
-      if (myStartElement.getFirstChild().getNode().getElementType().equals(MathematicaElementTypes.SLOT)) {
-        myReferringSymbol = element.getLastChild();
-        return false;
-      }
     } else if (element instanceof SetDelayed || element instanceof TagSetDelayed) {
 
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
-
-//      final List<Symbol> patterns = MathematicaPsiUtililities.getPatternSymbols(element);
       for (Symbol p : patternVisitor.getMyPatternSymbols()) {
         if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = p;
@@ -114,7 +113,6 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       lhs.accept(patternVisitor);
 
-//      List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(lhs);
       for (Symbol symbol : patternVisitor.getMyPatternSymbols()) {
         if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = symbol;
