@@ -30,6 +30,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaVariableProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +53,8 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public PsiElement resolveInner() {
     if (myVariable.cachedResolve()) {
-      if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName())) {
+      if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName()) ||
+          myVariable.getLocalizationConstruct().equals(LocalizationConstruct.ConstructType.ANONYMOUSFUNCTION)) {
         return myVariable.getResolveElement();
       } else {
         myVariable.subtreeChanged();
@@ -68,7 +70,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     }
     return null;
   }
-
 
   @Override
   public Symbol getElement() {

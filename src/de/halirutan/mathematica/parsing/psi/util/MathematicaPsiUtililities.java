@@ -305,6 +305,44 @@ public class MathematicaPsiUtililities {
   }
 
   /**
+   * This extracts the local defined arguments of a <code>Compile</code>.
+   *
+   * @param element The {@link PsiElement} of the function call
+   * @return The set of localized function arguments for this <code>Compile</code>
+   */
+  public static List<Symbol> getLocalCompileLikeVariables(FunctionCall element) {
+    List<Symbol> localVariables = Lists.newArrayList();
+
+    if (element.isScopingConstruct() && LocalizationConstruct.isCompileLike(element.getScopingConstruct())) {
+      final List<PsiElement> arguments = getArguments(element);
+      if (arguments.size() < 1) {
+        return localVariables;
+      }
+
+      final PsiElement firstArgument = arguments.get(0);
+
+      if (firstArgument instanceof Symbol) {
+        localVariables.add((Symbol) firstArgument);
+        return localVariables;
+      }
+
+      if (firstArgument instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+        PsiElement listElement = getFirstListElement(firstArgument);
+        while (listElement != null) {
+          if (listElement instanceof de.halirutan.mathematica.parsing.psi.api.lists.List) {
+            final PsiElement possibleSymbol = getFirstListElement(listElement);
+            if (possibleSymbol instanceof Symbol) {
+              localVariables.add((Symbol) possibleSymbol);
+            }
+          }
+          listElement = getNextArgument(listElement);
+        }
+      }
+    }
+    return localVariables;
+  }
+
+  /**
    * This extracts the local defined argument for a <code>Limit[Sin[x]/x, x-> 0]</code> call. Note that the returned
    * list has always only one element since <code>Limit</code> always uses only one variable.
    *

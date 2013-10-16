@@ -22,10 +22,7 @@
 package de.halirutan.mathematica.parsing.psi;
 
 import com.intellij.psi.PsiElementVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.Group;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
+import de.halirutan.mathematica.parsing.psi.api.*;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.ArithmeticOperation;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
@@ -148,6 +145,10 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitMessageName(MessageName messageName) {
     visitElement(messageName);
+  }
+
+  public void visitSymbol(Symbol symbol) {
+    visitElement(symbol);
   }
 
   public void visitList(List list) {
