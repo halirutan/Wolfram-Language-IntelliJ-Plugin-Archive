@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.editor;
+package de.halirutan.mathematica.codeInsight.highlighting;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;

@@ -28,7 +28,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighter;
+import de.halirutan.mathematica.codeInsight.highlighting.MathematicaSyntaxHighlighter;
 import de.halirutan.mathematica.parsing.psi.impl.*;
 import de.halirutan.mathematica.parsing.psi.impl.arithmetic.*;
 import de.halirutan.mathematica.parsing.psi.impl.assignment.*;
