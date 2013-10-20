@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.editor;
+package de.halirutan.mathematica.codeInsight.highlighting;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -46,7 +46,7 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
   public MathematicaSyntaxHighlighter() {
     myLexer = new MathematicaLexer();
 
-    SyntaxHighlighterBase.fillMap(colors, MathematicaSyntaxHighlighterColors.COMMENT, MathematicaElementTypes.COMMENT);
+    fillMap(colors, MathematicaSyntaxHighlighterColors.COMMENT, MathematicaElementTypes.COMMENT);
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL);
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_BEGIN);
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_END);

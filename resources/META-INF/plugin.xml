@@ -66,28 +66,41 @@
         <internalFileTemplate name="Package"/>
 
         <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
-        <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
-        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaHighlightingAnnotator"/>
-        <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaCommenter"/>
-        <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.MathematicaBraceMatcher"/>
-        <quoteHandler fileType="Mathematica" className="de.halirutan.mathematica.codeInsight.MathematicaQuoteHandler"/>
-        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionContributor"/>
-        <completion.confidence language="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
+        <lang.parserDefinition language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
+        <annotator language="Mathematica"
+                   implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaHighlightingAnnotator"/>
+        <lang.commenter language="Mathematica"
+                        implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaCommenter"/>
+        <lang.braceMatcher language="Mathematica"
+                           implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaBraceMatcher"/>
+        <quoteHandler fileType="Mathematica"
+                      className="de.halirutan.mathematica.codeInsight.completion.MathematicaQuoteHandler"/>
+        <completion.contributor language="Mathematica"
+                                implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionContributor"/>
+        <completion.confidence language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
 
-        <typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler" id="MathematicaBinary"/>
-        <lang.syntaxHighlighterFactory key="Mathematica" implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaSyntaxHighlighterFactory"/>
-        <lang.documentationProvider language="Mathematica" implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
-        <colorSettingsPage implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaColorSettingsPage"/>
+        <typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler"
+                      id="MathematicaBinary"/>
+        <lang.syntaxHighlighterFactory key="Mathematica"
+                                       implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+        <lang.documentationProvider language="Mathematica"
+                                    implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+        <colorSettingsPage
+                implementation="de.halirutan.mathematica.codeInsight.highlighting.MathematicaColorSettingsPage"/>
 
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
-        <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
+        <moduleType id="MATHEMATICA_MODULE"
+                    implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
         <fileTemplateGroup implementation="de.halirutan.mathematica.MathematicaFileTemplateProvider"/>
         <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
         <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
         <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
-        <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
+        <lang.refactoringSupport language="Mathematica"
+                                 implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
     </extensions>
 
 

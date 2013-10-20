@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight;
+package de.halirutan.mathematica.codeInsight.completion;
 
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
@@ -28,9 +28,10 @@ import com.intellij.psi.tree.IElementType;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
- * Provides the intelligent insertion of quotes. This, like the {@link MathematicaBraceMatcher} works on the lexer
- * token too. I should note, a string like <code >"blub"</code> is returned by the lexer as the sequence
- * <code >STRING_LITERAL_BEGIN, STRING_LITERAL, STRING_LITERAL_END</code>.
+ * Provides the intelligent insertion of quotes. This, like the {@link de.halirutan.mathematica.codeInsight.highlighting.MathematicaBraceMatcher}
+ * works on the lexer token too. I should note, a string like <code >"blub"</code> is returned by the lexer as the
+ * sequence <code >STRING_LITERAL_BEGIN, STRING_LITERAL, STRING_LITERAL_END</code>.
+ *
  * @author patrick (4/8/13)
  */
 public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
@@ -38,24 +39,26 @@ public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
     super(STRING_LITERAL, STRING_LITERAL_BEGIN, STRING_LITERAL_END);
   }
 
-    /**
-     * Should return true, when you are inside a string literal.
-     * @param iterator the iterator to move through the token stream. Here, only used to get the token type
-     * @return true, if the iterator is currently inside a string
-     */
+  /**
+   * Should return true, when you are inside a string literal.
+   *
+   * @param iterator the iterator to move through the token stream. Here, only used to get the token type
+   * @return true, if the iterator is currently inside a string
+   */
   @Override
   public boolean isInsideLiteral(HighlighterIterator iterator) {
     return iterator.getTokenType().equals(STRING_LITERAL);
   }
 
-    /**
-     * Should return true if the current offset is the closing quote of the string. Unfortunately, I'm not quite sure
-     * anymore why I had to make the calculations but I remember that something with the removal of an empty string
-     * did not work.
-     * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
-     * @param offset current character offset
-     * @return true, if the current offset is a closing quote
-     */
+  /**
+   * Should return true if the current offset is the closing quote of the string. Unfortunately, I'm not quite sure
+   * anymore why I had to make the calculations but I remember that something with the removal of an empty string did
+   * not work.
+   *
+   * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
+   * @param offset   current character offset
+   * @return true, if the current offset is a closing quote
+   */
   @Override
   public boolean isClosingQuote(HighlighterIterator iterator, int offset) {
     final IElementType tokenType = iterator.getTokenType();
@@ -68,12 +71,13 @@ public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
     return false;
   }
 
-    /**
-     * Finds out whether the current offset is an opening quote element.
-     * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
-     * @param offset current character offset
-     * @return  true, if the current offset is an opening quote
-     */
+  /**
+   * Finds out whether the current offset is an opening quote element.
+   *
+   * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
+   * @param offset   current character offset
+   * @return true, if the current offset is an opening quote
+   */
   @Override
   public boolean isOpeningQuote(HighlighterIterator iterator, int offset) {
     if (iterator.getTokenType().equals(STRING_LITERAL_BEGIN)) {
