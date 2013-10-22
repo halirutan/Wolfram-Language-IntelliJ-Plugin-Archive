@@ -221,6 +221,8 @@ public interface MathematicaElementTypes {
       SLOT, SLOT_SEQUENCE
   );
 
+  TokenSet ASSIGNMENTS = TokenSet.create(SET, SET_DELAYED);
+
   class Factory {
 
     public static PsiElement create(ASTNode node) {

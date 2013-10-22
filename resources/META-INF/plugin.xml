@@ -81,14 +81,20 @@
         <completion.confidence language="Mathematica"
                                implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
 
-        <typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler"
-                      id="MathematicaBinary"/>
+        <!--<typedHandler implementation="de.halirutan.mathematica.codeInsight.editor.MathematicaBinaryTypedHandler"-->
+        <!--id="MathematicaBinary"/>-->
+        <lang.smartEnterProcessor language="Mathematica"
+                                  implementationClass="de.halirutan.mathematica.codeInsight.smartEnter.MathematicaSmartEnter"/>
         <lang.syntaxHighlighterFactory key="Mathematica"
                                        implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
         <lang.documentationProvider language="Mathematica"
                                     implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
         <colorSettingsPage
                 implementation="de.halirutan.mathematica.codeInsight.highlighting.MathematicaColorSettingsPage"/>
+        <lang.formatter language="Mathematica"
+                        implementationClass="de.halirutan.mathematica.codeInsight.formatter.MathematicaFormattingModelBuilder"/>
+        <!--<fileTypeIndentOptionsProvider-->
+        <!--implementation="de.halirutan.mathematica.codeInsight.formatter.MathematicaFileTypeIndentOptionsProviderr"/>-->
 
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
