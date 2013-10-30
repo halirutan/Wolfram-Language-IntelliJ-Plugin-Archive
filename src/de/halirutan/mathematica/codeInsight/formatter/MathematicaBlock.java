@@ -23,6 +23,7 @@ package de.halirutan.mathematica.codeInsight.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
@@ -37,10 +38,17 @@ import java.util.List;
 public class MathematicaBlock extends AbstractBlock {
 
   private SpacingBuilder mySpacingBuilder;
+  private CodeStyleSettings mySettings;
 
   public MathematicaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment, SpacingBuilder spacingBuilder) {
     super(node, wrap, alignment);
     mySpacingBuilder = spacingBuilder;
+  }
+
+  protected MathematicaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment, SpacingBuilder spacingBuilder, CodeStyleSettings settings) {
+    super(node, wrap, alignment);
+    mySpacingBuilder = spacingBuilder;
+    mySettings = settings;
   }
 
   @Override
@@ -56,7 +64,7 @@ public class MathematicaBlock extends AbstractBlock {
         child = child.getTreeNext();
         continue;
       }
-      blocks.add(new MathematicaBlock(child, myWrap, baseAlignment, mySpacingBuilder));
+      blocks.add(new MathematicaBlock(child, myWrap, Alignment.createChildAlignment(baseAlignment), mySpacingBuilder));
       child = child.getTreeNext();
     }
     return blocks;
