@@ -23,62 +23,103 @@ package de.halirutan.mathematica.codeInsight.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.common.AbstractBlock;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (10/20/13)
  */
 public class MathematicaBlock extends AbstractBlock {
 
-  private SpacingBuilder mySpacingBuilder;
-  private CodeStyleSettings mySettings;
+  private final Indent myIndent;
+  private final CommonCodeStyleSettings myCommonCodeStyleSettings;
+  private final SpacingBuilder mySpacingBuilder;
 
-  public MathematicaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment, SpacingBuilder spacingBuilder) {
+  public MathematicaBlock(@NotNull ASTNode node,
+                          @Nullable Wrap wrap,
+                          @Nullable Alignment alignment,
+                          CommonCodeStyleSettings myCommonCodeStyleSettings,
+                          SpacingBuilder mySpacingBuilder) {
     super(node, wrap, alignment);
-    mySpacingBuilder = spacingBuilder;
-  }
-
-  protected MathematicaBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment, SpacingBuilder spacingBuilder, CodeStyleSettings settings) {
-    super(node, wrap, alignment);
-    mySpacingBuilder = spacingBuilder;
-    mySettings = settings;
+    this.myCommonCodeStyleSettings = myCommonCodeStyleSettings;
+    this.mySpacingBuilder = mySpacingBuilder;
+    myIndent = MathematicaIndentProcessor.getChildIndent(node);
   }
 
   @Override
   protected List<Block> buildChildren() {
     List<Block> blocks = new ArrayList<Block>();
-    final Alignment baseAlignment = Alignment.createAlignment();
-    ASTNode child = myNode.getFirstChildNode();
+    Alignment baseAlignment = Alignment.createAlignment();
+    IElementType parentType = getNode().getElementType();
+    PsiElement psi = getNode().getPsi();
 
-    while (child != null) {
-      if (child.getTextRange().getLength() == 0
-          || child.getElementType().equals(MathematicaElementTypes.WHITE_SPACE)
-          || child.getElementType().equals(MathematicaElementTypes.LINE_BREAK)) {
-        child = child.getTreeNext();
-        continue;
-      }
-      blocks.add(new MathematicaBlock(child, myWrap, Alignment.createChildAlignment(baseAlignment), mySpacingBuilder));
-      child = child.getTreeNext();
+
+    for (ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
+      IElementType childType = child.getElementType();
+      if (child.getTextRange().getLength() == 0 ||
+          childType == WHITE_SPACE ||
+          childType == LINE_BREAK) continue;
+
+      Alignment alignment = getAlignment(psi, childType, parentType, baseAlignment);
+      blocks.add(new MathematicaBlock(child, Wrap.createWrap(WrapType.NONE, false), alignment, myCommonCodeStyleSettings, mySpacingBuilder));
     }
-    return blocks;
+    return Collections.unmodifiableList(blocks);
+
+
+  }
+
+  @Nullable
+  private Alignment getAlignment(PsiElement psi, IElementType childType, IElementType parentType, Alignment baseAlignment) {
+    if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
+      return baseAlignment;
+    }
+
+    if (childType.equals(COMPOUND_EXPRESSION_EXPRESSION)) {
+      return baseAlignment;
+    }
+    return baseAlignment;
+  }
+
+  @NotNull
+  @Override
+  public ChildAttributes getChildAttributes(int newChildIndex) {
+    return super.getChildAttributes(newChildIndex);
+  }
+
+  @Nullable
+  @Override
+  protected Indent getChildIndent() {
+    return Indent.getNormalIndent();
   }
 
   @Nullable
   @Override
   public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
-    return mySpacingBuilder.getSpacing(this, child1, child2);
+    return null;
   }
 
   @Override
   public boolean isLeaf() {
-    return myNode.getFirstChildNode() == null;
+    if (getNode().equals(SYMBOL_EXPRESSION)) {
+      return true;
+    }
+    return false;
   }
+
+  @Override
+  public Indent getIndent() {
+    return myIndent;
+  }
+
 
 }
