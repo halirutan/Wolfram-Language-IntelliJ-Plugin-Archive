@@ -58,7 +58,7 @@ public class MathematicaFormattingModelBuilder implements FormattingModelBuilder
   public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
     return FormattingModelProvider.createFormattingModelForPsiFile(
         element.getContainingFile(),
-        new MathematicaBlock(element.getNode(), Wrap.createWrap(WrapType.NONE, false), Alignment.createAlignment(), createSpaceBuilder(settings), settings), settings
+        new MathematicaBlock(element.getNode(), null, Alignment.createAlignment(), settings, createSpaceBuilder(settings)), settings
     );
   }
 
