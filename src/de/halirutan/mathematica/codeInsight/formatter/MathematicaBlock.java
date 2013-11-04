@@ -24,8 +24,7 @@ package de.halirutan.mathematica.codeInsight.formatter;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.formatter.common.AbstractBlock;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,21 +38,19 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 /**
  * @author patrick (10/20/13)
  */
-public class MathematicaBlock extends AbstractBlock {
+public class MathematicaBlock extends AbstractMathematicaBlock {
 
-  private final Indent myIndent;
-  private final CommonCodeStyleSettings myCommonCodeStyleSettings;
-  private final SpacingBuilder mySpacingBuilder;
 
   public MathematicaBlock(@NotNull ASTNode node,
-                          @Nullable Wrap wrap,
                           @Nullable Alignment alignment,
-                          CommonCodeStyleSettings myCommonCodeStyleSettings,
-                          SpacingBuilder mySpacingBuilder) {
-    super(node, wrap, alignment);
-    this.myCommonCodeStyleSettings = myCommonCodeStyleSettings;
-    this.mySpacingBuilder = mySpacingBuilder;
-    myIndent = MathematicaIndentProcessor.getChildIndent(node);
+                          SpacingBuilder spacingBuilder,
+                          @Nullable Wrap wrap,
+                          CodeStyleSettings settings) {
+    super(node,
+        alignment,
+        spacingBuilder,
+        wrap,
+        settings);
   }
 
   @Override
@@ -70,8 +67,12 @@ public class MathematicaBlock extends AbstractBlock {
           childType == WHITE_SPACE ||
           childType == LINE_BREAK) continue;
 
-      Alignment alignment = getAlignment(psi, childType, parentType, baseAlignment);
-      blocks.add(new MathematicaBlock(child, Wrap.createWrap(WrapType.NONE, false), alignment, myCommonCodeStyleSettings, mySpacingBuilder));
+      Alignment alignment = getAlignment(child, childType, parentType, baseAlignment);
+      blocks.add(new MathematicaBlock(child,
+          alignment,
+          mySpacingBuilder,
+          myWrap,
+          mySettings));
     }
     return Collections.unmodifiableList(blocks);
 
@@ -79,21 +80,48 @@ public class MathematicaBlock extends AbstractBlock {
   }
 
   @Nullable
-  private Alignment getAlignment(PsiElement psi, IElementType childType, IElementType parentType, Alignment baseAlignment) {
-    if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
-      return baseAlignment;
+  private Alignment getAlignment(ASTNode node, IElementType childType, IElementType parentType, Alignment baseAlignment) {
+    if (parentType.equals(LIST_EXPRESSION)) {
+      if (childType != LEFT_BRACE && childType != RIGHT_BRACE) {
+        return baseAlignment;
+      }
     }
 
-    if (childType.equals(COMPOUND_EXPRESSION_EXPRESSION)) {
-      return baseAlignment;
+    if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
+      if (isFunctionHead(node) || childType != LEFT_BRACKET || childType != RIGHT_BRACKET) {
+        return baseAlignment;
+      }
     }
-    return baseAlignment;
+    return null;
+  }
+
+
+  public static boolean isFunctionHead(ASTNode node) {
+    final ASTNode parent = node.getTreeParent();
+    if (parent != null && parent.getElementType() == FUNCTION_CALL_EXPRESSION) {
+      ASTNode child = parent.getFirstChildNode();
+      while (child != null) {
+        if (node == child) {
+          return true;
+        }
+
+        if (node.getElementType() == LEFT_BRACKET) {
+          return false;
+        }
+
+        child = child.getTreeNext();
+      }
+    }
+    return false;
   }
 
   @NotNull
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
-    return super.getChildAttributes(newChildIndex);
+    if (myNode.getElementType() == FUNCTION_CALL_EXPRESSION) {
+      return new ChildAttributes(Indent.getNormalIndent(), null);
+    }
+    return new ChildAttributes(getIndent(), null);
   }
 
   @Nullable
@@ -110,16 +138,7 @@ public class MathematicaBlock extends AbstractBlock {
 
   @Override
   public boolean isLeaf() {
-    if (getNode().equals(SYMBOL_EXPRESSION)) {
-      return true;
-    }
-    return false;
+    return getNode().equals(SYMBOL_EXPRESSION);
   }
-
-  @Override
-  public Indent getIndent() {
-    return myIndent;
-  }
-
 
 }

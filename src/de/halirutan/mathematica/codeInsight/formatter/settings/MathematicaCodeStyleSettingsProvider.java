@@ -19,12 +19,14 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.formatter;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (11/1/13)
@@ -34,5 +36,17 @@ public class MathematicaCodeStyleSettingsProvider extends CodeStyleSettingsProvi
   @Override
   public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
     return new MathematicaCodeStyleConfigurable(settings, originalSettings);
+  }
+
+  @Nullable
+  @Override
+  public String getConfigurableDisplayName() {
+    return "Mathematica";
+  }
+
+  @Nullable
+  @Override
+  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+    return new MathematicaCodeStyleSettings(settings);
   }
 }

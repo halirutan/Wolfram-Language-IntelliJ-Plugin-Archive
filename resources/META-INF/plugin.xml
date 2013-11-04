@@ -91,6 +91,10 @@
                                     implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
         <colorSettingsPage
                 implementation="de.halirutan.mathematica.codeInsight.highlighting.MathematicaColorSettingsPage"/>
+        <codeStyleSettingsProvider
+                implementation="de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
         <lang.formatter language="Mathematica"
                         implementationClass="de.halirutan.mathematica.codeInsight.formatter.MathematicaFormattingModelBuilder"/>
         <!--<fileTypeIndentOptionsProvider-->

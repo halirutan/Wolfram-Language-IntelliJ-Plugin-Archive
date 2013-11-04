@@ -34,4 +34,8 @@ public class MathematicaLanguage extends Language {
     super(Mathematica.NAME);
   }
 
+  @Override
+  public String getDisplayName() {
+    return "Mathematica Language";
+  }
 }

@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.formatter;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
@@ -36,7 +36,7 @@ public class MathematicaCodeStyleConfigurable extends CodeStyleAbstractConfigura
 
   @Override
   protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
-    return null;
+    return new MathematicaCodeStyleMainPanel(getCurrentSettings(), settings);
   }
 
   @Nullable

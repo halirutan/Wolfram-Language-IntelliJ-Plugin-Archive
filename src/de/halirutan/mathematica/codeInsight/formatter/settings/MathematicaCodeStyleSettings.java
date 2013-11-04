@@ -19,36 +19,20 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeInsight.formatter;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
-import com.intellij.formatting.FormattingModel;
-import com.intellij.formatting.FormattingModelBuilder;
-import com.intellij.formatting.FormattingModelProvider;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 
 /**
- * @author patrick (10/20/13)
+ * @author patrick (11/2/13)
  */
-public class MathematicaFormattingModelBuilder implements FormattingModelBuilder {
+public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
-  @NotNull
-  @Override
-  public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-    return FormattingModelProvider.createFormattingModelForPsiFile(
-        element.getContainingFile(),
-        AbstractMathematicaBlock.createMathematicaBlock(element, settings),
-        settings);
-  }
+  public boolean ALIGN_MULTILINE_BLOCK = false;
+  public boolean ALIGN_FUNCTION_CLAUSES = false;
 
-  @Nullable
-  @Override
-  public TextRange getRangeAffectingIndent(PsiFile file, int offset, ASTNode elementAtOffset) {
-    return null;
+  protected MathematicaCodeStyleSettings(CodeStyleSettings container) {
+    super("MathematicaCodeStyleSettings", container);
   }
 }
