@@ -48,6 +48,10 @@ public class MathematicaIndentProcessor {
     }
 
     if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
+
+      if (MathematicaBlock.isFunctionHead(node) || elementType.equals(LEFT_BRACKET) || elementType.equals(RIGHT_BRACKET)) {
+        return Indent.getNoneIndent();
+      }
       return Indent.getNormalIndent();
     }
 
