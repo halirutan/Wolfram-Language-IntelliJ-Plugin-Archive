@@ -16,6 +16,10 @@ import java.util.List;
  */
 public class MathematicaFunctionBlock extends AbstractMathematicaBlock {
 
+  private enum myState {
+    BEFORE_BRACE, IN_BODY
+  }
+
   public MathematicaFunctionBlock(@NotNull ASTNode node,
                                   @Nullable Alignment alignment,
                                   SpacingBuilder spacingBuilder,
@@ -31,6 +35,8 @@ public class MathematicaFunctionBlock extends AbstractMathematicaBlock {
 
   @Override
   protected List<Block> buildChildren() {
+
+
     return null;
   }
 }

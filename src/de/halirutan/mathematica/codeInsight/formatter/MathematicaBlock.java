@@ -68,7 +68,7 @@ public class MathematicaBlock extends AbstractMathematicaBlock {
           childType == LINE_BREAK) continue;
 
       Alignment alignment = getAlignment(child, childType, parentType, baseAlignment);
-      blocks.add(new MathematicaBlock(child,
+      blocks.add(createMathematicaBlock(child,
           alignment,
           mySpacingBuilder,
           myWrap,
