@@ -24,11 +24,12 @@ package de.halirutan.mathematica.codeInsight.completion;
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.codeInsight.highlighting.MathematicaBraceMatcher;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
- * Provides the intelligent insertion of quotes. This, like the {@link de.halirutan.mathematica.codeInsight.highlighting.MathematicaBraceMatcher}
+ * Provides the intelligent insertion of quotes. This, like the {@link MathematicaBraceMatcher}
  * works on the lexer token too. I should note, a string like <code >"blub"</code> is returned by the lexer as the
  * sequence <code >STRING_LITERAL_BEGIN, STRING_LITERAL, STRING_LITERAL_END</code>.
  *
