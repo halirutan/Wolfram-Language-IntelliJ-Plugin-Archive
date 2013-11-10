@@ -252,6 +252,7 @@ public class MathematicaParser implements PsiParser {
       return myParsed;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isValid() {
       return (myLeftMark != null) && (myLeftToken != null);
     }
