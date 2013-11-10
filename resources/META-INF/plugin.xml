@@ -16,6 +16,10 @@
 
     <change-notes>
         <![CDATA[
+            <p>0.1.8.1</p>
+            <ul>
+                <li >Made the plugin available for most Jetbrains IDE's like PyCharm, etc</li>
+            </ul>
             <p>0.1.8</p>
             <ul>
                 <li >Improved highlighting of patterns</li>
