@@ -130,12 +130,6 @@ public class MathematicaBlock extends AbstractMathematicaBlock {
     return Indent.getNormalIndent();
   }
 
-  @Nullable
-  @Override
-  public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
-    return null;
-  }
-
   @Override
   public boolean isLeaf() {
     return getNode().equals(SYMBOL_EXPRESSION);

@@ -49,9 +49,9 @@ public class MathematicaIndentProcessor {
 
     if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
 
-      if (MathematicaBlock.isFunctionHead(node) || elementType.equals(LEFT_BRACKET) || elementType.equals(RIGHT_BRACKET)) {
-        return Indent.getNoneIndent();
-      }
+//      if (isInFunctionBody(node)) {
+//        return Indent.getNormalIndent();
+//      }
       return Indent.getNormalIndent();
     }
 
@@ -69,8 +69,66 @@ public class MathematicaIndentProcessor {
       return Indent.getNormalIndent();
     }
 
-    return Indent.getNoneIndent();
+    if (parentType.equals(COMPOUND_EXPRESSION_EXPRESSION) || parentType.equals(FILE)) {
+      return Indent.getNoneIndent();
+    }
+
+    return Indent.getContinuationWithoutFirstIndent();
 
 
   }
+
+  /**
+   * Checks whether an ASTNode is in the function head.
+   *
+   * @param node the node to check
+   * @return true if node is in the function head or the opening bracket
+   */
+  private static boolean isInFunctionHead(ASTNode node) {
+    final ASTNode treeParent = node.getTreeParent();
+    if (treeParent == null) {
+      return false;
+    }
+    for (ASTNode child = treeParent.getFirstChildNode(); child != null; child = FormatterUtil.getNextNonWhitespaceSibling(child)) {
+      if (child == node) {
+        return true;
+      }
+      if (child.getElementType() == LEFT_BRACKET) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks whether an ASTNode is part of the function body, meaning one of the arguments of a function call or a comma
+   *
+   * @param node the node to check
+   * @return true if the node is between the opening and closing bracket of <code >func[....]</code>
+   */
+  private static boolean isInFunctionBody(ASTNode node) {
+    final ASTNode treeParent = node.getTreeParent();
+    if (treeParent == null) {
+      return false;
+    }
+    boolean inBody = false;
+    for (ASTNode child = treeParent.getFirstChildNode(); child != null; child = FormatterUtil.getNextNonWhitespaceSibling(child)) {
+      if (!inBody) {
+        if (child.getElementType() == LEFT_BRACKET) {
+          inBody = true;
+        }
+        continue;
+      }
+
+      if (child.getElementType() == RIGHT_BRACKET) {
+        return false;
+      }
+
+      if (child == node) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

@@ -89,94 +89,14 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock {
     return myIndent;
   }
 
+  @NotNull
+  @Override
+  public ChildAttributes getChildAttributes(int newChildIndex) {
+    return super.getChildAttributes(newChildIndex);
+  }
 
-  //
-//  @Nullable
-//  private static Indent getChildIndent(@NotNull ASTNode parent) {
-//    final IElementType parentType = parent.getElementType();
-//    if (parentType == MathematicaElementTypes.FUNCTION_CALL_EXPRESSION) {
-//      return Indent.getNormalIndent();
-//    }
-//    return null;
-//  }
-//
-//  private static int calcNewState(final ASTNode child, int state) {
-//    switch (state) {
-//      case BEFORE_FIRST: {
-//        if (StdTokenSets.COMMENT_BIT_SET.contains(child.getElementType())) {
-//          return BEFORE_FIRST;
-//        } else if (isLBrace(child)) {
-//          return INSIDE_BODY;
-//        } else {
-//          return BEFORE_LBRACE;
-//        }
-//      }
-//      case BEFORE_LBRACE: {
-//        if (isLBrace(child)) {
-//          return INSIDE_BODY;
-//        } else {
-//          return BEFORE_LBRACE;
-//        }
-//      }
-//    }
-//    return INSIDE_BODY;
-//  }
-//
-//  private static boolean isLBrace(ASTNode child) {
-//    return child.getElementType() == MathematicaElementTypes.LEFT_BRACKET;
-//  }
-//
-//  protected static boolean isRBrace(@NotNull final ASTNode child) {
-//    return child.getElementType() == MathematicaElementTypes.RIGHT_BRACKET;
-//  }
-//
-//
-//  private Wrap createChildWrap() {
-//    return myWrap;
-//  }
-//
-//  @Nullable
-//  private Alignment createChildAlignment() {
-//    return Alignment.createChildAlignment(myAlignment);
-//  }
-//
-//  @Nullable
-//  @Override
-//  protected Indent getChildIndent() {
-//    return getChildIndent(myNode);
-//  }
-//
-//  @Nullable
-//  @Override
-//  public Spacing getSpacing(@Nullable Block child1, @NotNull Block child2) {
-//    return mySpacingBuilder.getSpacing(this, child1, child2);
-//  }
-//
-//  @Override
-//  public boolean isLeaf() {
-//    return myNode.getFirstChildNode() == null;
-//  }
-//
-//  private Indent calcCurrentIndent(final ASTNode child, final int state) {
-//    if (isRBrace(child) || child.getElementType() == JavaTokenType.AT) {
-//      return Indent.getNoneIndent();
-//    }
-//
-//    if (state == BEFORE_FIRST) return Indent.getNoneIndent();
-//
-//    if (state == BEFORE_LBRACE) {
-//      if (isLBrace(child)) {
-//        return Indent.getNoneIndent();
-//      } else {
-//        return Indent.getContinuationIndent();
-//      }
-//    } else {
-//      if (isRBrace(child)) {
-//        return Indent.getNoneIndent();
-//      } else {
-//        return Indent.getNormalIndent();
-//      }
-//    }
-//  }
-
+  @Override
+  public boolean isIncomplete() {
+    return super.isIncomplete();
+  }
 }
