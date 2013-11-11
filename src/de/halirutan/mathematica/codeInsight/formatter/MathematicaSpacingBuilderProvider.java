@@ -12,10 +12,10 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
  * @author patrick (11/4/13)
  */
 public class MathematicaSpacingBuilderProvider {
-  private static TokenSet assignments;
+  private static TokenSet ourAssignments;
 
   static {
-    assignments = TokenSet.create(
+    ourAssignments = TokenSet.create(
         MathematicaElementTypes.SET_DELAYED,
         MathematicaElementTypes.SET,
         MathematicaElementTypes.ADD_TO,
@@ -28,7 +28,7 @@ public class MathematicaSpacingBuilderProvider {
 
   public static SpacingBuilder getSpacingBuilder(CodeStyleSettings settings) {
     return new SpacingBuilder(settings)
-        .around(assignments).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
+        .around(ourAssignments).spaceIf(settings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
         .after(MathematicaElementTypes.COMMA).spaceIf(true)
         .before(MathematicaElementTypes.LEFT_BRACKET).none()
         .after(MathematicaElementTypes.RIGHT_BRACKET).none();
