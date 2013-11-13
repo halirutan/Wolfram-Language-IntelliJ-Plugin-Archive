@@ -29,6 +29,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,9 +43,12 @@ public class MathematicaFormattingModelBuilder implements FormattingModelBuilder
   @NotNull
   @Override
   public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
+    CommonCodeStyleSettings commonSettings = settings.getCommonSettings(MathematicaLanguage.INSTANCE);
+    MathematicaCodeStyleSettings mathematicaSettings = settings.getCustomSettings(MathematicaCodeStyleSettings.class);
+
     return FormattingModelProvider.createFormattingModelForPsiFile(
         element.getContainingFile(),
-        AbstractMathematicaBlock.createMathematicaBlock(element, settings),
+        AbstractMathematicaBlock.createMathematicaBlock(element, commonSettings, mathematicaSettings),
         settings);
   }
 

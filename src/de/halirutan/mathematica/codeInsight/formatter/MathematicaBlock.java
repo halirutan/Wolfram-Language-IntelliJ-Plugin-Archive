@@ -25,7 +25,9 @@ import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,12 +47,15 @@ public class MathematicaBlock extends AbstractMathematicaBlock {
                           @Nullable Alignment alignment,
                           SpacingBuilder spacingBuilder,
                           @Nullable Wrap wrap,
-                          CodeStyleSettings settings) {
+                          CommonCodeStyleSettings settings,
+                          MathematicaCodeStyleSettings mmaSettings) {
     super(node,
         alignment,
         spacingBuilder,
         wrap,
-        settings);
+        settings,
+        mmaSettings
+    );
   }
 
   @Override
@@ -67,72 +72,25 @@ public class MathematicaBlock extends AbstractMathematicaBlock {
           childType == WHITE_SPACE ||
           childType == LINE_BREAK) continue;
 
-      Alignment alignment = getAlignment(child, childType, parentType, baseAlignment);
       blocks.add(createMathematicaBlock(child,
-          alignment,
+          null,
           mySpacingBuilder,
           myWrap,
-          mySettings));
+          mySettings,
+          myMathematicaSettings));
     }
     return Collections.unmodifiableList(blocks);
-
-
   }
 
-  @Nullable
-  private Alignment getAlignment(ASTNode node, IElementType childType, IElementType parentType, Alignment baseAlignment) {
-    if (parentType.equals(LIST_EXPRESSION)) {
-      if (childType != LEFT_BRACE && childType != RIGHT_BRACE) {
-        return baseAlignment;
-      }
-    }
-
-    if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
-      if (isFunctionHead(node) || childType != LEFT_BRACKET || childType != RIGHT_BRACKET) {
-        return baseAlignment;
-      }
-    }
-    return null;
-  }
-
-
-  public static boolean isFunctionHead(ASTNode node) {
-    final ASTNode parent = node.getTreeParent();
-    if (parent != null && parent.getElementType() == FUNCTION_CALL_EXPRESSION) {
-      ASTNode child = parent.getFirstChildNode();
-      while (child != null) {
-        if (node == child) {
-          return true;
-        }
-
-        if (node.getElementType() == LEFT_BRACKET) {
-          return false;
-        }
-
-        child = child.getTreeNext();
-      }
-    }
-    return false;
-  }
 
   @NotNull
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
-    if (myNode.getElementType() == FUNCTION_CALL_EXPRESSION) {
-      return new ChildAttributes(Indent.getNormalIndent(), null);
+    if (isIncomplete()) {
+      return new ChildAttributes(getIndent(), null);
     }
-    return new ChildAttributes(getIndent(), null);
+    return new ChildAttributes(Indent.getNoneIndent(), null);
   }
 
-  @Nullable
-  @Override
-  protected Indent getChildIndent() {
-    return Indent.getNormalIndent();
-  }
-
-  @Override
-  public boolean isLeaf() {
-    return getNode().equals(SYMBOL_EXPRESSION);
-  }
 
 }

@@ -5,10 +5,12 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import org.jetbrains.annotations.NotNull;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.COMMA;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.RIGHT_BRACKET;
 
 /**
  * @author patrick (30/10/13)
@@ -19,14 +21,27 @@ public class FunctionCallFixer extends SmartEnterProcessorWithFixers.Fixer<Mathe
     Document doc = editor.getDocument();
     if (element instanceof FunctionCall) {
 
-      if (!element.getLastChild().getNode().getElementType().equals(MathematicaElementTypes.RIGHT_BRACKET)) {
-        PsiElement prevSibling = element.getLastChild().getPrevSibling();
+      final PsiElement lastChild = element.getLastChild();
+      if (!lastChild.getNode().getElementType().equals(RIGHT_BRACKET)) {
+        PsiElement prevSibling = lastChild.getPrevSibling();
         if (prevSibling != null) {
-          doc.insertString(prevSibling.getTextOffset() + prevSibling.getTextLength(),"]");
+          final int textOffset = prevSibling.getTextOffset();
+          if (prevSibling.getNode().getElementType() == COMMA) {
+            doc.replaceString(textOffset, textOffset + 1, "]");
+          } else {
+            doc.insertString(textOffset + prevSibling.getTextLength(), "]");
+          }
         }
-      }
-    } else if (element instanceof CompoundExpression) {
+      } else {
 
+        final PsiElement prevSibling = lastChild.getPrevSibling();
+        if (prevSibling != null && prevSibling.getNode().getElementType() == COMMA) {
+          doc.insertString(prevSibling.getTextOffset() + 1, "\n\n");
+          editor.getCaretModel().moveToOffset(prevSibling.getTextOffset() + 2);
+          processor.commit(editor);
+        }
+
+      }
     }
   }
 }

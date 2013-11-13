@@ -5,9 +5,12 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.text.CharArrayUtil;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.lists.List;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,6 +22,8 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
 
   public MathematicaSmartEnter() {
     addFixers(new FunctionCallFixer());
+    addFixers(new CompoundExpressionFixer());
+    addEnterProcessors(new FunctionCallEnterProcessor());
   }
 
 
@@ -38,7 +43,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     int steps = 0;
 
     while (current != null && steps++ < MAX_UPWALK) {
-      if (current instanceof de.halirutan.mathematica.parsing.psi.api.lists.List ||
+      if (current instanceof List ||
           current instanceof CompoundExpression ||
           current instanceof FunctionCall) {
         return current;
@@ -46,5 +51,19 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
       current = current.getParent();
     }
     return null;
+  }
+
+  private class FunctionCallEnterProcessor extends FixEnterProcessor {
+    @Override
+    public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
+      if (modified) {
+        CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, editor.getCaretModel().getOffset());
+        reformat(atCaret);
+        commit(editor);
+        return true;
+
+      }
+      return false;
+    }
   }
 }
