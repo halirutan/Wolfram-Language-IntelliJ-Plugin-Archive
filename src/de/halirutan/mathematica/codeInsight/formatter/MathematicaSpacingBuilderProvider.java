@@ -29,7 +29,11 @@ public class MathematicaSpacingBuilderProvider {
         ADD_TO,
         TIMES_BY,
         SUBTRACT_FROM,
-        DIVIDE_BY);
+        DIVIDE_BY,
+        TAG_SET,
+        TAG_UNSET_EXPRESSION,
+        UP_SET,
+        UP_SET_DELAYED);
 
     ourArithmeticOperations = TokenSet.create(
         PLUS,
@@ -74,7 +78,11 @@ public class MathematicaSpacingBuilderProvider {
         COLON,
         STRING_JOIN,
         STRING_EXPRESSION,
-        INFIX_CALL
+        INFIX_CALL,
+        SPAN,
+        GET,
+        PUT,
+        PUT_APPEND
     );
 
   }

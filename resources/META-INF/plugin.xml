@@ -2,7 +2,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>0.1.9</version>
+  <version>0.1.9.1</version>
   <idea-version since-build="123.94"/>
   <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
 
@@ -15,6 +15,10 @@
 
   <change-notes>
     <![CDATA[
+            <p>0.1.9.1</p>
+            <ul>
+                <li >This is an unofficial test-release for the formatter.
+            </ul>
             <p>0.1.8</p>
             <ul>
                 <li >Improved highlighting of patterns</li>
