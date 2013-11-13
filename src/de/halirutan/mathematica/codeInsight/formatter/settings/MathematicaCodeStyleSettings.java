@@ -29,10 +29,14 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
  */
 public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
-  public boolean ALIGN_MULTILINE_BLOCK = false;
-  public boolean ALIGN_FUNCTION_CLAUSES = false;
+  public boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
+  public boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
+  public boolean SPACE_AROUND_RULE_OPERATIONS = true;
+  public boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
+  public boolean SPACE_AROUND_OTHER_OPERATIONS = true;
+  public boolean SPACE_AROUND_RELATION_OPERATIONS = true;
 
-  protected MathematicaCodeStyleSettings(CodeStyleSettings container) {
+  public MathematicaCodeStyleSettings(CodeStyleSettings container) {
     super("MathematicaCodeStyleSettings", container);
   }
 }

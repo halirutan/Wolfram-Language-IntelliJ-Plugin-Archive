@@ -43,16 +43,18 @@ public class MathematicaIndentProcessor {
     IElementType prevSiblingElementType = prevSibling != null ? prevSibling.getElementType() : null;
 
 
-    if (parent == null) {
+    if (parent == null ||
+        elementType == COMMENT ||
+        parentType == FILE) {
       return Indent.getNoneIndent();
     }
 
     if (parentType.equals(FUNCTION_CALL_EXPRESSION)) {
 
-//      if (isInFunctionBody(node)) {
-//        return Indent.getNormalIndent();
-//      }
-      return Indent.getNormalIndent();
+      if (isInFunctionBody(node)) {
+        return Indent.getNormalIndent(false);
+      }
+      return Indent.getNoneIndent();
     }
 
     if (parentType.equals(GROUP_EXPRESSION)) {
@@ -69,7 +71,7 @@ public class MathematicaIndentProcessor {
       return Indent.getNormalIndent();
     }
 
-    if (parentType.equals(COMPOUND_EXPRESSION_EXPRESSION) || parentType.equals(FILE)) {
+    if (parentType == COMPOUND_EXPRESSION_EXPRESSION) {
       return Indent.getNoneIndent();
     }
 

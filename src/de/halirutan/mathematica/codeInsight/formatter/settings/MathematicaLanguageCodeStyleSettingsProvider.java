@@ -30,13 +30,22 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import de.halirutan.mathematica.MathematicaLanguage;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 
 /**
  * @author patrick (11/2/13)
  */
 public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
+  public static final String AROUND_OPERATORS = "Around Operators";
+
+  private static final String GENERAL_EXAMPLE = readFromFile("spacingExample.m");
 
   @NotNull
   @Override
@@ -46,11 +55,11 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
 
   @Override
   public String getCodeSample(@NotNull SettingsType settingsType) {
-    if (settingsType == SettingsType.SPACING_SETTINGS) return SPACING_SAMPLE;
-    if (settingsType == SettingsType.BLANK_LINES_SETTINGS) return BLANK_LINE_SAMPLE;
-    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return WRAPPING_CODE_SAMPLE;
+    if (settingsType == SettingsType.SPACING_SETTINGS) return GENERAL_EXAMPLE;
+    if (settingsType == SettingsType.BLANK_LINES_SETTINGS) return readFromFile("blankLinesExample.m");
+    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return readFromFile("spacingExample.m");
 
-    return GENERAL_CODE_SAMPLE;
+    return GENERAL_EXAMPLE;
   }
 
 
@@ -88,95 +97,40 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
   public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
       consumer.showStandardOptions(
-          "SPACE_AROUND_ASSIGNMENT_OPERATORS",
-          "SPACE_AROUND_LOGICAL_OPERATORS",
-          "SPACE_AROUND_EQUALITY_OPERATORS",
-          "SPACE_AROUND_ADDITIVE_OPERATORS",
-          "SPACE_AROUND_MULTIPLICATIVE_OPERATORS",
-          "SPACE_AFTER_COMMA",
-          "SPACE_BEFORE_COMMA"
+          "SPACE_AFTER_COMMA"
       );
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_OPERATIONS", "Assignment (=, :=)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ARITHMETIC_OPERATIONS", "Arithmetic (+, -)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RELATION_OPERATIONS", "Relation (==, =!=)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RULE_OPERATIONS", "Rules (/., ->)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_FUNCTIONAL_OPERATIONS", "Functional (/@, @@)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_OTHER_OPERATIONS", "Other (~~, /;)", AROUND_OPERATORS);
     } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
       consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
-    } else if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
-      consumer.showStandardOptions(
-//        "KEEP_LINE_BREAKS",
-          "KEEP_FIRST_COLUMN_COMMENT"//,
-//        "CALL_PARAMETERS_WRAP",
-//        "CALL_PARAMETERS_LPAREN_ON_NEXT_LINE",
-//        "CALL_PARAMETERS_RPAREN_ON_NEXT_LINE",
-//        "METHOD_PARAMETERS_WRAP",
-//        "METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE",
-//        "METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE",
-//        "ALIGN_MULTILINE_PARAMETERS",
-//        "ALIGN_MULTILINE_PARAMETERS_IN_CALLS",
-//        "ALIGN_MULTILINE_BINARY_OPERATION",
-//        "BINARY_OPERATION_WRAP",
-//        "BINARY_OPERATION_SIGN_ON_NEXT_LINE",
-//        "PARENTHESES_EXPRESSION_LPAREN_WRAP",
-//        "PARENTHESES_EXPRESSION_RPAREN_WRAP"
-      );
-//      consumer.showCustomOption(ErlangCodeStyleSettings.class, "ALIGN_MULTILINE_BLOCK", "Blocks (fun...end, etc)", "Alignment");
-//      consumer.showCustomOption(ErlangCodeStyleSettings.class, "ALIGN_FUNCTION_CLAUSES", "Function clauses", "Alignment");
     }
   }
 
-  private static final String SPACING_SAMPLE =
-      "Bresenham[p1 : {x1_, y1_}, p2 : {x2_, y2_}] :=\n" +
-          "  Module[{dx, dy, dir, corr, test, side},\n" +
-          "    {dx, dy} = p2 - p1;\n" +
-          "    dir = If[Abs[dx] > Abs[dy], {Sign[dx], 0}, {0, Sign[dy]}];\n" +
-          "    test[{x_, y_}] := dy*x - dx*y + dx*y1 - dy*x1;\n" +
-          "    side = Sign[test[p1 + dir]];\n" +
-          "    corr = side*{-1, 1}*Reverse[dir];\n" +
-          "    NestWhileList[\n" +
-          "      Block[{new = # + dir},\n" +
-          "        If[Sign[test[new]] == side, new += corr];\n" +
-          "        new] &,/n" +
-          "      p1,\n" +
-          "      #1 =!= p2 &, 1, 500]]";
-  private static final String BLANK_LINE_SAMPLE =
-      "Bresenham[p1 : {x1_, y1_}, p2 : {x2_, y2_}] :=\n" +
-          "  Module[{dx, dy, dir, corr, test, side},\n" +
-          "    {dx, dy} = p2 - p1;\n" +
-          "    dir = If[Abs[dx] > Abs[dy], {Sign[dx], 0}, {0, Sign[dy]}];\n" +
-          "    test[{x_, y_}] := dy*x - dx*y + dx*y1 - dy*x1;\n" +
-          "    side = Sign[test[p1 + dir]];\n" +
-          "    corr = side*{-1, 1}*Reverse[dir];\n" +
-          "    NestWhileList[\n" +
-          "      Block[{new = # + dir},\n" +
-          "        If[Sign[test[new]] == side, new += corr];\n" +
-          "        new] &,\n" +
-          "      p1,\n" +
-          "      #1 =!= p2 &, 1, 500]]";
-  private static final String WRAPPING_CODE_SAMPLE =
-      "Bresenham[p1 : {x1_, y1_}, p2 : {x2_, y2_}] :=\n" +
-          "  Module[{dx, dy, dir, corr, test, side},\n" +
-          "    {dx, dy} = p2 - p1;\n" +
-          "    dir = If[Abs[dx] > Abs[dy], {Sign[dx], 0}, {0, Sign[dy]}];\n" +
-          "    test[{x_, y_}] := dy*x - dx*y + dx*y1 - dy*x1;\n" +
-          "    side = Sign[test[p1 + dir]];\n" +
-          "    corr = side*{-1, 1}*Reverse[dir];\n" +
-          "    NestWhileList[\n" +
-          "      Block[{new = # + dir},\n" +
-          "        If[Sign[test[new]] == side, new += corr];\n" +
-          "        new] &,\n" +
-          "      p1,\n" +
-          "      #1 =!= p2 &, 1, 500]]";
-  private static final String GENERAL_CODE_SAMPLE =
-      "Bresenham[p1 : {x1_, y1_}, p2 : {x2_, y2_}] :=\n" +
-          "  Module[{dx, dy, dir, corr, test, side},\n" +
-          "    {dx, dy} = p2 - p1;\n" +
-          "    dir = If[Abs[dx] > Abs[dy], {Sign[dx], 0}, {0, Sign[dy]}];\n" +
-          "    test[{x_, y_}] := dy*x - dx*y + dx*y1 - dy*x1;\n" +
-          "    side = Sign[test[p1 + dir]];\n" +
-          "    corr = side*{-1, 1}*Reverse[dir];\n" +
-          "    NestWhileList[\n" +
-          "      Block[{new = # + dir},\n" +
-          "        If[Sign[test[new]] == side, new += corr];\n" +
-          "        new] &,\n" +
-          "      p1,\n" +
-          "      #1 =!= p2 &, 1, 500]]";
+  public static String readFromFile(@NonNls final String fileName) {
+    try {
+      final InputStream stream = MathematicaLanguageCodeStyleSettingsProvider.class.getResourceAsStream(fileName);
+      final InputStreamReader reader = new InputStreamReader(stream);
+      final StringBuffer result;
+      final LineNumberReader lineNumberReader = new LineNumberReader(reader);
+      try {
+        result = new StringBuffer();
+        String line;
+        while ((line = lineNumberReader.readLine()) != null) {
+          result.append(line);
+          result.append("\n");
+        }
+      } finally {
+        lineNumberReader.close();
+      }
 
+      return result.toString();
+    } catch (IOException e) {
+      return "";
+    }
+  }
 
 }

@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,26 +27,25 @@ public class MathematicaFunctionBlock extends AbstractMathematicaBlock {
                                   @Nullable Alignment alignment,
                                   SpacingBuilder spacingBuilder,
                                   @Nullable Wrap wrap,
-                                  CodeStyleSettings settings) {
+                                  CommonCodeStyleSettings settings,
+                                  MathematicaCodeStyleSettings mmaSettings) {
     super(
         node,
         alignment,
         spacingBuilder,
         wrap,
-        settings);
+        settings,
+        mmaSettings);
   }
 
   @Override
   protected List<Block> buildChildren() {
     List<Block> result = Lists.newArrayList();
     ChildState state = ChildState.BEFORE_BRACE;
-//    Alignment functionAlignment = Alignment.createAlignment();
-//    Alignment argumentAlignment = Alignment.createChildAlignment(myAlignment);
+    Alignment childAlignment = null;
 
     for (ASTNode child = getNode().getFirstChildNode(); child != null; child = child.getTreeNext()) {
       IElementType childType = child.getElementType();
-
-      Alignment alignment = Alignment.createAlignment();
 
       if (child.getTextRange().getLength() == 0 ||
           childType == WHITE_SPACE ||
@@ -55,19 +56,19 @@ public class MathematicaFunctionBlock extends AbstractMathematicaBlock {
           if (childType == LEFT_BRACKET) {
             state = ChildState.IN_BODY;
           }
-          result.add(createMathematicaBlock(child, alignment, mySpacingBuilder, myWrap, mySettings));
+          result.add(createMathematicaBlock(child, null, mySpacingBuilder, myWrap, mySettings, myMathematicaSettings));
           break;
         case IN_BODY:
           if (childType == RIGHT_BRACKET) {
             state = ChildState.AFTER_BODY;
-            result.add(createMathematicaBlock(child, alignment, mySpacingBuilder, myWrap, mySettings));
+            result.add(createMathematicaBlock(child, null, mySpacingBuilder, myWrap, mySettings, myMathematicaSettings));
             break;
           }
-          result.add(createMathematicaBlock(child, alignment, mySpacingBuilder, myWrap, mySettings));
+          result.add(createMathematicaBlock(child, childAlignment, mySpacingBuilder, myWrap, mySettings, myMathematicaSettings));
           break;
         case AFTER_BODY:
           // theoretically not possible!
-          result.add(createMathematicaBlock(child, alignment, mySpacingBuilder, myWrap, mySettings));
+          result.add(createMathematicaBlock(child, null, mySpacingBuilder, myWrap, mySettings, myMathematicaSettings));
           break;
       }
     }
@@ -77,6 +78,7 @@ public class MathematicaFunctionBlock extends AbstractMathematicaBlock {
   @NotNull
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
-    return super.getChildAttributes(newChildIndex);
+    return new ChildAttributes(Indent.getNormalIndent(false), null);
   }
+
 }

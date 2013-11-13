@@ -23,10 +23,15 @@ package de.halirutan.mathematica.codeInsight.formatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.Language;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.TokenType;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettings;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,31 +39,37 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (10/20/13)
  */
-public abstract class AbstractMathematicaBlock extends AbstractBlock {
+public abstract class AbstractMathematicaBlock extends AbstractBlock implements BlockEx {
 
   private final Indent myIndent;
+  protected final MathematicaCodeStyleSettings myMathematicaSettings;
   protected SpacingBuilder mySpacingBuilder;
-  protected CodeStyleSettings mySettings;
+  protected CommonCodeStyleSettings mySettings;
 
 
   protected AbstractMathematicaBlock(@NotNull ASTNode node,
                                      @Nullable Alignment alignment,
                                      SpacingBuilder spacingBuilder,
                                      @Nullable Wrap wrap,
-                                     CodeStyleSettings settings) {
+                                     CommonCodeStyleSettings settings,
+                                     MathematicaCodeStyleSettings mmaSettings) {
     super(node, wrap, alignment);
     mySpacingBuilder = spacingBuilder;
     mySettings = settings;
+    myMathematicaSettings = mmaSettings;
     myIndent = MathematicaIndentProcessor.getChildIndent(node);
   }
 
-  public static Block createMathematicaBlock(PsiElement element, CodeStyleSettings settings) {
+  public static Block createMathematicaBlock(PsiElement element,
+                                             CommonCodeStyleSettings settings,
+                                             MathematicaCodeStyleSettings mathematicaSettings) {
     return createMathematicaBlock(
         element.getNode(),
         null,
-        MathematicaSpacingBuilderProvider.getSpacingBuilder(settings),
+        MathematicaSpacingBuilderProvider.getSpacingBuilder(settings, mathematicaSettings),
         null,
-        settings
+        settings,
+        mathematicaSettings
     );
   }
 
@@ -66,17 +77,13 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock {
                                              @Nullable Alignment alignment,
                                              SpacingBuilder spacingBuilder,
                                              @Nullable Wrap wrap,
-                                             CodeStyleSettings codeStyleSettings) {
+                                             CommonCodeStyleSettings codeStyleSettings,
+                                             MathematicaCodeStyleSettings mathematicaSettings) {
     final IElementType elementType = node.getElementType();
     if (elementType == MathematicaElementTypes.FUNCTION_CALL_EXPRESSION) {
-      return new MathematicaFunctionBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings);
+      return new MathematicaFunctionBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
     }
-    return new MathematicaBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings);
-  }
-
-  @Override
-  public boolean isLeaf() {
-    return getNode().getElementType() == MathematicaElementTypes.SYMBOL_EXPRESSION;
+    return new MathematicaBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
   }
 
   @Nullable
@@ -85,6 +92,7 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock {
     return mySpacingBuilder.getSpacing(this, child1, child2);
   }
 
+  @Override
   public Indent getIndent() {
     return myIndent;
   }
@@ -97,6 +105,33 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock {
 
   @Override
   public boolean isIncomplete() {
-    return super.isIncomplete();
+    ASTNode lastChild = myNode.getLastChildNode();
+    while (lastChild != null && lastChild.getElementType() == TokenType.WHITE_SPACE) {
+      lastChild = lastChild.getTreePrev();
+    }
+    if (lastChild == null) return false;
+    if (lastChild.getElementType() == TokenType.ERROR_ELEMENT) return true;
+    return FormatterUtil.isIncomplete(lastChild);
+  }
+
+  @Override
+  public boolean isLeaf() {
+    return myNode.getFirstChildNode() == null;
+  }
+
+  @Nullable
+  @Override
+  protected Indent getChildIndent() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return MathematicaLanguage.INSTANCE;
+  }
+
+  public IElementType getElementType() {
+    return myNode.getElementType();
   }
 }
