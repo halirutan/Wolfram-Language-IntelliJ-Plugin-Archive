@@ -37,7 +37,6 @@ public class MathematicaSpacingBuilderProvider {
 
     ourArithmeticOperations = TokenSet.create(
         PLUS,
-        MINUS,
         TIMES,
         DIVIDE,
         AND,
@@ -91,6 +90,7 @@ public class MathematicaSpacingBuilderProvider {
     return new SpacingBuilder(settings.getRootSettings())
         .around(ourAssignments).spaceIf(mathematicaSettings.SPACE_AROUND_ASSIGNMENT_OPERATIONS)
         .around(ourArithmeticOperations).spaceIf(mathematicaSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
+        .aroundInside(MINUS, MINUS_EXPRESSION).spaceIf(mathematicaSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
         .around(ourRelationalOperations).spaceIf(mathematicaSettings.SPACE_AROUND_RELATION_OPERATIONS)
         .around(ourRuleOperations).spaceIf(mathematicaSettings.SPACE_AROUND_RULE_OPERATIONS)
         .around(ourFunctionalOperations).spaceIf(mathematicaSettings.SPACE_AROUND_FUNCTIONAL_OPERATIONS)
