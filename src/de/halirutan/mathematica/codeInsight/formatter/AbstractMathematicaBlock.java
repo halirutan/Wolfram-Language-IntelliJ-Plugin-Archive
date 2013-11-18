@@ -32,17 +32,19 @@ import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.MathematicaLanguage;
 import de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettings;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.FUNCTION_CALL_EXPRESSION;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.LIST_EXPRESSION;
 
 /**
  * @author patrick (10/20/13)
  */
 public abstract class AbstractMathematicaBlock extends AbstractBlock implements BlockEx {
 
-  private final Indent myIndent;
   protected final MathematicaCodeStyleSettings myMathematicaSettings;
+  private final Indent myIndent;
   protected SpacingBuilder mySpacingBuilder;
   protected CommonCodeStyleSettings mySettings;
 
@@ -80,10 +82,13 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock implements 
                                              CommonCodeStyleSettings codeStyleSettings,
                                              MathematicaCodeStyleSettings mathematicaSettings) {
     final IElementType elementType = node.getElementType();
-    if (elementType == MathematicaElementTypes.FUNCTION_CALL_EXPRESSION) {
+    if (elementType == FUNCTION_CALL_EXPRESSION) {
       return new MathematicaFunctionBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
+    } else if (elementType == LIST_EXPRESSION) {
+      return new MathematicaListBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
+    } else {
+      return new MathematicaBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
     }
-    return new MathematicaBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
   }
 
   @Nullable
