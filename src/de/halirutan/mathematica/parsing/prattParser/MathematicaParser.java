@@ -43,14 +43,14 @@ public class MathematicaParser implements PsiParser {
 
   private static final int MAX_RECURSION_DEPTH = 1024;
   private static final ImplicitMultiplicationParselet IMPLICIT_MULTIPLICATION_PARSELET = new ImplicitMultiplicationParselet();
-  private final ImportantLinebreakHandler myImportantLinebreakHandler;
+  private final ImportantLineBreakHandler myImportantLinebreakHandler;
   private PsiBuilder myBuilder;
   private int myRecursionDepth;
 
 
   public MathematicaParser() {
     myRecursionDepth = 0;
-    myImportantLinebreakHandler = new ImportantLinebreakHandler();
+    myImportantLinebreakHandler = new ImportantLineBreakHandler();
   }
 
   /**
@@ -86,7 +86,7 @@ public class MathematicaParser implements PsiParser {
   /**
    * This is the main entry point for the parsing a file. Every tme
    *
-   * @param root The root node of the AST
+   * @param root    The root node of the AST
    * @param builder Through this, the AST is built up by placing markers.
    * @return The parsed AST
    */
@@ -168,7 +168,7 @@ public class MathematicaParser implements PsiParser {
       return null;
     }
 
-    if (myImportantLinebreakHandler.hadLinebreak()) {
+    if (myImportantLinebreakHandler.hadLineBreak()) {
       return null;
     }
 
@@ -261,20 +261,20 @@ public class MathematicaParser implements PsiParser {
    * Registers when a whitespace token was seen. This is important in order to find out whether an <em>implicit
    * multiplication</em> has arisen.
    */
-  public class ImportantLinebreakHandler implements WhitespaceSkippedCallback {
-    private boolean linebreakSeen;
+  public class ImportantLineBreakHandler implements WhitespaceSkippedCallback {
+    private boolean myLineBreakSeen;
 
     @Override
     public void onSkip(IElementType type, int start, int end) {
-      if (type.equals(LINE_BREAK)) linebreakSeen = true;
+      if (type.equals(LINE_BREAK)) myLineBreakSeen = true;
     }
 
     public void reset() {
-      linebreakSeen = false;
+      myLineBreakSeen = false;
     }
 
-    public boolean hadLinebreak() {
-      return linebreakSeen;
+    public boolean hadLineBreak() {
+      return myLineBreakSeen;
     }
 
 

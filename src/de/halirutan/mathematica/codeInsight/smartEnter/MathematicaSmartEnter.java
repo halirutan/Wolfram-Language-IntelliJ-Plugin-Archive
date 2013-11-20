@@ -21,7 +21,7 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  */
 public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
 
-  static int MAX_UPWALK = 10;
+  static final int MAX_UPWALK = 10;
 
   public MathematicaSmartEnter() {
     addFixers(new FunctionCallFixer());
