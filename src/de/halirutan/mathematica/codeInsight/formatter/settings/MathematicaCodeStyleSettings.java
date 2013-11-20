@@ -29,12 +29,12 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
  */
 public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
-  public boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
-  public boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
-  public boolean SPACE_AROUND_RULE_OPERATIONS = true;
-  public boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
-  public boolean SPACE_AROUND_OTHER_OPERATIONS = true;
-  public boolean SPACE_AROUND_RELATION_OPERATIONS = true;
+  public static boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
+  public static boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
+  public static boolean SPACE_AROUND_RULE_OPERATIONS = true;
+  public static boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
+  public static boolean SPACE_AROUND_OTHER_OPERATIONS = true;
+  public static boolean SPACE_AROUND_RELATION_OPERATIONS = true;
 
   public MathematicaCodeStyleSettings(CodeStyleSettings container) {
     super("MathematicaCodeStyleSettings", container);
