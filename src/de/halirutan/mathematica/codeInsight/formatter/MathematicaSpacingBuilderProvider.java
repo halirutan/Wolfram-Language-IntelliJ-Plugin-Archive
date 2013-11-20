@@ -98,6 +98,5 @@ public class MathematicaSpacingBuilderProvider {
         .after(COMMA).spaceIf(settings.SPACE_AFTER_COMMA)
         .before(LEFT_BRACKET).none()
         .after(RIGHT_BRACKET).none();
-
   }
 }
