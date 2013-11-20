@@ -81,12 +81,17 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
         commit(editor);
         return true;
       }
-      if (atCaret instanceof PsiFile) {
+      if (atCaret instanceof PsiFile || atCaret instanceof CompoundExpression) {
         return false;
       } else {
         caretModel.moveToOffset(atCaret.getTextOffset() + atCaret.getTextLength());
         return true;
       }
     }
+  }
+
+  @Override
+  public boolean doNotStepInto(PsiElement element) {
+    return true;
   }
 }
