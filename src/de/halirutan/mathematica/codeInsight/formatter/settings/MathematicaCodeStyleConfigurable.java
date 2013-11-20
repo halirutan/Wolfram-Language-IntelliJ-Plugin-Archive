@@ -19,23 +19,29 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
-import com.intellij.lang.Language;
+import com.intellij.application.options.CodeStyleAbstractConfigurable;
+import com.intellij.application.options.CodeStyleAbstractPanel;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * @author patrick (4/4/13)
+ * @author patrick (11/1/13)
  */
-public class MathematicaLanguage extends Language {
-
-  public static final Language INSTANCE = new MathematicaLanguage();
-
-  public MathematicaLanguage() {
-    super(Mathematica.NAME);
+public class MathematicaCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
+  public MathematicaCodeStyleConfigurable(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
+    super(settings, originalSettings, "Mathematica");
   }
 
   @Override
-  public String getDisplayName() {
-    return "Mathematica Language";
+  protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
+    return new MathematicaCodeStyleMainPanel(getCurrentSettings(), settings);
+  }
+
+  @Nullable
+  @Override
+  public String getHelpTopic() {
+    return null;
   }
 }

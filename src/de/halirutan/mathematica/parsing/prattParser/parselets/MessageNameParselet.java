@@ -50,7 +50,7 @@ public class MessageNameParselet implements InfixParselet {
     if (result.isMyParsed()) {
       // Check whether we have a symbol or a string in usage message
       if ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
-          (!result.getToken().equals(MathematicaElementTypes.STRING_EXPRESSION))) {
+          (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION))) {
         PsiBuilder.Marker errorMark = result.getMark().precede();
         errorMark.error("Usage message expects Symbol or String");
       }
@@ -60,7 +60,7 @@ public class MessageNameParselet implements InfixParselet {
         parser.advanceLexer();
         result = parser.parseExpression(myPrecedence);
         if (result.isMyParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) ||
-            (!result.getToken().equals(MathematicaElementTypes.STRING_EXPRESSION)))) {
+            (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION)))) {
           PsiBuilder.Marker errMark = result.getMark().precede();
           errMark.error("Usage message exprects Symbol or String");
         }

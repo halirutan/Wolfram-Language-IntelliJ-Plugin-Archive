@@ -19,23 +19,17 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
-import com.intellij.lang.Language;
+import com.intellij.application.options.TabbedLanguageCodeStylePanel;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import de.halirutan.mathematica.MathematicaLanguage;
 
 /**
- * @author patrick (4/4/13)
+ * @author patrick (11/2/13)
  */
-public class MathematicaLanguage extends Language {
-
-  public static final Language INSTANCE = new MathematicaLanguage();
-
-  public MathematicaLanguage() {
-    super(Mathematica.NAME);
-  }
-
-  @Override
-  public String getDisplayName() {
-    return "Mathematica Language";
+public class MathematicaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
+  protected MathematicaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
+    super(MathematicaLanguage.INSTANCE, currentSettings, settings);
   }
 }
