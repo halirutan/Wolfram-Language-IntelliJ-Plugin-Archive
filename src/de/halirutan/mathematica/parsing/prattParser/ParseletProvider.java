@@ -187,7 +187,7 @@ public class ParseletProvider {
 
     register(MathematicaElementTypes.NUMBER, MathematicaElementTypes.NUMBER_EXPRESSION, new NumberParselet(80)); // Number(123)
     register(MathematicaElementTypes.IDENTIFIER, MathematicaElementTypes.SYMBOL_EXPRESSION, new SymbolParselet(80)); // Symbol($var)
-    register(MathematicaElementTypes.STRING_LITERAL_BEGIN, MathematicaElementTypes.STRING_EXPRESSION, new StringParselet(80)); // MString(abc)
+    register(MathematicaElementTypes.STRING_LITERAL_BEGIN, MathematicaElementTypes.STRING_LITERAL_EXPRESSION, new StringParselet(80)); // MString(abc)
 
     register(MathematicaElementTypes.DOUBLE_COLON, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, new MessageNameParselet(78)); // MessageName(::)
 

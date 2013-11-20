@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.codeInsight.editor;
 
-import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.editorActions.TypedHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.codeInsight.highlighting.BraceMatcher;
@@ -99,11 +98,11 @@ public class MathematicaBinaryTypedHandler extends TypedHandlerDelegate
   @Override
   public Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
     if (!(file instanceof MathematicaPsiFile)) return super.charTyped(c, project, editor, file);
-
-    if ((c != '<') || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
-      return Result.CONTINUE;
-    }
-    insertMatchedBinaryBraces(project, editor, file);
+//
+//    if ((c != '<') || !CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
+//      return Result.CONTINUE;
+//    }
+//    insertMatchedBinaryBraces(project, editor, file);
     return Result.CONTINUE;
   }
 }
