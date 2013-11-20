@@ -19,23 +19,24 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.codeInsight.formatter.settings;
 
-import com.intellij.lang.Language;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 
 /**
- * @author patrick (4/4/13)
+ * @author patrick (11/2/13)
  */
-public class MathematicaLanguage extends Language {
+public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
-  public static final Language INSTANCE = new MathematicaLanguage();
+  public static boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
+  public static boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
+  public static boolean SPACE_AROUND_RULE_OPERATIONS = true;
+  public static boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
+  public static boolean SPACE_AROUND_OTHER_OPERATIONS = true;
+  public static boolean SPACE_AROUND_RELATION_OPERATIONS = true;
 
-  public MathematicaLanguage() {
-    super(Mathematica.NAME);
-  }
-
-  @Override
-  public String getDisplayName() {
-    return "Mathematica Language";
+  public MathematicaCodeStyleSettings(CodeStyleSettings container) {
+    super("MathematicaCodeStyleSettings", container);
   }
 }
