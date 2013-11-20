@@ -5,7 +5,9 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SEMICOLON;

@@ -8,7 +8,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.text.CharArrayUtil;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
@@ -30,13 +29,6 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     addEnterProcessors(new FunctionCallEnterProcessor());
   }
 
-
-  @Nullable
-  @Override
-  protected PsiElement getStatementAtCaret(Editor editor, PsiFile psiFile) {
-    return findNextElement(editor, psiFile);
-  }
-
   public static PsiElement findNextElement(Editor editor, PsiFile psiFile) {
     int caret = editor.getCaretModel().getOffset();
 
@@ -54,9 +46,12 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     while (current != null && steps++ < MAX_UPWALK) {
       if (current instanceof List ||
           current instanceof CompoundExpression ||
-          current instanceof FunctionCall) {
+          current instanceof FunctionCall ||
+          current instanceof PsiFile) {
 
-        if (current instanceof List && saveOriginal.getNode().getElementType() == RIGHT_BRACE) {
+        if (current instanceof List && saveOriginal.getNode().getElementType() == RIGHT_BRACE ||
+            current instanceof FunctionCall && saveOriginal.getNode().getElementType() == RIGHT_BRACKET ||
+            current instanceof CompoundExpression && saveOriginal.getNode().getElementType() == SEMICOLON) {
           offset += 1;
           current = psiFile.findElementAt(offset);
           saveOriginal = current;
@@ -70,6 +65,12 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     return null;
   }
 
+  @Nullable
+  @Override
+  protected PsiElement getStatementAtCaret(Editor editor, PsiFile psiFile) {
+    return findNextElement(editor, psiFile);
+  }
+
   private class FunctionCallEnterProcessor extends FixEnterProcessor {
     @Override
     public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
@@ -80,8 +81,12 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
         commit(editor);
         return true;
       }
-      caretModel.moveToOffset(atCaret.getTextOffset() + atCaret.getTextLength());
-      return true;
+      if (atCaret instanceof PsiFile) {
+        return false;
+      } else {
+        caretModel.moveToOffset(atCaret.getTextOffset() + atCaret.getTextLength());
+        return true;
+      }
     }
   }
 }
