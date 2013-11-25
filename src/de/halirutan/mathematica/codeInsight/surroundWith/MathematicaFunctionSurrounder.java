@@ -55,8 +55,7 @@ public class MathematicaFunctionSurrounder implements Surrounder {
 
   @Override
   public boolean isApplicable(@NotNull PsiElement[] elements) {
-      return true;
-    }
+    return true;
   }
 
   @Nullable
@@ -72,7 +71,7 @@ public class MathematicaFunctionSurrounder implements Surrounder {
     for (int i = 0; i < elements.length; i++) {
       final PsiElement element = elements[i];
 
-        s.append(element.getText());
+      s.append(element.getText());
       if (i > 0) {
         final ASTNode child = element.getNode();
         assert child != null;
@@ -112,6 +111,7 @@ public class MathematicaFunctionSurrounder implements Surrounder {
   }
 
   protected String makeReplacement(StringBuilder s) {
-    return myGroupStart + s + ")";
+    return s + ")";
+//    return myGroupStart + s + ")";
   }
 }
