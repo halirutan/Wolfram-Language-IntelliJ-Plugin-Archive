@@ -123,12 +123,6 @@
             class="de.halirutan.mathematica.actions.CreateMathematicaFile" text="Mathematica File"
             description="Create New Mathematica File">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
-    </action>
-
-    <action id="Mathematica.NewMathematicaFile"
-            class="de.halirutan.mathematica.actions.CreateMathematicaFile" text="Mathematica File"
-            description="Create New Mathematica File">
-      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
 
     </action>
     <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
