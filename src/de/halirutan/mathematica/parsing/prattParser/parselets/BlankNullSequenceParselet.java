@@ -50,8 +50,10 @@ public class BlankNullSequenceParselet implements InfixParselet {
     PsiBuilder.Marker blankMark = left.getMark().precede();
     IElementType token = MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
     parser.advanceLexer();
-    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    if (!parser.isNextWhitespace() && !parser.eof() && parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER)) {
+      parser.advanceLexer();
+    }
     blankMark.done(token);
-    return MathematicaParser.result(blankMark, token, !result.isValid() || result.isMyParsed());
+    return MathematicaParser.result(blankMark, token, true);
   }
 }

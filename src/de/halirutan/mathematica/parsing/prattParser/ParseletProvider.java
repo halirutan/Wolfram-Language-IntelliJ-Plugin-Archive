@@ -258,6 +258,7 @@ public class ParseletProvider {
     infixLeft(MathematicaElementTypes.SAME_Q, MathematicaElementTypes.SAME_Q_EXPRESSION, 34); // SameQ(===)
     infixLeft(MathematicaElementTypes.UNSAME_Q, MathematicaElementTypes.UNSAME_Q_EXPRESSION, 34); // UnsameQ(=!=)
 
+//    prefix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.NOT_PREFIX, 32); // Not(!)
     prefix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.NOT_PREFIX, 32); // Not(!)
 
     infixLeft(MathematicaElementTypes.AND, MathematicaElementTypes.AND_EXPRESSION, 30); // And(&&)

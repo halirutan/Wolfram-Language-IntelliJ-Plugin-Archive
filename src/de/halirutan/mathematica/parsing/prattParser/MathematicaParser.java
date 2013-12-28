@@ -33,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.LINE_BREAK;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.WHITE_SPACE;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.WHITE_SPACES;
 import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getInfixParselet;
 import static de.halirutan.mathematica.parsing.prattParser.ParseletProvider.getPrefixParselet;
 
@@ -135,7 +137,7 @@ public class MathematicaParser implements PsiParser {
     }
 
     PrefixParselet prefix = getPrefixParselet(token);
-    if (prefix == null || precedence >= prefix.getPrecedence()) {
+    if (prefix == null) {
       return notParsed();
     }
 
@@ -224,6 +226,11 @@ public class MathematicaParser implements PsiParser {
     return myBuilder.eof();
   }
 
+  public boolean isNextWhitespace() {
+    final IElementType possibleWhitespace = myBuilder.rawLookup(1);
+    return WHITE_SPACES.contains(possibleWhitespace);
+  }
+
   /**
    * For the Pratt parser we need the left side which was already parsed. An instance of this will provide all necessary
    * information required to know what expression was parsed on the left of an infix operator.
@@ -265,6 +272,7 @@ public class MathematicaParser implements PsiParser {
   public class ImportantLineBreakHandler implements WhitespaceSkippedCallback {
     private boolean myLineBreakSeen;
 
+
     @Override
     public void onSkip(IElementType type, int start, int end) {
       if (type.equals(LINE_BREAK)) myLineBreakSeen = true;
@@ -277,7 +285,6 @@ public class MathematicaParser implements PsiParser {
     public boolean hadLineBreak() {
       return myLineBreakSeen;
     }
-
 
   }
 }

@@ -43,9 +43,13 @@ public class BlankParselet implements InfixParselet {
     PsiBuilder.Marker blankMark = left.getMark().precede();
     IElementType token = MathematicaElementTypes.BLANK_EXPRESSION;
     parser.advanceLexer();
-    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    if (!parser.isNextWhitespace() && !parser.eof() && parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER)) {
+      parser.advanceLexer();
+    }
+//    MathematicaParser.Result expr = parser.parseExpression(myPrecedence);
     blankMark.done(token);
-    return MathematicaParser.result(blankMark, token, !result.isValid() || result.isMyParsed());
+//    return MathematicaParser.result(blankMark, token, !expr.isValid() || expr.isMyParsed());
+    return MathematicaParser.result(blankMark, token, true);
   }
 
   @Override
