@@ -148,7 +148,11 @@ Out = "%"+
 
     ","					{ return MathematicaElementTypes.COMMA; }
 	"..."				{ return MathematicaElementTypes.REPEATED_NULL; }
-	"=."				{ return MathematicaElementTypes.UNSET; }
+// The next two lines need explanation: The problem is that .3 is short for 0.3 in Mathematica. Now, x=.3 should
+// be parsed as x = 0.3 and not as x=. 3
+	"=."[0-9] 	{ yypushback(2); return MathematicaElementTypes.SET; }
+	"=."       	{ return MathematicaElementTypes.UNSET; }
+
 	".."				{ return MathematicaElementTypes.REPEATED; }
 	"."					{ return MathematicaElementTypes.POINT; }
 	";;"				{ return MathematicaElementTypes.SPAN; }
