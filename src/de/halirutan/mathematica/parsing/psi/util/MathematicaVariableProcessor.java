@@ -88,6 +88,9 @@ public class MathematicaVariableProcessor extends BaseScopeProcessor {
           vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
         }
 
+        /* Ensure, that a definition of a variable cannot come from the same definition list */
+        //    if (vars.contains(myStartElement)) return true;
+
         for (Symbol v : vars) {
           if (v.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = v;
