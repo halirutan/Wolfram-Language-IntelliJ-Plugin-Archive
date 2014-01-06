@@ -65,4 +65,5 @@ public class PatternParselet implements InfixParselet {
   public int getMyPrecedence() {
     return myPrecedence;
   }
+
 }

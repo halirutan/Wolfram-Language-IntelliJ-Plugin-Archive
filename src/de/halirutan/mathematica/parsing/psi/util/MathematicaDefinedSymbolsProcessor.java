@@ -59,7 +59,6 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element, ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof TagSet) {
-//      List<Symbol> assignee = MathematicaPsiUtililities.getPatternSymbols(element);
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
       mySymbols.addAll(patternVisitor.getMyPatternSymbols());
@@ -95,7 +94,7 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
         }
 
 //      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
-        if (vars.size() > 0) {
+        if (vars.size() > 0 && !vars.contains(myStartElement)) {
           mySymbols.addAll(vars);
         }
       }
