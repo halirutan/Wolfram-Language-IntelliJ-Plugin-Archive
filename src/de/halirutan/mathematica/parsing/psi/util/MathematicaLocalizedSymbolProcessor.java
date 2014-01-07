@@ -42,14 +42,14 @@ import java.util.List;
  *
  * @author patrick (5/22/13)
  */
-public class MathematicaVariableProcessor extends BaseScopeProcessor {
+public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
 
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
   private LocalizationConstruct.ConstructType myLocalization;
   private PsiElement myLocalizationSymbol;
 
-  public MathematicaVariableProcessor(Symbol myStartElement) {
+  public MathematicaLocalizedSymbolProcessor(Symbol myStartElement) {
     this.myStartElement = myStartElement;
     this.myReferringSymbol = null;
     this.myLocalization = LocalizationConstruct.ConstructType.NULL;
