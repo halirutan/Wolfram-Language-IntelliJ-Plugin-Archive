@@ -31,8 +31,8 @@ import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaGlobalSymbolProcessor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaLocalizedSymbolProcessor;
-import de.halirutan.mathematica.parsing.psi.util.UnreferencedSymbolFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,16 +73,26 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       return referringSymbol;
     }
 
-    final PsiElement[] globalDefinitions = PsiTreeUtil.collectElements(myVariable.getContainingFile(), new UnreferencedSymbolFilter());
-    for (PsiElement globalDefinition : globalDefinitions) {
-      if (globalDefinition instanceof Symbol &&
-          myVariable.getSymbolName().equals(((Symbol) globalDefinition).getSymbolName())) {
-        final Symbol possibleDefinition = (Symbol) globalDefinition;
-        myVariable.setReferringElement(possibleDefinition, LocalizationConstruct.ConstructType.NULL, null);
-        return possibleDefinition;
-      }
+    MathematicaGlobalSymbolProcessor globalProcessor = new MathematicaGlobalSymbolProcessor(myVariable);
+    PsiTreeUtil.processElements(myVariable.getContainingFile(), globalProcessor);
 
+
+    final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
+    if (globalDefinition instanceof Symbol) {
+      myVariable.setReferringElement((Symbol) globalDefinition, LocalizationConstruct.ConstructType.NULL, null);
+      return globalDefinition;
     }
+
+
+//    final PsiElement[] globalDefinitions = PsiTreeUtil.collectElements(myVariable.getContainingFile(), new UnreferencedSymbolFilter());
+//
+//    for (PsiElement globalDefinition : globalDefinitions) {
+//      if (globalDefinition instanceof Symbol &&
+//          myVariable.getSymbolName().equals(((Symbol) globalDefinition).getSymbolName())) {
+//        final Symbol possibleDefinition = (Symbol) globalDefinition;
+//        myVariable.setReferringElement(possibleDefinition, LocalizationConstruct.ConstructType.NULL, null);
+//        return possibleDefinition;
+//      }
 
 
     return null;
@@ -143,7 +153,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getUnresolvedMessagePattern() {
-    return "unresolved var";
+    return "Unresolved Symbol";
   }
 
 }
