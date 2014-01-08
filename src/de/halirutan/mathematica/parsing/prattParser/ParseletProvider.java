@@ -44,11 +44,9 @@ public class ParseletProvider {
   private static final Map<IElementType, InfixParselet> INFIX_PARSELETS = new HashMap<IElementType, InfixParselet>();
   private static final Map<PrefixParselet, IElementType> PREFIX_TO_PSI_ELEMENT = new HashMap<PrefixParselet, IElementType>();
   private static final Map<InfixParselet, IElementType> INFIX_PARSELET_TO_PSI_ELEMENT = new HashMap<InfixParselet, IElementType>();
-  private static ParseletProvider ourInstance = null;
 
 
   private ParseletProvider() {
-    registerAll();
   }
 
   /**
@@ -58,9 +56,6 @@ public class ParseletProvider {
    * @return The {@link PrefixParselet} if available for this token and {@code null} otherwise.
    */
   public static PrefixParselet getPrefixParselet(IElementType token) {
-    if (ourInstance == null) {
-      ourInstance = new ParseletProvider();
-    }
     return PREFIX_PARSELETS.get(token);
   }
 
@@ -71,9 +66,6 @@ public class ParseletProvider {
    * @return The {@link InfixParselet} if available for this token and {@code null} otherwise.
    */
   public static InfixParselet getInfixParselet(IElementType token) {
-    if (ourInstance == null) {
-      ourInstance = new ParseletProvider();
-    }
     return INFIX_PARSELETS.get(token);
   }
 
@@ -84,9 +76,6 @@ public class ParseletProvider {
    * @return The precedence of the specified token or 0 whether the precedence is not available.
    */
   public static int getPrecedence(IElementType token) {
-    if (ourInstance == null) {
-      ourInstance = new ParseletProvider();
-    }
     InfixParselet parselet = INFIX_PARSELETS.get(token);
     if (parselet != null) {
       return parselet.getMyPrecedence();
@@ -101,9 +90,6 @@ public class ParseletProvider {
    * @return The precedence of the specified token or 0 whether the precedence is not available.
    */
   public static int getPrecedence(PsiBuilder builder) {
-    if (ourInstance == null) {
-      ourInstance = new ParseletProvider();
-    }
     IElementType token = builder.getTokenType();
     if (token == null) {
       return 0;
@@ -181,7 +167,7 @@ public class ParseletProvider {
 
 // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
 
-  private void registerAll() {
+  static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
     register(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.LIST_EXPRESSION, new ListParselet(82)); // Group(()
 
