@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -54,7 +55,8 @@ import java.util.List;
  * Now {@link SymbolPsiReference#resolveInner()} searches clever for the place where the variable could be defined. This
  * process depends on the language; in Mathematica, I use currently the following approach: I walk the parsing tree
  * upwards and check every Module, Block, ... I find on my way. Checking means I look in the definition list whether my
- * variable is defined there. If not, I go further upwards. This is why you find a {@link PsiTreeUtil.treeWalkUp()} in
+ * variable is defined there. If not, I go further upwards. This is why you find a
+ * {@link PsiTreeUtil#treeWalkUp(PsiScopeProcessor, PsiElement, PsiElement, ResolveState)} in
  * this method. On every step upwards the {@link #execute(PsiElement, ResolveState)} method is called and exactly here I
  * extract all locally defined variables I find and check whether any of it has the same name as my original variable
  * whose definition I want to find.
@@ -147,6 +149,7 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
         if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = p;
           myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
+          myLocalizationSymbol = element;
           return false;
         }
       }
@@ -159,6 +162,7 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
         if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = symbol;
           myLocalization = LocalizationConstruct.ConstructType.RULEDELAYED;
+          myLocalizationSymbol = element;
           return false;
         }
       }
