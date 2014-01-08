@@ -150,10 +150,4 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     return new Object[0];
   }
 
-  @NotNull
-  @Override
-  public String getUnresolvedMessagePattern() {
-    return "Unresolved Symbol";
-  }
-
 }
