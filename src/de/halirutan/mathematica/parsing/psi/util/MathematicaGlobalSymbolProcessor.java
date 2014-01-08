@@ -22,35 +22,47 @@
 package de.halirutan.mathematica.parsing.psi.util;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiElementFilter;
+import com.intellij.psi.search.PsiElementProcessor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
  * @author patrick (1/6/14)
  */
-public class UnreferencedSymbolFilter implements PsiElementFilter {
+public class MathematicaGlobalSymbolProcessor implements PsiElementProcessor {
   public static final int MAX_UPWARD_STEPS = 3;
+  private final Symbol myStartElement;
+  private PsiElement myReferringSymbol;
+
+  public MathematicaGlobalSymbolProcessor(Symbol startElement) {
+    this.myStartElement = startElement;
+    this.myReferringSymbol = null;
+  }
 
   @Override
-  public boolean isAccepted(PsiElement element) {
-    if (element instanceof Symbol) {
-      Symbol symbol = (Symbol) element;
-      PsiElement parent = symbol.getParent();
-      int iter = 0;
-      while (parent != null && ++iter != MAX_UPWARD_STEPS && !(parent instanceof PsiFile)) {
-        if (parent instanceof Set || parent instanceof SetDelayed) {
-          final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(parent);
-          return assignmentSymbols != null && assignmentSymbols.contains(element);
+  public boolean execute(@NotNull PsiElement element) {
+    if (element instanceof Set || element instanceof SetDelayed) {
+      final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(element);
+      if (assignmentSymbols != null) {
+        for (Symbol symbol : assignmentSymbols) {
+          if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
+            myReferringSymbol = symbol;
+            return false;
+          }
         }
-        parent = parent.getParent();
       }
-
     }
-    return false;
+    return true;
   }
+
+  @Nullable
+  public PsiElement getMyReferringSymbol() {
+    return myReferringSymbol;
+  }
+
 }
