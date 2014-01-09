@@ -61,7 +61,7 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
     if (element instanceof Set || element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof TagSet) {
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
-      mySymbols.addAll(patternVisitor.getMyPatternSymbols());
+      mySymbols.addAll(patternVisitor.getPatternSymbols());
 
     } else if (element instanceof FunctionCall) {
       final FunctionCall functionCall = (FunctionCall) element;

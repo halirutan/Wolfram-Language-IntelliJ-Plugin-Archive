@@ -42,6 +42,9 @@ public class SetImpl extends OperatorNameProvider implements Set {
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (lastParent.getParent() != this) {
+      return true;
+    }
     return processor.execute(this, state);
   }
 

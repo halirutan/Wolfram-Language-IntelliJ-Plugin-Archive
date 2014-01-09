@@ -49,9 +49,6 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
     if (lastParent.getParent() != this) {
       return true;
     }
-    PsiElement assignee = getFirstChild();
-    if (!(assignee instanceof FunctionCall) && !(assignee instanceof Condition))
-      return false;
     return processor.execute(this, state);
   }
 

@@ -24,8 +24,7 @@ package de.halirutan.mathematica.parsing.psi.util;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
-import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,13 +45,28 @@ public class MathematicaGlobalSymbolProcessor implements PsiElementProcessor {
 
   @Override
   public boolean execute(@NotNull PsiElement element) {
-    if (element instanceof Set || element instanceof SetDelayed) {
-      final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(element);
+    if (element instanceof Set || element instanceof SetDelayed
+        || element instanceof TagSet || element instanceof TagSetDelayed
+        || element instanceof UpSet || element instanceof UpSetDelayed) {
+      MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+      element.accept(patternVisitor);
+//      final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(element);
+      java.util.Set<Symbol> assignmentSymbols = patternVisitor.getUnboundSymbols();
+
       if (assignmentSymbols != null) {
-        for (Symbol symbol : assignmentSymbols) {
+
+        if ((element instanceof Set || element instanceof SetDelayed || element instanceof TagSet || element instanceof TagSetDelayed) && assignmentSymbols.size() > 0) {
+          Symbol symbol = assignmentSymbols.iterator().next();
           if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
             myReferringSymbol = symbol;
             return false;
+          }
+        } else if ((element instanceof UpSet || element instanceof UpSetDelayed) && assignmentSymbols.size() > 0) {
+          for (Symbol symbol : assignmentSymbols) {
+            if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
+              myReferringSymbol = symbol;
+              return false;
+            }
           }
         }
       }

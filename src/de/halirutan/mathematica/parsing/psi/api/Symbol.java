@@ -80,5 +80,7 @@ public interface Symbol extends PsiNameIdentifierOwner {
    */
   void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement);
 
+  void addElementReferencingToMe(Symbol reference);
+
   public void subtreeChanged();
 }
