@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.psi.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Group;
@@ -32,7 +33,9 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
+import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,13 +44,26 @@ import java.util.Set;
  */
 public class MathematicaPatternVisitor extends MathematicaVisitor {
 
+  private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+
+  private enum Assignment {_Set, _SetDelayed, _TagSet, _TagSetDelayed, _None}
+
   private final Set<Symbol> myPatternSymbols = Sets.newHashSet();
-  private final Set<Symbol> myDefinitionSymbols = Sets.newHashSet();
+  private final LinkedHashSet<Symbol> myUnboundSymbols = Sets.newLinkedHashSet();
   private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
   private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
+  private Assignment myAssignmentType = Assignment._None;
 
-  public Set<Symbol> getMyPatternSymbols() {
+  public Set<Symbol> getPatternSymbols() {
     return myPatternSymbols;
+  }
+
+  public Assignment getAssignmentType() {
+    return myAssignmentType;
+  }
+
+  public Set<Symbol> getUnboundSymbols() {
+    return myUnboundSymbols;
   }
 
   @Override
@@ -100,6 +116,7 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   public void visitFunctionCall(FunctionCall functionCall) {
     final PsiElement head = functionCall.getFirstChild();
     if (head instanceof Symbol) {
+      myUnboundSymbols.add((Symbol) head);
       final String functionName = ((Symbol) head).getSymbolName();
       if (myDiveInFirstChild.contains(functionName)) {
         List<PsiElement> args = MathematicaPsiUtililities.getArguments(functionCall);
@@ -127,20 +144,27 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   @Override
   public void visitSetDelayed(SetDelayed setDelayed) {
     final PsiElement lhs = setDelayed.getFirstChild();
+    myAssignmentType = Assignment._SetDelayed;
     lhs.accept(this);
   }
 
   @Override
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
     final PsiElement lhs = set.getFirstChild();
+    myAssignmentType = Assignment._Set;
     lhs.accept(this);
   }
 
   @Override
   public void visitTagSet(TagSet element) {
+    myAssignmentType = Assignment._TagSet;
     final PsiElement firstChild = element.getFirstChild();
     if (firstChild == null) {
       return;
+    } else {
+      if (firstChild instanceof Symbol) {
+        myUnboundSymbols.add((Symbol) firstChild);
+      }
     }
     final PsiElement operator = MathematicaPsiUtililities.getNextSiblingSkippingWhitespace(firstChild);
     if (operator == null) {
@@ -154,9 +178,14 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
 
   @Override
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
+    myAssignmentType = Assignment._TagSetDelayed;
     final PsiElement firstChild = tagSetDelayed.getFirstChild();
     if (firstChild == null) {
       return;
+    } else {
+      if (firstChild instanceof Symbol) {
+        myUnboundSymbols.add((Symbol) firstChild);
+      }
     }
     final PsiElement operator = MathematicaPsiUtililities.getNextSiblingSkippingWhitespace(firstChild);
     if (operator == null) {
@@ -166,6 +195,13 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
     if (pattern != null) {
       pattern.accept(this);
     }
+  }
+
+  @Override
+  public void visitRuleDelayed(RuleDelayed ruleDelayed) {
+    final PsiElement lhs = ruleDelayed.getFirstChild();
+    myAssignmentType = Assignment._None;
+    lhs.accept(this);
   }
 
   @Override

@@ -22,6 +22,9 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,5 +34,13 @@ import org.jetbrains.annotations.NotNull;
 public class UpSetDelayedImpl extends OperatorNameProvider {
   public UpSetDelayedImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    if (lastParent.getParent() != this) {
+      return true;
+    }
+    return processor.execute(this, state);
   }
 }

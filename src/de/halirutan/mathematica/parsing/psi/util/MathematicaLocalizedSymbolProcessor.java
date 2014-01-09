@@ -145,7 +145,7 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
 
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
-      for (Symbol p : patternVisitor.getMyPatternSymbols()) {
+      for (Symbol p : patternVisitor.getPatternSymbols()) {
         if (p.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = p;
           myLocalization = LocalizationConstruct.ConstructType.SETDELAYEDPATTERN;
@@ -154,11 +154,10 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
         }
       }
     } else if (element instanceof RuleDelayed) {
-      PsiElement lhs = element.getFirstChild();
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
-      lhs.accept(patternVisitor);
+      element.accept(patternVisitor);
 
-      for (Symbol symbol : patternVisitor.getMyPatternSymbols()) {
+      for (Symbol symbol : patternVisitor.getPatternSymbols()) {
         if (symbol.getSymbolName().equals(myStartElement.getSymbolName())) {
           myReferringSymbol = symbol;
           myLocalization = LocalizationConstruct.ConstructType.RULEDELAYED;

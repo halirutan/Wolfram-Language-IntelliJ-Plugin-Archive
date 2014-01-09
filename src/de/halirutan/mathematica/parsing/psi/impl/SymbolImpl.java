@@ -35,6 +35,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+
 /**
  * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
  * Mathematica are not only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the
@@ -51,6 +53,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   private LocalizationConstruct.ConstructType myLocalization;
   private Symbol myDefinitionElement;
   private PsiElement myLocalizationElement;
+  private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
 
   public SymbolImpl(@NotNull ASTNode node) {
     super(node);
@@ -116,6 +119,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public void subtreeChanged() {
+    for (Symbol myReferringElement : myReferringElements) {
+      myReferringElement.subtreeChanged();
+    }
+    myReferringElements.clear();
     if (myLocalizationElement instanceof SymbolImpl) {
       ((SymbolImpl) myLocalizationElement).subtreeChanged();
     }
@@ -145,9 +152,15 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement) {
     myDefinitionElement = referringSymbol;
+    referringSymbol.addElementReferencingToMe(this);
     myLocalizationElement = localizationElement;
     myLocalization = type;
     myIsUpToDate = true;
+  }
+
+  @Override
+  public void addElementReferencingToMe(Symbol reference) {
+    if(!reference.equals(this)) myReferringElements.add(reference);
   }
 
   @Override
