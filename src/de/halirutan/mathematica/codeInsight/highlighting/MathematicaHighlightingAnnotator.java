@@ -77,6 +77,8 @@ public class MathematicaHighlightingAnnotator implements Annotator {
               case SETDELAYEDPATTERN:
                 setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.PATTERN);
                 break;
+              case NULL:
+                break;
               default:
                 setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
                 break;

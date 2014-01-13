@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,28 +19,38 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.assignment;
+package de.halirutan.mathematica.parsing.psi.util;
 
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiElementFilter;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
+import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
+
+import java.util.List;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (1/6/14)
  */
-public class UpSetDelayedImpl extends OperatorNameProvider {
-  public UpSetDelayedImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+public class UnreferencedSymbolFilter implements PsiElementFilter {
+  public static final int MAX_UPWARD_STEPS = 3;
 
   @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    if (lastParent.getParent() != this) {
-      return true;
+  public boolean isAccepted(PsiElement element) {
+    if (element instanceof Symbol) {
+      Symbol symbol = (Symbol) element;
+      PsiElement parent = symbol.getParent();
+      int iter = 0;
+      while (parent != null && ++iter != MAX_UPWARD_STEPS && !(parent instanceof PsiFile)) {
+        if (parent instanceof Set || parent instanceof SetDelayed) {
+          final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(parent);
+          return assignmentSymbols != null && assignmentSymbols.contains(element);
+        }
+        parent = parent.getParent();
+      }
+
     }
-    return processor.execute(this, state);
+    return false;
   }
 }

@@ -31,7 +31,8 @@ import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaVariableProcessor;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaGlobalSymbolProcessor;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaLocalizedSymbolProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,9 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Nullable
   @Override
   public PsiElement resolveInner() {
+
+    if (NAMES.contains(myVariable.getSymbolName())) return myVariable;
+
     if (myVariable.cachedResolve()) {
       if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName()) ||
           myVariable.getLocalizationConstruct().equals(LocalizationConstruct.ConstructType.ANONYMOUSFUNCTION)) {
@@ -61,13 +65,36 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       }
 
     }
-    MathematicaVariableProcessor processor = new MathematicaVariableProcessor(myVariable);
+    MathematicaLocalizedSymbolProcessor processor = new MathematicaLocalizedSymbolProcessor(myVariable);
     PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
     final PsiElement referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol instanceof Symbol) {
       myVariable.setReferringElement((Symbol) referringSymbol, processor.getMyLocalization(), processor.getMyLocalizationSymbol());
       return referringSymbol;
     }
+
+    MathematicaGlobalSymbolProcessor globalProcessor = new MathematicaGlobalSymbolProcessor(myVariable);
+    PsiTreeUtil.processElements(myVariable.getContainingFile(), globalProcessor);
+
+
+    final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
+    if (globalDefinition instanceof Symbol) {
+      myVariable.setReferringElement((Symbol) globalDefinition, LocalizationConstruct.ConstructType.NULL, null);
+      return globalDefinition;
+    }
+
+
+//    final PsiElement[] globalDefinitions = PsiTreeUtil.collectElements(myVariable.getContainingFile(), new UnreferencedSymbolFilter());
+//
+//    for (PsiElement globalDefinition : globalDefinitions) {
+//      if (globalDefinition instanceof Symbol &&
+//          myVariable.getSymbolName().equals(((Symbol) globalDefinition).getSymbolName())) {
+//        final Symbol possibleDefinition = (Symbol) globalDefinition;
+//        myVariable.setReferringElement(possibleDefinition, LocalizationConstruct.ConstructType.NULL, null);
+//        return possibleDefinition;
+//      }
+
+
     return null;
   }
 
@@ -81,10 +108,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     return TextRange.from(0, myVariable.getFirstChild().getNode().getTextLength());
   }
 
-//  @Override
-//  protected TextRange calculateDefaultRangeInElement() {
-//    return super.calculateDefaultRangeInElement();
-//  }
 
   @NotNull
   @Override
@@ -127,31 +150,4 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     return new Object[0];
   }
 
-  @NotNull
-  @Override
-  public String getUnresolvedMessagePattern() {
-    return "unresolved var";
-  }
-
-  //  @NotNull
-//  @Override
-//  public Object[] getVariants() {
-//    final PsiFile containingFile = myElement.getContainingFile();
-//
-//    List<Symbol> variants = Lists.newArrayList();
-//
-//    final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(getElement());
-//    PsiTreeUtil.treeWalkUp(processor, getElement(), containingFile, ResolveState.initial());
-//
-//    variants.addAll(processor.getMyReferringSymbol());
-//
-//
-//    List<LookupElement> lookupElements = new ArrayList<LookupElement>();
-//    for (Symbol currentSymbol : variants) {
-//      if (!NAMES.contains(currentSymbol.getSymbolName())) {
-//        lookupElements.add(LookupElementBuilder.create(currentSymbol));
-//      }
-//    }
-//    return lookupElements.toArray();
-//  }
 }
