@@ -2,67 +2,21 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>0.1.9.2</version>
+  <version>0.2</version>
   <idea-version since-build="123.94"/>
   <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
 
   <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
-        lookup and more. This plugin is currently under heavy development. If you want to help, check out the 
+        lookup, refactoring, code formatting, etc. This plugin is currently under heavy development. If you want to help, check out the
         <a href="http://www.halirutan.de/start">Official Website</a> or take a look at the open-source
         <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
       ]]></description>
 
   <change-notes>
     <![CDATA[
-            <p>0.1.9.2</p>
-            <ul>
-                <li >This is an unofficial test-release for the formatter.
-                <li >Bugfixes for the formatter and Smart Enter</li>
-                <li >Made the plugin available for most Jetbrains IDE's like PyCharm, etc</li>
-            </ul>
-            <p>0.1.8</p>
-            <ul>
-                <li >Improved highlighting of patterns</li>
-                <li >Smart completion inside Message[]</li>
-                <li >Local variable highlighting</li>
-            </ul>
-            <p>0.1.5</p>
-            <ul>
-                <li >Local variable completion</li>
-                <li >Smart completion of Options to functions</li>
-                <li>Basic reference resolving of local variables</li>
-                <li>Renaming of variables with partial reference resolving</li>
-            </ul>
-            <p>0.1.4</p>
-            <ul>
-                <li>Anonymous functions are made italic </li>
-            </ul>
-            <p>0.1.4</p>
-            <ul>
-              <li >Smart completion of built-in options to functions</li>
-              <li>Completion of localized variables (Block/Module and patterns in function definitions)</li>
-              <li>Bugfixes</li>
-            </ul>
-            <p>0.1.3</p>
-            <ul >
-                <li >Creation of Mathematica SDK types</li>
-                <li>Consistent colors for Default and Darcula scheme</li>
-                <li >Bugfixes</li>
-            </ul>
-            <p >0.1.2</p>
-            <ul >
-                <li >Commenter</li>
-                <li >Create Mathematica files</li>
-                <li >Color setting page</li>
-            </ul>
-            <p >0.1:</p>
-            <ul >
-                <li >Syntax highlighting</li>
-                <li >Autocompletion for built-in functions</li>
-                <li >Paired brace matching and smart quote inserting</li>
-                <li >Documentation lookup of built-in functions</li>
-            </ul>
+            For a detailed list of bugfixes please see the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki/Features">
+            Updates page in the GitHub Wiki.</a>
         ]]>
   </change-notes>
 
@@ -73,40 +27,37 @@
 
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
-                           implementationClass="de.halirutan.mathematica.parsing.prattParser.MathematicaParserDefinition"/>
+                           implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
     <annotator language="Mathematica"
-               implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaHighlightingAnnotator"/>
+               implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaHighlightingAnnotator"/>
     <lang.commenter language="Mathematica"
-                    implementationClass="de.halirutan.mathematica.codeInsight.editor.MathematicaCommenter"/>
+                    implementationClass="de.halirutan.mathematica.codeinsight.editor.MathematicaCommenter"/>
     <lang.braceMatcher language="Mathematica"
-                       implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaBraceMatcher"/>
+                       implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher"/>
     <quoteHandler fileType="Mathematica"
-                  className="de.halirutan.mathematica.codeInsight.completion.MathematicaQuoteHandler"/>
+                  className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>
     <completion.contributor language="Mathematica"
-                            implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionContributor"/>
-    <completion.confidence language="Mathematica"
-                           implementationClass="de.halirutan.mathematica.codeInsight.completion.MathematicaCompletionConfidence"/>
+                            implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
 
     <lang.smartEnterProcessor language="Mathematica"
-                              implementationClass="de.halirutan.mathematica.codeInsight.smartEnter.MathematicaSmartEnter"/>
+                              implementationClass="de.halirutan.mathematica.codeinsight.smartenter.MathematicaSmartEnter"/>
     <lang.syntaxHighlighterFactory key="Mathematica"
-                                   implementationClass="de.halirutan.mathematica.codeInsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+                                   implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
     <lang.documentationProvider language="Mathematica"
                                 implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
     <colorSettingsPage
-        implementation="de.halirutan.mathematica.codeInsight.highlighting.MathematicaColorSettingsPage"/>
+        implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
     <codeStyleSettingsProvider
-        implementation="de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaCodeStyleSettingsProvider"/>
+        implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettingsProvider"/>
     <langCodeStyleSettingsProvider
-        implementation="de.halirutan.mathematica.codeInsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
+        implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
     <lang.formatter language="Mathematica"
-                    implementationClass="de.halirutan.mathematica.codeInsight.formatter.MathematicaFormattingModelBuilder"/>
+                    implementationClass="de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder"/>
 
     <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
 
     <moduleType id="MATHEMATICA_MODULE"
                 implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
-    <fileTemplateGroup implementation="de.halirutan.mathematica.MathematicaFileTemplateProvider"/>
     <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
     <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
@@ -115,7 +66,7 @@
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
 
     <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeInsight.formatter.MathematicaEnterBetweenBracesHandler"/>
+        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
   </extensions>
 
   <actions>

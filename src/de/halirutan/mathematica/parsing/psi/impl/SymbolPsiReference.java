@@ -28,7 +28,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.codeInsight.completion.SymbolInformationProvider;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaGlobalSymbolProcessor;

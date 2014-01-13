@@ -28,7 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 

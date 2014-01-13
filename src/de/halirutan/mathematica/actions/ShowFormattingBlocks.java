@@ -1,27 +1,23 @@
 package de.halirutan.mathematica.actions;
 
 import com.intellij.formatting.Block;
-import com.intellij.formatting.CoreFormatterUtil;
 import com.intellij.formatting.FormattingModel;
 import com.intellij.formatting.Indent;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.componentsList.components.ScrollablePanel;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.codeInsight.formatter.AbstractMathematicaBlock;
-import de.halirutan.mathematica.codeInsight.formatter.MathematicaFormattingModelBuilder;
+import de.halirutan.mathematica.codeinsight.formatter.AbstractMathematicaBlock;
+import de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder;
 
 import javax.swing.*;
 import java.util.List;

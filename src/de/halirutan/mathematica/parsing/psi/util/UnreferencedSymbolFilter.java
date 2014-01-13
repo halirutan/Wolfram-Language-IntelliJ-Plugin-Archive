@@ -44,7 +44,7 @@ public class UnreferencedSymbolFilter implements PsiElementFilter {
       int iter = 0;
       while (parent != null && ++iter != MAX_UPWARD_STEPS && !(parent instanceof PsiFile)) {
         if (parent instanceof Set || parent instanceof SetDelayed) {
-          final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(parent);
+          final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(parent);
           return assignmentSymbols != null && assignmentSymbols.contains(element);
         }
         parent = parent.getParent();

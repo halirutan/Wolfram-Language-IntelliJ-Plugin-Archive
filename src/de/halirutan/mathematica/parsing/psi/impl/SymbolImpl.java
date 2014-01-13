@@ -26,7 +26,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -76,13 +76,13 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public String getName() {
-//    return MathematicaPsiUtililities.getSymbolName(this);
+//    return MathematicaPsiUtilities.getSymbolName(this);
     return getText();
   }
 
   @Override
   public String getMathematicaContext() {
-//    String myName = MathematicaPsiUtililities.getSymbolName(this);
+//    String myName = MathematicaPsiUtilities.getSymbolName(this);
     String myName = getName();
     String context = "System`";
     if (myName != null) {
@@ -95,7 +95,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public String getSymbolName() {
-//    String myName = MathematicaPsiUtililities.getSymbolName(this);
+//    String myName = MathematicaPsiUtilities.getSymbolName(this);
     String myName = getName();
     if (myName == null) return "";
     if (myName.lastIndexOf('`') == -1) {
@@ -160,7 +160,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public void addElementReferencingToMe(Symbol reference) {
-    if(!reference.equals(this)) myReferringElements.add(reference);
+    if (!reference.equals(this)) myReferringElements.add(reference);
   }
 
   @Override
