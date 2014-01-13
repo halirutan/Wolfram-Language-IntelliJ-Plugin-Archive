@@ -75,7 +75,7 @@ public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
   }
 
   private void cacheAssignedSymbols(PsiElement element) {
-    final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(element);
+    final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(element);
     if (assignmentSymbols != null) {
       for (Symbol assignmentSymbol : assignmentSymbols) {
         String symbolName = assignmentSymbol.getSymbolName();

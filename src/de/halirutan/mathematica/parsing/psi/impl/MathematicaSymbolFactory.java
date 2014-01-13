@@ -23,7 +23,7 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFileFactory;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 
 /**

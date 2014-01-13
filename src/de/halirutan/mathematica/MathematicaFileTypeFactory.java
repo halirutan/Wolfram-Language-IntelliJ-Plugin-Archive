@@ -23,7 +23,7 @@ package de.halirutan.mathematica;
 
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
-import de.halirutan.mathematica.fileTypes.MathematicaFileType;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import org.jetbrains.annotations.NotNull;
 
 /**

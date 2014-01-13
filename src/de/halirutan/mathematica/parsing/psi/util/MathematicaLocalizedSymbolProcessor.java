@@ -55,11 +55,11 @@ import java.util.List;
  * Now {@link SymbolPsiReference#resolveInner()} searches clever for the place where the variable could be defined. This
  * process depends on the language; in Mathematica, I use currently the following approach: I walk the parsing tree
  * upwards and check every Module, Block, ... I find on my way. Checking means I look in the definition list whether my
- * variable is defined there. If not, I go further upwards. This is why you find a
- * {@link PsiTreeUtil#treeWalkUp(PsiScopeProcessor, PsiElement, PsiElement, ResolveState)} in
- * this method. On every step upwards the {@link #execute(PsiElement, ResolveState)} method is called and exactly here I
- * extract all locally defined variables I find and check whether any of it has the same name as my original variable
- * whose definition I want to find.
+ * variable is defined there. If not, I go further upwards. This is why you find a {@link
+ * PsiTreeUtil#treeWalkUp(PsiScopeProcessor, PsiElement, PsiElement, ResolveState)} in this method. On every step
+ * upwards the {@link #execute(PsiElement, ResolveState)} method is called and exactly here I extract all locally
+ * defined variables I find and check whether any of it has the same name as my original variable whose definition I
+ * want to find.
  * <p/>
  * If I find it in any of the localization constructs like Module, Block.. I stop and return the PsiElement which is the
  * place of definition.
@@ -74,10 +74,10 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
   private LocalizationConstruct.ConstructType myLocalization;
-  private PsiElement myLocalizationSymbol;
+  private PsiElement myLocalizationSymbol = null;
 
-  public MathematicaLocalizedSymbolProcessor(Symbol myStartElement) {
-    this.myStartElement = myStartElement;
+  public MathematicaLocalizedSymbolProcessor(Symbol startElement) {
+    this.myStartElement = startElement;
     this.myReferringSymbol = null;
     this.myLocalization = LocalizationConstruct.ConstructType.NULL;
 
@@ -106,27 +106,27 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
         final LocalizationConstruct.ConstructType scopingConstruct = functionCall.getScopingConstruct();
 
         if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalFunctionVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalFunctionVariables(functionCall);
         }
 
         if (LocalizationConstruct.isModuleLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalModuleLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalModuleLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isTableLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalTableLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalTableLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalManipulateLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalManipulateLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalCompileLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalCompileLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalLimitVariables(functionCall);
         }
 
         /* Ensure, that a definition of a variable cannot come from the same definition list */

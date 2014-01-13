@@ -70,36 +70,36 @@ public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
         final LocalizationConstruct.ConstructType scopingConstruct = functionCall.getScopingConstruct();
 
         if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalFunctionVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalFunctionVariables(functionCall);
         }
 
         if (LocalizationConstruct.isModuleLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalModuleLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalModuleLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isTableLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalTableLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalTableLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalCompileLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalCompileLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalManipulateLikeVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalManipulateLikeVariables(functionCall);
         }
 
         if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
-          vars = MathematicaPsiUtililities.getLocalLimitVariables(functionCall);
+          vars = MathematicaPsiUtilities.getLocalLimitVariables(functionCall);
         }
 
-//      List<Symbol> declaredSymbols = MathematicaPsiUtililities.extractLocalizedVariables(element);
+//      List<Symbol> declaredSymbols = MathematicaPsiUtilities.extractLocalizedVariables(element);
         if (vars.size() > 0 && !vars.contains(myStartElement)) {
           mySymbols.addAll(vars);
         }
       }
     } else if (element instanceof RuleDelayed) {
-      final List<Symbol> patternSymbols = MathematicaPsiUtililities.getSymbolsFromArgumentPattern(element.getFirstChild());
+      final List<Symbol> patternSymbols = MathematicaPsiUtilities.getSymbolsFromArgumentPattern(element.getFirstChild());
       mySymbols.addAll(patternSymbols);
     }
     return true;
