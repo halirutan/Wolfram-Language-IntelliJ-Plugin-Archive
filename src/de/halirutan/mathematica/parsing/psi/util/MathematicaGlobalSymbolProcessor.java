@@ -28,8 +28,6 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * @author patrick (1/6/14)
  */
@@ -50,7 +48,6 @@ public class MathematicaGlobalSymbolProcessor implements PsiElementProcessor {
         || element instanceof UpSet || element instanceof UpSetDelayed) {
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
-//      final List<Symbol> assignmentSymbols = MathematicaPsiUtililities.getAssignmentSymbols(element);
       java.util.Set<Symbol> assignmentSymbols = patternVisitor.getUnboundSymbols();
 
       if (assignmentSymbols != null) {
