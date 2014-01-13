@@ -18,6 +18,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="com.google.guava:guava:r09" level="project" />
   </component>
 </module>
 
