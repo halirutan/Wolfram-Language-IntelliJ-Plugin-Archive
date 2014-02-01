@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaIcons;
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -44,7 +45,8 @@ import java.util.regex.Pattern;
 public class MathematicaSdkType extends SdkType {
   private static final String DOC_URL = "http://reference.wolfram.com/mathematica/guide/Mathematica.html";
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
-  private final String version = null;
+  private final String myVersion = null;
+
 
   public MathematicaSdkType() {
     super("MATHEMATICA SDK");
@@ -73,7 +75,11 @@ public class MathematicaSdkType extends SdkType {
   @Nullable
   @Override
   public String suggestHomePath() {
-    String path = "/usr/local/Wolfram";
+    final String property = System.getProperty("os.name");
+    String path = "";
+    if (property.matches("Linux.*")) {
+      path = "/usr/local/Wolfram";
+    }
     if (new File(path).exists()) {
       return path;
     }
@@ -88,7 +94,7 @@ public class MathematicaSdkType extends SdkType {
 
   @Nullable
   @Override
-  public String getVersionString(Sdk sdk) {
+  public String getVersionString(@NotNull Sdk sdk) {
     return getMathematicaVersionString(sdk.getHomePath());
   }
 
