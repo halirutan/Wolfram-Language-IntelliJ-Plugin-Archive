@@ -24,6 +24,7 @@ package de.halirutan.mathematica.module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import de.halirutan.mathematica.MathematicaIcons;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -42,11 +43,13 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
     return (MathematicaModuleType) ModuleTypeManager.getInstance().findByID(MATHEMATICA_TYPE_ID);
   }
 
+  @NotNull
   @Override
   public String getName() {
     return "Empty Module";
   }
 
+  @NotNull
   @Override
   public String getDescription() {
     return "Creates an empty project or module for custom layouts.";
@@ -57,6 +60,7 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
     return MathematicaIcons.FILE_ICON;
   }
 
+  @NotNull
   @Override
   public MathematicaModuleBuilder createModuleBuilder() {
     return new MathematicaModuleBuilder.Empty();
