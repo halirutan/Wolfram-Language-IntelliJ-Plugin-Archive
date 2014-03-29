@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.function;
+package de.halirutan.mathematica.parsing.psi.impl.lists;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
