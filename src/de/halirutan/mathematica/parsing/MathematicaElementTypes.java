@@ -38,6 +38,7 @@ import de.halirutan.mathematica.parsing.psi.impl.files.PutAppendImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutImpl;
 import de.halirutan.mathematica.parsing.psi.impl.function.*;
 import de.halirutan.mathematica.parsing.psi.impl.lists.ListImpl;
+import de.halirutan.mathematica.parsing.psi.impl.lists.AssociationImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.PartImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.SpanImpl;
 import de.halirutan.mathematica.parsing.psi.impl.logical.AndImpl;
@@ -85,16 +86,21 @@ public interface MathematicaElementTypes {
   IElementType LEFT_BRACKET = new MathematicaElementType("LEFT_BRACKET");
   IElementType PART_BEGIN = new MathematicaElementType("PART_BEGIN");
   IElementType RIGHT_BRACKET = new MathematicaElementType("RIGHT_BRACKET");
+  IElementType LEFT_ASSOCIATION = new MathematicaElementType("LEFT_ASSOCIATION");
+  IElementType RIGHT_ASSOCIATION = new MathematicaElementType("RIGHT_ASSOCIATION");
 
   IElementType ACCURACY = new MathematicaElementType("ACCURACY");
   IElementType COMMA = new MathematicaElementType("COMMA");
 
   IElementType PREFIX = new MathematicaElementType("PREFIX");
   IElementType POSTFIX = new MathematicaElementType("POSTFIX");
+  IElementType COMPOSITION = new MathematicaElementType("COMPOSITION");
+  IElementType RIGHT_COMPOSITION = new MathematicaElementType("RIGHT_COMPOSITION");
   IElementType MAP = new MathematicaElementType("MAP");
   IElementType MAP_ALL = new MathematicaElementType("MAP_ALL");
   IElementType APPLY = new MathematicaElementType("APPLY");
   IElementType APPLY1 = new MathematicaElementType("APPLY1");
+  IElementType INLINE_PART = new MathematicaElementType("INLINE_PART");
   IElementType REPLACE_ALL = new MathematicaElementType("REPLACE_ALL");
   IElementType REPLACE_REPEATED = new MathematicaElementType("REPLACE_REPEATED");
 
@@ -291,10 +297,14 @@ public interface MathematicaElementTypes {
       if (type.equals(PREFIX_CALL_EXPRESSION)) return new PrefixImpl(node);
       if (type.equals(FUNCTION_POSTFIX)) return new FunctionImpl(node);
       if (type.equals(DERIVATIVE_EXPRESSION)) return new DerivativeImpl(node);
+      if (type.equals(COMPOSITION_EXPRESSION)) return new CompositionImpl(node);
+      if (type.equals(RIGHT_COMPOSITION_EXPRESSION)) return new RightCompositionImpl(node);
 
-      // List related
+      // List or Association related
       if (type.equals(LIST_EXPRESSION)) return new ListImpl(node);
+      if (type.equals(ASSOCIATION_EXPRESSION)) return new AssociationImpl(node);
       if (type.equals(PART_EXPRESSION)) return new PartImpl(node);
+      if (type.equals(INLINE_PART_EXPRESSION)) return new InlinePartImpl(node);
       if (type.equals(SPAN_EXPRESSION)) return new SpanImpl(node);
 
       // Logical operations
@@ -339,6 +349,7 @@ public interface MathematicaElementTypes {
 
   IElementType GROUP_EXPRESSION = new MathematicaElementType("GROUP_EXPRESSION");
   IElementType LIST_EXPRESSION = new MathematicaElementType("LIST_EXPRESSION");
+  IElementType ASSOCIATION_EXPRESSION = new MathematicaElementType("ASSOCIATION_EXPRESSION");
 
   IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");
   IElementType SYMBOL_EXPRESSION = new MathematicaElementType("SYMBOL_EXPRESSION");
@@ -356,6 +367,7 @@ public interface MathematicaElementTypes {
 
   IElementType FUNCTION_CALL_EXPRESSION = new MathematicaElementType("FUNCTION_CALL_EXPRESSION");
   IElementType PART_EXPRESSION = new MathematicaElementType("PART_EXPRESSION");
+  IElementType INLINE_PART_EXPRESSION = new MathematicaElementType("INLINE_PART_EXPRESSION");
 
   IElementType INCREMENT_POSTFIX = new MathematicaElementType("INCREMENT_POSTFIX");
   IElementType DECREMENT_POSTFIX = new MathematicaElementType("DECREMENT_POSTFIX");
@@ -439,6 +451,9 @@ public interface MathematicaElementTypes {
   IElementType FUNCTION_POSTFIX = new MathematicaElementType("FUNCTION_POSTFIX");
 
   IElementType POSTFIX_EXPRESSION = new MathematicaElementType("POSTFIX_EXPRESSION");
+
+  IElementType COMPOSITION_EXPRESSION = new MathematicaElementType("COMPOSITION_EXPRESSION");
+  IElementType RIGHT_COMPOSITION_EXPRESSION = new MathematicaElementType("RIGHT_COMPOSITION_EXPRESSION");
 
   IElementType SET_EXPRESSION = new MathematicaElementType("SET_EXPRESSION");
   IElementType SET_DELAYED_EXPRESSION = new MathematicaElementType("SET_DELAYED_EXPRESSION");
