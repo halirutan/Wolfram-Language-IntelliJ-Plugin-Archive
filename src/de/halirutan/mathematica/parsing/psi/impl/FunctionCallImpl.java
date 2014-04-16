@@ -36,10 +36,12 @@ import org.jetbrains.annotations.NotNull;
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
+  private boolean myIsUpToDate;
 
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
+    myIsUpToDate = false;
   }
 
   @Override
@@ -63,7 +65,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   @Override
   public void subtreeChanged() {
-    clearUserData();
+    myIsUpToDate = false;
   }
 
   /**
@@ -79,7 +81,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   @Override
   public boolean isScopingConstruct() {
 
-    if (isUserDataEmpty()) {
+    if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
     LocalizationConstruct.ConstructType type = (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
@@ -87,25 +89,25 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   }
 
   public LocalizationConstruct.ConstructType getScopingConstruct() {
-    if (isUserDataEmpty()) {
+    if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
     return (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
   }
 
   private void cacheScopingConstruct() {
+    if (myIsUpToDate) return;
     PsiElement head = getFirstChild();
     if (head instanceof Symbol) {
       cacheScopingConstruct(((Symbol) head).getSymbolName());
     } else {
       putUserData(myScopeKey, LocalizationConstruct.ConstructType.NULL);
     }
+    myIsUpToDate = true;
   }
 
   private void cacheScopingConstruct(String functionName) {
-    if (isUserDataEmpty()) {
-      putUserData(myScopeKey, LocalizationConstruct.getType(functionName));
-    }
+    putUserData(myScopeKey, LocalizationConstruct.getType(functionName));
   }
 
   @Override
