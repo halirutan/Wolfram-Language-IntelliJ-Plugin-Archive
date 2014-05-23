@@ -26,14 +26,19 @@ import com.intellij.openapi.fileTypes.FileTypeFactory;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
 /**
  * @author patrick (4/4/13)
  */
 public class MathematicaFileTypeFactory extends FileTypeFactory {
+
   @Override
   public void createFileTypes(@NotNull FileTypeConsumer consumer) {
     consumer.consume(MathematicaFileType.INSTANCE, "m;mb;mt;nb");
   }
+
 
 }
 
