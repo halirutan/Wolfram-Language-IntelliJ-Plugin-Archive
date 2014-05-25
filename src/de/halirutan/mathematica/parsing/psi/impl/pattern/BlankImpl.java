@@ -44,4 +44,9 @@ public class BlankImpl extends OperatorNameProvider implements Blank {
       super.accept(visitor);
     }
   }
+
+  @Override
+  public void subtreeChanged() {
+    super.subtreeChanged();
+  }
 }

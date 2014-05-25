@@ -36,6 +36,7 @@ import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaFileTemplateProvider;
 import de.halirutan.mathematica.MathematicaIcons;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -119,7 +120,7 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   @Nullable
   @Override
-  public ModuleWizardStep modifySettingsStep(final SettingsStep settingsStep) {
+  public ModuleWizardStep modifySettingsStep(@NotNull final SettingsStep settingsStep) {
     return new MathematicaModifiedSettingsStep(this, settingsStep);
   }
 
@@ -134,8 +135,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
@@ -152,8 +153,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
@@ -170,8 +171,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
@@ -188,8 +189,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
@@ -206,8 +207,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(WizardContext wizardContext,
-                                                ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 

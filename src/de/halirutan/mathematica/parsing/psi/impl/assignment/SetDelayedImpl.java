@@ -27,10 +27,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
