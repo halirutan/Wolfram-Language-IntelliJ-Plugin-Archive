@@ -63,8 +63,10 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return true;
   }
 
+
   @Override
   public void subtreeChanged() {
+    super.subtreeChanged();
     myIsUpToDate = false;
   }
 
@@ -74,8 +76,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
    * >evaluating</em> the code in Mathematica, it's of course found to be a correct scoping construct. Btw, the
    * Mathematica front end has the same issues.
    *
-   * @return True iff the head is a symbol defining the function as scoping construct like <code
-   *         >Block[{..},..]</code>.
+   * @return True iff the head is a symbol defining the function as scoping construct like <code >Block[{..},..]</code>.
    */
 
   @Override

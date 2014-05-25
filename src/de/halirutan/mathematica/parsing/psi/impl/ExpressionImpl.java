@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,5 +44,16 @@ public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
       classname = classname.substring(0, classname.length() - "Impl".length());
     }
     return classname;
+  }
+
+  @Override
+  public void subtreeChanged() {
+    final PsiElement[] children = getChildren();
+    for (PsiElement child : children) {
+      if (child instanceof ExpressionImpl) {
+        ((ExpressionImpl) child).subtreeChanged();
+      }
+    }
+
   }
 }

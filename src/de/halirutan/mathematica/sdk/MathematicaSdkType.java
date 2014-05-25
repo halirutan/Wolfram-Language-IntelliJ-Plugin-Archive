@@ -43,10 +43,7 @@ import java.util.regex.Pattern;
  * @author patrick (4/27/13)
  */
 public class MathematicaSdkType extends SdkType {
-  private static final String DOC_URL = "http://reference.wolfram.com/mathematica/guide/Mathematica.html";
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
-  private final String myVersion = null;
-
 
   public MathematicaSdkType() {
     super("MATHEMATICA SDK");
@@ -125,7 +122,7 @@ public class MathematicaSdkType extends SdkType {
   }
 
   @Override
-  public void saveAdditionalData(SdkAdditionalData additionalData, Element additional) {
+  public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
   }
 
   @Override

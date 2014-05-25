@@ -22,11 +22,8 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
-import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.DEFAULT_EXPRESSION;
 
