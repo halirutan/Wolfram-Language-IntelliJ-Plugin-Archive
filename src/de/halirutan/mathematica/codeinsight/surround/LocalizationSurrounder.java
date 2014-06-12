@@ -28,21 +28,32 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author patrick (6/12/14)
  */
-public class FunctionCallSurrounder implements Surrounder {
+public class LocalizationSurrounder implements Surrounder {
+  private String myHead;
+
+
+  public LocalizationSurrounder(String head) {
+    this.myHead = head;
+  }
+
   @Override
   public String getTemplateDescription() {
-    return "func[code]";
+    return myHead + "[{}, code]";
   }
 
   @Override
@@ -55,17 +66,25 @@ public class FunctionCallSurrounder implements Surrounder {
   public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements) throws IncorrectOperationException {
     assert (elements.length == 1 && elements[0] != null) || PsiTreeUtil.findCommonParent(elements) == elements[0].getParent();
     final PsiElement e = elements[0];
+    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
     final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-    final StringBuilder stringBuilder = new StringBuilder("f[");
+    final StringBuilder stringBuilder = new StringBuilder(myHead+"[{},\n");
     stringBuilder.append(e.getText());
-    stringBuilder.append("]");
+    stringBuilder.append("\n]");
 
     final PsiFile file = factory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, stringBuilder);
     final FunctionCall[] func = PsiTreeUtil.getChildrenOfType(file, FunctionCall.class);
     assert func != null && func[0] != null;
+    func[0] = (FunctionCall)codeStyleManager.reformat(func[0]);
     PsiElement newElement = e.replace(func[0]);
-    final PsiElement head = newElement.getFirstChild();
-    return head == null ? null : head.getTextRange();
+
+    final List<PsiElement> arguments = MathematicaPsiUtilities.getArguments(newElement);
+    if(arguments.isEmpty()){
+      return null;
+    }
+    // We want to place the cursor inside the {} of Module[{}, code], therefore we use the first argument which is
+    // {} and step one letter ahead.
+    return TextRange.from(arguments.get(0).getTextOffset()+1,0);
   }
 }
