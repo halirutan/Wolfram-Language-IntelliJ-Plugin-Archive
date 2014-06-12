@@ -33,8 +33,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (6/11/14)
  */
-public class MathematicaSurroundWith implements SurroundDescriptor {
-  private static final Surrounder SURROUNDERS[] = {new FunctionCallSurrounder()};
+public class MathematicaSurroundDescriptor implements SurroundDescriptor {
+  private static final Surrounder SURROUNDERS[] = {
+      new FunctionCallSurrounder(),
+      new AnnonymousFunctionSurrounder(),
+      new LocalizationSurrounder("Module"),
+      new LocalizationSurrounder("With"),
+      new LocalizationSurrounder("Block"),
+      new LocalizationSurrounder("Function"),
+      new LocalizationSurrounder("Compile")
+  };
 
   @NotNull
   @Override

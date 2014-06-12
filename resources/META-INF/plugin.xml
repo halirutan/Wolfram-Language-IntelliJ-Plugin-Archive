@@ -42,7 +42,7 @@
     <lang.smartEnterProcessor language="Mathematica"
                               implementationClass="de.halirutan.mathematica.codeinsight.smartenter.MathematicaSmartEnter"/>
     <lang.surroundDescriptor language="Mathematica"
-                             implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWith"/>
+                             implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
     <lang.syntaxHighlighterFactory key="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
     <lang.documentationProvider language="Mathematica"

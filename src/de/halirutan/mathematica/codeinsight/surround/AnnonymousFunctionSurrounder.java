@@ -39,10 +39,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/12/14)
  */
-public class FunctionCallSurrounder implements Surrounder {
+public class AnnonymousFunctionSurrounder implements Surrounder {
   @Override
   public String getTemplateDescription() {
-    return "func[code]";
+    return "Anonymous function";
   }
 
   @Override
@@ -57,15 +57,16 @@ public class FunctionCallSurrounder implements Surrounder {
     final PsiElement e = elements[0];
 
     final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-    final StringBuilder stringBuilder = new StringBuilder("f[");
+    final StringBuilder stringBuilder = new StringBuilder("(");
     stringBuilder.append(e.getText());
-    stringBuilder.append("]");
+    stringBuilder.append(")&");
 
     final PsiFile file = factory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, stringBuilder);
     final FunctionCall[] func = PsiTreeUtil.getChildrenOfType(file, FunctionCall.class);
     assert func != null && func[0] != null;
-    PsiElement newElement = e.replace(func[0]);
-    final PsiElement head = newElement.getFirstChild();
-    return head == null ? null : head.getTextRange();
+    e.replace(func[0]);
+//    final PsiElement head = newElement.getFirstChild();
+//    return head == null ? null : head.getTextRange();
+    return null;
   }
 }
