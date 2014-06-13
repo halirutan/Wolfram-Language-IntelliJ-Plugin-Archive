@@ -32,7 +32,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,11 +62,9 @@ public class AnnonymousFunctionSurrounder implements Surrounder {
     stringBuilder.append(")&");
 
     final PsiFile file = factory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, stringBuilder);
-    final FunctionCall[] func = PsiTreeUtil.getChildrenOfType(file, FunctionCall.class);
+    final Function[] func = PsiTreeUtil.getChildrenOfType(file, Function.class);
     assert func != null && func[0] != null;
     e.replace(func[0]);
-//    final PsiElement head = newElement.getFirstChild();
-//    return head == null ? null : head.getTextRange();
     return null;
   }
 }
