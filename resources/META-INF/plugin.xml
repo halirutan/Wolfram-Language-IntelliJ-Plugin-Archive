@@ -45,6 +45,8 @@
                              implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
     <lang.syntaxHighlighterFactory key="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+    <lang.psiStructureViewFactory language="Mathematica"
+                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
     <lang.documentationProvider language="Mathematica"
                                 implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
     <colorSettingsPage
