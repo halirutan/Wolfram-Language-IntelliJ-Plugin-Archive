@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,12 +19,30 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api;
+package de.halirutan.mathematica.codeinsight.structureview;
 
-import com.intellij.psi.NavigatablePsiElement;
+import com.intellij.ide.structureView.StructureViewBuilder;
+import com.intellij.ide.structureView.StructureViewModel;
+import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
+import com.intellij.lang.PsiStructureViewFactory;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
+ * @author patrick (6/13/14)
  */
-public interface Expression extends NavigatablePsiElement {
+public class MathematicaStructureViewFactory implements PsiStructureViewFactory {
+  @Nullable
+  @Override
+  public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile) {
+    return new TreeBasedStructureViewBuilder() {
+      @NotNull
+      @Override
+      public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
+        return new MathematicaStructureViewModel(psiFile, editor);
+      }
+    };
+  }
 }

@@ -40,10 +40,12 @@ import java.util.Set;
 public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
 
   private final Set<String> myCollectedFunctionNames;
+  private final Set<Symbol> myCollectedFunctions;
 
   public MathematicaTopLevelFunctionVisitor() {
     super();
     myCollectedFunctionNames = new HashSet<String>();
+    myCollectedFunctions = new HashSet<Symbol>();
   }
 
   public void visitFile(PsiFile file) {
@@ -74,12 +76,17 @@ public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
     return myCollectedFunctionNames;
   }
 
+  public Set<Symbol> getAssignedSymbols() {
+    return myCollectedFunctions;
+  }
+
   private void cacheAssignedSymbols(PsiElement element) {
     final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(element);
     if (assignmentSymbols != null) {
       for (Symbol assignmentSymbol : assignmentSymbols) {
         String symbolName = assignmentSymbol.getSymbolName();
         myCollectedFunctionNames.add(symbolName);
+        myCollectedFunctions.add(assignmentSymbol);
       }
     }
   }
