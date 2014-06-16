@@ -124,4 +124,6 @@ public class MathematicaStructureViewElement implements StructureViewTreeElement
   public Expression getValue() {
     return myElement;
   }
+
+
 }

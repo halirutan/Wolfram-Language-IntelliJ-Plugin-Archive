@@ -39,6 +39,7 @@ import org.jetbrains.annotations.Nullable;
 public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider{
 
   public MathematicaStructureViewModel(@NotNull PsiFile psiFile, @Nullable Editor editor) {
+    //todo Implement a ViewElement for PsiFile which runs the visitor to build up the ViewStructure tree
     super(psiFile, editor, new MathematicaStructureViewElement((Expression) psiFile));
     withSorters(Sorter.ALPHA_SORTER);
   }
