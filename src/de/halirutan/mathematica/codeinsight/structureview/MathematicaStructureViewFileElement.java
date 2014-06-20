@@ -21,42 +21,30 @@
 
 package de.halirutan.mathematica.codeinsight.structureview;
 
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author patrick (6/14/14)
  */
-public class MathematicaStructureViewElement implements StructureViewTreeElement {
+public class MathematicaStructureViewFileElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
 
-  protected enum Visibility {
-    GLOBAL,
-    LOCAL,
-    NONE
-  }
+  private MathematicaPsiFile myElement;
 
-  private Expression myElement;
-  private Visibility myVisibility;
-
-  public MathematicaStructureViewElement(Expression element) {
-    this(element, Visibility.NONE);
-  }
-
-  public MathematicaStructureViewElement(Expression element, Visibility visibility) {
+  public MathematicaStructureViewFileElement(MathematicaPsiFile element) {
     myElement = element;
-    myVisibility = visibility;
   }
-
 
   @Override
   public void navigate(boolean requestFocus) {
@@ -82,14 +70,7 @@ public class MathematicaStructureViewElement implements StructureViewTreeElement
       @Nullable
       @Override
       public String getPresentableText() {
-        if (myElement instanceof Symbol) {
-          return ((Symbol) myElement).getSymbolName();
-        }
-        if (myElement instanceof MathematicaPsiFile) {
-          return ((MathematicaPsiFile) myElement).getName();
-        }
-        return "ERROR";
-
+        return myElement.getName();
       }
 
       @Nullable
@@ -109,14 +90,14 @@ public class MathematicaStructureViewElement implements StructureViewTreeElement
   @NotNull
   @Override
   public StructureViewTreeElement[] getChildren() {
+    MathematicaViewElementExtractingVisitor visitor = new MathematicaViewElementExtractingVisitor();
+    myElement.accept(visitor);
+    final HashMap<String, List<SymbolDefinition>> definedSymbols = visitor.getDefinedSymbols();
     final Collection<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>();
-    final MathematicaTopLevelFunctionVisitor functionVisitor = new MathematicaTopLevelFunctionVisitor();
-    if (myElement instanceof MathematicaPsiFile) {
-      myElement.accept(functionVisitor);
-      for (Symbol sym : functionVisitor.getAssignedSymbols()) {
-        children.add(new MathematicaStructureViewElement((Expression) sym));
-      }
+    for (String symbolName : definedSymbols.keySet()) {
+      children.add(new MathematicaStructureViewDefinitionElement(symbolName, definedSymbols.get(symbolName)));
     }
+
     return children.toArray(new StructureViewTreeElement[children.size()]);
   }
 
@@ -125,5 +106,14 @@ public class MathematicaStructureViewElement implements StructureViewTreeElement
     return myElement;
   }
 
+  @Override
+  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+    return false;
+  }
+
+  @Override
+  public boolean isSmartExpand() {
+    return true;
+  }
 
 }

@@ -25,14 +25,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPatternVisitor;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,19 +42,18 @@ import java.util.Set;
  * information specifically for the StructureView. This means it will bundle several definitions of the same symbol so
  * that the StructureView contains one node for one defined functions, no matter how many different definition patterns
  * exist. </p> <p> The node for one function can be <em>opened</em> to see (and be able to navigate) the different
- * definitions for the symbol.
- * </p>
+ * definitions for the symbol. </p>
  *
  * @author patrick (6/14/14)
  */
 public class MathematicaViewElementExtractingVisitor extends MathematicaVisitor {
 
 
-  private HashMap<String, Set<SymbolDefinition>> myDefinedSymbols;
+  private HashMap<String, List<SymbolDefinition>> myDefinedSymbols;
 
   public MathematicaViewElementExtractingVisitor() {
     super();
-    myDefinedSymbols = new HashMap<String, Set<SymbolDefinition>>(20);
+    myDefinedSymbols = new HashMap<String, List<SymbolDefinition>>(20);
   }
 
   public void visitFile(PsiFile file) {
@@ -80,50 +80,29 @@ public class MathematicaViewElementExtractingVisitor extends MathematicaVisitor 
     cacheAssignedSymbols(tagSetDelayed);
   }
 
-  public HashMap<String, Set<SymbolDefinition>> getDefinedSymbols() {
+  public HashMap<String, List<SymbolDefinition>> getDefinedSymbols() {
     return myDefinedSymbols;
   }
 
-  private void cacheAssignedSymbols(PsiElement setType) {
-    final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(setType);
-    if (assignmentSymbols != null) {
-      for (Symbol assignmentSymbol : assignmentSymbols) {
-        String symbolName = assignmentSymbol.getSymbolName();
-        if (!myDefinedSymbols.containsKey(symbolName)) {
-          myDefinedSymbols.put(symbolName, new HashSet<SymbolDefinition>(1));
-        }
-        final Set<SymbolDefinition> symbolDefinitions = myDefinedSymbols.get(symbolName);
-        symbolDefinitions.add(new SymbolDefinition(assignmentSymbol, setType));
-      }
+  @Override
+  public void visitFunctionCall(final FunctionCall functionCall) {
+    if (!functionCall.isScopingConstruct()) {
+      functionCall.acceptChildren(this);
     }
   }
 
-
-  /**
-   * Class for holding information about the details of a (function)-definition. This includes:
-   * <ul>
-   *   <li>PsiElement of the symbol which is defined</li>
-   *   <li>Symbol name</li>
-   *   <li>Type of the definition: Set, SetDelayed, TagSet, TagSetDelayed</li>
-   *   <li>The LHS (or parts of it) as string</li>
-   *   <li>Line number</li>
-   * </ul>
-   */
-  private class SymbolDefinition {
-    private Symbol myElement;
-    private PsiElement mySetType;
-    private String myLhs;
-    private int myLineNumber;
-
-    private SymbolDefinition(Symbol symbol, PsiElement setType) {
-      myElement = symbol;
-      mySetType = setType;
-      myLhs = "";
-      if (mySetType != null) {
-        myLhs = mySetType.getFirstChild().getText();
+  private void cacheAssignedSymbols(PsiElement setType) {
+    MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+    setType.accept(patternVisitor);
+    final Set<Symbol> unboundSymbols = patternVisitor.getUnboundSymbols();
+    if (unboundSymbols.size() > 0) {
+      final Symbol symbol = unboundSymbols.iterator().next();
+      String symbolName = symbol.getSymbolName();
+      if (!myDefinedSymbols.containsKey(symbolName)) {
+        myDefinedSymbols.put(symbolName, new LinkedList<SymbolDefinition>());
       }
-      myLineNumber = 0;
-
+      final List<SymbolDefinition> symbolDefinitions = myDefinedSymbols.get(symbolName);
+      symbolDefinitions.add(new SymbolDefinition(symbol, setType));
     }
   }
 

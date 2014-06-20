@@ -27,8 +27,6 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,18 +34,17 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/13/14)
  */
-public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider{
+public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
 
-  public MathematicaStructureViewModel(@NotNull PsiFile psiFile, @Nullable Editor editor) {
-    //todo Implement a ViewElement for PsiFile which runs the visitor to build up the ViewStructure tree
-    super(psiFile, editor, new MathematicaStructureViewElement((Expression) psiFile));
+  public MathematicaStructureViewModel(@NotNull MathematicaPsiFile psiFile, @Nullable Editor editor) {
+    super(psiFile, editor, new MathematicaStructureViewFileElement(psiFile));
     withSorters(Sorter.ALPHA_SORTER);
   }
 
   @NotNull
   @Override
   public Sorter[] getSorters() {
-    return new Sorter[] {Sorter.ALPHA_SORTER};
+    return new Sorter[]{Sorter.ALPHA_SORTER};
   }
 
   @Override
