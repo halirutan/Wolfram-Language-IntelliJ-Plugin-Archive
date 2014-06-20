@@ -31,4 +31,10 @@ import javax.swing.*;
 public interface MathematicaIcons {
 
   Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
+  Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
+  Icon SETDELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
+  Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
+  Icon TAGSETDELAYED_ICON = IconLoader.getIcon("/icons/TagSetDelayed.png");
+  Icon UPSET_ICON = IconLoader.getIcon("/icons/UpSet.png");
+  Icon UPSETDELAYED_ICON = IconLoader.getIcon("/icons/UpSetDelayed.png");
 }
