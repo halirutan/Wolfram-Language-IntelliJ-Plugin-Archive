@@ -189,6 +189,7 @@ public class ParseletProvider {
     register(MathematicaElementTypes.BLANK_NULL_SEQUENCE, MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION, new BlankNullSequenceParselet(76)); // BlankNullSequence(___)
     register(MathematicaElementTypes.BLANK_NULL_SEQUENCE, MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION, new PrefixBlankNullSequenceParselet(76)); // BlankNullSequence(___)
     postfix(MathematicaElementTypes.DEFAULT, MathematicaElementTypes.DEFAULT_EXPRESSION, 76); // Default(_.)
+    register(MathematicaElementTypes.DEFAULT, MathematicaElementTypes.DEFAULT_EXPRESSION, new PrefixDefaultParselet(76)); // Default(_.)
 
     prefix(MathematicaElementTypes.GET, MathematicaElementTypes.GET_PREFIX, 74); // Get(<<)
 

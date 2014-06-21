@@ -23,8 +23,9 @@ package de.halirutan.mathematica.refactoring;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import com.intellij.refactoring.RefactoringActionHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (7/22/13)
@@ -37,12 +38,19 @@ public class MathematicaRefactoringSupport extends RefactoringSupportProvider {
   }
 
   @Override
-  public boolean isInplaceRenameAvailable(PsiElement element, PsiElement context) {
+  public boolean isInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
+
     return false;
   }
 
   @Override
-  public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
+  public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
     return true;
+  }
+
+  @Nullable
+  @Override
+  public RefactoringActionHandler getIntroduceVariableHandler() {
+    return super.getIntroduceVariableHandler();
   }
 }

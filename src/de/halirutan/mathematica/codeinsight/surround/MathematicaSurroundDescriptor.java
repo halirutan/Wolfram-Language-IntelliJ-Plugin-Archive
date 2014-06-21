@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,41 +19,46 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.codeinsight.surround;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
+import com.intellij.codeInsight.CodeInsightUtilCore;
+import com.intellij.lang.surroundWith.SurroundDescriptor;
+import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.MathematicaLanguage;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:42 AM Purpose:
+ * @author patrick (6/11/14)
  */
-public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
-//  final ASTNode myNode;
+public class MathematicaSurroundDescriptor implements SurroundDescriptor {
+  private static final Surrounder SURROUNDERS[] = {
+      new FunctionCallSurrounder(),
+      new AnnonymousFunctionSurrounder(),
+      new LocalizationSurrounder("Module"),
+      new LocalizationSurrounder("With"),
+      new LocalizationSurrounder("Block"),
+      new LocalizationSurrounder("Function"),
+      new LocalizationSurrounder("Compile")
+  };
 
-  public ExpressionImpl(@NotNull ASTNode node) {
-    super(node);
-//    myNode = node;
+  @NotNull
+  @Override
+  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
+    final PsiElement elementInRange = CodeInsightUtilCore.findElementInRange(file, startOffset, endOffset, Expression.class, MathematicaLanguage.INSTANCE);
+    return new PsiElement[]{elementInRange};
   }
 
-  public String toString() {
-    String classname = getClass().getSimpleName();
-    if (classname.endsWith("Impl")) {
-      classname = classname.substring(0, classname.length() - "Impl".length());
-    }
-    return classname;
+  @NotNull
+  @Override
+  public Surrounder[] getSurrounders() {
+    return SURROUNDERS;
   }
 
   @Override
-  public void subtreeChanged() {
-    final PsiElement[] children = getChildren();
-    for (PsiElement child : children) {
-      if (child instanceof ExpressionImpl) {
-        ((ExpressionImpl) child).subtreeChanged();
-      }
-    }
-
+  public boolean isExclusive() {
+    return false;
   }
 }

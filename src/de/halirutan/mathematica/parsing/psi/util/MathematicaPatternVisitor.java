@@ -24,7 +24,6 @@ package de.halirutan.mathematica.parsing.psi.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Group;
