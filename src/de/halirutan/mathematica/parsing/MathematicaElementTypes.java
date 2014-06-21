@@ -100,7 +100,6 @@ public interface MathematicaElementTypes {
   IElementType MAP_ALL = new MathematicaElementType("MAP_ALL");
   IElementType APPLY = new MathematicaElementType("APPLY");
   IElementType APPLY1 = new MathematicaElementType("APPLY1");
-  IElementType INLINE_PART = new MathematicaElementType("INLINE_PART");
   IElementType REPLACE_ALL = new MathematicaElementType("REPLACE_ALL");
   IElementType REPLACE_REPEATED = new MathematicaElementType("REPLACE_REPEATED");
 
@@ -304,7 +303,6 @@ public interface MathematicaElementTypes {
       if (type.equals(LIST_EXPRESSION)) return new ListImpl(node);
       if (type.equals(ASSOCIATION_EXPRESSION)) return new AssociationImpl(node);
       if (type.equals(PART_EXPRESSION)) return new PartImpl(node);
-      if (type.equals(INLINE_PART_EXPRESSION)) return new InlinePartImpl(node);
       if (type.equals(SPAN_EXPRESSION)) return new SpanImpl(node);
 
       // Logical operations
@@ -367,7 +365,6 @@ public interface MathematicaElementTypes {
 
   IElementType FUNCTION_CALL_EXPRESSION = new MathematicaElementType("FUNCTION_CALL_EXPRESSION");
   IElementType PART_EXPRESSION = new MathematicaElementType("PART_EXPRESSION");
-  IElementType INLINE_PART_EXPRESSION = new MathematicaElementType("INLINE_PART_EXPRESSION");
 
   IElementType INCREMENT_POSTFIX = new MathematicaElementType("INCREMENT_POSTFIX");
   IElementType DECREMENT_POSTFIX = new MathematicaElementType("DECREMENT_POSTFIX");

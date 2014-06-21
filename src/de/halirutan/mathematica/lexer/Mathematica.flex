@@ -99,7 +99,6 @@ Out = "%"+
 	"@"					{ return MathematicaElementTypes.PREFIX_CALL; }
 	"//@"				{ return MathematicaElementTypes.MAP_ALL; }
 	"/@"				{ return MathematicaElementTypes.MAP; }
-	"@>"				{ return MathematicaElementTypes.INLINE_PART; }
 
 	"@*"				{ return MathematicaElementTypes.COMPOSITION; }
 	"/*"				{ return MathematicaElementTypes.RIGHT_COMPOSITION; }
