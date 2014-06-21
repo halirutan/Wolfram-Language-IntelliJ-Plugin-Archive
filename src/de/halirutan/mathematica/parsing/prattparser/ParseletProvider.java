@@ -23,7 +23,6 @@ package de.halirutan.mathematica.parsing.prattparser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.parsing.MathematicaElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattparser.parselets.*;
 
@@ -197,7 +196,6 @@ public class ParseletProvider {
 
     register(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.FUNCTION_CALL_EXPRESSION, new FunctionCallParselet(70)); // FunctionCall([)
 
-    infixLeft(MathematicaElementTypes.INLINE_PART, MathematicaElementTypes.INLINE_PART_EXPRESSION, 69); // Inline Part (@>)
     infixLeft(MathematicaElementTypes.COMPOSITION, MathematicaElementTypes.COMPOSITION_EXPRESSION, 69); // Composition (@*)
     infixLeft(MathematicaElementTypes.RIGHT_COMPOSITION, MathematicaElementTypes.RIGHT_COMPOSITION_EXPRESSION, 69); // RightComposition (/*)
 
