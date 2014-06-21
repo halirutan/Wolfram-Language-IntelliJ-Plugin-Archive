@@ -24,8 +24,6 @@ package de.halirutan.mathematica.codeinsight.completion;
 import com.intellij.codeInsight.completion.*;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
 /**
  * Provides the implementation of the extension point which is registered in /META-INF/plugin.xml. It adds all kinds of
  * completion providers to the plugin.

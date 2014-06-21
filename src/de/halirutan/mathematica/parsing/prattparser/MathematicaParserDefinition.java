@@ -87,6 +87,6 @@ public class MathematicaParserDefinition implements ParserDefinition {
 
   @Override
   public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
-    return null;
+    return SpaceRequirements.MAY;
   }
 }

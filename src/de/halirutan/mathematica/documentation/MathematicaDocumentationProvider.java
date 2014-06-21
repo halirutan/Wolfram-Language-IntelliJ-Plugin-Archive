@@ -36,7 +36,6 @@ import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -60,14 +59,14 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   }
 
   /**
-   * Generates the documentation (if available) for element. This does two things, first it looks whether the element
-   * is a {@link Symbol}. If this is true it tries to load the usage message. If element is not a Symbol, it is
-   * possibly an operator. Then it tries to guess the usage message of the operator by converting the class name to a
-   * hopefully valid operator name.
+   * Generates the documentation (if available) for element. This does two things, first it looks whether the element is
+   * a {@link Symbol}. If this is true it tries to load the usage message. If element is not a Symbol, it is possibly an
+   * operator. Then it tries to guess the usage message of the operator by converting the class name to a hopefully
+   * valid operator name.
    *
-   * @param element         Element which was possibly altered by {@link #getCustomDocumentationElement(Editor,
-   *                        PsiFile, PsiElement)} or by {@link #getDocumentationElementForLookupItem(PsiManager,
-   *                        Object, PsiElement)} if the lookup was active
+   * @param element         Element which was possibly altered by {@link #getCustomDocumentationElement(Editor, PsiFile,
+   *                        PsiElement)} or by {@link #getDocumentationElementForLookupItem(PsiManager, Object,
+   *                        PsiElement)} if the lookup was active
    * @param originalElement The original element for which the doc was called (possibly whitespace)
    * @return The html string of the usage message or null if it could not be loaded
    */
@@ -106,9 +105,9 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
    * @param file           The file which is edited and where the doc call was made
    * @param contextElement The element where the caret was when the doc was called
    * @return The element for which the user wants documentation. If an item of the completion list is currently
-   *         highlighted, then this element. If the cursor is over/beside an identifier, then the symbol element. As
-   *         last thing it is determined whether the PsiElement is the operator-sign of an operation, then we get the
-   *         corresponding operation psi implementation element back.
+   * highlighted, then this element. If the cursor is over/beside an identifier, then the symbol element. As last thing
+   * it is determined whether the PsiElement is the operator-sign of an operation, then we get the corresponding
+   * operation psi implementation element back.
    */
   @Nullable
   @Override

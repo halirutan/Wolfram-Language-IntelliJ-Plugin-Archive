@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,41 +19,36 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.DEFAULT_EXPRESSION;
 
 /**
- * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:42 AM Purpose:
+ * Parselet for parsing a single _.
+ *
+ * @author patrick (3/27/13)
  */
-public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
-//  final ASTNode myNode;
+public class PrefixDefaultParselet implements PrefixParselet {
+  private final int myPrecedence;
 
-  public ExpressionImpl(@NotNull ASTNode node) {
-    super(node);
-//    myNode = node;
-  }
-
-  public String toString() {
-    String classname = getClass().getSimpleName();
-    if (classname.endsWith("Impl")) {
-      classname = classname.substring(0, classname.length() - "Impl".length());
-    }
-    return classname;
+  public PrefixDefaultParselet(int precedence) {
+    this.myPrecedence = precedence;
   }
 
   @Override
-  public void subtreeChanged() {
-    final PsiElement[] children = getChildren();
-    for (PsiElement child : children) {
-      if (child instanceof ExpressionImpl) {
-        ((ExpressionImpl) child).subtreeChanged();
-      }
-    }
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker mark = parser.mark();
+    parser.advanceLexer();
+    mark.done(DEFAULT_EXPRESSION);
+    return MathematicaParser.result(mark, DEFAULT_EXPRESSION, true);
 
+  }
+
+  public int getPrecedence() {
+    return myPrecedence;
   }
 }
