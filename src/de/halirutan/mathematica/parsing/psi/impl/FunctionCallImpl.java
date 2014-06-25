@@ -119,4 +119,10 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
       super.accept(visitor);
     }
   }
+
+  @Override
+  public boolean headMatches(final Class<?> clazz) {
+    final String head = getFirstChild().getText();
+    return clazz.getSimpleName().matches(head);
+  }
 }
