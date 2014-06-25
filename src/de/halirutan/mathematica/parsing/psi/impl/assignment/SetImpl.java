@@ -27,7 +27,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
@@ -57,8 +56,4 @@ public class SetImpl extends OperatorNameProvider implements Set {
     }
   }
 
-  @Override
-  public java.util.Set<Symbol> getAssignedSymbols() {
-    return null;
-  }
 }

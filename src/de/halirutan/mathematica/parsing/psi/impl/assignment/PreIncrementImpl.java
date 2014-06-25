@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.api.assignment.PreIncrement;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PreIncrementImpl extends OperatorNameProvider {
+public class PreIncrementImpl extends OperatorNameProvider implements PreIncrement {
   public PreIncrementImpl(@NotNull ASTNode node) {
     super(node);
   }

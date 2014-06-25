@@ -25,13 +25,14 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.api.assignment.UpSetDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class UpSetDelayedImpl extends OperatorNameProvider {
+public class UpSetDelayedImpl extends OperatorNameProvider implements UpSetDelayed {
   public UpSetDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }
