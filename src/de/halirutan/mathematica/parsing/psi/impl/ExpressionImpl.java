@@ -56,4 +56,9 @@ public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
     }
 
   }
+
+  @Override
+  public boolean headMatches( Class<?> clazz) {
+    return clazz.isInstance(this);
+  }
 }
