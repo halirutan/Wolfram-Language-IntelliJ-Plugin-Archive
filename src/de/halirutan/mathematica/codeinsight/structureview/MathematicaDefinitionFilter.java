@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,22 +19,36 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.codeinsight.structureview;
 
-import com.intellij.openapi.util.IconLoader;
-
-import javax.swing.*;
+import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
+import com.intellij.ide.util.treeView.smartTree.Filter;
+import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/4/13)
+ * @author patrick (6/14/14)
  */
-public interface MathematicaIcons {
+public class MathematicaDefinitionFilter implements Filter {
+  @Override
+  public boolean isVisible(TreeElement treeElement) {
+    return false;
+  }
 
-  Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
-  Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
-  Icon SETDELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
-  Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
-  Icon TAGSETDELAYED_ICON = IconLoader.getIcon("/icons/TagSetDelayed.png");
-  Icon UPSET_ICON = IconLoader.getIcon("/icons/UpSet.png");
-  Icon UPSETDELAYED_ICON = IconLoader.getIcon("/icons/UpSetDelayed.png");
+  @Override
+  public boolean isReverted() {
+    return false;
+  }
+
+  @NotNull
+  @Override
+  public ActionPresentation getPresentation() {
+    return null;
+  }
+
+  @NotNull
+  @Override
+  public String getName() {
+    return null;
+  }
 }

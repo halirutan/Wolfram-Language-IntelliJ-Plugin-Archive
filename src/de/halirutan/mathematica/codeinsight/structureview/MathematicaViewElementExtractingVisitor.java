@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,33 +19,41 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.util;
+package de.halirutan.mathematica.codeinsight.structureview;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPatternVisitor;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * @author patrick (9/27/13)
+ * <p> This visitor goes through the AST and extracts all top-level definitions. It's purpose is to collect the
+ * information specifically for the StructureView. This means it will bundle several definitions of the same symbol so
+ * that the StructureView contains one node for one defined functions, no matter how many different definition patterns
+ * exist. </p> <p> The node for one function can be <em>opened</em> to see (and be able to navigate) the different
+ * definitions for the symbol. </p>
+ *
+ * @author patrick (6/14/14)
  */
-public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
+public class MathematicaViewElementExtractingVisitor extends MathematicaVisitor {
 
-  private final Set<String> myCollectedFunctionNames;
-  private final Set<Symbol> myCollectedFunctions;
 
-  public MathematicaTopLevelFunctionVisitor() {
+  private HashMap<String, List<SymbolDefinition>> myDefinedSymbols;
+
+  public MathematicaViewElementExtractingVisitor() {
     super();
-    myCollectedFunctionNames = new HashSet<String>();
-    myCollectedFunctions = new HashSet<Symbol>();
+    myDefinedSymbols = new HashMap<String, List<SymbolDefinition>>(20);
   }
 
   public void visitFile(PsiFile file) {
@@ -72,22 +80,30 @@ public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
     cacheAssignedSymbols(tagSetDelayed);
   }
 
-  public Set<String> getFunctionsNames() {
-    return myCollectedFunctionNames;
+  public HashMap<String, List<SymbolDefinition>> getDefinedSymbols() {
+    return myDefinedSymbols;
   }
 
-  public Set<Symbol> getAssignedSymbols() {
-    return myCollectedFunctions;
-  }
-
-  private void cacheAssignedSymbols(PsiElement element) {
-    final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(element);
-    if (assignmentSymbols != null) {
-      for (Symbol assignmentSymbol : assignmentSymbols) {
-        String symbolName = assignmentSymbol.getSymbolName();
-        myCollectedFunctionNames.add(symbolName);
-        myCollectedFunctions.add(assignmentSymbol);
-      }
+  @Override
+  public void visitFunctionCall(final FunctionCall functionCall) {
+    if (!functionCall.isScopingConstruct()) {
+      functionCall.acceptChildren(this);
     }
   }
+
+  private void cacheAssignedSymbols(PsiElement setType) {
+    MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
+    setType.accept(patternVisitor);
+    final Set<Symbol> unboundSymbols = patternVisitor.getUnboundSymbols();
+    if (unboundSymbols.size() > 0) {
+      final Symbol symbol = unboundSymbols.iterator().next();
+      String symbolName = symbol.getSymbolName();
+      if (!myDefinedSymbols.containsKey(symbolName)) {
+        myDefinedSymbols.put(symbolName, new LinkedList<SymbolDefinition>());
+      }
+      final List<SymbolDefinition> symbolDefinitions = myDefinedSymbols.get(symbolName);
+      symbolDefinitions.add(new SymbolDefinition(symbol, setType));
+    }
+  }
+
 }

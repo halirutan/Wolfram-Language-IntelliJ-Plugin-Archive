@@ -170,6 +170,7 @@ public class ParseletProvider {
   static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
     register(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.LIST_EXPRESSION, new ListParselet(82)); // Group(()
+    register(MathematicaElementTypes.LEFT_ASSOCIATION, MathematicaElementTypes.ASSOCIATION_EXPRESSION, new AssociationParselet(82)); // Group(()
 
     register(MathematicaElementTypes.NUMBER, MathematicaElementTypes.NUMBER_EXPRESSION, new NumberParselet(80)); // Number(123)
     register(MathematicaElementTypes.IDENTIFIER, MathematicaElementTypes.SYMBOL_EXPRESSION, new SymbolParselet(80)); // Symbol($var)
@@ -194,6 +195,9 @@ public class ParseletProvider {
     infixLeft(MathematicaElementTypes.QUESTION_MARK, MathematicaElementTypes.PATTERN_TEST_EXPRESSION, 72); // PatternTest(?)
 
     register(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.FUNCTION_CALL_EXPRESSION, new FunctionCallParselet(70)); // FunctionCall([)
+
+    infixLeft(MathematicaElementTypes.COMPOSITION, MathematicaElementTypes.COMPOSITION_EXPRESSION, 69); // Composition (@*)
+    infixLeft(MathematicaElementTypes.RIGHT_COMPOSITION, MathematicaElementTypes.RIGHT_COMPOSITION_EXPRESSION, 69); // RightComposition (/*)
 
     postfix(MathematicaElementTypes.INCREMENT, MathematicaElementTypes.INCREMENT_POSTFIX, 68);
     postfix(MathematicaElementTypes.DECREMENT, MathematicaElementTypes.DECREMENT_POSTFIX, 68);
@@ -245,7 +249,6 @@ public class ParseletProvider {
     infixLeft(MathematicaElementTypes.SAME_Q, MathematicaElementTypes.SAME_Q_EXPRESSION, 34); // SameQ(===)
     infixLeft(MathematicaElementTypes.UNSAME_Q, MathematicaElementTypes.UNSAME_Q_EXPRESSION, 34); // UnsameQ(=!=)
 
-//    prefix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.NOT_PREFIX, 32); // Not(!)
     prefix(MathematicaElementTypes.EXCLAMATION_MARK, MathematicaElementTypes.NOT_PREFIX, 32); // Not(!)
 
     infixLeft(MathematicaElementTypes.AND, MathematicaElementTypes.AND_EXPRESSION, 30); // And(&&)
