@@ -55,7 +55,7 @@ ScientificInteger = {Number} "\*^"(-?){Digits}
 ScientificNumber = {PrecisionNumber} "\*^"(-?){Digits}
 BaseScientificNumber = {BasePrecisionNumber} "\*^"(-?){Digits}
 
-Slot = "#" [0-9]*
+Slot = "#" [0-9a-zA-Z]*
 SlotSequence = "##" [0-9]*
 
 Out = "%"+
@@ -92,11 +92,16 @@ Out = "%"+
 	")"					{ return MathematicaElementTypes.RIGHT_PAR; }
 	"{"					{ return MathematicaElementTypes.LEFT_BRACE; }
 	"}"					{ return MathematicaElementTypes.RIGHT_BRACE; }
+	"<|"				{ return MathematicaElementTypes.LEFT_ASSOCIATION; }
+	"|>"				{ return MathematicaElementTypes.RIGHT_ASSOCIATION; }
 	"@@@"				{ return MathematicaElementTypes.APPLY1; }
 	"@@"				{ return MathematicaElementTypes.APPLY; }
 	"@"					{ return MathematicaElementTypes.PREFIX_CALL; }
 	"//@"				{ return MathematicaElementTypes.MAP_ALL; }
 	"/@"				{ return MathematicaElementTypes.MAP; }
+
+	"@*"				{ return MathematicaElementTypes.COMPOSITION; }
+	"/*"				{ return MathematicaElementTypes.RIGHT_COMPOSITION; }
 
 	{Out}				{ return MathematicaElementTypes.OUT; }
 

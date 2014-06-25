@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,22 +19,11 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
-
-import com.intellij.openapi.util.IconLoader;
-
-import javax.swing.*;
+package de.halirutan.mathematica.parsing.psi.api.lists;
+import de.halirutan.mathematica.parsing.psi.api.Expression;
 
 /**
- * @author patrick (4/4/13)
+ * Created by rsmenon on 3/28/14.
  */
-public interface MathematicaIcons {
-
-  Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
-  Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
-  Icon SETDELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
-  Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
-  Icon TAGSETDELAYED_ICON = IconLoader.getIcon("/icons/TagSetDelayed.png");
-  Icon UPSET_ICON = IconLoader.getIcon("/icons/UpSet.png");
-  Icon UPSETDELAYED_ICON = IconLoader.getIcon("/icons/UpSetDelayed.png");
+public interface Association extends Expression {
 }

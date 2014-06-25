@@ -1,21 +1,21 @@
-<idea-plugin url="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki" version="2">
+<idea-plugin url="http://mathematicaplugin.halirutan.de" version="2">
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>0.2.6</version>
+  <version>0.2.61</version>
   <idea-version since-build="123.94"/>
-  <vendor email="pscheibe@trm.uni-leipzig.de" url="http://www.halirutan.de">Patrick Scheibe</vendor>
+  <vendor email="pscheibe@trm.uni-leipzig.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
   <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
         lookup, refactoring, code formatting, etc. This plugin is currently under heavy development. If you want to help, check out the
-        <a href="http://www.halirutan.de/start">Official Website</a> or take a look at the open-source
+        <a href="http://mathematicaplugin.halirutan.de">Official Website</a> for more information or take a look at the open-source
         <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
       ]]></description>
 
   <change-notes>
     <![CDATA[
-            For a detailed list of bugfixes please see the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki/Features">
+            For a detailed list of bugfixes please see the <a href="http://mathematicaplugin.halirutan.de/index.php/history">
             Updates page in the GitHub Wiki.</a>
         ]]>
   </change-notes>
@@ -41,8 +41,12 @@
 
     <lang.smartEnterProcessor language="Mathematica"
                               implementationClass="de.halirutan.mathematica.codeinsight.smartenter.MathematicaSmartEnter"/>
+    <lang.surroundDescriptor language="Mathematica"
+                             implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
     <lang.syntaxHighlighterFactory key="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+    <lang.psiStructureViewFactory language="Mathematica"
+                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
     <lang.documentationProvider language="Mathematica"
                                 implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
     <colorSettingsPage
