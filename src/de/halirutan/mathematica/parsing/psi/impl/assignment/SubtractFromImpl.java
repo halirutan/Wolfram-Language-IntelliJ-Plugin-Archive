@@ -23,13 +23,13 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SubtractFrom;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class SubtractFromImpl extends OperatorNameProvider implements SubtractFrom {
+public class SubtractFromImpl extends OperatorNameProviderImpl implements SubtractFrom {
   public SubtractFromImpl(@NotNull ASTNode node) {
     super(node);
   }

@@ -23,13 +23,14 @@ package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.function.Infix;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class InfixImpl extends OperatorNameProvider {
+public class InfixImpl extends OperatorNameProviderImpl implements Infix {
   public InfixImpl(@NotNull ASTNode node) {
     super(node);
   }

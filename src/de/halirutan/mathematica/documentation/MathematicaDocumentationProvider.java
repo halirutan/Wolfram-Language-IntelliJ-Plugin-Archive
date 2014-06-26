@@ -30,8 +30,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiWhiteSpace;
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,7 +87,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     }
 
     if (element instanceof OperatorNameProvider) {
-//      path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProvider) element).getOperatorName() + ".html";
+//      path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProviderImpl) element).getOperatorName() + ".html";
       path = "usages/System/" + ((OperatorNameProvider) element).getOperatorName() + ".html";
     }
 
@@ -142,7 +142,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
       }
 
       // Determine if the contextElement is the operator sign of an operation.
-      // See the doc to OperatorNameProvider.
+      // See the doc to OperatorNameProviderImpl.
       if (parent instanceof OperatorNameProvider) {
         if (((OperatorNameProvider) parent).isOperatorSign(contextElement)) {
           return parent;

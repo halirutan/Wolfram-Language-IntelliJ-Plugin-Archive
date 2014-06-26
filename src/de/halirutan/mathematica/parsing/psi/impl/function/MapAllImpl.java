@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.function.MapAll;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class MapAllImpl extends OperatorNameProvider {
+public class MapAllImpl extends OperatorNameProviderImpl implements MapAll {
   public MapAllImpl(@NotNull ASTNode node) {
     super(node);
   }

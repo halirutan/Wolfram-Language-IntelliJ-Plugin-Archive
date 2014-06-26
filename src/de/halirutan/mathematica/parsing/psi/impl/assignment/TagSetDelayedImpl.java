@@ -28,13 +28,13 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDelayed {
+public class TagSetDelayedImpl extends OperatorNameProviderImpl implements TagSetDelayed {
   public TagSetDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }

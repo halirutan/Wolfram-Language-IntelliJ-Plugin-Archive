@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class MessageNameImpl extends OperatorNameProvider implements MessageName {
+public class MessageNameImpl extends OperatorNameProviderImpl implements MessageName {
   public MessageNameImpl(@NotNull ASTNode node) {
     super(node);
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,29 +19,12 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl.assignment;
+package de.halirutan.mathematica.parsing.psi.api.function;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.api.assignment.UpSetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
-import org.jetbrains.annotations.NotNull;
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (6/26/14)
  */
-public class UpSetDelayedImpl extends OperatorNameProviderImpl implements UpSetDelayed {
-  public UpSetDelayedImpl(@NotNull ASTNode node) {
-    super(node);
-  }
-
-  @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    if (lastParent.getParent() != this) {
-      return true;
-    }
-    return processor.execute(this, state);
-  }
+public interface Composition extends OperatorNameProvider{
 }

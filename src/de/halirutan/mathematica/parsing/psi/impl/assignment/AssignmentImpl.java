@@ -21,10 +21,29 @@
 
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (6/25/14)
+ * @author patrick (6/26/14)
  */
-public abstract class AssignmentImpl extends OperatorNameProvider {
+public class AssignmentImpl extends ExpressionImpl implements OperatorNameProvider {
+
+  public AssignmentImpl(@NotNull final ASTNode node) {
+    super(node);
+  }
+
+  //Todo
+  @Override
+  public boolean isOperatorSign(final PsiElement operatorSignElement) {
+    return true;
+  }
+
+  @Override
+  public String getOperatorName() {
+    return this.toString();
+  }
 }
