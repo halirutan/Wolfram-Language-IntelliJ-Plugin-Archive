@@ -26,13 +26,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.api.assignment.UpSet;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class UpSetImpl extends OperatorNameProvider implements UpSet{
+public class UpSetImpl extends OperatorNameProviderImpl implements UpSet{
   public UpSetImpl(@NotNull ASTNode node) {
     super(node);
   }

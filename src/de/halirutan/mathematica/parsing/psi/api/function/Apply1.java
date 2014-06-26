@@ -21,8 +21,10 @@
 
 package de.halirutan.mathematica.parsing.psi.api.function;
 
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
+
 /**
  * @author patrick (4/14/13)
  */
-public interface Apply1 {
+public interface Apply1 extends OperatorNameProvider{
 }

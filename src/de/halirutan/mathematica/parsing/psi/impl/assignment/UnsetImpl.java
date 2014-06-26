@@ -23,13 +23,13 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Unset;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class UnsetImpl extends OperatorNameProvider implements Unset{
+public class UnsetImpl extends OperatorNameProviderImpl implements Unset{
   public UnsetImpl(@NotNull ASTNode node) {
     super(node);
   }

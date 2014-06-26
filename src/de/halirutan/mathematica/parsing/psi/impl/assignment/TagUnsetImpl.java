@@ -23,13 +23,13 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagUnset;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class TagUnsetImpl extends OperatorNameProvider implements TagUnset {
+public class TagUnsetImpl extends OperatorNameProviderImpl implements TagUnset {
   public TagUnsetImpl(@NotNull ASTNode node) {
     super(node);
   }

@@ -23,13 +23,13 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.assignment.Increment;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class IncrementImpl extends OperatorNameProvider implements Increment {
+public class IncrementImpl extends OperatorNameProviderImpl implements Increment {
   public IncrementImpl(@NotNull ASTNode node) {
     super(node);
   }

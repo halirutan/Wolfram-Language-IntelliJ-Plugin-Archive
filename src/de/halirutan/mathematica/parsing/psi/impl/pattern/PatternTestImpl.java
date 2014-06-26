@@ -26,13 +26,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.pattern.PatternTest;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PatternTestImpl extends OperatorNameProvider implements PatternTest {
+public class PatternTestImpl extends OperatorNameProviderImpl implements PatternTest {
   public PatternTestImpl(@NotNull ASTNode node) {
     super(node);
   }

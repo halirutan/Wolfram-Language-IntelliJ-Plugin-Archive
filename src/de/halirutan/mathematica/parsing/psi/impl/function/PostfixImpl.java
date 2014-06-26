@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.function.Postfix;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class PostfixImpl extends OperatorNameProvider {
+public class PostfixImpl extends OperatorNameProviderImpl implements Postfix{
   public PostfixImpl(@NotNull ASTNode node) {
     super(node);
   }
