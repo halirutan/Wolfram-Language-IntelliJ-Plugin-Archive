@@ -23,13 +23,14 @@ package de.halirutan.mathematica.parsing.psi.impl.function;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.function.Derivative;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (10/11/13)
  */
-public class DerivativeImpl extends OperatorNameProvider {
+public class DerivativeImpl extends OperatorNameProviderImpl implements Derivative {
   public DerivativeImpl(@NotNull ASTNode node) {
     super(node);
   }

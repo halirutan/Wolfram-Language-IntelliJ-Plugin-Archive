@@ -25,13 +25,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class ConditionImpl extends OperatorNameProvider implements Condition {
+public class ConditionImpl extends OperatorNameProviderImpl implements Condition {
   public ConditionImpl(@NotNull ASTNode node) {
     super(node);
   }

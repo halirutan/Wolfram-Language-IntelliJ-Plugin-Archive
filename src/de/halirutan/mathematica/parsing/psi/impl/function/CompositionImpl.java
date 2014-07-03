@@ -21,13 +21,14 @@
 
 package de.halirutan.mathematica.parsing.psi.impl.function;
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.function.Composition;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by rsmenon on 3/28/14.
  */
-public class CompositionImpl extends OperatorNameProvider {
+public class CompositionImpl extends OperatorNameProviderImpl implements Composition {
     public CompositionImpl(@NotNull ASTNode node) {
         super(node);
     }

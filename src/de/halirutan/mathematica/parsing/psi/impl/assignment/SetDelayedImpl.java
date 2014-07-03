@@ -27,17 +27,13 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * @author patrick (4/14/13)
  */
-public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
+public class SetDelayedImpl extends AssignmentImpl implements SetDelayed {
   public SetDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -59,8 +55,4 @@ public class SetDelayedImpl extends OperatorNameProvider implements SetDelayed {
     }
   }
 
-  @Override
-  public Set<Symbol> getAssignedSymbols() {
-    return null;
-  }
 }

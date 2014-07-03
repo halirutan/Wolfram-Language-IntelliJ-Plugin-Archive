@@ -25,13 +25,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceAll;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class ReplaceAllImpl extends OperatorNameProvider implements ReplaceAll {
+public class ReplaceAllImpl extends OperatorNameProviderImpl implements ReplaceAll {
 
   public ReplaceAllImpl(@NotNull ASTNode node) {
     super(node);

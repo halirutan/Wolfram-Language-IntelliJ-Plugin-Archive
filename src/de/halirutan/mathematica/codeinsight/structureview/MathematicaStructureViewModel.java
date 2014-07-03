@@ -27,17 +27,22 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (6/13/14)
  */
-public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
+public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider, StructureViewModel.ExpandInfoProvider {
+  private Editor myEditor;
 
   public MathematicaStructureViewModel(@NotNull MathematicaPsiFile psiFile, @Nullable Editor editor) {
     super(psiFile, editor, new MathematicaStructureViewFileElement(psiFile));
+    myEditor = editor;
     withSorters(Sorter.ALPHA_SORTER);
   }
 
@@ -57,9 +62,33 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
     return element instanceof MathematicaPsiFile;
   }
 
+  @Override
+  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+    return false;
+  }
+
+  @Override
+  public boolean isSmartExpand() {
+    return true;
+  }
+
   @NotNull
   @Override
   public Filter[] getFilters() {
     return new Filter[0];
   }
+
+  @Override
+  public Object getCurrentEditorElement() {
+    if (myEditor == null) return null;
+    final int offset = myEditor.getCaretModel().getOffset();
+    final PsiFile file = getPsiFile();
+    final PsiElement element = file.getViewProvider().findElementAt(offset, file.getLanguage());
+    final PsiElement parent = element != null ? element.getParent() : null;
+    if (parent instanceof Symbol) {
+      return parent;
+    }
+    return null;
+  }
+
 }
