@@ -21,10 +21,13 @@
 
 package de.halirutan.mathematica.codeinsight.highlighting;
 
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
@@ -46,6 +49,7 @@ import java.util.Set;
  * string, number, operator highlighting if it is set). In this stage, all the fancy highlighting happens which means
  * <ul > <li >coloring of built-in functions</li> <li >coloring of local variables like in Module</li> <li >coloring of
  * messages</li> <li >coloring of anonymous functions</li> </ul>
+ *
  * @author patrick (5/14/13)
  */
 public class MathematicaHighlightingAnnotator extends MathematicaVisitor implements Annotator {
@@ -55,6 +59,13 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     final Annotation annotation = holder.createInfoAnnotation(element, null);
     annotation.setTextAttributes(key);
+    annotation.setNeedsUpdateOnTyping(false);
+  }
+
+  private static void setHighlightingStrict(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
+    final Annotation annotation = holder.createInfoAnnotation(element, null);
+    annotation.setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
+    annotation.setEnforcedTextAttributes(EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key));
     annotation.setNeedsUpdateOnTyping(false);
   }
 
@@ -123,7 +134,10 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitMessageName(final MessageName messageName) {
-    setHighlighting(messageName, myHolder, MathematicaSyntaxHighlighterColors.MESSAGE);
+    final ASTNode[] children = messageName.getNode().getChildren(null);
+    for (int i = 1; i < children.length; i++) {
+      setHighlightingStrict(children[i].getPsi(), myHolder, MathematicaSyntaxHighlighterColors.MESSAGE);
+    }
   }
 
 }
