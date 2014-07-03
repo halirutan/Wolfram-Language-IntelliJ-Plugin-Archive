@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.api.assignment.AddTo;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class AddToImpl extends OperatorNameProvider {
+public class AddToImpl extends OperatorNameProviderImpl implements AddTo {
   public AddToImpl(@NotNull ASTNode node) {
     super(node);
   }

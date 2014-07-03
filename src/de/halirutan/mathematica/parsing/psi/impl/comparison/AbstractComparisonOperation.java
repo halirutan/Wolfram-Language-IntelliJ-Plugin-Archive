@@ -25,13 +25,13 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (10/10/13)
  */
-abstract class AbstractComparisonOperation extends OperatorNameProvider implements ComparisonOperation {
+abstract class AbstractComparisonOperation extends OperatorNameProviderImpl implements ComparisonOperation {
 
   AbstractComparisonOperation(@NotNull ASTNode node) {
     super(node);

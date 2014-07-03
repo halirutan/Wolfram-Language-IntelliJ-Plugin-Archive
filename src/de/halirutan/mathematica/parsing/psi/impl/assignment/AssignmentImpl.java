@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,12 +19,31 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api.assignment;
+package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
-import de.halirutan.mathematica.parsing.psi.api.Expression;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (6/26/14)
  */
-public interface TimesBy extends Expression{
+public class AssignmentImpl extends ExpressionImpl implements OperatorNameProvider {
+
+  public AssignmentImpl(@NotNull final ASTNode node) {
+    super(node);
+  }
+
+  //Todo
+  @Override
+  public boolean isOperatorSign(final PsiElement operatorSignElement) {
+    return true;
+  }
+
+  @Override
+  public String getOperatorName() {
+    return this.toString();
+  }
 }

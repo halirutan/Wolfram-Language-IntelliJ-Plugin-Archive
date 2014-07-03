@@ -24,10 +24,7 @@ package de.halirutan.mathematica.parsing.psi;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.api.*;
 import de.halirutan.mathematica.parsing.psi.api.arithmetic.ArithmeticOperation;
-import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
-import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
@@ -61,6 +58,9 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     visitElement(tagSetDelayed);
+  }
+  public void visitUpSet(UpSet upSet) {
+    visitElement(upSet);
   }
 
   public void visitArithmeticOperation(ArithmeticOperation arithmeticOperation) {

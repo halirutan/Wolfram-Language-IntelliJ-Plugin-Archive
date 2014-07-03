@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.api.function.Apply;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,9 +33,9 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author patrick (5/5/13)
  */
-public class OperatorNameProvider extends ExpressionImpl {
+public class OperatorNameProviderImpl extends ExpressionImpl implements OperatorNameProvider {
 
-  public OperatorNameProvider(@NotNull ASTNode node) {
+  public OperatorNameProviderImpl(@NotNull ASTNode node) {
     super(node);
   }
 

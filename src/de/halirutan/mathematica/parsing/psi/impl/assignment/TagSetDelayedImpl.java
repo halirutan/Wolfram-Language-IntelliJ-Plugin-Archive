@@ -27,17 +27,14 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProvider;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * @author patrick (4/14/13)
  */
-public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDelayed {
+public class TagSetDelayedImpl extends OperatorNameProviderImpl implements TagSetDelayed {
   public TagSetDelayedImpl(@NotNull ASTNode node) {
     super(node);
   }
@@ -50,10 +47,6 @@ public class TagSetDelayedImpl extends OperatorNameProvider implements TagSetDel
     return processor.execute(this, state);
   }
 
-  @Override
-  public Set<Symbol> getAssignedSymbols() {
-    return null;
-  }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {

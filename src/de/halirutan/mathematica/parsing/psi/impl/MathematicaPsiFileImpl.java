@@ -59,5 +59,8 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
     return true;
   }
 
-
+  @Override
+  public boolean headMatches(final Class clazz) {
+    return clazz.isInstance(this);
+  }
 }

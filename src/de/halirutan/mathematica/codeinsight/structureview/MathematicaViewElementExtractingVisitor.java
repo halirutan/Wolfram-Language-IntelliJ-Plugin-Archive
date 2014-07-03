@@ -26,6 +26,7 @@ import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
@@ -61,25 +62,24 @@ public class MathematicaViewElementExtractingVisitor extends MathematicaVisitor 
   }
 
   public void visitCompoundExpression(CompoundExpression compoundExpression) {
-    compoundExpression.acceptChildren(this);
+    // we only want to dive in if we are in the top level
+    if (compoundExpression.getParent() instanceof MathematicaPsiFile) {
+      compoundExpression.acceptChildren(this);
+    }
   }
 
   public void visitSetDelayed(SetDelayed setDelayed) {
     cacheAssignedSymbols(setDelayed);
   }
-
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
     cacheAssignedSymbols(set);
   }
-
   public void visitTagSet(TagSet element) {
     cacheAssignedSymbols(element);
   }
-
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     cacheAssignedSymbols(tagSetDelayed);
   }
-
   public HashMap<String, List<SymbolDefinition>> getDefinedSymbols() {
     return myDefinedSymbols;
   }
