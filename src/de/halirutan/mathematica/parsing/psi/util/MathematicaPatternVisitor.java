@@ -174,6 +174,11 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   }
 
   @Override
+  public void visitSymbol(final Symbol symbol) {
+    myUnboundSymbols.add(symbol);
+  }
+
+  @Override
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     myAssignmentType = Assignment.TAG_SET_DELAYED_;
     final PsiElement firstChild = tagSetDelayed.getFirstChild();

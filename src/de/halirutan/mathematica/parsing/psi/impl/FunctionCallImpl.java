@@ -63,6 +63,10 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return true;
   }
 
+  @Override
+  public PsiElement getHead() {
+    return getFirstChild();
+  }
 
   @Override
   public void subtreeChanged() {
