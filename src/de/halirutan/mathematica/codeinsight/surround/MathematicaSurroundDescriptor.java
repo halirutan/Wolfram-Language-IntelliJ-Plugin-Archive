@@ -21,14 +21,15 @@
 
 package de.halirutan.mathematica.codeinsight.surround;
 
-import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.surroundWith.SurroundDescriptor;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.MathematicaLanguage;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (6/11/14)
@@ -45,14 +46,11 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   };
 
   @NotNull
-  @Override
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    final PsiElement elementInRange = CodeInsightUtilCore.findElementInRange(file, startOffset, endOffset, Expression.class, MathematicaLanguage.INSTANCE);
-    return new PsiElement[]{elementInRange};
+    return findElementsInRange(file, startOffset, endOffset);
   }
 
   @NotNull
-  @Override
   public Surrounder[] getSurrounders() {
     return SURROUNDERS;
   }
@@ -60,5 +58,29 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   @Override
   public boolean isExclusive() {
     return false;
+  }
+
+  private PsiElement[] findElementsInRange(PsiFile file, int startOffset, int endOffset) {
+    // adjust start/end
+    PsiElement element1 = file.findElementAt(startOffset);
+    PsiElement element2 = file.findElementAt(endOffset - 1);
+    if (element1 instanceof PsiWhiteSpace) {
+      startOffset = element1.getTextRange().getEndOffset();
+    }
+    if (element2 instanceof PsiWhiteSpace) {
+      endOffset = element2.getTextRange().getStartOffset();
+    }
+
+    final Expression expression = findElementAtStrict(file, startOffset, endOffset, Expression.class);
+    if (expression != null) return new Expression[]{ expression };
+
+    return PsiElement.EMPTY_ARRAY;
+  }
+
+  @Nullable
+  private static <T extends Expression> T findElementAtStrict(PsiFile file, int startOffset, int endOffset, Class<T> clazz) {
+    T element = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, clazz);
+    if (element == null || element.getTextRange().getEndOffset() < endOffset) return null;
+    return element;
   }
 }
