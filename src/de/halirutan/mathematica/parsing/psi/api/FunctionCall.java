@@ -34,6 +34,8 @@ public interface FunctionCall extends PsiElement {
 
   public boolean isScopingConstruct();
 
+  public PsiElement getHead();
+
   public LocalizationConstruct.ConstructType getScopingConstruct();
 
 
