@@ -61,6 +61,7 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   }
 
   private PsiElement[] findElementsInRange(PsiFile file, int startOffset, int endOffset) {
+
     // adjust start/end
     PsiElement element1 = file.findElementAt(startOffset);
     PsiElement element2 = file.findElementAt(endOffset - 1);
@@ -71,16 +72,23 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
       endOffset = element2.getTextRange().getStartOffset();
     }
 
-    final Expression expression = findElementAtStrict(file, startOffset, endOffset, Expression.class);
-    if (expression != null) return new Expression[]{ expression };
+    final Expression expression = findElementAtStrict(file, startOffset, endOffset);
+    if (expression != null) return new Expression[]{expression};
 
     return PsiElement.EMPTY_ARRAY;
   }
 
   @Nullable
-  private static <T extends Expression> T findElementAtStrict(PsiFile file, int startOffset, int endOffset, Class<T> clazz) {
-    T element = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, clazz);
-    if (element == null || element.getTextRange().getEndOffset() < endOffset) return null;
-    return element;
+  private static Expression findElementAtStrict(PsiFile file, int startOffset, int endOffset) {
+    Expression element = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, Expression.class);
+    if (element == null) return null;
+    PsiElement result = element;
+    while (result.getTextRange().getEndOffset() < endOffset) {
+      result = result.getParent();
+    }
+    if (result instanceof Expression) {
+      return (Expression) result;
+    }
+    return null;
   }
 }
