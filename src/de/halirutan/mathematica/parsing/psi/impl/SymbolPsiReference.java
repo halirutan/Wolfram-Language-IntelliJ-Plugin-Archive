@@ -82,19 +82,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       myVariable.setReferringElement((Symbol) globalDefinition, LocalizationConstruct.ConstructType.NULL, null);
       return globalDefinition;
     }
-
-
-//    final PsiElement[] globalDefinitions = PsiTreeUtil.collectElements(myVariable.getContainingFile(), new UnreferencedSymbolFilter());
-//
-//    for (PsiElement globalDefinition : globalDefinitions) {
-//      if (globalDefinition instanceof Symbol &&
-//          myVariable.getSymbolName().equals(((Symbol) globalDefinition).getSymbolName())) {
-//        final Symbol possibleDefinition = (Symbol) globalDefinition;
-//        myVariable.setReferringElement(possibleDefinition, LocalizationConstruct.ConstructType.NULL, null);
-//        return possibleDefinition;
-//      }
-
-
     return null;
   }
 
