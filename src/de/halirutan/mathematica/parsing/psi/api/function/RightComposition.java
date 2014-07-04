@@ -26,5 +26,5 @@ import de.halirutan.mathematica.parsing.psi.api.Expression;
 /**
  * @author patrick (6/26/14)
  */
-public interface RightComposition extends Expression{
+public interface RightComposition extends Expression {
 }

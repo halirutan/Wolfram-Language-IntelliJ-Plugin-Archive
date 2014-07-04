@@ -26,6 +26,23 @@ import java.util.List;
  * @author patrick (11/11/13)
  */
 public class ShowFormattingBlocks extends AnAction {
+  private static String printBlock(AbstractBlock block, String text) {
+    String result = "";
+    final TextRange range = block.getTextRange();
+    result += block.getNode() + "(" + text.substring(range.getStartOffset(), Math.min(range.getStartOffset() + 3, range.getEndOffset())) +
+        "..." + text.substring(Math.max(range.getEndOffset() - 3, range.getStartOffset()), range.getEndOffset()) + range +
+        ")" + printIndent(block.getIndent()) + " " + block.getAlignment() + "\n";
+    final List<Block> subBlocks = block.getSubBlocks();
+    for (Block subBlock : subBlocks) {
+      result += printBlock((AbstractMathematicaBlock) subBlock, text);
+    }
+    return result;
+  }
+
+  private static String printIndent(Indent indent) {
+    return indent.toString();
+  }
+
   public void actionPerformed(AnActionEvent event) {
     Editor editor = event.getData(PlatformDataKeys.EDITOR);
     Project project = event.getData(PlatformDataKeys.PROJECT);
@@ -45,22 +62,5 @@ public class ShowFormattingBlocks extends AnAction {
     final JScrollPane pane = new JScrollPane(textArea);
     dialogBuilder.setCenterPanel(pane);
     dialogBuilder.show();
-  }
-
-  private static String printBlock(AbstractBlock block, String text) {
-    String result = "";
-    final TextRange range = block.getTextRange();
-    result += block.getNode() + "(" + text.substring(range.getStartOffset(), Math.min(range.getStartOffset() + 3, range.getEndOffset())) +
-        "..." + text.substring(Math.max(range.getEndOffset() - 3, range.getStartOffset()), range.getEndOffset()) + range +
-        ")" + printIndent(block.getIndent()) + " " + block.getAlignment() + "\n";
-    final List<Block> subBlocks = block.getSubBlocks();
-    for (Block subBlock : subBlocks) {
-      result += printBlock((AbstractMathematicaBlock) subBlock, text);
-    }
-    return result;
-  }
-
-  private static String printIndent(Indent indent) {
-    return indent.toString();
   }
 }

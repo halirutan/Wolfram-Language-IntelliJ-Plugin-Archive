@@ -34,8 +34,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaDefinedSymbolsProcessor;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaTopLevelFunctionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -66,7 +64,7 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
       final PsiFile containingFile = parameters.getOriginalFile();
       List<Symbol> variants = Lists.newArrayList();
 
-      MathematicaTopLevelFunctionVisitor visitor = new MathematicaTopLevelFunctionVisitor();
+      GlobalDefinitionCompletionProvider visitor = new GlobalDefinitionCompletionProvider();
       containingFile.accept(visitor);
       for (String name : visitor.getFunctionsNames()) {
         if (!NAMES.contains(name)) {
@@ -75,7 +73,7 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
       }
 
 
-      final MathematicaDefinedSymbolsProcessor processor = new MathematicaDefinedSymbolsProcessor(callingSymbol);
+      final LocalDefinitionCompletionProvider processor = new LocalDefinitionCompletionProvider(callingSymbol);
       PsiTreeUtil.treeWalkUp(processor, callingSymbol, containingFile, ResolveState.initial());
 
       variants.addAll(processor.getSymbols());

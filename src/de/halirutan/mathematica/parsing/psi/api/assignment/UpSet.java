@@ -26,5 +26,5 @@ import de.halirutan.mathematica.parsing.psi.api.Expression;
 /**
  * @author patrick (4/14/13)
  */
-public interface UpSet extends Expression{
+public interface UpSet extends Expression {
 }

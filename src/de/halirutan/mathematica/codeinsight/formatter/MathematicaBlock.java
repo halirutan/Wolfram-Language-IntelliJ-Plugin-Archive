@@ -34,7 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.LINE_BREAK;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.WHITE_SPACE;
 
 /**
  * @author patrick (10/20/13)

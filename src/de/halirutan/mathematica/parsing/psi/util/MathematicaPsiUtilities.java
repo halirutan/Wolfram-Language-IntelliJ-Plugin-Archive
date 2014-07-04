@@ -23,7 +23,6 @@ package de.halirutan.mathematica.parsing.psi.util;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -50,7 +49,8 @@ public class MathematicaPsiUtilities {
    * <code>a = 2</code> returns a. Note that vector assignments like <code>{a,{b,c}} = {1,{2,3}}</code> return a list of
    * variables.
    *
-   * @param element PsiElement of the assignment
+   * @param element
+   *     PsiElement of the assignment
    * @return List of symbols which are assigned.
    */
   @Nullable
@@ -142,7 +142,8 @@ public class MathematicaPsiUtilities {
    * would be extracted successfully: <ul > <li ><code>{a,b,c,d}</code></li> <li ><code>{{a,b},c,d}</code></li> <li
    * ><code>{{a},b,{c},d}</code></li> </ul>
    *
-   * @param listHead List to extract from
+   * @param listHead
+   *     List to extract from
    * @return List of extracted {@link Symbol} PsiElement's.
    */
   @NotNull
@@ -171,7 +172,8 @@ public class MathematicaPsiUtilities {
    * arg1+arg2]</code> extracts <code>arg1,arg2</code></li> <li><code>Function[#+#]</code> extracts nothing</li>
    * <li><code>Function[Null, #+#, {Listable}]</code> extracts nothing</li> </ul>
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The set of localized function arguments
    */
   public static List<Symbol> getLocalFunctionVariables(@NotNull FunctionCall element) {
@@ -212,7 +214,8 @@ public class MathematicaPsiUtilities {
    * <li><code>Module[{arg}, arg^2]</code> extracts <code>arg</code></li> <li><code>With[{a=1,b=2}, a*b]</code> extracts
    * <code>a,b</code></li> </ul>
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The set of localized function arguments
    */
   public static List<Symbol> getLocalModuleLikeVariables(@NotNull FunctionCall element) {
@@ -244,7 +247,8 @@ public class MathematicaPsiUtilities {
    * <li><code>Table[i,{i,10}]</code> extracts <code>i</code></li> <li><code>NSum[a+b,{a,0,10},{b,0,10}]</code> extracts
    * <code>a,b</code></li> </ul>
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The set of localized function arguments
    */
   public static List<Symbol> getLocalTableLikeVariables(FunctionCall element) {
@@ -274,7 +278,8 @@ public class MathematicaPsiUtilities {
    * definition of a <code>Manipulate</code> variable and I'm not sure whether this works in all circumstance. What I
    * haven't implemented is the usage of <code>Control[...]</code> objects.
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The set of localized function arguments for this <code>Manipulate</code>
    */
   public static List<Symbol> getLocalManipulateLikeVariables(FunctionCall element) {
@@ -307,7 +312,8 @@ public class MathematicaPsiUtilities {
   /**
    * This extracts the local defined arguments of a <code>Compile</code>.
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The set of localized function arguments for this <code>Compile</code>
    */
   public static List<Symbol> getLocalCompileLikeVariables(FunctionCall element) {
@@ -346,7 +352,8 @@ public class MathematicaPsiUtilities {
    * This extracts the local defined argument for a <code>Limit[Sin[x]/x, x-> 0]</code> call. Note that the returned
    * list has always only one element since <code>Limit</code> always uses only one variable.
    *
-   * @param element The {@link PsiElement} of the function call
+   * @param element
+   *     The {@link PsiElement} of the function call
    * @return The localized argument
    */
   public static List<Symbol> getLocalLimitVariables(FunctionCall element) {
@@ -390,41 +397,24 @@ public class MathematicaPsiUtilities {
    * Takes the complete {@link PsiElement} of a function-call like <code>f[x,y,z]</code> or <code>Plot[x,{x,0,1}]</code>
    * and skips over function-head, whitespaces and commas to give you only the arguments.
    *
-   * @param func {@link FunctionCall} element from which you want the arguments
+   * @param func
+   *     {@link FunctionCall} element from which you want the arguments
    * @return List of arguments
    */
   @NotNull
   public static List<PsiElement> getArguments(@Nullable PsiElement func) {
     List<PsiElement> allArguments = Lists.newLinkedList();
-
     if (!(func instanceof FunctionCall)) {
       return allArguments;
     }
-
-    PsiElement head = func.getFirstChild();
-    if (head == null) {
-      return allArguments;
-    }
-
-    PsiElement bracket = head.getNextSibling();
-    if (bracket == null || !bracket.getNode().getElementType().equals(MathematicaElementTypes.LEFT_BRACKET)) {
-      return allArguments;
-    }
-
     boolean skipHead = true;
     for (PsiElement child : func.getChildren()) {
-      final IElementType type = child.getNode().getElementType();
-      if (MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(type) || type.equals(MathematicaElementTypes.COMMA)) {
-        continue;
-      }
       if (skipHead) {
         skipHead = false;
         continue;
       }
-
       allArguments.add(child);
     }
-
     return allArguments;
   }
 

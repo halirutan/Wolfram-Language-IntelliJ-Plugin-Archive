@@ -98,14 +98,14 @@ public class SymbolInformationProvider {
 
   public static class SymbolInformation {
     public final String name;
-    public String context = "System";
-    public String nameWithoutContext;
     public final int importance;
     public final String shortName;
     public final String callPattern;
     public final boolean function;
     public final String attributes[];
     public final String options[];
+    public String context = "System";
+    public String nameWithoutContext;
 
     public SymbolInformation(String name, String shortName, int importance, String callPattern, boolean function, String[] attributes, String[] options) {
       this.name = name;

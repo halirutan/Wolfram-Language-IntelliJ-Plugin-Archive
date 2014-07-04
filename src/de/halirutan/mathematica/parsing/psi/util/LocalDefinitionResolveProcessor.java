@@ -69,14 +69,14 @@ import java.util.List;
  *
  * @author patrick (5/22/13)
  */
-public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
+public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
 
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
   private LocalizationConstruct.ConstructType myLocalization;
   private PsiElement myLocalizationSymbol = null;
 
-  public MathematicaLocalizedSymbolProcessor(Symbol startElement) {
+  public LocalDefinitionResolveProcessor(Symbol startElement) {
     this.myStartElement = startElement;
     this.myReferringSymbol = null;
     this.myLocalization = LocalizationConstruct.ConstructType.NULL;
@@ -93,8 +93,10 @@ public class MathematicaLocalizedSymbolProcessor extends BaseScopeProcessor {
    * <p/>
    * Finally, <code >RuleDelayed</code> constructs are checked.
    *
-   * @param element Element to check for defining the {@link #myStartElement}.
-   * @param state   State of the resolving.
+   * @param element
+   *     Element to check for defining the {@link #myStartElement}.
+   * @param state
+   *     State of the resolving.
    * @return <code >false</code> if the search can be stopped, <code >true</code> otherwise
    */
   @Override

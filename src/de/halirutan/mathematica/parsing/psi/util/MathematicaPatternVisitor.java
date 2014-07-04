@@ -43,8 +43,6 @@ import java.util.Set;
  */
 public class MathematicaPatternVisitor extends MathematicaVisitor {
 
-  public enum Assignment {SET_, SET_DELAYED_, TAG_SET_, TAG_SET_DELAYED_, NONE_}
-
   private final Set<Symbol> myPatternSymbols = Sets.newHashSet();
   private final LinkedHashSet<Symbol> myUnboundSymbols = Sets.newLinkedHashSet();
   private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
@@ -210,5 +208,7 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   public void visitElement(PsiElement element) {
     element.acceptChildren(this);
   }
+
+  public enum Assignment {SET_, SET_DELAYED_, TAG_SET_, TAG_SET_DELAYED_, NONE_}
 }
 

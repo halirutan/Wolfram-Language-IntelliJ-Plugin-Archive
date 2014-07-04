@@ -21,7 +21,8 @@
 
 package de.halirutan.mathematica.codeinsight.completion;
 
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionInitializationContext;
 import org.jetbrains.annotations.NotNull;
 
 /**

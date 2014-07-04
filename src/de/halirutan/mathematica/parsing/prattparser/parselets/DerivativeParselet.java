@@ -25,7 +25,8 @@ import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.DERIVATIVE;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.DERIVATIVE_EXPRESSION;
 
 /**
  * Parselet for derivative expression like f''[x] or g' I expect the left operand to be a symbol. Don't know whether

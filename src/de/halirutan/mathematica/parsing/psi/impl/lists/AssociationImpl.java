@@ -20,6 +20,7 @@
  */
 
 package de.halirutan.mathematica.parsing.psi.impl.lists;
+
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.lists.Association;
 import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * Created by rsmenon on 3/28/14.
  */
 public class AssociationImpl extends ExpressionImpl implements Association {
-    public AssociationImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public AssociationImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }

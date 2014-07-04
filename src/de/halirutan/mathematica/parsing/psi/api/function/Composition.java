@@ -26,5 +26,5 @@ import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
 /**
  * @author patrick (6/26/14)
  */
-public interface Composition extends OperatorNameProvider{
+public interface Composition extends OperatorNameProvider {
 }

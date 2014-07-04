@@ -49,11 +49,11 @@ import java.util.HashSet;
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
+  private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
   private boolean myIsUpToDate;
   private LocalizationConstruct.ConstructType myLocalization;
   private Symbol myDefinitionElement;
   private PsiElement myLocalizationElement;
-  private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
 
   public SymbolImpl(@NotNull ASTNode node) {
     super(node);

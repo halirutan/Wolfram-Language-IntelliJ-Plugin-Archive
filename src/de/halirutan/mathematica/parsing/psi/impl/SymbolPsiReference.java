@@ -30,9 +30,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionResolveProcessor;
+import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaGlobalSymbolProcessor;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaLocalizedSymbolProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,7 +65,8 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       }
 
     }
-    MathematicaLocalizedSymbolProcessor processor = new MathematicaLocalizedSymbolProcessor(myVariable);
+
+    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(myVariable);
     PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
     final PsiElement referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol instanceof Symbol) {
@@ -73,7 +74,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       return referringSymbol;
     }
 
-    MathematicaGlobalSymbolProcessor globalProcessor = new MathematicaGlobalSymbolProcessor(myVariable);
+    GlobalDefinitionResolveProcessor globalProcessor = new GlobalDefinitionResolveProcessor(myVariable);
     PsiTreeUtil.processElements(myVariable.getContainingFile(), globalProcessor);
 
 

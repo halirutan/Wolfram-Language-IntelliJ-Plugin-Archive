@@ -38,10 +38,6 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  * @author patrick (11/16/13)
  */
 public class MathematicaListBlock extends AbstractMathematicaBlock {
-  private enum ChildState {
-    BEFORE_BRACE, IN_BODY, AFTER_BODY
-  }
-
   public MathematicaListBlock(@NotNull ASTNode node,
                               @Nullable Alignment alignment,
                               SpacingBuilder spacingBuilder,
@@ -98,6 +94,10 @@ public class MathematicaListBlock extends AbstractMathematicaBlock {
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
     return new ChildAttributes(Indent.getNormalIndent(false), null);
+  }
+
+  private enum ChildState {
+    BEFORE_BRACE, IN_BODY, AFTER_BODY
   }
 
 }

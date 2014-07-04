@@ -47,12 +47,12 @@ import java.io.IOException;
  */
 public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
+  private final ProjectType myProjectType;
   /**
    * Additions by rsmenon (5/6/13) Will need some more reworking to implement checkboxes for Test/Documentation.
    */
 
   private String myProjectName;
-  private final ProjectType myProjectType;
 
   public MathematicaModuleBuilder(ProjectType type) {
     myProjectType = type;
@@ -122,6 +122,26 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
   @Override
   public ModuleWizardStep modifySettingsStep(@NotNull final SettingsStep settingsStep) {
     return new MathematicaModifiedSettingsStep(this, settingsStep);
+  }
+
+  @Override
+  public Icon getBigIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
+
+  @Override
+  public Icon getNodeIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
+
+  @Override
+  public String getGroupName() {
+    return MathematicaProjectTemplatesFactory.MATHEMATICA;
+  }
+
+  @Override
+  public ModuleType getModuleType() {
+    return MathematicaModuleType.getInstance();
   }
 
   public static class Basic extends MathematicaModuleBuilder {
@@ -212,25 +232,5 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
-  }
-
-  @Override
-  public Icon getBigIcon() {
-    return MathematicaIcons.FILE_ICON;
-  }
-
-  @Override
-  public Icon getNodeIcon() {
-    return MathematicaIcons.FILE_ICON;
-  }
-
-  @Override
-  public String getGroupName() {
-    return MathematicaProjectTemplatesFactory.MATHEMATICA;
-  }
-
-  @Override
-  public ModuleType getModuleType() {
-    return MathematicaModuleType.getInstance();
   }
 }

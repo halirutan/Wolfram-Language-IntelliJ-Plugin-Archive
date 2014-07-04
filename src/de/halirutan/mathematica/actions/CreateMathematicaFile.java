@@ -45,6 +45,34 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
     super(NEW_M_FILE, "Creates a new .m Mathematica package file", MathematicaIcons.FILE_ICON);
   }
 
+  /**
+   * This is stolen from here {@link http://stackoverflow.com/a/990492/1078614}
+   *
+   * @param s
+   *     filename with possible extension
+   * @return filename without extension
+   */
+  public static String removeExtension(String s) {
+
+    String separator = File.separator;
+    String filename;
+
+    // Remove the path up to the filename.
+    int lastSeparatorIndex = s.lastIndexOf(separator);
+    if (lastSeparatorIndex == -1) {
+      filename = s;
+    } else {
+      filename = s.substring(lastSeparatorIndex + 1);
+    }
+
+    // Remove the extension.
+    int extensionIndex = filename.lastIndexOf(".");
+    if (extensionIndex == -1)
+      return filename;
+
+    return filename.substring(0, extensionIndex);
+  }
+
   @Override
   protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
     builder.setTitle(NEW_M_FILE).addKind("Notebook", MathematicaIcons.FILE_ICON, "Notebook");
@@ -73,33 +101,6 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
     final FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
     String fileName = removeExtension(name);
     return createFileFromTemplate(fileName, template, dir);
-  }
-
-  /**
-   * This is stolen from here {@link http://stackoverflow.com/a/990492/1078614}
-   *
-   * @param s filename with possible extension
-   * @return filename without extension
-   */
-  public static String removeExtension(String s) {
-
-    String separator = File.separator;
-    String filename;
-
-    // Remove the path up to the filename.
-    int lastSeparatorIndex = s.lastIndexOf(separator);
-    if (lastSeparatorIndex == -1) {
-      filename = s;
-    } else {
-      filename = s.substring(lastSeparatorIndex + 1);
-    }
-
-    // Remove the extension.
-    int extensionIndex = filename.lastIndexOf(".");
-    if (extensionIndex == -1)
-      return filename;
-
-    return filename.substring(0, extensionIndex);
   }
 
 }

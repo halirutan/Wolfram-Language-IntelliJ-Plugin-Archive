@@ -35,16 +35,16 @@ public class SymbolParselet implements PrefixParselet {
 
   private final int myPrecedence;
 
+  public SymbolParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
+
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
     PsiBuilder.Marker symbolMark = parser.mark();
     parser.advanceLexer();
     symbolMark.done(MathematicaElementTypes.SYMBOL_EXPRESSION);
     return MathematicaParser.result(symbolMark, MathematicaElementTypes.SYMBOL_EXPRESSION, true);
-  }
-
-  public SymbolParselet(int precedence) {
-    this.myPrecedence = precedence;
   }
 
   public int getPrecedence() {

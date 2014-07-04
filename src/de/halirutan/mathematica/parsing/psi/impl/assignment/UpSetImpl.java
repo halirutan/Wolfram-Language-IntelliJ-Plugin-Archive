@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/14/13)
  */
-public class UpSetImpl extends OperatorNameProviderImpl implements UpSet{
+public class UpSetImpl extends OperatorNameProviderImpl implements UpSet {
   public UpSetImpl(@NotNull ASTNode node) {
     super(node);
   }

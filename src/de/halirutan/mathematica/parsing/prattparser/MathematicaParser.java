@@ -63,9 +63,12 @@ public class MathematicaParser implements PsiParser {
    * Since IDEA uses markers to mark the sequential code into a tree-structure I use this {@link Result} which contains
    * additionally the {@link IElementType} of the last expression and whether the previous expression was parsed.
    *
-   * @param mark    The builder mark which was created and closed during the current parse
-   * @param token   The token type of the expression which was parsed, e.g. FUNCTION_CALL_EXPRESSION
-   * @param parsedQ Whether the parsing of the expression was successful
+   * @param mark
+   *     The builder mark which was created and closed during the current parse
+   * @param token
+   *     The token type of the expression which was parsed, e.g. FUNCTION_CALL_EXPRESSION
+   * @param parsedQ
+   *     Whether the parsing of the expression was successful
    * @return The Result object with the given parsing information.
    */
   public static Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
@@ -87,8 +90,10 @@ public class MathematicaParser implements PsiParser {
   /**
    * This is the main entry point for the parsing a file. Every tme
    *
-   * @param root    The root node of the AST
-   * @param builder Through this, the AST is built up by placing markers.
+   * @param root
+   *     The root node of the AST
+   * @param builder
+   *     Through this, the AST is built up by placing markers.
    * @return The parsed AST
    */
   @NotNull
@@ -215,7 +220,8 @@ public class MathematicaParser implements PsiParser {
   /**
    * Wrapper for {@link PsiBuilder#error(String)}
    *
-   * @param s Error message
+   * @param s
+   *     Error message
    */
   public void error(String s) {
     myBuilder.error(s);

@@ -34,6 +34,10 @@ public class AtomParselet implements PrefixParselet {
 
   private final int myPrecedence;
 
+  public AtomParselet(int precedence) {
+    this.myPrecedence = precedence;
+  }
+
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
     IElementType token = parser.getTokenType();
@@ -41,10 +45,6 @@ public class AtomParselet implements PrefixParselet {
     parser.advanceLexer();
     symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
     return MathematicaParser.result(symbolMark, token, true);
-  }
-
-  public AtomParselet(int precedence) {
-    this.myPrecedence = precedence;
   }
 
   public int getPrecedence() {

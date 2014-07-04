@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
@@ -31,37 +32,37 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  */
 public class AssociationParselet implements PrefixParselet {
 
-    private final int myPrecedence;
+  private final int myPrecedence;
 
-    public AssociationParselet(int precedence) {
-        myPrecedence = precedence;
+  public AssociationParselet(int precedence) {
+    myPrecedence = precedence;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker listMarker = parser.mark();
+    boolean result = true;
+
+    if (parser.matchesToken(LEFT_ASSOCIATION)) {
+      parser.advanceLexer();
+    } else {
+      listMarker.drop();
+      throw new CriticalParserError("Association parselet does not start with <|");
     }
 
-    @Override
-    public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-        PsiBuilder.Marker listMarker = parser.mark();
-        boolean result = true;
+    MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_ASSOCIATION);
 
-        if (parser.matchesToken(LEFT_ASSOCIATION)) {
-            parser.advanceLexer();
-        } else {
-            listMarker.drop();
-            throw new CriticalParserError("Association parselet does not start with <|");
-        }
-
-        MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_ASSOCIATION);
-
-        if (parser.matchesToken(RIGHT_ASSOCIATION)) {
-            parser.advanceLexer();
-        } else {
-            parser.error("Closing '}' expected");
-            result = false;
-        }
-        listMarker.done(ASSOCIATION_EXPRESSION);
-        return MathematicaParser.result(listMarker, ASSOCIATION_EXPRESSION, result && seqResult.isMyParsed());
+    if (parser.matchesToken(RIGHT_ASSOCIATION)) {
+      parser.advanceLexer();
+    } else {
+      parser.error("Closing '}' expected");
+      result = false;
     }
+    listMarker.done(ASSOCIATION_EXPRESSION);
+    return MathematicaParser.result(listMarker, ASSOCIATION_EXPRESSION, result && seqResult.isMyParsed());
+  }
 
-    public int getPrecedence() {
-        return myPrecedence;
-    }
+  public int getPrecedence() {
+    return myPrecedence;
+  }
 }
