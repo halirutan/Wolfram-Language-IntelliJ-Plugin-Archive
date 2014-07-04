@@ -74,9 +74,10 @@ public interface Symbol extends PsiNameIdentifierOwner {
   /**
    * Caches the resolved referring symbol for later use.
    *
-   * @param referringSymbol Element which is the defining element for the variable. E.g. in a situation like
-   *                        <code>Module[{x=3}, x+x]</code> the <code>x</code> in the braces is the definition for both
-   *                        <code>x</code> in the <code>Module</code> body.
+   * @param referringSymbol
+   *     Element which is the defining element for the variable. E.g. in a situation like <code>Module[{x=3},
+   *     x+x]</code> the <code>x</code> in the braces is the definition for both <code>x</code> in the
+   *     <code>Module</code> body.
    */
   void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement);
 

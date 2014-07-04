@@ -83,7 +83,8 @@ public class MathematicaIndentProcessor {
   /**
    * Checks whether an ASTNode is in the function head.
    *
-   * @param node the node to check
+   * @param node
+   *     the node to check
    * @return true if node is in the function head or the opening bracket
    */
   private static boolean isInFunctionHead(ASTNode node) {
@@ -105,7 +106,8 @@ public class MathematicaIndentProcessor {
   /**
    * Checks whether an ASTNode is part of the function body, meaning one of the arguments of a function call or a comma
    *
-   * @param node the node to check
+   * @param node
+   *     the node to check
    * @return true if the node is between the opening and closing bracket of <code >func[....]</code>
    */
   private static boolean isInFunctionBody(ASTNode node) {

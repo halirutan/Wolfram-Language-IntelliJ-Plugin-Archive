@@ -20,6 +20,7 @@
  */
 
 package de.halirutan.mathematica.parsing.psi.api.lists;
+
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 
 /**

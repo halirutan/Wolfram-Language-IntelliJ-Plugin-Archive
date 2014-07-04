@@ -42,8 +42,10 @@ public final class ParserUtil {
    * Note that we do not accept {1,2,,,3} which would be valid Mathematica syntax but is not used in real applications.
    * Therefore, we will give an error instead because the user most probably did a mistake.
    *
-   * @param parser   Parser which provides the token-stream, the builder, etc
-   * @param rightDel Token where we will stop the sequence parsing
+   * @param parser
+   *     Parser which provides the token-stream, the builder, etc
+   * @param rightDel
+   *     Token where we will stop the sequence parsing
    * @return The parsing result which is true iff all sub-expressions were successfully parsed.
    * @throws CriticalParserError
    */

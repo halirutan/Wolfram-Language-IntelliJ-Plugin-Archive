@@ -41,7 +41,8 @@ public class StringParselet implements PrefixParselet {
   /**
    * Tries to parse a string consisting of beginning ", string content and final ".
    *
-   * @param parser The main parser object.
+   * @param parser
+   *     The main parser object.
    * @return Information about the success of the parsing.
    */
   @Override

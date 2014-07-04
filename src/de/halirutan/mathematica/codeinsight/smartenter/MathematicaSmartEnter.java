@@ -71,6 +71,11 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     return findNextElement(editor, psiFile);
   }
 
+  @Override
+  public boolean doNotStepInto(PsiElement element) {
+    return true;
+  }
+
   private class FunctionCallEnterProcessor extends FixEnterProcessor {
     @Override
     public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
@@ -88,10 +93,5 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
         return true;
       }
     }
-  }
-
-  @Override
-  public boolean doNotStepInto(PsiElement element) {
-    return true;
   }
 }

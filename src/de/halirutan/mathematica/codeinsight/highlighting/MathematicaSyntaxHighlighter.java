@@ -40,8 +40,8 @@ import java.util.Map;
  */
 public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
 
-  private final MathematicaLexer myLexer;
   private static final Map<IElementType, TextAttributesKey> colors = new HashMap<IElementType, TextAttributesKey>();
+  private final MathematicaLexer myLexer;
 
   public MathematicaSyntaxHighlighter() {
     myLexer = new MathematicaLexer();

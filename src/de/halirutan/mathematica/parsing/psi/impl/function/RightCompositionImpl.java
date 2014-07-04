@@ -20,6 +20,7 @@
  */
 
 package de.halirutan.mathematica.parsing.psi.impl.function;
+
 import com.intellij.lang.ASTNode;
 import de.halirutan.mathematica.parsing.psi.api.function.RightComposition;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
@@ -29,8 +30,8 @@ import org.jetbrains.annotations.NotNull;
  * Created by rsmenon on 3/28/14.
  */
 public class RightCompositionImpl extends OperatorNameProviderImpl implements RightComposition {
-    public RightCompositionImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public RightCompositionImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 }
 

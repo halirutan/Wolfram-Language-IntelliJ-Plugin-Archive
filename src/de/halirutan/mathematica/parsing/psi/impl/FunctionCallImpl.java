@@ -69,6 +69,27 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   }
 
   @Override
+  public boolean matchesHead(final String head) {
+    PsiElement myHead = getHead();
+    if (myHead != null) {
+      return myHead.getText().matches(head);
+    }
+    return false;
+  }
+
+  @Override
+  public PsiElement getArgument(int n) {
+    for (PsiElement child : getChildren()) {
+      if (n > 0) {
+        n--;
+        continue;
+      }
+      return child;
+    }
+    return null;
+  }
+
+  @Override
   public void subtreeChanged() {
     super.subtreeChanged();
     myIsUpToDate = false;

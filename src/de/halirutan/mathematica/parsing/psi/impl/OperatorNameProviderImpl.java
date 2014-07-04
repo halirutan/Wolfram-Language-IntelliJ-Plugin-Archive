@@ -48,7 +48,8 @@ public class OperatorNameProviderImpl extends ExpressionImpl implements Operator
    * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of List and
    * the function returns false.
    *
-   * @param operatorSignElement Operator sign to check
+   * @param operatorSignElement
+   *     Operator sign to check
    * @return true if operatorSignElement is the operator sign of this expression
    */
   public boolean isOperatorSign(PsiElement operatorSignElement) {

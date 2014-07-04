@@ -47,69 +47,6 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
 
   private static final String GENERAL_EXAMPLE = readFromFile("spacingExample.m");
 
-  @NotNull
-  @Override
-  public Language getLanguage() {
-    return MathematicaLanguage.INSTANCE;
-  }
-
-  @Override
-  public String getCodeSample(@NotNull SettingsType settingsType) {
-    if (settingsType == SettingsType.SPACING_SETTINGS) return GENERAL_EXAMPLE;
-    if (settingsType == SettingsType.BLANK_LINES_SETTINGS) return readFromFile("blankLinesExample.m");
-    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return readFromFile("spacingExample.m");
-
-    return GENERAL_EXAMPLE;
-  }
-
-
-  @Override
-  public IndentOptionsEditor getIndentOptionsEditor() {
-    return new SmartIndentOptionsEditor();
-  }
-
-  @Override
-  public CommonCodeStyleSettings getDefaultCommonSettings() {
-    CommonCodeStyleSettings defaultSettings = new CommonCodeStyleSettings(getLanguage());
-    CommonCodeStyleSettings.IndentOptions indentOptions = defaultSettings.initIndentOptions();
-    indentOptions.INDENT_SIZE = 2;
-    indentOptions.CONTINUATION_INDENT_SIZE = 4;
-    indentOptions.TAB_SIZE = 2;
-    indentOptions.USE_TAB_CHARACTER = false;
-
-    return defaultSettings;
-  }
-
-  @Nullable
-  @Override
-  public PsiFile createFileFromText(Project project, String text) {
-    return super.createFileFromText(project, text);
-  }
-
-
-  //    final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(
-//        "sample.m", MathematicaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false
-//    );
-//    return file;
-//  }
-
-  @Override
-  public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
-    if (settingsType == SettingsType.SPACING_SETTINGS) {
-      consumer.showStandardOptions(
-          "SPACE_AFTER_COMMA"
-      );
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_OPERATIONS", "Assignment (=, :=)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ARITHMETIC_OPERATIONS", "Arithmetic (+, -)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RELATION_OPERATIONS", "Relation (==, =!=)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RULE_OPERATIONS", "Rules (/., ->)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_FUNCTIONAL_OPERATIONS", "Functional (/@, @@)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_OTHER_OPERATIONS", "Other (~~, /;)", AROUND_OPERATORS);
-    } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
-      consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
-    }
-  }
-
   public static String readFromFile(@NonNls final String fileName) {
     try {
       final InputStream stream = MathematicaLanguageCodeStyleSettingsProvider.class.getResourceAsStream(fileName);
@@ -130,6 +67,68 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
       return result.toString();
     } catch (IOException e) {
       return "";
+    }
+  }
+
+  @NotNull
+  @Override
+  public Language getLanguage() {
+    return MathematicaLanguage.INSTANCE;
+  }
+
+  @Override
+  public String getCodeSample(@NotNull SettingsType settingsType) {
+    if (settingsType == SettingsType.SPACING_SETTINGS) return GENERAL_EXAMPLE;
+    if (settingsType == SettingsType.BLANK_LINES_SETTINGS) return readFromFile("blankLinesExample.m");
+    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return readFromFile("spacingExample.m");
+
+    return GENERAL_EXAMPLE;
+  }
+
+  @Override
+  public IndentOptionsEditor getIndentOptionsEditor() {
+    return new SmartIndentOptionsEditor();
+  }
+
+  @Override
+  public CommonCodeStyleSettings getDefaultCommonSettings() {
+    CommonCodeStyleSettings defaultSettings = new CommonCodeStyleSettings(getLanguage());
+    CommonCodeStyleSettings.IndentOptions indentOptions = defaultSettings.initIndentOptions();
+    indentOptions.INDENT_SIZE = 2;
+    indentOptions.CONTINUATION_INDENT_SIZE = 4;
+    indentOptions.TAB_SIZE = 2;
+    indentOptions.USE_TAB_CHARACTER = false;
+
+    return defaultSettings;
+  }
+
+
+  //    final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(
+//        "sample.m", MathematicaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false
+//    );
+//    return file;
+//  }
+
+  @Nullable
+  @Override
+  public PsiFile createFileFromText(Project project, String text) {
+    return super.createFileFromText(project, text);
+  }
+
+  @Override
+  public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
+    if (settingsType == SettingsType.SPACING_SETTINGS) {
+      consumer.showStandardOptions(
+          "SPACE_AFTER_COMMA"
+      );
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_OPERATIONS", "Assignment (=, :=)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ARITHMETIC_OPERATIONS", "Arithmetic (+, -)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RELATION_OPERATIONS", "Relation (==, =!=)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RULE_OPERATIONS", "Rules (/., ->)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_FUNCTIONAL_OPERATIONS", "Functional (/@, @@)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_OTHER_OPERATIONS", "Other (~~, /;)", AROUND_OPERATORS);
+    } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
+      consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
     }
   }
 

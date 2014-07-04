@@ -19,9 +19,8 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.util;
+package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
@@ -29,20 +28,21 @@ import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Group;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
+import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * @author patrick (7/3/14)
  */
-public class UnboundSymbolExtractingVisitor extends MathematicaVisitor {
-
-
+public class SetDefinitionSymbolVisitor extends MathematicaVisitor {
   private final LinkedHashSet<Symbol> myUnboundSymbols = Sets.newLinkedHashSet();
-  private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
-  private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
+  private final PsiElement myStartElement;
+
+  public SetDefinitionSymbolVisitor(final PsiElement startElement) {
+    this.myStartElement = startElement;
+  }
 
   public Set<Symbol> getUnboundSymbols() {
     return myUnboundSymbols;
@@ -56,30 +56,31 @@ public class UnboundSymbolExtractingVisitor extends MathematicaVisitor {
     }
   }
 
-
-
   @Override
   public void visitFunctionCall(FunctionCall functionCall) {
     final PsiElement head = functionCall.getHead();
     if (head instanceof Symbol) {
-      final String headName = ((Symbol) head).getSymbolName();
-      //Todo: Exract first argument to Options[..]
-      if (headName.matches("Options")) {
-      }
-
-
-      myUnboundSymbols.add((Symbol) head);
-      final String functionName = ((Symbol) head).getSymbolName();
-      if (myDiveInFirstChild.contains(functionName)) {
-        List<PsiElement> args = MathematicaPsiUtilities.getArguments(functionCall);
-        if (args.size() > 0) {
-          args.get(0).accept(this);
-        }
-      } else if (!myDoNotDiveIn.contains(functionName)) {
-        functionCall.acceptChildren(this);
+      // check if we have an assignment of the form Options[sym] = {...}
+      if (functionCall.equals(myStartElement) && functionCall.matchesHead("Options|Attributes|MessageName|Default|Format|N")) {
+        PsiElement arg1 = functionCall.getArgument(1);
+        if (arg1 instanceof Symbol) arg1.accept(this);
+      } else {
+        myUnboundSymbols.add((Symbol) head);
       }
     } else {
-      functionCall.acceptChildren(this);
+      // situations like this (g : fff)[x_^2] := Hold[g, x] where the head contains something more complex
+      head.accept(this);
+    }
+  }
+
+  /**
+   * Need this for situations like <code>p:f[x_]:=x^2</code>
+   */
+  @Override
+  public void visitPattern(final Pattern pattern) {
+    final PsiElement lastChild = pattern.getLastChild();
+    if (lastChild != null) {
+      lastChild.accept(this);
     }
   }
 

@@ -19,33 +19,31 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.util;
+package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.SetDefinitionSymbolVisitor;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * @author patrick (9/27/13)
  */
-public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
+public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
 
   private final Set<String> myCollectedFunctionNames;
-  private final Set<Symbol> myCollectedFunctions;
 
-  public MathematicaTopLevelFunctionVisitor() {
-    super();
+  public GlobalDefinitionCompletionProvider() {
     myCollectedFunctionNames = new HashSet<String>();
-    myCollectedFunctions = new HashSet<Symbol>();
   }
 
   public void visitFile(PsiFile file) {
@@ -57,37 +55,62 @@ public class MathematicaTopLevelFunctionVisitor extends MathematicaVisitor {
   }
 
   public void visitSetDelayed(SetDelayed setDelayed) {
-    cacheAssignedSymbols(setDelayed);
+    cacheFromSetAssignment(setDelayed);
   }
 
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
-    cacheAssignedSymbols(set);
+    cacheFromSetAssignment(set);
   }
 
   public void visitTagSet(TagSet element) {
-    cacheAssignedSymbols(element);
+    final PsiElement tag = element.getFirstChild();
+    if (tag instanceof Symbol) {
+      myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
+    }
   }
 
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
-    cacheAssignedSymbols(tagSetDelayed);
+    final PsiElement tag = tagSetDelayed.getFirstChild();
+    if (tag instanceof Symbol) {
+      myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
+    }
+  }
+
+  @Override
+  public void visitFunctionCall(final FunctionCall functionCall) {
+    final String head = functionCall.getHead().getText();
+    if (head.matches("Set|SetDelayed")) {
+      final PsiElement lhs = functionCall.getArgument(1);
+      if (lhs != null) {
+        final SetDefinitionSymbolVisitor visitor = new SetDefinitionSymbolVisitor(lhs);
+        lhs.accept(visitor);
+        cacheAssignedSymbols(visitor.getUnboundSymbols());
+      }
+    } else if (head.matches("TagSet|TagSetDelayed|SetAttributes|SetOptions")) {
+      final PsiElement arg1 = functionCall.getArgument(1);
+      if (arg1 instanceof Symbol) {
+        myCollectedFunctionNames.add(((Symbol) arg1).getSymbolName());
+      }
+    }
   }
 
   public Set<String> getFunctionsNames() {
     return myCollectedFunctionNames;
   }
 
-  public Set<Symbol> getAssignedSymbols() {
-    return myCollectedFunctions;
+  private void cacheFromSetAssignment(PsiElement element) {
+    final PsiElement lhs = element.getFirstChild();
+    SetDefinitionSymbolVisitor visitor = new SetDefinitionSymbolVisitor(lhs);
+    lhs.accept(visitor);
+    cacheAssignedSymbols(visitor.getUnboundSymbols());
   }
 
-  private void cacheAssignedSymbols(PsiElement element) {
-    final List<Symbol> assignmentSymbols = MathematicaPsiUtilities.getAssignmentSymbols(element);
-    if (assignmentSymbols != null) {
-      for (Symbol assignmentSymbol : assignmentSymbols) {
-        String symbolName = assignmentSymbol.getSymbolName();
-        myCollectedFunctionNames.add(symbolName);
-        myCollectedFunctions.add(assignmentSymbol);
+  private void cacheAssignedSymbols(Set<Symbol> symbolSet) {
+    if (symbolSet != null) {
+      for (Symbol symbol : symbolSet) {
+        myCollectedFunctionNames.add(symbol.getSymbolName());
       }
     }
   }
+
 }

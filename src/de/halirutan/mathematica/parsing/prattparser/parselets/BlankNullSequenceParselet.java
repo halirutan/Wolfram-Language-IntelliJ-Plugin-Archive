@@ -26,6 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
  * @author patrick (3/27/13)
@@ -51,7 +52,8 @@ public class BlankNullSequenceParselet implements InfixParselet {
     IElementType token = MathematicaElementTypes.BLANK_NULL_SEQUENCE_EXPRESSION;
     parser.advanceLexer();
     if (!parser.isNextWhitespace() && !parser.eof() && parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER)) {
-      parser.advanceLexer();
+      final PrefixParselet symbolParselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.IDENTIFIER);
+      symbolParselet.parse(parser);
     }
     blankMark.done(token);
     return MathematicaParser.result(blankMark, token, true);

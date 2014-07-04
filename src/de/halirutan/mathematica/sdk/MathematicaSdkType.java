@@ -52,7 +52,8 @@ public class MathematicaSdkType extends SdkType {
   /**
    * Extracts the version from the .VersionID file for Mathematica version > 5
    *
-   * @param path Path to the install directory
+   * @param path
+   *     Path to the install directory
    * @return Version number in the format e.g. 9.0.1
    */
   public static String getMathematicaVersionString(String path) {
@@ -67,6 +68,29 @@ public class MathematicaSdkType extends SdkType {
     } catch (FileNotFoundException ignored) {
     }
     return versionString;
+  }
+
+  private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
+
+    final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
+    String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
+    jarFileSystem.setNoCopyJarForPath(path);
+    VirtualFile vFile = jarFileSystem.findFileByPath(path);
+    sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
+  }
+
+  private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
+    File addOns = new File(homePath, "AddOns");
+    Pattern initMPattern = Pattern.compile(".*init\\.m");
+    if (addOns.isDirectory()) {
+      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
+      for (File file : initFiles) {
+        if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
+          final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
+          sdkModificator.addRoot(packageDirectory, OrderRootType.SOURCES);
+        }
+      }
+    }
   }
 
   @Nullable
@@ -146,29 +170,6 @@ public class MathematicaSdkType extends SdkType {
     return true;
 
 
-  }
-
-  private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
-
-    final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
-    String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
-    jarFileSystem.setNoCopyJarForPath(path);
-    VirtualFile vFile = jarFileSystem.findFileByPath(path);
-    sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
-  }
-
-  private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
-    File addOns = new File(homePath, "AddOns");
-    Pattern initMPattern = Pattern.compile(".*init\\.m");
-    if (addOns.isDirectory()) {
-      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
-      for (File file : initFiles) {
-        if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
-          final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
-          sdkModificator.addRoot(packageDirectory, OrderRootType.SOURCES);
-        }
-      }
-    }
   }
 
 

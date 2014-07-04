@@ -43,7 +43,8 @@ public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
   /**
    * Should return true, when you are inside a string literal.
    *
-   * @param iterator the iterator to move through the token stream. Here, only used to get the token type
+   * @param iterator
+   *     the iterator to move through the token stream. Here, only used to get the token type
    * @return true, if the iterator is currently inside a string
    */
   @Override
@@ -56,8 +57,10 @@ public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
    * anymore why I had to make the calculations but I remember that something with the removal of an empty string did
    * not work.
    *
-   * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
-   * @param offset   current character offset
+   * @param iterator
+   *     the iterator to move through the token stream. Here, only used to get the current token type
+   * @param offset
+   *     current character offset
    * @return true, if the current offset is a closing quote
    */
   @Override
@@ -75,8 +78,10 @@ public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
   /**
    * Finds out whether the current offset is an opening quote element.
    *
-   * @param iterator the iterator to move through the token stream. Here, only used to get the current token type
-   * @param offset   current character offset
+   * @param iterator
+   *     the iterator to move through the token stream. Here, only used to get the current token type
+   * @param offset
+   *     current character offset
    * @return true, if the current offset is an opening quote
    */
   @Override

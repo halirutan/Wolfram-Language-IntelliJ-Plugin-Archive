@@ -69,22 +69,22 @@ public class LocalizationSurrounder implements Surrounder {
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
     final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-    final StringBuilder stringBuilder = new StringBuilder(myHead+"[{},\n");
+    final StringBuilder stringBuilder = new StringBuilder(myHead + "[{},\n");
     stringBuilder.append(e.getText());
     stringBuilder.append("\n]");
 
     final PsiFile file = factory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, stringBuilder);
     final FunctionCall[] func = PsiTreeUtil.getChildrenOfType(file, FunctionCall.class);
     assert func != null && func[0] != null;
-    func[0] = (FunctionCall)codeStyleManager.reformat(func[0]);
+    func[0] = (FunctionCall) codeStyleManager.reformat(func[0]);
     PsiElement newElement = e.replace(func[0]);
 
     final List<PsiElement> arguments = MathematicaPsiUtilities.getArguments(newElement);
-    if(arguments.isEmpty()){
+    if (arguments.isEmpty()) {
       return null;
     }
     // We want to place the cursor inside the {} of Module[{}, code], therefore we use the first argument which is
     // {} and step one letter ahead.
-    return TextRange.from(arguments.get(0).getTextOffset()+1,0);
+    return TextRange.from(arguments.get(0).getTextOffset() + 1, 0);
   }
 }

@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.util;
+package de.halirutan.mathematica.codeinsight.completion;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
@@ -33,6 +33,9 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPatternVisitor;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -46,12 +49,12 @@ import java.util.regex.Pattern;
  *
  * @author patrick (5/22/13)
  */
-public class MathematicaDefinedSymbolsProcessor extends BaseScopeProcessor {
+public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
 
   private final List<Symbol> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
 
-  public MathematicaDefinedSymbolsProcessor(Symbol myStartElement) {
+  public LocalDefinitionCompletionProvider(Symbol myStartElement) {
     super();
     this.myStartElement = myStartElement;
   }

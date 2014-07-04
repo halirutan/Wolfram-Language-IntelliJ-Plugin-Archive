@@ -71,15 +71,19 @@ public class MathematicaViewElementExtractingVisitor extends MathematicaVisitor 
   public void visitSetDelayed(SetDelayed setDelayed) {
     cacheAssignedSymbols(setDelayed);
   }
+
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
     cacheAssignedSymbols(set);
   }
+
   public void visitTagSet(TagSet element) {
     cacheAssignedSymbols(element);
   }
+
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     cacheAssignedSymbols(tagSetDelayed);
   }
+
   public HashMap<String, List<SymbolDefinition>> getDefinedSymbols() {
     return myDefinedSymbols;
   }

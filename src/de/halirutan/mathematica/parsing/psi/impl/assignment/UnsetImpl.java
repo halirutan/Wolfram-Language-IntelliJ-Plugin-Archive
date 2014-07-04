@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (4/14/13)
  */
-public class UnsetImpl extends OperatorNameProviderImpl implements Unset{
+public class UnsetImpl extends OperatorNameProviderImpl implements Unset {
   public UnsetImpl(@NotNull ASTNode node) {
     super(node);
   }
