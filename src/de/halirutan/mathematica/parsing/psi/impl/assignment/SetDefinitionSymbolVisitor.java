@@ -27,6 +27,7 @@ import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Group;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Condition;
 import de.halirutan.mathematica.parsing.psi.api.pattern.Pattern;
 
@@ -90,7 +91,7 @@ public class SetDefinitionSymbolVisitor extends MathematicaVisitor {
   }
 
   @Override
-  public void visitList(de.halirutan.mathematica.parsing.psi.api.lists.List list) {
+  public void visitList(List list) {
     list.acceptChildren(this);
   }
 
