@@ -27,10 +27,9 @@ import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.impl.assignment.SetDefinitionSymbolVisitor;
+import de.halirutan.mathematica.parsing.psi.impl.assignment.UpSetDefinitionSymbolVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +48,6 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
   public void visitFile(PsiFile file) {
     file.acceptChildren(this);
   }
-
   public void visitCompoundExpression(CompoundExpression compoundExpression) {
     compoundExpression.acceptChildren(this);
   }
@@ -57,7 +55,6 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
   public void visitSetDelayed(SetDelayed setDelayed) {
     cacheFromSetAssignment(setDelayed);
   }
-
   public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
     cacheFromSetAssignment(set);
   }
@@ -68,12 +65,21 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
       myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
     }
   }
-
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     final PsiElement tag = tagSetDelayed.getFirstChild();
     if (tag instanceof Symbol) {
       myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
     }
+  }
+
+  @Override
+  public void visitUpSet(final UpSet upSet) {
+    cacheFromUpSetAssignment(upSet);
+  }
+
+  @Override
+  public void visitUpSetDelayed(final UpSetDelayed upSetDelayed) {
+    cacheFromUpSetAssignment(upSetDelayed);
   }
 
   @Override
@@ -101,6 +107,13 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
   private void cacheFromSetAssignment(PsiElement element) {
     final PsiElement lhs = element.getFirstChild();
     SetDefinitionSymbolVisitor visitor = new SetDefinitionSymbolVisitor(lhs);
+    lhs.accept(visitor);
+    cacheAssignedSymbols(visitor.getUnboundSymbols());
+  }
+
+  private void cacheFromUpSetAssignment(final PsiElement upSet) {
+    final PsiElement lhs = upSet.getFirstChild();
+    UpSetDefinitionSymbolVisitor visitor = new UpSetDefinitionSymbolVisitor();
     lhs.accept(visitor);
     cacheAssignedSymbols(visitor.getUnboundSymbols());
   }

@@ -23,8 +23,10 @@ package de.halirutan.mathematica.parsing.psi.impl.assignment;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.assignment.UpSet;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
@@ -44,4 +46,14 @@ public class UpSetImpl extends OperatorNameProviderImpl implements UpSet {
     }
     return processor.execute(this, state);
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitUpSet(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }

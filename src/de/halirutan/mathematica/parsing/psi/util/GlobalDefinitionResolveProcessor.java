@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.util;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.impl.assignment.SetDefinitionSymbolVisitor;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (1/6/14)
  */
+@SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
 public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
@@ -45,22 +47,46 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   @Override
   public boolean execute(@NotNull PsiElement element) {
     if (element instanceof Set || element instanceof SetDelayed) {
-      return visitSetDefinition(element);
+      return visitSetDefinition(element.getFirstChild());
     }
 
     if (element instanceof TagSet || element instanceof TagSetDelayed) {
-      return visitTagSetDefinition(element);
+      return visitTagSetDefinition(element.getFirstChild());
     }
     if (element instanceof UpSet || element instanceof UpSetDelayed) {
-      return visitUpSetDefinition(element);
+      return visitUpSetDefinition(element.getFirstChild());
     }
 
+    if (element instanceof FunctionCall) {
+      final PsiElement lhs = ((FunctionCall) element).getArgument(1);
+      if (((FunctionCall) element).matchesHead("Set|SetDelayed")) {
+        return visitSetDefinition(lhs);
+      } else if (((FunctionCall) element).matchesHead("TagSet|TagSetDelayed")) {
+        return visitTagSetDefinition(lhs);
+      } else if (((FunctionCall) element).matchesHead("UpSet|UpSetDelayed")) {
+        return visitUpSetDefinition(lhs);
+      } else if (((FunctionCall) element).matchesHead("SetAttributes|SetOptions") && lhs instanceof Symbol) {
+        return visitSymbol((Symbol) lhs);
+      }
+    }
     return true;
   }
 
-  @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-  private boolean visitUpSetDefinition(final PsiElement element) {
-    final PsiElement lhs = element.getFirstChild();
+  /**
+   * Check if a symbol has the same name and if yes, it is my point of definition.
+   * @param symbol symbol to check
+   * @return true if the names are equal
+   */
+  private boolean visitSymbol(final Symbol symbol) {
+    if (myStartElement.getSymbolName().equals(symbol.getSymbolName())) {
+      myReferringSymbol = symbol;
+      return false;
+    }
+    return true;
+  }
+
+
+  private boolean visitUpSetDefinition(final PsiElement lhs) {
     if (lhs != null) {
       UpSetDefinitionSymbolVisitor definitionVisitor = new UpSetDefinitionSymbolVisitor();
       lhs.accept(definitionVisitor);
@@ -78,9 +104,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   /**
    * TagSet should be trivial. In f /: g[a,b,..,f,..] = .., f is always expected to be a symbol.
    */
-  @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-  private boolean visitTagSetDefinition(final PsiElement element) {
-    final PsiElement defSymbol = element.getFirstChild();
+  private boolean visitTagSetDefinition(final PsiElement defSymbol) {
     if (defSymbol instanceof Symbol && ((Symbol) defSymbol).getSymbolName().matches(myStartElement.getSymbolName())) {
       myReferringSymbol = defSymbol;
       return false;
@@ -88,9 +112,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
     return true;
   }
 
-  @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-  private boolean visitSetDefinition(final PsiElement element) {
-    final PsiElement lhs = element.getFirstChild();
+  private boolean visitSetDefinition(final PsiElement lhs) {
     if (lhs != null) {
       SetDefinitionSymbolVisitor definitionVisitor = new SetDefinitionSymbolVisitor(lhs);
       lhs.accept(definitionVisitor);
