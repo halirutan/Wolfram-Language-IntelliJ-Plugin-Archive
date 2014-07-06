@@ -49,6 +49,8 @@
                                   implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
     <lang.documentationProvider language="Mathematica"
                                 implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+    <lang.findUsagesProvider language="Mathematica"
+                             implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>
     <colorSettingsPage
         implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
     <codeStyleSettingsProvider
