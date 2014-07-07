@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<templateSet group="localizations">
-    <template name="Module" description="Module[{vars}, body]" toReformat="true" toShortenFQNames="true"
-              value="Module[{$VAR$}, $BODY$]">
+<templateSet group="Mathematica">
+    <template name="Block" description="Block[{vars}, body]" toReformat="true"
+              value="Block[{$VARS$}, $BODY$]">
+        <variable name="VARS" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
+
+    <template name="Module" description="Module[{vars}, body]" toReformat="true"
+              value="Module[{$VARS$}, $BODY$]">
+        <variable name="VARS" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
+    <template name="With" description="With[{vars}, body]" toReformat="true"
+              value="With[{$VARS$}, $BODY$]">
+        <variable name="VARS" expression="foo" defaultValue="" alwaysStopAt="true" />
+        <variable name="BODY" expression="" defaultValue="bar" alwaysStopAt="true" />
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
+    <template name="Table" description="Table[body, {var, min, max}]" toReformat="true"
+              value="Table[$BODY$, {$VAR$, $START$, $STOP$}]">
+        <variable name="BODY" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="START" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="STOP" expression="" defaultValue="" alwaysStopAt="true" />
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
 </templateSet>
