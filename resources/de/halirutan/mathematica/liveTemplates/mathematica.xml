@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templateSet group="localizations">
+    <template name="Module" description="Module[{vars}, body]" toReformat="true" toShortenFQNames="true"
+              value="Module[{$VAR$}, $BODY$]">
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+</templateSet>
