@@ -49,8 +49,11 @@
                                   implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
     <lang.documentationProvider language="Mathematica"
                                 implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
-    <lang.findUsagesProvider language="Mathematica"
-                             implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>
+    <!--<lang.findUsagesProvider language="Mathematica"-->
+                             <!--implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>-->
+    <!--<findUsagesHandlerFactory-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageHandlerFactory"/>-->
+    <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
     <colorSettingsPage
         implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
     <codeStyleSettingsProvider
@@ -84,6 +87,10 @@
     </action>
     <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
             text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
+      <add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>
+    </action>
+    <action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"
+            text="Highlight References" description="Highlights the symbol under the cursor and its references">
       <add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>
     </action>
   </actions>
