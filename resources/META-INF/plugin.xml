@@ -28,12 +28,29 @@
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
+
+    <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
+
+    <moduleType id="MATHEMATICA_MODULE"
+                implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
+    <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
+
+
+    <!-- Highlighting and annotating of code, StructureView and documentation lookup-->
+
+    <lang.syntaxHighlighterFactory key="Mathematica"
+                                   implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+    <lang.psiStructureViewFactory language="Mathematica"
+                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
+    <lang.documentationProvider language="Mathematica"
+                                implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+
     <annotator language="Mathematica"
                implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaHighlightingAnnotator"/>
-    <lang.commenter language="Mathematica"
-                    implementationClass="de.halirutan.mathematica.codeinsight.editor.MathematicaCommenter"/>
     <lang.braceMatcher language="Mathematica"
                        implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher"/>
+
+    <!-- Smart editing features -->
     <quoteHandler fileType="Mathematica"
                   className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>
     <completion.contributor language="Mathematica"
@@ -41,19 +58,25 @@
 
     <lang.smartEnterProcessor language="Mathematica"
                               implementationClass="de.halirutan.mathematica.codeinsight.smartenter.MathematicaSmartEnter"/>
+    <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
+
+    <lang.commenter language="Mathematica"
+                    implementationClass="de.halirutan.mathematica.codeinsight.editor.MathematicaCommenter"/>
+
     <lang.surroundDescriptor language="Mathematica"
                              implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
-    <lang.syntaxHighlighterFactory key="Mathematica"
-                                   implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
-    <lang.psiStructureViewFactory language="Mathematica"
-                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
-    <lang.documentationProvider language="Mathematica"
-                                implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+
+
+    <!-- Find Usage provider -->
+    <!-- Currently, we don't need it since the standard implementation does find in most cases. There is one case, where it
+    doesn't work, but I'll look into that later. The current implementation would be too slow for real use. -->
     <!--<lang.findUsagesProvider language="Mathematica"-->
-                             <!--implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>-->
+    <!--implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>-->
     <!--<findUsagesHandlerFactory-->
-        <!--implementation="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageHandlerFactory"/>-->
-    <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
+    <!--implementation="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageHandlerFactory"/>-->
+
+
+    <!-- Code-style and colors-->
     <colorSettingsPage
         implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
     <codeStyleSettingsProvider
@@ -62,11 +85,6 @@
         implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
     <lang.formatter language="Mathematica"
                     implementationClass="de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder"/>
-    <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
-
-    <moduleType id="MATHEMATICA_MODULE"
-                implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
-    <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
     <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
     <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
@@ -85,13 +103,15 @@
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
 
     </action>
-    <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
-            text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
-      <add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>
-    </action>
-    <action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"
-            text="Highlight References" description="Highlights the symbol under the cursor and its references">
-      <add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>
-    </action>
+
+    <!-- Actions for debugging purpose only -->
+    <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
+    <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
+    <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
+    <!--</action>-->
+    <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
+    <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
+    <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
+    <!--</action>-->
   </actions>
 </idea-plugin>
