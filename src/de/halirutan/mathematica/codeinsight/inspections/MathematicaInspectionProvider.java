@@ -19,37 +19,22 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.inspections;
 
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Filter;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.codeInspection.InspectionToolProvider;
+import de.halirutan.mathematica.codeinsight.inspections.bugs.ImplicitTimesThroughLinebreak;
+import de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistenCompoundExpressionInFile;
 
 /**
- * @author patrick (6/14/14)
+ * @author patrick (7/8/14)
  */
-@SuppressWarnings({"UnusedDeclaration", "ConstantConditions"})
-public class MathematicaDefinitionFilter implements Filter {
+public class MathematicaInspectionProvider implements InspectionToolProvider {
   @Override
-  public boolean isVisible(TreeElement treeNode) {
-    return false;
-  }
+  public Class[] getInspectionClasses() {
+    return new Class[]{
+        ConsistenCompoundExpressionInFile.class,
+        ImplicitTimesThroughLinebreak.class
+    };
 
-  @Override
-  public boolean isReverted() {
-    return false;
-  }
-
-  @NotNull
-  @Override
-  public ActionPresentation getPresentation() {
-    return null;
-  }
-
-  @NotNull
-  @Override
-  public String getName() {
-    return null;
   }
 }

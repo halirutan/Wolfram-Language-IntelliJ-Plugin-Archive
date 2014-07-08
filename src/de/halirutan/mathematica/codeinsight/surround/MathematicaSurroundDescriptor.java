@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   private static final Surrounder SURROUNDERS[] = {
       new FunctionCallSurrounder(),
-      new AnnonymousFunctionSurrounder(),
+      new AnonymousFunctionSurrounder(),
       new LocalizationSurrounder("Module"),
       new LocalizationSurrounder("With"),
       new LocalizationSurrounder("Block"),

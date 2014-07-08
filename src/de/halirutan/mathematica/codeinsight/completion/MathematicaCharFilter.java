@@ -35,7 +35,7 @@ public class MathematicaCharFilter extends CharFilter {
   @Nullable
   @Override
   public Result acceptChar(final char c, final int prefixLength, final Lookup lookup) {
-    if(!lookup.isFocused()) return null;
+    if (!lookup.isFocused()) return null;
     final PsiFile psiFile = lookup.getPsiFile();
 
     if (psiFile != null && !psiFile.getViewProvider().getLanguages().contains(MathematicaLanguage.INSTANCE))

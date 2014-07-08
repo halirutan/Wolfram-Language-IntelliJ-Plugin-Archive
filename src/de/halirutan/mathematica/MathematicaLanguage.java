@@ -36,6 +36,6 @@ public class MathematicaLanguage extends Language {
 
   @Override
   public String getDisplayName() {
-    return "Mathematica Language";
+    return MathematicaBundle.message("language.name");
   }
 }

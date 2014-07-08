@@ -30,6 +30,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
@@ -42,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 public class FunctionCallSurrounder implements Surrounder {
   @Override
   public String getTemplateDescription() {
-    return "func[code]";
+    return MathematicaBundle.message("surround.function.call.description");
   }
 
   @Override

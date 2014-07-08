@@ -44,6 +44,7 @@ public class ParseletProvider {
   private static final Map<IElementType, InfixParselet> INFIX_PARSELETS = new HashMap<IElementType, InfixParselet>();
   private static final Map<PrefixParselet, IElementType> PREFIX_TO_PSI_ELEMENT = new HashMap<PrefixParselet, IElementType>();
   private static final Map<InfixParselet, IElementType> INFIX_PARSELET_TO_PSI_ELEMENT = new HashMap<InfixParselet, IElementType>();
+
   static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
     register(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.LIST_EXPRESSION, new ListParselet(82)); // Group(()

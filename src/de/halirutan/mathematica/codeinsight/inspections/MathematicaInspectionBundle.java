@@ -19,37 +19,36 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.inspections;
 
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Filter;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.CommonBundle;
+import org.jetbrains.annotations.PropertyKey;
+
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.ResourceBundle;
 
 /**
- * @author patrick (6/14/14)
+ * @author patrick (7/8/14)
  */
-@SuppressWarnings({"UnusedDeclaration", "ConstantConditions"})
-public class MathematicaDefinitionFilter implements Filter {
-  @Override
-  public boolean isVisible(TreeElement treeNode) {
-    return false;
+public class MathematicaInspectionBundle {
+  private static final String BUNDLE = "de.halirutan.mathematica.MathematicaInspectionBundle";
+  private static Reference<ResourceBundle> ourBundle = null;
+
+  private MathematicaInspectionBundle() {
   }
 
-  @Override
-  public boolean isReverted() {
-    return false;
+  public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+    return CommonBundle.message(getBundle(), key, params);
   }
 
-  @NotNull
-  @Override
-  public ActionPresentation getPresentation() {
-    return null;
-  }
-
-  @NotNull
-  @Override
-  public String getName() {
-    return null;
+  private static ResourceBundle getBundle() {
+    ResourceBundle bundle = null;
+    if (ourBundle != null) bundle = ourBundle.get();
+    if (bundle == null) {
+      bundle = ResourceBundle.getBundle(BUNDLE);
+      ourBundle = new SoftReference<ResourceBundle>(bundle);
+    }
+    return bundle;
   }
 }

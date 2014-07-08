@@ -39,12 +39,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 /**
- * Povides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference
- * class uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
- * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions
- * are done at file-scope.
- * The class uses caching to speed up the resolve process. Once a definition for a symbol is found, it is stored
- * as long as the code in the concerning areas is not edited.
+ * Povides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
+ * uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
+ * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions are
+ * done at file-scope. The class uses caching to speed up the resolve process. Once a definition for a symbol is found,
+ * it is stored as long as the code in the concerning areas is not edited.
+ *
  * @author patrick (5/8/13)
  */
 public class SymbolPsiReference extends CachingReference implements PsiReference {

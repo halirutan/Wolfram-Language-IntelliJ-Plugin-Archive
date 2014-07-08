@@ -30,6 +30,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
@@ -39,10 +40,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/12/14)
  */
-public class AnnonymousFunctionSurrounder implements Surrounder {
+public class AnonymousFunctionSurrounder implements Surrounder {
   @Override
   public String getTemplateDescription() {
-    return "Anonymous function";
+    return MathematicaBundle.message("surround.anonymous.function.description");
   }
 
   @Override
