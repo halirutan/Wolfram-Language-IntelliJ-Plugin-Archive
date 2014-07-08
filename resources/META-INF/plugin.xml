@@ -66,8 +66,17 @@
     <lang.surroundDescriptor language="Mathematica"
                              implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
 
+      <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
+      <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
-    <!-- Find Usage provider -->
+      <lang.refactoringSupport language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
+
+      <enterHandlerDelegate
+              implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
+
+
+      <!-- Find Usage provider -->
     <!-- Currently, we don't need it since the standard implementation does find in most cases. There is one case, where it
     doesn't work, but I'll look into that later. The current implementation would be too slow for real use. -->
     <!--<lang.findUsagesProvider language="Mathematica"-->
@@ -88,14 +97,6 @@
 
     <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
     <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
-    <lang.refactoringSupport language="Mathematica"
-                             implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
-
-    <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
-
-      <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
-      <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
   </extensions>
 
