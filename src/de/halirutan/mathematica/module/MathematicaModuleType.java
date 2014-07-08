@@ -23,6 +23,7 @@ package de.halirutan.mathematica.module;
 
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,13 +47,13 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
   @NotNull
   @Override
   public String getName() {
-    return "Empty Module";
+    return MathematicaBundle.message("module.type.name");
   }
 
   @NotNull
   @Override
   public String getDescription() {
-    return "Creates an empty project or module for custom layouts.";
+    return MathematicaBundle.message("module.type.description");
   }
 
   @Override

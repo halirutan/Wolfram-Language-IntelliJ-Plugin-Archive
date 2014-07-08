@@ -63,6 +63,7 @@ public class MathematicaVisitor extends PsiElementVisitor {
   public void visitUpSet(UpSet upSet) {
     visitElement(upSet);
   }
+
   public void visitUpSetDelayed(UpSetDelayed upSetDelayed) {
     visitElement(upSetDelayed);
   }

@@ -19,37 +19,46 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.inspections;
 
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Filter;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import com.intellij.codeHighlighting.HighlightDisplayLevel;
+import com.intellij.codeInspection.LocalInspectionTool;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * @author patrick (6/14/14)
+ * @author patrick (7/8/14)
  */
-@SuppressWarnings({"UnusedDeclaration", "ConstantConditions"})
-public class MathematicaDefinitionFilter implements Filter {
-  @Override
-  public boolean isVisible(TreeElement treeNode) {
-    return false;
-  }
+public class AbstractInspection extends LocalInspectionTool {
 
+  @Nullable
   @Override
-  public boolean isReverted() {
-    return false;
+  public String getStaticDescription() {
+    return "Abstract Inspection";
   }
 
   @NotNull
   @Override
-  public ActionPresentation getPresentation() {
-    return null;
+  public String[] getGroupPath() {
+    return new String[]{"Mathematica", getGroupDisplayName()};
   }
 
   @NotNull
   @Override
-  public String getName() {
-    return null;
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WEAK_WARNING;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
+
+  @Nls
+  @NotNull
+  @Override
+  public String getGroupDisplayName() {
+    return "Mathematica";
   }
 }

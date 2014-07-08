@@ -80,6 +80,7 @@ public interface MathematicaElementTypes {
   TokenSet COMMENTS = TokenSet.create(
       COMMENT
   );
+  @SuppressWarnings("UnusedDeclaration")
   TokenSet WHITE_SPACE_OR_COMMENTS = TokenSet.create(
       WHITE_SPACE, LINE_BREAK, COMMENT
   );
@@ -141,6 +142,7 @@ public interface MathematicaElementTypes {
   IElementType GREATER = new MathematicaElementType("GREATER");
   IElementType SET = new MathematicaElementType("SET");
   IElementType SET_DELAYED = new MathematicaElementType("SET_DELAYED");
+  @SuppressWarnings("UnusedDeclaration")
   TokenSet ASSIGNMENTS = TokenSet.create(SET, SET_DELAYED);
   IElementType UNSET = new MathematicaElementType("UNSET");
   IElementType TAG_SET = new MathematicaElementType("TAG_SET");
@@ -205,7 +207,7 @@ public interface MathematicaElementTypes {
   IElementType GROUP_EXPRESSION = new MathematicaElementType("GROUP_EXPRESSION");
 
 
-// THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
+  // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
   IElementType LIST_EXPRESSION = new MathematicaElementType("LIST_EXPRESSION");
   IElementType ASSOCIATION_EXPRESSION = new MathematicaElementType("ASSOCIATION_EXPRESSION");
   IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");

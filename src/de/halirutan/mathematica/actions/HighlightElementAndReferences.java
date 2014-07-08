@@ -38,18 +38,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * @author patrick (7/7/14)
  */
+@SuppressWarnings("ComponentNotRegistered")
 public class HighlightElementAndReferences extends AnAction {
   public void actionPerformed(AnActionEvent e) {
 
@@ -83,7 +81,7 @@ public class HighlightElementAndReferences extends AnAction {
       if (ref != null) {
         final PsiElement resolve = ref.resolve();
         if (resolve != null && resolve instanceof Symbol) {
-          if(!resolve.equals(element))
+          if (!resolve.equals(element))
             usages.add(resolve);
           final Collection<Symbol> symbolsInFile = PsiTreeUtil.findChildrenOfType(psiFile, Symbol.class);
           for (Symbol symbol : symbolsInFile) {
@@ -101,7 +99,7 @@ public class HighlightElementAndReferences extends AnAction {
     //endregion
 
     highlightManager.addOccurrenceHighlights(
-        editor,usages.toArray(new PsiElement[usages.size()]), textattributes, false, null);
+        editor, usages.toArray(new PsiElement[usages.size()]), textattributes, false, null);
     final WindowManager windowManager = WindowManager.getInstance();
     final StatusBar statusBar = windowManager.getStatusBar(project);
     assert statusBar != null;
