@@ -76,8 +76,8 @@
     <enterHandlerDelegate
         implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
-      <liveTemplateContext implementation="de.halirutan.mathematica.liveTemplates.MathematicaTemplateContextType"/>
-      <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.liveTemplates.MathematicaDefaultLiveTemplateProvider"/>
+      <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
+      <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
   </extensions>
 
