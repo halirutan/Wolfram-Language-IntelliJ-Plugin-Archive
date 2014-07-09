@@ -74,7 +74,9 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
 
   /**
    * Check if a symbol has the same name and if yes, it is my point of definition.
-   * @param symbol symbol to check
+   *
+   * @param symbol
+   *     symbol to check
    * @return true if the names are equal
    */
   private boolean visitSymbol(final Symbol symbol) {

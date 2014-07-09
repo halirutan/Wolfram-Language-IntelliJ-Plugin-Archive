@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.documentation;
 
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupEx;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
@@ -48,15 +49,6 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   private static final Pattern SLOT_PATTERN = Pattern.compile("#[0-9]*");
   private static final Pattern ALL_SLOT_PATTERN = Pattern.compile("#+[0-9]*");
   private static final Pattern SLOT_SEQUENCE_PATTERN = Pattern.compile("##[0-9]*");
-
-  @Nullable
-  @Override
-  public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-    if (element instanceof Symbol) {
-      return "Hello you...";
-    }
-    return null;
-  }
 
   /**
    * Generates the documentation (if available) for element. This does two things, first it looks whether the element is
@@ -124,7 +116,8 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
       final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset() - 1);
       if (elementAt != null) {
         Symbol lookup = new SymbolImpl(elementAt.getNode());
-        final String lookupString = activeLookup.getCurrentItem().getLookupString();
+        final LookupElement currentItem = activeLookup.getCurrentItem();
+        final String lookupString = currentItem != null ? currentItem.getLookupString() : "";
         lookup.setName(lookupString);
         return lookup;
       }

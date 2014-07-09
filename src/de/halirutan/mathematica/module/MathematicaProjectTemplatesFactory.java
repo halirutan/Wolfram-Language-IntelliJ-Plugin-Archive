@@ -25,6 +25,7 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,11 +37,11 @@ import javax.swing.*;
  */
 public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory {
 
-  public static final String MATHEMATICA = "Mathematica";
-  public static final String BASIC_MODULE = "Basic Package";
-  public static final String APPLICATION_MODULE = "Mathematica Application";
-  public static final String TEST_MODULE = "Unit Test Module";
-  public static final String DOCUMENTATION_MODULE = "Documentation Module";
+  public static final String MATHEMATICA = MathematicaBundle.message("project.template.mathematica");
+  public static final String BASIC_MODULE = MathematicaBundle.message("project.template.basic");
+  public static final String APPLICATION_MODULE = MathematicaBundle.message("project.template.application");
+  public static final String TEST_MODULE = MathematicaBundle.message("project.template.test");
+  public static final String DOCUMENTATION_MODULE = MathematicaBundle.message("project.template.documentation");
 
   @NotNull
   @Override
@@ -59,13 +60,12 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
     ProjectTemplate[] projectTemplates = {
 
         new MathematicaProjectTemplate(BASIC_MODULE,
-            "A basic Mathematica package provides a simple package file and a notebook. " +
-                "Use this for simple or moderately sized Mathematica packages. ",
+            MathematicaBundle.message("project.template.basic.description"),
             // The descriptions should be reworked when the plugin is more mature
             new MathematicaModuleBuilder.Basic()),
 
         new MathematicaProjectTemplate(APPLICATION_MODULE,
-            "A Mathematica application is used for large packages and more complicated applications. ",
+            MathematicaBundle.message("project.template.application.description"),
             new MathematicaModuleBuilder.Application())
     };
 
@@ -75,11 +75,11 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
       return new ProjectTemplate[]{
 
           new MathematicaProjectTemplate(TEST_MODULE,
-              "Unit test module",
+              MathematicaBundle.message("project.template.test.description"),
               new MathematicaModuleBuilder.Test()),
 
           new MathematicaProjectTemplate(DOCUMENTATION_MODULE,
-              "Documentation module",
+              MathematicaBundle.message("project.template.documentation.description"),
               new MathematicaModuleBuilder.Documentation())
       };
     }
