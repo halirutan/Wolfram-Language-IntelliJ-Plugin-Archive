@@ -25,6 +25,7 @@
 
     <internalFileTemplate name="Package"/>
 
+    <errorHandler implementation="de.halirutan.mathematica.errorreporting.YouTrackBugReporter"/>
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
@@ -118,5 +119,9 @@
     <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
     <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
     <!--</action>-->
+    <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
+            class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>
+    </action>
   </actions>
 </idea-plugin>
