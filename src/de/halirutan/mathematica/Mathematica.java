@@ -26,6 +26,6 @@ package de.halirutan.mathematica;
  */
 public interface Mathematica {
 
-  String NAME = MathematicaBundle.message("language.name");
+  String NAME = "Mathematica";
   String DESCRIPTION = MathematicaBundle.message("language.description");
 }

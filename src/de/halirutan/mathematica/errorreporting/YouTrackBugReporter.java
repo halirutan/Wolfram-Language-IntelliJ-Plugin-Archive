@@ -407,7 +407,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
                 NotificationListener listener = url != null ? new NotificationListener() {
                     @Override
                     public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
-                        BrowserUtil.launchBrowser(url);
+                        BrowserUtil.browse(url);
                         notification.expire();
                     }
                 } : null;

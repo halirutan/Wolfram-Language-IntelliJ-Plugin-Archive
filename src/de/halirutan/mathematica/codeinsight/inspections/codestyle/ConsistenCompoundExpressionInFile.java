@@ -83,7 +83,6 @@ public class ConsistenCompoundExpressionInFile extends AbstractInspection {
               errorElement = errorElement.getLastChild();
             }
             holder.registerProblem(errorElement, getStaticDescription(), LocalQuickFix.EMPTY_ARRAY);
-            return;
           }
         }
       }
