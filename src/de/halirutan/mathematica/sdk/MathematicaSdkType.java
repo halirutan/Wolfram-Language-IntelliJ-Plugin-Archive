@@ -45,8 +45,13 @@ import java.util.regex.Pattern;
 public class MathematicaSdkType extends SdkType {
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
 
+  @NotNull
+  public static MathematicaSdkType getInstance() {
+    return SdkType.findInstance(MathematicaSdkType.class);
+  }
+
   public MathematicaSdkType() {
-    super("MATHEMATICA SDK");
+    super("Mathematica Sdk");
   }
 
   /**

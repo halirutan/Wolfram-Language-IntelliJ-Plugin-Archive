@@ -34,6 +34,7 @@ import com.intellij.psi.PsiWhiteSpace;
 import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -149,6 +150,21 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     return null;
   }
 
+  /**
+   * This makes it possible to have the documentation for each function while scrolling through the completion
+   * suggestion list.
+   *
+   * @param psiManager
+   *     access to Psi related things
+   * @param object
+   *     the current lookup object
+   * @param element
+   *     the element, the documentation was initially called for. Note that this is typically not a valid built-in
+   *     function, because you start typing Plo then the completion box pops up and when you call documentation on
+   *     one of the selected lookup entries, the elements name is still Plo, while you want to check the documentation
+   *     for the lookup element.
+   * @return The Symbol which was created from the string of the lookup element or null if it wasn't possible.
+   */
   @Nullable
   @Override
   public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
@@ -156,9 +172,12 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
       final LookupEx activeLookup = LookupManager.getActiveLookup(FileEditorManager.getInstance(element.getProject()).getSelectedTextEditor());
       if (activeLookup != null) {
         if (activeLookup.isFocused()) {
-          Symbol lookup = new SymbolImpl(element.getNode());
-          lookup.setName((String) object);
-          return lookup;
+          MathematicaPsiElementFactory elementFactory = new MathematicaPsiElementFactory(psiManager.getProject());
+          try {
+            return elementFactory.createSymbol(object.toString());
+          } catch (Exception e) {
+            return null;
+          }
         }
       }
     }
