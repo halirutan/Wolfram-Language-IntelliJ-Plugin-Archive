@@ -71,25 +71,23 @@ import static com.intellij.openapi.util.text.StringUtil.notNullize;
  * Time: 11:35:35 AM
  */
 public class YouTrackBugReporter extends ErrorReportSubmitter {
-    public static final String DESCRIPTION = "Description";
-    public static final String PROJECT = "Project";
-    public static final String AREA = "Area";
-    private static final Logger log = Logger.getInstance(YouTrackBugReporter.class.getName());
+    private static final String DESCRIPTION = "Description";
+    private static final String PROJECT = "Project";
+    private static final String AREA = "Area";
+    protected static final Logger log = Logger.getInstance(YouTrackBugReporter.class.getName());
     @NonNls
     private static final String SERVER_URL = "http://halirutan.myjetbrains.com/youtrack/";
     private static final String SERVER_REST_URL = SERVER_URL + "rest/";
     private static final String SERVER_ISSUE_URL = SERVER_REST_URL + "issue";
     private static final String LOGIN_URL = SERVER_REST_URL + "user/login";
-    private static final String DEFAULT_RESPONSE = "Thank you for your report.";
-    private final CookieManager myCookieManager = new CookieManager();
+  private final CookieManager myCookieManager = new CookieManager();
     private String myDescription = null;
     private String myExtraInformation = "";
-    private String myEmail = null;
-    private String myAffectedVersion = null;
+  private String myAffectedVersion = null;
 
     @Override
     public String getReportActionText() {
-        return "Report Error To Author";
+        return "Report to halirutan";
     }
 
     @Override
@@ -113,7 +111,6 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
         final IdeaLoggingEvent ideaLoggingEvent = ideaLoggingEvents[0];
         final String throwableText = ideaLoggingEvent.getThrowableText();
         this.myDescription = throwableText.substring(0, Math.min(Math.max(80, throwableText.length()), 80));
-        this.myEmail = user;
 
 
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored") Integer signature = ideaLoggingEvent.getThrowable()
@@ -166,12 +163,12 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
             return new SubmittedReportInfo(SERVER_ISSUE_URL, "", FAILED);
         }
 
-        String ResultString = null;
+        String resultString = null;
         try {
             Pattern regex = Pattern.compile("id=\"([^\"]+)\"", Pattern.DOTALL | Pattern.MULTILINE);
             Matcher regexMatcher = regex.matcher(result);
             if (regexMatcher.find()) {
-                ResultString = regexMatcher.group(1);
+                resultString = regexMatcher.group(1);
             }
         } catch (PatternSyntaxException ex) {
             // Syntax error in the regular expression
@@ -179,24 +176,24 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
 
         SubmittedReportInfo.SubmissionStatus status = NEW_ISSUE;
 
-        if (ResultString == null) {
+        if (resultString == null) {
             return new SubmittedReportInfo(SERVER_ISSUE_URL, "", FAILED);
         }
 
 
-        final SubmittedReportInfo reportInfo = new SubmittedReportInfo(SERVER_URL + "issue/" + ResultString,
-                ResultString, status);
+        final SubmittedReportInfo reportInfo = new SubmittedReportInfo(SERVER_URL + "issue/" + resultString,
+                resultString, status);
 
 
 
 
         /* Now try to set the autosubmit user using a custom command */
         if (user != null) {
-            runCommand(ResultString, "Autosubmit User " + user);
+            runCommand(resultString, "Autosubmit User " + user);
         }
 
         if (signature != 0) {
-            runCommand(ResultString, "Exception Signature " + signature);
+            runCommand(resultString, "Exception Signature " + signature);
         }
 
         popupResultInfo(reportInfo, project);
@@ -382,7 +379,8 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     }
 
     private void popupResultInfo(final SubmittedReportInfo reportInfo, final Project project) {
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
+      //noinspection OverlyComplexAnonymousInnerClass
+      ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
                 StringBuilder text = new StringBuilder("<html>");
@@ -390,16 +388,16 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
                 IdeErrorsDialog.appendSubmissionInformation(reportInfo, text, url);
                 text.append(".");
                 final SubmittedReportInfo.SubmissionStatus status = reportInfo.getStatus();
-                if (status == SubmittedReportInfo.SubmissionStatus.NEW_ISSUE) {
+                if (status == NEW_ISSUE) {
                     text.append("<br/>").append(DiagnosticBundle.message("error.report.gratitude"));
-                } else if (status == SubmittedReportInfo.SubmissionStatus.DUPLICATE) {
+                } else if (status == DUPLICATE) {
                     text.append("<br/>Possible duplicate report");
                 }
                 text.append("</html>");
                 NotificationType type;
-                if (status == SubmittedReportInfo.SubmissionStatus.FAILED) {
+                if (status == FAILED) {
                     type = NotificationType.ERROR;
-                } else if (status == SubmittedReportInfo.SubmissionStatus.DUPLICATE) {
+                } else if (status == DUPLICATE) {
                     type = NotificationType.WARNING;
                 } else {
                     type = NotificationType.INFORMATION;

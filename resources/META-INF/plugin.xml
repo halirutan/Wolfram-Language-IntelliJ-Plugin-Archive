@@ -121,18 +121,21 @@
         </action>
 
         <!-- Actions for debugging purpose only -->
+
         <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
         <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
         <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
         <!--</action>-->
 
         <!-- Action to test the resolving of symbol definitions and their usages -->
+
         <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
         <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
         <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
         <!--</action>-->
 
         <!-- Action for throwing an exception just to test the reporting of errors into the YouTrack database -->
+
         <!--<action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"-->
         <!--class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">-->
         <!--<keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>-->
