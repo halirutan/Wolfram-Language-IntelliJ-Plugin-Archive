@@ -211,4 +211,22 @@
             <option name="Mathematica" value="true"/>
         </context>
     </template>
+
+    <!-- Messages -->
+    <template name="usg" description="Create usage message" toReformat="true"
+              value="$SYM$::usage = &quot;$SYM$[$END$]&quot;;">
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+    <template name="msg" description="Create usage message" toReformat="true"
+              value="$SYM$::$TAG$ = &quot;$END$&quot;;">
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
+        <variable name="TAG" expression="" defaultValue="&quot;tag&quot;" alwaysStopAt="true" />
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
 </templateSet>
