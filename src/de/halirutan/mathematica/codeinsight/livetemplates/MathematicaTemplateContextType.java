@@ -22,48 +22,41 @@
 package de.halirutan.mathematica.codeinsight.livetemplates;
 
 import com.intellij.codeInsight.template.TemplateContextType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import de.halirutan.mathematica.Mathematica;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighter;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import org.jetbrains.annotations.NotNull;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by rsmenon on 7/7/14.
- * This only checks whether we are in a Mathematica file and there, not in a comment. Additional checks seem to
- * hinder more because in Mathematica everything is an expression and you probably want to expand a template
- * in all kinds of different positions.
+ * This only checks whether we are in a Mathematica file and there, not in a comment. Additional checks seem to hinder
+ * more because in Mathematica everything is an expression and you probably want to expand a template in all kinds of
+ * different positions.
+ *
+ * @author rsmenon 7/7/14.
  */
 public class MathematicaTemplateContextType extends TemplateContextType {
-    protected MathematicaTemplateContextType() {
-        super(Mathematica.NAME, "Mathematica");
-    }
+  protected MathematicaTemplateContextType() {
+    super(Mathematica.NAME, "Mathematica");
+  }
 
-    public boolean isInContext(@NotNull PsiFile file, int offset) {
-        if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(MathematicaFileType.INSTANCE.getLanguage())) {
-            PsiElement element = PsiUtilBase.getElementAtOffset(file, offset);
-            return PsiTreeUtil.getParentOfType(element, PsiComment.class, false) == null;
-        }
-        return false;
+  public boolean isInContext(@NotNull PsiFile file, int offset) {
+    if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(MathematicaFileType.INSTANCE.getLanguage())) {
+      PsiElement element = PsiUtilBase.getElementAtOffset(file, offset);
+      return PsiTreeUtil.getParentOfType(element, PsiComment.class, false) == null;
     }
+    return false;
+  }
 
-    @Override
-    public SyntaxHighlighter createHighlighter() {
-        return new MathematicaSyntaxHighlighter();
-    }
+  @Override
+  public SyntaxHighlighter createHighlighter() {
+    return new MathematicaSyntaxHighlighter();
+  }
 
 
 }

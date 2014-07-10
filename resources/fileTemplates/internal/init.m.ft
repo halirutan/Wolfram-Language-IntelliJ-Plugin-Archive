@@ -1,2 +1,3 @@
-(* Mathematica Init file *)
+(* Mathematica Init file    *)
+(* Created by IntelliJ IDEA *)
 Get["${PROJECT_NAME}`${PROJECT_NAME}`"]

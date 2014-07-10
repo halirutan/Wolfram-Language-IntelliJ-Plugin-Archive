@@ -1,9 +1,18 @@
-(* Mathematica Package *)
-(* :Context: ${NAME}` *)
-(* :Author: ${USER} *)
-(* :Date: ${DATE} *)
+(* Mathematica Package         *)
+(* Created by IntelliJ IDEA    *)
 
-BeginPackage["${NAME}`"]
+(* :Title: ${NAME}     *)
+(* :Context: ${PROJECT_NAME}`${NAME}`  *)
+(* :Author: ${USER}            *)
+(* :Date: ${DATE}              *)
+
+(* :Package Version: 1.0       *)
+(* :Mathematica Version:       *)
+(* :Copyright: (c) ${YEAR} ${USER} *)
+(* :Keywords:                  *)
+(* :Discussion:                *)
+
+BeginPackage["${PROJECT_NAME}`${NAME}`"]
 (* Exported symbols added here with SymbolName::usage *)  
 
 Begin["`Private`"] (* Begin Private Context *) 
