@@ -107,8 +107,8 @@
                 implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
         <!-- Error recovery and intentions-->
-        <inspectionToolProvider
-                implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
+        <!--<inspectionToolProvider-->
+                <!--implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>-->
     </extensions>
 
     <actions>
