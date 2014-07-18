@@ -27,7 +27,6 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
-import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
  * @author patrick (3/27/13)
@@ -46,16 +45,14 @@ public class PutParselet implements InfixParselet {
     final IElementType tokenType = parser.getTokenType();
     final IElementType type = tokenType.equals(MathematicaElementTypes.PUT) ? MathematicaElementTypes.PUT_EXPRESSION : MathematicaElementTypes.PUT_APPEND_EXPRESSION;
     parser.advanceLexer();
-    boolean result;
     if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
-      final PrefixParselet parselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.STRINGIFIED_IDENTIFIER);
-      result = parselet.parse(parser).isMyParsed();
+      final MathematicaParser.Result result1 = parser.parseExpression(myPrecedence);
       putMark.done(type);
+      return MathematicaParser.result(putMark, type, result1.isMyParsed());
     } else {
       putMark.error(ParserBundle.message("Put.rhs"));
-      result = false;
+      return MathematicaParser.result(putMark, type, false);
     }
-    return MathematicaParser.result(putMark, type, result);
   }
 
   @Override

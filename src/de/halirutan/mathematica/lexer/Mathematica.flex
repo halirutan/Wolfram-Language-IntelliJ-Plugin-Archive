@@ -56,7 +56,7 @@ ScientificInteger = {Number} "\*^"(-?){Digits}
 ScientificNumber = {PrecisionNumber} "\*^"(-?){Digits}
 BaseScientificNumber = {BasePrecisionNumber} "\*^"(-?){Digits}
 
-Slot = "#" [0-9a-zA-Z]*
+Slot = "#" [0-9]* | "#" [a-zA-Z\$][a-zA-Z0-9\$]*
 SlotSequence = "##" [0-9]*
 
 Out = "%"+
