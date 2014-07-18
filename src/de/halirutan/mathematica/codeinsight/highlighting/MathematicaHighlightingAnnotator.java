@@ -36,6 +36,7 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
+import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
@@ -130,6 +131,11 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
     };
 
     patternVisitor.visitElement(function);
+  }
+
+  @Override
+  public void visitStringifiedSymbol(final StringifiedSymbol stringifiedSymbol) {
+    setHighlighting(stringifiedSymbol, myHolder, MathematicaSyntaxHighlighterColors.MESSAGE);
   }
 
   @Override

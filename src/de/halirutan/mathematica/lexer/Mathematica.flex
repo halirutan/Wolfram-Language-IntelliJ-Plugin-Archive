@@ -63,11 +63,12 @@ Out = "%"+
 
 %xstate IN_COMMENT
 %xstate IN_STRING
+%state PUT_START, PUT_RHS, GET_START, GET_RHS
 
 %%
 
 <YYINITIAL> {
-	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT;}
+	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
 	{WhiteSpace}+ 		{ return MathematicaElementTypes.WHITE_SPACE; }
     "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
@@ -115,9 +116,9 @@ Out = "%"+
 	"/;"				{ return MathematicaElementTypes.CONDITION; }
 	"/:"				{ return MathematicaElementTypes.TAG_SET; }
 
-	">>>"				{ return MathematicaElementTypes.PUT_APPEND; }
-	">>"				{ return MathematicaElementTypes.PUT; }
-	"<<"				{ return MathematicaElementTypes.GET; }
+	">>>"				{ yybegin(PUT_START); return MathematicaElementTypes.PUT_APPEND; }
+	">>"				{ yybegin(PUT_START); return MathematicaElementTypes.PUT; }
+	"<<"				{ yybegin(GET_START); return MathematicaElementTypes.GET; }
 
 	"//"				{ return MathematicaElementTypes.POSTFIX; }
 
@@ -199,6 +200,26 @@ Out = "%"+
 //
 //}
 
+<PUT_START> {
+  {WhiteSpace}+                 { yybegin(PUT_RHS); return MathematicaElementTypes.WHITE_SPACE; }
+  .                             { yypushback(1); yybegin(PUT_RHS);}
+}
+
+<GET_START> {
+  {WhiteSpace}+                 { yybegin(GET_RHS); return MathematicaElementTypes.WHITE_SPACE; }
+  .                             { yypushback(1); yybegin(GET_RHS);}
+}
+
+<PUT_RHS> {
+  [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+  .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
+}
+
+<GET_RHS> {
+  [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+  .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
+}
+
 <IN_STRING> {
   \"                             { yypopstate(); return MathematicaElementTypes.STRING_LITERAL_END; }
   [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
@@ -209,6 +230,7 @@ Out = "%"+
 }
 
 
+
 <IN_COMMENT> {
 	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
 	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
@@ -217,5 +239,7 @@ Out = "%"+
 	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
 
 }
+
+
 
 .|{LineTerminator}+ 	{ return MathematicaElementTypes.BAD_CHARACTER; }

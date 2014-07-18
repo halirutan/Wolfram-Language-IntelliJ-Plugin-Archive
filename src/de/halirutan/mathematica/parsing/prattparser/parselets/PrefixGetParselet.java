@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,31 +24,38 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
- * Parselet for symbols (identifier).
+ * Parses <<package`name`
  *
  * @author patrick (3/27/13)
  */
-public class SymbolParselet implements PrefixParselet {
-
+public class PrefixGetParselet implements PrefixParselet {
   private final int myPrecedence;
 
-  public SymbolParselet(int precedence) {
+  public PrefixGetParselet(int precedence) {
     this.myPrecedence = precedence;
   }
 
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker symbolMark = parser.mark();
-    final IElementType type = parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER) ?
-        MathematicaElementTypes.SYMBOL_EXPRESSION :
-        MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION;
+    PsiBuilder.Marker getMark = parser.mark();
+    IElementType nodeToken = MathematicaElementTypes.GET_PREFIX;
     parser.advanceLexer();
-    symbolMark.done(type);
-    return MathematicaParser.result(symbolMark, type, true);
+    boolean result;
+    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
+      final PrefixParselet prefixParselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.STRINGIFIED_IDENTIFIER);
+      result = prefixParselet.parse(parser).isMyParsed();
+      getMark.done(nodeToken);
+    } else {
+      getMark.error(ParserBundle.message("Get.stringified.symbol.expected"));
+      result = false;
+    }
+    return MathematicaParser.result(getMark, nodeToken, result);
   }
 
   public int getPrecedence() {

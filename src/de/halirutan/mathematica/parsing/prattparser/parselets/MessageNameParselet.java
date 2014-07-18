@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -52,21 +53,31 @@ public class MessageNameParselet implements InfixParselet {
       if ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
           (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION))) {
         PsiBuilder.Marker errorMark = result.getMark().precede();
-        errorMark.error("Usage message expects Symbol or String");
+        errorMark.error(ParserBundle.message("MessageName.no.symbol.or.string"));
+      } else if (result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) {
+        final PsiBuilder.Marker mark = result.getMark();
+        final PsiBuilder.Marker precede = mark.precede();
+        precede.done(MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION);
+        mark.drop();
       }
 
       // Check whether we have the form symbol::name::language
       if (parser.matchesToken(MathematicaElementTypes.DOUBLE_COLON)) {
         parser.advanceLexer();
         result = parser.parseExpression(myPrecedence);
-        if (result.isMyParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) ||
+        if (result.isMyParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
             (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION)))) {
           PsiBuilder.Marker errMark = result.getMark().precede();
-          errMark.error("Usage message exprects Symbol or String");
+          errMark.error(ParserBundle.message("MessageName.no.symbol.or.string"));
+        } else if (result.isValid() && result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) {
+          final PsiBuilder.Marker mark = result.getMark();
+          final PsiBuilder.Marker precede = mark.precede();
+          precede.done(MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION);
+          mark.drop();
         }
       }
     } else {
-      parser.error("Symbol or String expected as Name in Symbol::Name");
+      parser.error(ParserBundle.message("MessageName.arg"));
     }
     messageNameMarker.done(MathematicaElementTypes.MESSAGE_NAME_EXPRESSION);
     return MathematicaParser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, result.isMyParsed());

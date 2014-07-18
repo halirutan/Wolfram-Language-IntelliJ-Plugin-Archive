@@ -52,6 +52,7 @@ public class ParseletProvider {
 
     register(MathematicaElementTypes.NUMBER, MathematicaElementTypes.NUMBER_EXPRESSION, new NumberParselet(80)); // Number(123)
     register(MathematicaElementTypes.IDENTIFIER, MathematicaElementTypes.SYMBOL_EXPRESSION, new SymbolParselet(80)); // Symbol($var)
+    register(MathematicaElementTypes.STRINGIFIED_IDENTIFIER, MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION, new SymbolParselet(80)); // Symbol($var)
     register(MathematicaElementTypes.STRING_LITERAL_BEGIN, MathematicaElementTypes.STRING_LITERAL_EXPRESSION, new StringParselet(80)); // MString(abc)
 
     register(MathematicaElementTypes.DOUBLE_COLON, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, new MessageNameParselet(78)); // MessageName(::)
@@ -68,7 +69,7 @@ public class ParseletProvider {
     postfix(MathematicaElementTypes.DEFAULT, MathematicaElementTypes.DEFAULT_EXPRESSION, 76); // Default(_.)
     register(MathematicaElementTypes.DEFAULT, MathematicaElementTypes.DEFAULT_EXPRESSION, new PrefixDefaultParselet(76)); // Default(_.)
 
-    prefix(MathematicaElementTypes.GET, MathematicaElementTypes.GET_PREFIX, 74); // Get(<<)
+    register(MathematicaElementTypes.GET, MathematicaElementTypes.GET_PREFIX, new PrefixGetParselet(74)); // Get(<<)
 
     infixLeft(MathematicaElementTypes.QUESTION_MARK, MathematicaElementTypes.PATTERN_TEST_EXPRESSION, 72); // PatternTest(?)
 
@@ -167,8 +168,8 @@ public class ParseletProvider {
     register(MathematicaElementTypes.TAG_SET, MathematicaElementTypes.TAG_SET_EXPRESSION, new TagSetParselet(6)); // TagSet(/:)
     postfix(MathematicaElementTypes.UNSET, MathematicaElementTypes.UNSET_EXPRESSION, 6); // Unset(=.)
 
-    infixLeft(MathematicaElementTypes.PUT, MathematicaElementTypes.PUT_EXPRESSION, 4); // Put(>>)
-    infixLeft(MathematicaElementTypes.PUT_APPEND, MathematicaElementTypes.PUT_APPEND_EXPRESSION, 4); // PutAppend(>>>)
+    register(MathematicaElementTypes.PUT, MathematicaElementTypes.PUT_EXPRESSION, new PutParselet(4)); // Put(>>)
+    register(MathematicaElementTypes.PUT_APPEND, MathematicaElementTypes.PUT_APPEND_EXPRESSION, new PutParselet(4)); // PutAppend(>>>)
 
     register(MathematicaElementTypes.SEMICOLON, MathematicaElementTypes.COMPOUND_EXPRESSION_EXPRESSION, new CompoundExpressionParselet(2)); // CompoundExpression(;)
 

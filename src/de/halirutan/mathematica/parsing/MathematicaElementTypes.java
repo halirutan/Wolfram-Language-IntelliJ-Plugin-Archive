@@ -91,6 +91,7 @@ public interface MathematicaElementTypes {
       STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN
   );
   IElementType IDENTIFIER = new MathematicaElementType("IDENTIFIER");
+  IElementType STRINGIFIED_IDENTIFIER = new MathematicaElementType("STRINGIFIED_IDENTIFIER");
   IElementType NUMBER = new MathematicaElementType("NUMBER");
   TokenSet LITERALS = TokenSet.create(
       NUMBER
@@ -212,6 +213,7 @@ public interface MathematicaElementTypes {
   IElementType ASSOCIATION_EXPRESSION = new MathematicaElementType("ASSOCIATION_EXPRESSION");
   IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");
   IElementType SYMBOL_EXPRESSION = new MathematicaElementType("SYMBOL_EXPRESSION");
+  IElementType STRINGIFIED_SYMBOL_EXPRESSION = new MathematicaElementType("STRINGIFIED_SYMBOL_EXPRESSION");
   IElementType STRING = new MathematicaElementType("STRING");
   IElementType MESSAGE_NAME_EXPRESSION = new MathematicaElementType("MESSAGE_NAME_EXPRESSION");
   IElementType BLANK_EXPRESSION = new MathematicaElementType("BLANK_EXPRESSION");
@@ -297,11 +299,12 @@ public interface MathematicaElementTypes {
       if (type.equals(FUNCTION_CALL_EXPRESSION)) return new FunctionCallImpl(node);
 
       // Basic types
+      if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
+      if (type.equals(STRINGIFIED_SYMBOL_EXPRESSION)) return new StringifiedSymbolImpl(node);
       if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
       if (type.equals(STRING_LITERAL_EXPRESSION)) return new StringImpl(node);
 
       // Arithmetic operations
-      if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
       if (type.equals(DIVIDE_EXPRESSION)) return new DivideImpl(node);
       if (type.equals(DOT_EXPRESSION)) return new DotImpl(node);
       if (type.equals(FACTORIAL_POSTFIX)) return new FactorialImpl(node);

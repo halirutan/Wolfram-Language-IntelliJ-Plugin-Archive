@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,34 +24,42 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
- * Parselet for symbols (identifier).
- *
  * @author patrick (3/27/13)
  */
-public class SymbolParselet implements PrefixParselet {
-
+public class PutParselet implements InfixParselet {
   private final int myPrecedence;
 
-  public SymbolParselet(int precedence) {
+  public PutParselet(int precedence) {
     this.myPrecedence = precedence;
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker symbolMark = parser.mark();
-    final IElementType type = parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER) ?
-        MathematicaElementTypes.SYMBOL_EXPRESSION :
-        MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION;
+  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+    if (!left.isValid()) return MathematicaParser.notParsed();
+    PsiBuilder.Marker putMark = left.getMark().precede();
+    final IElementType tokenType = parser.getTokenType();
+    final IElementType type = tokenType.equals(MathematicaElementTypes.PUT) ? MathematicaElementTypes.PUT_EXPRESSION : MathematicaElementTypes.PUT_APPEND_EXPRESSION;
     parser.advanceLexer();
-    symbolMark.done(type);
-    return MathematicaParser.result(symbolMark, type, true);
+    boolean result;
+    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
+      final PrefixParselet parselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.STRINGIFIED_IDENTIFIER);
+      result = parselet.parse(parser).isMyParsed();
+      putMark.done(type);
+    } else {
+      putMark.error(ParserBundle.message("Put.rhs"));
+      result = false;
+    }
+    return MathematicaParser.result(putMark, type, result);
   }
 
-  public int getPrecedence() {
+  @Override
+  public int getMyPrecedence() {
     return myPrecedence;
   }
 }
