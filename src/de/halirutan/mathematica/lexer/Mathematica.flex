@@ -5,6 +5,7 @@ import com.intellij.psi.tree.IElementType;
 import java.util.LinkedList;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
+@SuppressWarnings("ALL")
 %%
 
 %class _MathematicaLexer

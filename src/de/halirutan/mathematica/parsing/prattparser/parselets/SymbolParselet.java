@@ -23,12 +23,15 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+
 /**
- * Parselet for symbols (identifier).
+ * Parselet for symbols (identifier). Here, I currently parse not only simple identifiers like Sqrt, variable or
+ * $MaxRecursion. Additionally, I parse slot expressions like #1, ## or #abc into symbols and I parse stringified
+ * expressions like the rhs of << into one STRINGIFIED_SYMBOL_EXPRESSION node.
  *
  * @author patrick (3/27/13)
  */
@@ -43,12 +46,18 @@ public class SymbolParselet implements PrefixParselet {
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
     PsiBuilder.Marker symbolMark = parser.mark();
-    final IElementType type = parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER) ?
-        MathematicaElementTypes.SYMBOL_EXPRESSION :
-        MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION;
+    IElementType finalExpressionType;
+    final IElementType tokenType = parser.getTokenType();
+    if (tokenType.equals(IDENTIFIER) || SLOTS.contains(tokenType)) {
+      finalExpressionType = SYMBOL_EXPRESSION;
+    } else if (tokenType.equals(STRINGIFIED_IDENTIFIER)) {
+      finalExpressionType = STRINGIFIED_SYMBOL_EXPRESSION;
+    } else {
+      return MathematicaParser.notParsed();
+    }
     parser.advanceLexer();
-    symbolMark.done(type);
-    return MathematicaParser.result(symbolMark, type, true);
+    symbolMark.done(finalExpressionType);
+    return MathematicaParser.result(symbolMark, finalExpressionType, true);
   }
 
   public int getPrecedence() {
