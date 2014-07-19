@@ -54,7 +54,7 @@ public class CompoundExpressionParselet implements InfixParselet {
     while (true) {
       MathematicaParser.Result result = parser.parseExpression(myPrecedence);
       if (!result.isValid()) break;
-      ok &= result.isMyParsed();
+      ok &= result.isParsed();
       if (parser.matchesToken(MathematicaElementTypes.SEMICOLON)) parser.advanceLexer();
       else break;
     }

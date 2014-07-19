@@ -46,7 +46,7 @@ public class PrefixOperatorParselet implements PrefixParselet {
     IElementType token = ParseletProvider.getPrefixPsiElement(this);
     MathematicaParser.Result result = parser.parseExpression(myPrecedence);
     mark.done(token);
-    return MathematicaParser.result(mark, token, result.isMyParsed());
+    return MathematicaParser.result(mark, token, result.isParsed());
 
   }
 

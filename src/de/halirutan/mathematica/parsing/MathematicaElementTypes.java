@@ -91,6 +91,7 @@ public interface MathematicaElementTypes {
       STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN
   );
   IElementType IDENTIFIER = new MathematicaElementType("IDENTIFIER");
+  IElementType ASSOCIATION_SLOT = new MathematicaElementType("ASSOCIATION_SLOT");
   IElementType STRINGIFIED_IDENTIFIER = new MathematicaElementType("STRINGIFIED_IDENTIFIER");
   IElementType NUMBER = new MathematicaElementType("NUMBER");
   TokenSet LITERALS = TokenSet.create(
@@ -176,7 +177,7 @@ public interface MathematicaElementTypes {
   IElementType SLOT = new MathematicaElementType("SLOT");
   IElementType SLOT_SEQUENCE = new MathematicaElementType("SLOT_SEQUENCE");
   TokenSet SLOTS = TokenSet.create(
-      SLOT, SLOT_SEQUENCE
+      SLOT, SLOT_SEQUENCE, ASSOCIATION_SLOT
   );
   IElementType FUNCTION = new MathematicaElementType("FUNCTION");
   IElementType BACK_TICK = new MathematicaElementType("BACK_TICK");
@@ -301,6 +302,7 @@ public interface MathematicaElementTypes {
       // Basic types
       if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
       if (type.equals(STRINGIFIED_SYMBOL_EXPRESSION)) return new StringifiedSymbolImpl(node);
+      if (SLOTS.contains(type)) return new SlotImpl(node);
       if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
       if (type.equals(STRING_LITERAL_EXPRESSION)) return new StringImpl(node);
 

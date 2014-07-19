@@ -45,5 +45,4 @@ public class MathematicaCompletionContributor extends CompletionContributor {
   }
 
 
-
 }

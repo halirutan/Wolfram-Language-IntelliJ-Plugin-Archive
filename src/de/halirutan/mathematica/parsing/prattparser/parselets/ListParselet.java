@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -49,7 +50,7 @@ public class ListParselet implements PrefixParselet {
       parser.advanceLexer();
     } else {
       listMarker.drop();
-      throw new CriticalParserError("List parselet does not start with {");
+      throw new CriticalParserError(ParserBundle.message("Critical.list"));
     }
 
     MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_BRACE);
@@ -57,11 +58,11 @@ public class ListParselet implements PrefixParselet {
     if (parser.matchesToken(RIGHT_BRACE)) {
       parser.advanceLexer();
     } else {
-      parser.error("Closing '}' expected");
+      parser.error(ParserBundle.message("General.closing", "'}'"));
       result = false;
     }
     listMarker.done(LIST_EXPRESSION);
-    return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isMyParsed());
+    return MathematicaParser.result(listMarker, LIST_EXPRESSION, result && seqResult.isParsed());
   }
 
   public int getPrecedence() {

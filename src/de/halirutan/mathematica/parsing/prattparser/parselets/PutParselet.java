@@ -48,7 +48,7 @@ public class PutParselet implements InfixParselet {
     if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
       final MathematicaParser.Result result1 = parser.parseExpression(myPrecedence);
       putMark.done(type);
-      return MathematicaParser.result(putMark, type, result1.isMyParsed());
+      return MathematicaParser.result(putMark, type, result1.isParsed());
     } else {
       putMark.error(ParserBundle.message("Put.rhs"));
       return MathematicaParser.result(putMark, type, false);

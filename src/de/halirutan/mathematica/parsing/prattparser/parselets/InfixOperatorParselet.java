@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
@@ -52,11 +53,11 @@ public class InfixOperatorParselet implements InfixParselet {
     parser.advanceLexer();
 
     MathematicaParser.Result result = parser.parseExpression(myPrecedence - (myRightAssociative ? 1 : 0));
-    if (result.isMyParsed()) {
+    if (result.isParsed()) {
       infixOperationMarker.done(token);
       result = MathematicaParser.result(infixOperationMarker, token, true);
     } else {
-      parser.error("More input expected.");
+      parser.error(ParserBundle.message("General.input"));
       infixOperationMarker.done(token);
     }
     return result;

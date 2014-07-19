@@ -41,6 +41,7 @@ public class MathematicaBraceMatcher implements PairedBraceMatcher {
   private static final BracePair[] PAIRS = new BracePair[]{
       new BracePair(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.RIGHT_BRACE, true),
       new BracePair(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.RIGHT_PAR, false),
+      new BracePair(MathematicaElementTypes.LEFT_ASSOCIATION, MathematicaElementTypes.RIGHT_ASSOCIATION, false),
       new BracePair(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET, true),
       new BracePair(MathematicaElementTypes.PART_BEGIN, MathematicaElementTypes.RIGHT_BRACKET, true)
   };

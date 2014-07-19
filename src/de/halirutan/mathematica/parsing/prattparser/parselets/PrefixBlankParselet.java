@@ -46,7 +46,7 @@ public class PrefixBlankParselet implements PrefixParselet {
     parser.advanceLexer();
     MathematicaParser.Result result = parser.parseExpression(myPrecedence);
     blankMark.done(token);
-    return MathematicaParser.result(blankMark, token, !result.isValid() || result.isMyParsed());
+    return MathematicaParser.result(blankMark, token, !result.isValid() || result.isParsed());
   }
 
   public int getPrecedence() {

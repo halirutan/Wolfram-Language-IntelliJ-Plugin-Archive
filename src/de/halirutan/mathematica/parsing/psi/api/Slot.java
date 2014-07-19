@@ -18,26 +18,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.halirutan.mathematica.errorreporting;
 
-import com.intellij.CommonBundle;
-import org.jetbrains.annotations.PropertyKey;
-
-import java.util.ResourceBundle;
+package de.halirutan.mathematica.parsing.psi.api;
 
 /**
- * This class allows for i18n of the messages displayed by the error report submitter.
- *
- * @author <a href="mailto:intellij@studer.nu">Etienne Studer</a>, Jun 13, 2006
+ * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
-public class PluginErrorReportSubmitterBundle {
-  private static final ResourceBundle OUR_BUNDLE = ResourceBundle.getBundle("com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle");
+public interface Slot extends Expression {
 
-  private PluginErrorReportSubmitterBundle() {
-  }
-
-  public static String message(@PropertyKey(resourceBundle = "com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle") String key,
-                               Object... params) {
-    return CommonBundle.message(OUR_BUNDLE, key, params);
-  }
 }

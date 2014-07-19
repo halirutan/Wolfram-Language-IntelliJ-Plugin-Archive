@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2014 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,39 +23,41 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
-import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
+
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SLOTS;
 
 /**
+ * Parselet for symbols (identifier). Here, I currently parse not only simple identifiers like Sqrt, variable or
+ * $MaxRecursion. Additionally, I parse slot expressions like #1, ## or #abc into symbols and I parse stringified
+ * expressions like the rhs of << into one STRINGIFIED_SYMBOL_EXPRESSION node.
+ *
  * @author patrick (3/27/13)
  */
-public class BlankParselet implements InfixParselet {
+public class SlotParselet implements PrefixParselet {
+
   private final int myPrecedence;
 
-  public BlankParselet(int precedence) {
+  public SlotParselet(int precedence) {
     this.myPrecedence = precedence;
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-    if (!left.isValid()) return MathematicaParser.notParsed();
-    PsiBuilder.Marker blankMark = left.getMark().precede();
-    IElementType token = MathematicaElementTypes.BLANK_EXPRESSION;
-    parser.advanceLexer();
-    if (!parser.isNextWhitespace() && !parser.eof() && parser.getTokenType().equals(MathematicaElementTypes.IDENTIFIER)) {
-      final PrefixParselet symbolParselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.IDENTIFIER);
-      symbolParselet.parse(parser);
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    PsiBuilder.Marker symbolMark = parser.mark();
+    final IElementType tokenType = parser.getTokenType();
+    if (SLOTS.contains(tokenType)) {
+      parser.advanceLexer();
+      symbolMark.done(tokenType);
+      return MathematicaParser.result(symbolMark, tokenType, true);
+    } else {
+      return MathematicaParser.notParsed();
     }
-//    MathematicaParser.Result expr = parser.parseExpression(myPrecedence);
-    blankMark.done(token);
-//    return MathematicaParser.result(blankMark, token, !expr.isValid() || expr.isParsed());
-    return MathematicaParser.result(blankMark, token, true);
+
   }
 
-  @Override
-  public int getMyPrecedence() {
+  public int getPrecedence() {
     return myPrecedence;
   }
 }

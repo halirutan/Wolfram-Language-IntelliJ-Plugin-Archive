@@ -48,7 +48,7 @@ public class ParseletProvider {
   static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
     register(MathematicaElementTypes.LEFT_BRACE, MathematicaElementTypes.LIST_EXPRESSION, new ListParselet(82)); // Group(()
-    register(MathematicaElementTypes.LEFT_ASSOCIATION, MathematicaElementTypes.ASSOCIATION_EXPRESSION, new AssociationParselet(82)); // Group(()
+    register(MathematicaElementTypes.LEFT_ASSOCIATION, MathematicaElementTypes.ASSOCIATION_EXPRESSION, new AssociationParselet(82)); // Association <|"foo"->1|>
 
     register(MathematicaElementTypes.NUMBER, MathematicaElementTypes.NUMBER_EXPRESSION, new NumberParselet(80)); // Number(123)
     register(MathematicaElementTypes.IDENTIFIER, MathematicaElementTypes.SYMBOL_EXPRESSION, new SymbolParselet(80)); // Symbol($var)
@@ -57,8 +57,9 @@ public class ParseletProvider {
 
     register(MathematicaElementTypes.DOUBLE_COLON, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, new MessageNameParselet(78)); // MessageName(::)
 
-    register(MathematicaElementTypes.SLOT_SEQUENCE, MathematicaElementTypes.SLOT_SEQUENCE, new SymbolParselet(77)); // ##n expressions
-    register(MathematicaElementTypes.SLOT, MathematicaElementTypes.SLOT, new SymbolParselet(77)); // ##n expressions
+    register(MathematicaElementTypes.SLOT_SEQUENCE, MathematicaElementTypes.SLOT_SEQUENCE, new SlotParselet(77)); // ##n expressions
+    register(MathematicaElementTypes.SLOT, MathematicaElementTypes.SLOT, new SlotParselet(77)); // ##n expressions
+    register(MathematicaElementTypes.ASSOCIATION_SLOT, MathematicaElementTypes.ASSOCIATION_SLOT, new SlotParselet(77)); // #foo123 expressions
 
     register(MathematicaElementTypes.BLANK, MathematicaElementTypes.BLANK_EXPRESSION, new BlankParselet(76)); // Blank(_)
     register(MathematicaElementTypes.BLANK, MathematicaElementTypes.BLANK_EXPRESSION, new PrefixBlankParselet(76)); // Blank(_)

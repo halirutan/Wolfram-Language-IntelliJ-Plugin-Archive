@@ -29,11 +29,9 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
+import de.halirutan.mathematica.parsing.psi.api.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -50,7 +48,7 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
 
   static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-  static HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
+  static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
       "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
       "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"
   }));
@@ -81,22 +79,43 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
       if (functionName.equals("Message")) {
         final Set<LookupElement> usages = new com.intellij.util.containers.hash.HashSet<LookupElement>();
-        PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
+
+        MathematicaRecursiveVisitor visitor = new MathematicaRecursiveVisitor() {
+
           @Override
-          public void visitElement(PsiElement element) {
-            if (element instanceof MessageName) {
-              final PsiElement[] args = element.getChildren();
-              if (args.length == 2) {
-                final PsiElement symbol = args[0];
-                final PsiElement msg = args[1];
-                if (symbol instanceof Symbol && msg instanceof Symbol) {
-                  usages.add(LookupElementBuilder.create(((Symbol) symbol).getSymbolName() + "::" + ((Symbol) msg).getSymbolName()).
-                      withTypeText("Msg"));
-                }
+          public void visitMessageName(final MessageName messageName) {
+            final Expression symbol = messageName.getSymbol();
+            final StringifiedSymbol tag = messageName.getTag();
+            final StringifiedSymbol lang = messageName.getLang();
+
+            if (symbol instanceof Symbol && tag != null) {
+              StringBuilder lookup = new StringBuilder(((Symbol) symbol).getSymbolName());
+              lookup.append("::");
+              lookup.append(tag.getText());
+              if (lang != null) {
+                lookup.append("::");
+                lookup.append(lang.getText());
               }
+              usages.add(LookupElementBuilder.create(lookup.toString()).withTypeText("Msg"));
             }
-            element.acceptChildren(this);
+
           }
+//
+//          @Override
+//          public void visitElement(PsiElement element) {
+//            if (element instanceof MessageName) {
+//              final PsiElement[] args = element.getChildren();
+//              if (args.length == 2) {
+//                final PsiElement symbol = args[0];
+//                final PsiElement msg = args[1];
+//                if (symbol instanceof Symbol && msg instanceof Symbol) {
+//                  usages.add(LookupElementBuilder.create(((Symbol) symbol).getSymbolName() + "::" + ((Symbol) msg).getSymbolName()).
+//                      withTypeText("Msg"));
+//                }
+//              }
+//            }
+//            element.acceptChildren(this);
+//          }
         };
         visitor.visitFile(parameters.getOriginalFile());
         result.addAllElements(usages);

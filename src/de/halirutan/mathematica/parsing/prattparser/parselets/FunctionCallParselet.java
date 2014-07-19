@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -69,15 +70,15 @@ public class FunctionCallParselet implements InfixParselet {
     if (parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET)) {
       if (isPartExpr && parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET, MathematicaElementTypes.RIGHT_BRACKET)) {
         if (!hasArgs) {
-          parser.error("Part expression cannot be empty");
+          parser.error(ParserBundle.message("Part.empty"));
         }
         parser.advanceLexer();
         parser.advanceLexer();
         mainMark.done(MathematicaElementTypes.PART_EXPRESSION);
-        return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isMyParsed() && hasArgs);
+        return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, exprSeq.isParsed() && hasArgs);
       } else if (isPartExpr) {
         parser.advanceLexer();
-        parser.error("Closing ']' expected");
+        parser.error(ParserBundle.message("General.closing", "']]'"));
         mainMark.done(MathematicaElementTypes.PART_EXPRESSION);
         return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, false);
       } else {
@@ -87,7 +88,7 @@ public class FunctionCallParselet implements InfixParselet {
       }
     }
 
-    parser.error("Closing ']' expected");
+    parser.error(ParserBundle.message("General.closing", "']'"));
     IElementType expressionType = isPartExpr ? MathematicaElementTypes.PART_EXPRESSION : MathematicaElementTypes.FUNCTION_CALL_EXPRESSION;
     mainMark.done(expressionType);
     return MathematicaParser.result(mainMark, expressionType, false);

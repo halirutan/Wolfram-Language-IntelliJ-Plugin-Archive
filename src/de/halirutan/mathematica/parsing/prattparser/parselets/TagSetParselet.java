@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -47,7 +48,7 @@ public class TagSetParselet implements InfixParselet {
       parser.advanceLexer();
     } else {
       tagSetMark.drop();
-      throw new CriticalParserError("Expected token TAG_SET");
+      throw new CriticalParserError(ParserBundle.message("Critical.tagset"));
     }
     // In the next line we parse expr1 of expr0/:expr1 and we reduce the precedence by one because it is
     // right associative. Using SetDelayed (:=) which has the same precedence the following expression:
@@ -55,7 +56,7 @@ public class TagSetParselet implements InfixParselet {
     MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
 
     if (!expr1.isValid()) {
-      parser.error("Missing 'expr' followed by ':=','=' or '=.' to complete TagSet");
+      parser.error(ParserBundle.message("TagSet.missing.pattern"));
       tagSetMark.done(MathematicaElementTypes.TAG_SET_EXPRESSION);
       return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
     }
@@ -64,7 +65,7 @@ public class TagSetParselet implements InfixParselet {
     IElementType tokenType = parser.getTokenType();
 
     if (tokenType == null) {
-      parser.error("Missing ':=','=' or '=.' to complete TagSet");
+      parser.error(ParserBundle.message("TagSet.missing.set"));
       tagSetMark.done(MathematicaElementTypes.TAG_SET_EXPRESSION);
       return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
     }
@@ -73,7 +74,7 @@ public class TagSetParselet implements InfixParselet {
     if (tokenType.equals(MathematicaElementTypes.UNSET)) {
       parser.advanceLexer();
       tagSetMark.done(MathematicaElementTypes.TAG_UNSET_EXPRESSION);
-      return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_UNSET_EXPRESSION, expr1.isMyParsed());
+      return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_UNSET_EXPRESSION, expr1.isParsed());
     }
 
     // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
@@ -82,15 +83,15 @@ public class TagSetParselet implements InfixParselet {
       MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
       IElementType endType = tokenType.equals(MathematicaElementTypes.SET) ? MathematicaElementTypes.TAG_SET_EXPRESSION : MathematicaElementTypes.TAG_SET_DELAYED_EXPRESSION;
       if (!expr2.isValid()) {
-        parser.error("Expression expected");
+        parser.error(ParserBundle.message("General.expr.expected"));
       }
 
       tagSetMark.done(endType);
-      return MathematicaParser.result(tagSetMark, endType, expr1.isMyParsed() && expr2.isMyParsed());
+      return MathematicaParser.result(tagSetMark, endType, expr1.isParsed() && expr2.isParsed());
     }
 
     // if we are here, the second operator (:=, = or =.) is missing and we give up
-    parser.error("Missing ':=','=' or '=.' to complete TagSet");
+    parser.error(ParserBundle.message("TagSet.missing.set"));
     tagSetMark.done(MathematicaElementTypes.TAG_SET_EXPRESSION);
     return MathematicaParser.result(tagSetMark, MathematicaElementTypes.TAG_SET_EXPRESSION, false);
   }

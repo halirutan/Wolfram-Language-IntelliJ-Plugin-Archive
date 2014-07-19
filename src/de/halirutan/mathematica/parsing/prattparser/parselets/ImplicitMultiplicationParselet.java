@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -45,11 +46,11 @@ public class ImplicitMultiplicationParselet implements InfixParselet {
 
 
     MathematicaParser.Result result = parser.parseExpression(PRECEDENCE);
-    if (result.isMyParsed()) {
+    if (result.isParsed()) {
       timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
       result = MathematicaParser.result(timesMarker, MathematicaElementTypes.TIMES_EXPRESSION, true);
     } else {
-      parser.error("More input expected.");
+      parser.error(ParserBundle.message("General.eof"));
       timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
     }
     return result;

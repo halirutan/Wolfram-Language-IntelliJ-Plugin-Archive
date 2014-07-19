@@ -45,14 +45,13 @@ public class DerivativeParselet implements InfixParselet {
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
     PsiBuilder.Marker derivativeMark = left.getMark().precede();
-    boolean result = true;
 
     while (!parser.eof() && parser.getTokenType().equals(DERIVATIVE)) {
       parser.advanceLexer();
     }
     derivativeMark.done(DERIVATIVE_EXPRESSION);
 
-    return MathematicaParser.result(derivativeMark, DERIVATIVE_EXPRESSION, result);
+    return MathematicaParser.result(derivativeMark, DERIVATIVE_EXPRESSION, true);
   }
 
   @Override

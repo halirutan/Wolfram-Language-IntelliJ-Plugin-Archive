@@ -49,7 +49,7 @@ public class PrefixGetParselet implements PrefixParselet {
     boolean result;
     if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
       final PrefixParselet prefixParselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.STRINGIFIED_IDENTIFIER);
-      result = prefixParselet.parse(parser).isMyParsed();
+      result = prefixParselet.parse(parser).isParsed();
       getMark.done(nodeToken);
     } else {
       getMark.error(ParserBundle.message("Get.stringified.symbol.expected"));

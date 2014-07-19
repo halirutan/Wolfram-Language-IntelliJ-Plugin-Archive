@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -61,18 +62,18 @@ public final class ParserUtil {
     while (true) {
       while (parser.matchesToken(MathematicaElementTypes.COMMA)) {
         parser.advanceLexer();
-        parser.error("Expression expected before ','");
+        parser.error(ParserBundle.message("General.expr.expected.before.comma"));
         sequenceParsed = false;
       }
       if (parser.matchesToken(rightDel)) {
         break;
       }
       result = parser.parseExpression();
-      sequenceParsed &= result.isMyParsed();
+      sequenceParsed &= result.isParsed();
 
       // if we couldn't parseSequence the argument expression and the next token is neither a comma nor
       // a closing brace/bracket, then we are lost at this point and should not try further to parseSequence something.
-      if (!result.isMyParsed() && !(parser.matchesToken(MathematicaElementTypes.COMMA) || parser.matchesToken(rightDel))) {
+      if (!result.isParsed() && !(parser.matchesToken(MathematicaElementTypes.COMMA) || parser.matchesToken(rightDel))) {
         sequenceParsed = false;
         break;
       }
@@ -82,7 +83,7 @@ public final class ParserUtil {
       // something like f[expr1,expr2,] is not considered to be a bug.
       if (parser.matchesToken(MathematicaElementTypes.COMMA)) {
         if (parser.matchesToken(MathematicaElementTypes.COMMA, rightDel)) {
-          parser.error("unexpected ','");
+          parser.error(ParserBundle.message("General.unexpected.character", ","));
           parser.advanceLexer();
           break;
         }

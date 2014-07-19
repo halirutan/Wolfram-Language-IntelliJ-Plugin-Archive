@@ -24,23 +24,19 @@ package de.halirutan.mathematica.codeinsight.livetemplates;
 import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider;
 
 /**
- * Created by rsmenon on 7/7/14.
- * Based on code by Jon Akhtar (sylvanaar)
- * Source: com.sylvanaar.idea.Lua.lang.template.LuaDefaultLiveTemplateProvider.java
+ * Created by rsmenon on 7/7/14. Based on code by Jon Akhtar (sylvanaar) Source: com.sylvanaar.idea.Lua.lang.template.LuaDefaultLiveTemplateProvider.java
  */
 
 public class MathematicaDefaultLiveTemplateProvider implements DefaultLiveTemplatesProvider {
-    public String[] getDefaultLiveTemplateFiles()
-    {
-        return DEFAULT_TEMPLATES;
-    }
+  private static final String DEFAULT_TEMPLATES[] = {
+      "/de/halirutan/mathematica/codeinsight/livetemplates/mathematica",
+  };
 
-    public String[] getHiddenLiveTemplateFiles()
-    {
-        return null;
-    }
+  public String[] getDefaultLiveTemplateFiles() {
+    return DEFAULT_TEMPLATES;
+  }
 
-    private static final String DEFAULT_TEMPLATES[] = {
-            "/de/halirutan/mathematica/codeinsight/livetemplates/mathematica",
-    };
+  public String[] getHiddenLiveTemplateFiles() {
+    return null;
+  }
 }

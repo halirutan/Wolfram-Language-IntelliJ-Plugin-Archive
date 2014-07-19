@@ -48,7 +48,7 @@ public class SymbolParselet implements PrefixParselet {
     PsiBuilder.Marker symbolMark = parser.mark();
     IElementType finalExpressionType;
     final IElementType tokenType = parser.getTokenType();
-    if (tokenType.equals(IDENTIFIER) || SLOTS.contains(tokenType)) {
+    if (tokenType.equals(IDENTIFIER)) {
       finalExpressionType = SYMBOL_EXPRESSION;
     } else if (tokenType.equals(STRINGIFIED_IDENTIFIER)) {
       finalExpressionType = STRINGIFIED_SYMBOL_EXPRESSION;

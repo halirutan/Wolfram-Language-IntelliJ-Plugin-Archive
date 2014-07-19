@@ -29,13 +29,13 @@ import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
+import de.halirutan.mathematica.parsing.psi.api.Slot;
 import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
@@ -116,21 +116,15 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
   public void visitFunction(final Function function) {
     setHighlighting(function, myHolder, MathematicaSyntaxHighlighterColors.ANONYMOUS_FUNCTION);
 
-    PsiElementVisitor patternVisitor = new MathematicaVisitor() {
-      @Override
-      public void visitElement(PsiElement element) {
-        element.acceptChildren(this);
-      }
+    final MathematicaRecursiveVisitor slotVisitor = new MathematicaRecursiveVisitor() {
 
       @Override
-      public void visitSymbol(Symbol symbol) {
-        if (MathematicaElementTypes.SLOTS.contains(symbol.getNode().getFirstChildNode().getElementType())) {
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
-        }
+      public void visitSlot(final Slot slot) {
+        setHighlighting(slot, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
       }
     };
+    function.accept(slotVisitor);
 
-    patternVisitor.visitElement(function);
   }
 
   @Override

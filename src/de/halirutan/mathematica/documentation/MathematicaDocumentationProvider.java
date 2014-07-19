@@ -160,9 +160,9 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
    *     the current lookup object
    * @param element
    *     the element, the documentation was initially called for. Note that this is typically not a valid built-in
-   *     function, because you start typing Plo then the completion box pops up and when you call documentation on
-   *     one of the selected lookup entries, the elements name is still Plo, while you want to check the documentation
-   *     for the lookup element.
+   *     function, because you start typing Plo then the completion box pops up and when you call documentation on one
+   *     of the selected lookup entries, the elements name is still Plo, while you want to check the documentation for
+   *     the lookup element.
    * @return The Symbol which was created from the string of the lookup element or null if it wasn't possible.
    */
   @Nullable

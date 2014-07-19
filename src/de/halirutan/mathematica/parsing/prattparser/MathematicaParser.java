@@ -45,7 +45,7 @@ public class MathematicaParser implements PsiParser {
   private static final int MAX_RECURSION_DEPTH = 1024;
   private static final ImplicitMultiplicationParselet IMPLICIT_MULTIPLICATION_PARSELET = new ImplicitMultiplicationParselet();
   private final ImportantLineBreakHandler myImportantLinebreakHandler;
-  private PsiBuilder myBuilder;
+  private PsiBuilder myBuilder = null;
   private int myRecursionDepth;
 
 
@@ -105,7 +105,7 @@ public class MathematicaParser implements PsiParser {
     try {
       while (!builder.eof()) {
         Result expr = parseExpression();
-        if (!expr.isMyParsed()) {
+        if (!expr.isParsed()) {
           builder.error("The last expression could not be parsed correctly.");
           builder.advanceLexer();
         }
@@ -148,7 +148,7 @@ public class MathematicaParser implements PsiParser {
     increaseRecursionDepth();
     Result left = prefix.parse(this);
 
-    while (left.isMyParsed()) {
+    while (left.isParsed()) {
       token = myBuilder.getTokenType();
       InfixParselet infix = getInfixOrMultiplyParselet(token);
       if (infix == null) {
@@ -227,6 +227,7 @@ public class MathematicaParser implements PsiParser {
     myBuilder.error(s);
   }
 
+  @SuppressWarnings({"BooleanMethodNameMustStartWithQuestion", "InstanceMethodNamingConvention"})
   public boolean eof() {
     return myBuilder.eof();
   }
@@ -261,7 +262,14 @@ public class MathematicaParser implements PsiParser {
       return myLeftToken;
     }
 
-    public boolean isMyParsed() {
+    /**
+     * True, iff an expression could be parsed correctly. This method can be used to check, whether the result of the
+     * parsing of a sub-expression was successful. For instance in <code >expr1 + expr2</code>: you can test if <code
+     * >expr2</code> was parsed successfully and decide what to do in the parsing of Plus, if it wasn't
+     *
+     * @return true if an expression was parsed correctly.
+     */
+    public boolean isParsed() {
       return myParsed;
     }
 
@@ -276,7 +284,7 @@ public class MathematicaParser implements PsiParser {
    * multiplication</em> has arisen.
    */
   public class ImportantLineBreakHandler implements WhitespaceSkippedCallback {
-    private boolean myLineBreakSeen;
+    private boolean myLineBreakSeen = false;
 
 
     @Override

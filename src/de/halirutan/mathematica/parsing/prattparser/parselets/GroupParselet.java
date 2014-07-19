@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
@@ -37,8 +38,8 @@ public class GroupParselet implements PrefixParselet {
 
   final int myPrecedence;
 
-  public GroupParselet(int myPrecedence) {
-    this.myPrecedence = myPrecedence;
+  public GroupParselet(int precedence) {
+    this.myPrecedence = precedence;
   }
 
   @Override
@@ -52,7 +53,7 @@ public class GroupParselet implements PrefixParselet {
     parser.advanceLexer();
 
     if (parser.eof()) {
-      parser.error("More input expected");
+      parser.error(ParserBundle.message("General.eof"));
       groupMark.drop();
       return MathematicaParser.notParsed();
     }
@@ -69,8 +70,8 @@ public class GroupParselet implements PrefixParselet {
       // when the grouped expr was parsed successfully and we just don't find the closing parenthesis we
       // create an error mark there. Otherwise we just return "not parsed" since something seems to be really
       // broken.
-      if (result.isMyParsed()) {
-        parser.error("')' expected");
+      if (result.isParsed()) {
+        parser.error(ParserBundle.message("General.closing", "')'"));
         groupMark.done(token);
         result = MathematicaParser.result(groupMark, token, false);
       } else {

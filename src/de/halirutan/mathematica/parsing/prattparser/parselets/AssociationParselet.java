@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
- * Created by rsmenon on 3/28/14.
+ * Provides functionality to parse Association in Mathematica Created by rsmenon on 3/28/14.
  */
 public class AssociationParselet implements PrefixParselet {
 
@@ -40,14 +41,14 @@ public class AssociationParselet implements PrefixParselet {
 
   @Override
   public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker listMarker = parser.mark();
+    PsiBuilder.Marker associationMarker = parser.mark();
     boolean result = true;
 
     if (parser.matchesToken(LEFT_ASSOCIATION)) {
       parser.advanceLexer();
     } else {
-      listMarker.drop();
-      throw new CriticalParserError("Association parselet does not start with <|");
+      associationMarker.drop();
+      throw new CriticalParserError(ParserBundle.message("Association.critical.error"));
     }
 
     MathematicaParser.Result seqResult = ParserUtil.parseSequence(parser, RIGHT_ASSOCIATION);
@@ -55,11 +56,11 @@ public class AssociationParselet implements PrefixParselet {
     if (parser.matchesToken(RIGHT_ASSOCIATION)) {
       parser.advanceLexer();
     } else {
-      parser.error("Closing '}' expected");
+      parser.error(ParserBundle.message("General.closing", "'|>'"));
       result = false;
     }
-    listMarker.done(ASSOCIATION_EXPRESSION);
-    return MathematicaParser.result(listMarker, ASSOCIATION_EXPRESSION, result && seqResult.isMyParsed());
+    associationMarker.done(ASSOCIATION_EXPRESSION);
+    return MathematicaParser.result(associationMarker, ASSOCIATION_EXPRESSION, result && seqResult.isParsed());
   }
 
   public int getPrecedence() {

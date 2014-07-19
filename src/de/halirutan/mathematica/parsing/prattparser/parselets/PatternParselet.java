@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -52,12 +53,12 @@ public class PatternParselet implements InfixParselet {
     IElementType expressionType = left.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION) ?
         MathematicaElementTypes.PATTERN_EXPRESSION : MathematicaElementTypes.OPTIONAL_EXPRESSION;
 
-    if (!result.isMyParsed()) {
-      parser.error("Could not parse Pattern/Optional expression.");
+    if (!result.isParsed()) {
+      parser.error(ParserBundle.message("Pattern.error"));
     }
 
     patternOptional.done(expressionType);
-    return MathematicaParser.result(patternOptional, expressionType, result.isMyParsed());
+    return MathematicaParser.result(patternOptional, expressionType, result.isParsed());
   }
 
   @Override

@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -53,7 +54,7 @@ public class SpanParselet implements InfixParselet {
       parser.advanceLexer();
     } else {
       spanMark.drop();
-      throw new CriticalParserError("SPAN token ';;' expected");
+      throw new CriticalParserError(ParserBundle.message("Critical.span"));
     }
 
     // if we meet a second ;; right after the first ;; we just skip it
@@ -68,11 +69,11 @@ public class SpanParselet implements InfixParselet {
     PrefixParselet nextPrefix = getPrefixParselet(parser.getTokenType());
     if (nextPrefix == null) {
       if (skipped) {
-        spanMark.error("Expression expected after  \"expr0;; ;;\"");
+        spanMark.error(ParserBundle.message("General.expr.expected.after", "'expr0;; ;;'"));
       } else {
         spanMark.done(SPAN_EXPRESSION);
       }
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && !skipped);
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
     }
 
     MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
@@ -80,21 +81,21 @@ public class SpanParselet implements InfixParselet {
     // if we had expr0;;;;expr1
     if (skipped) {
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
     }
 
     if (parser.matchesToken(SPAN)) {
       parser.advanceLexer();
       MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
-      if (expr2.isMyParsed()) {
+      if (expr2.isParsed()) {
         spanMark.done(SPAN_EXPRESSION);
       } else
-        spanMark.error("Expression expected after \"expr0;;expr1;;\"");
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed() && expr2.isMyParsed());
+        spanMark.error(ParserBundle.message("General.expr.expected.after", "'expr0;;expr1;;'"));
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed() && expr2.isParsed());
     } else {
       // we have the form expr0;;expr1
       spanMark.done(SPAN_EXPRESSION);
-      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isMyParsed() && expr1.isMyParsed());
+      return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && expr1.isParsed());
     }
   }
 

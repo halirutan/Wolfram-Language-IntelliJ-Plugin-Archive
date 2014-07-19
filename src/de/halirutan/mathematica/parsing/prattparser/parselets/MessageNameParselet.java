@@ -28,7 +28,7 @@ import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
 /**
- * Parselet for MessageName's like blub::usage or Sin::argx. There are some specialties about this because the left
+ * Parselet for MessageName's like symbol::usage or Sin::tag. There are some specialties about this because the left
  * operand is required to be a symbol. The right operand can be a symbol or a string.
  *
  * @author patrick (3/27/13)
@@ -48,7 +48,7 @@ public class MessageNameParselet implements InfixParselet {
     parser.advanceLexer();
     MathematicaParser.Result result = parser.parseExpression(myPrecedence);
 
-    if (result.isMyParsed()) {
+    if (result.isParsed()) {
       // Check whether we have a symbol or a string in usage message
       if ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
           (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION))) {
@@ -65,7 +65,7 @@ public class MessageNameParselet implements InfixParselet {
       if (parser.matchesToken(MathematicaElementTypes.DOUBLE_COLON)) {
         parser.advanceLexer();
         result = parser.parseExpression(myPrecedence);
-        if (result.isMyParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
+        if (result.isParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
             (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION)))) {
           PsiBuilder.Marker errMark = result.getMark().precede();
           errMark.error(ParserBundle.message("MessageName.no.symbol.or.string"));
@@ -80,7 +80,7 @@ public class MessageNameParselet implements InfixParselet {
       parser.error(ParserBundle.message("MessageName.arg"));
     }
     messageNameMarker.done(MathematicaElementTypes.MESSAGE_NAME_EXPRESSION);
-    return MathematicaParser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, result.isMyParsed());
+    return MathematicaParser.result(messageNameMarker, MathematicaElementTypes.MESSAGE_NAME_EXPRESSION, result.isParsed());
 
   }
 

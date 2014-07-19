@@ -21,8 +21,19 @@
 
 package de.halirutan.mathematica.parsing.psi.api;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 11:41 AM Purpose:
  */
 public interface MessageName extends Expression {
+
+  @Nullable
+  public Expression getSymbol();
+
+  @Nullable
+  public StringifiedSymbol getTag();
+
+  @Nullable
+  public StringifiedSymbol getLang();
 }

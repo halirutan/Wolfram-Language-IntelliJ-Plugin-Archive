@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -38,8 +39,8 @@ public class InfixCallParselet implements InfixParselet {
 
   private final int myPrecedence;
 
-  public InfixCallParselet(int prec) {
-    myPrecedence = prec;
+  public InfixCallParselet(int precedence) {
+    myPrecedence = precedence;
   }
 
   @Override
@@ -51,14 +52,17 @@ public class InfixCallParselet implements InfixParselet {
     if (parser.matchesToken(MathematicaElementTypes.INFIX_CALL)) {
       parser.advanceLexer();
       MathematicaParser.Result operand2 = parser.parseExpression(myPrecedence);
+      if (!operand2.isParsed()) {
+        parser.error(ParserBundle.message("Infix.missing.arg2"));
+      }
       infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
-      return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isMyParsed() && operand2.isMyParsed());
+      return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, operator.isParsed() && operand2.isParsed());
     } else {
       // if the operator was not parsed successfully we will not display a parsing error
-      if (operator.isMyParsed()) {
-        parser.error("'~' expected in infix notation");
+      if (operator.isParsed()) {
+        parser.error(ParserBundle.message("Infix.missing.tilde"));
       } else {
-        parser.error("Operator expected for infix notation");
+        parser.error(ParserBundle.message("Infix.operator.missing"));
       }
       infixCall.done(MathematicaElementTypes.INFIX_CALL_EXPRESSION);
       return MathematicaParser.result(infixCall, MathematicaElementTypes.INFIX_CALL_EXPRESSION, false);

@@ -160,6 +160,11 @@ public class MathematicaVisitor extends PsiElementVisitor {
     visitElement(list);
   }
 
-  public void visitStringifiedSymbol(StringifiedSymbol stringifiedSymbol) {visitElement(stringifiedSymbol);}
+  public void visitStringifiedSymbol(StringifiedSymbol stringifiedSymbol) {
+    visitElement(stringifiedSymbol);
+  }
 
+  public void visitSlot(Slot slot) {
+    visitElement(slot);
+  }
 }

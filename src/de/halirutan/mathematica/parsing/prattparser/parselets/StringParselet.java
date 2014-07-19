@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
@@ -56,7 +57,7 @@ public class StringParselet implements PrefixParselet {
     if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {
       parser.advanceLexer();
     } else {
-      parser.error("\" expected");
+      parser.error(ParserBundle.message("General.expected.character", "\""));
       parsedQ = false;
     }
     stringMark.done(MathematicaElementTypes.STRING_LITERAL_EXPRESSION);
