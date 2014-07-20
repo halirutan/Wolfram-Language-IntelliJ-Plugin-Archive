@@ -52,8 +52,8 @@ public class MathematicaVisitor extends PsiElementVisitor {
     visitElement(set);
   }
 
-  public void visitTagSet(TagSet element) {
-    visitElement(element);
+  public void visitTagSet(TagSet tagSet) {
+    visitElement(tagSet);
   }
 
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {

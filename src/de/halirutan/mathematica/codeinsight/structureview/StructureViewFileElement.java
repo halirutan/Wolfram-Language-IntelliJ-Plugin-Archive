@@ -26,23 +26,24 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author patrick (6/14/14)
  */
-public class MathematicaStructureViewFileElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
+public class StructureViewFileElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
 
   private MathematicaPsiFile myElement;
 
-  public MathematicaStructureViewFileElement(MathematicaPsiFile element) {
+  public StructureViewFileElement(MathematicaPsiFile element) {
     myElement = element;
   }
 
@@ -90,15 +91,15 @@ public class MathematicaStructureViewFileElement implements StructureViewTreeEle
   @NotNull
   @Override
   public StructureViewTreeElement[] getChildren() {
-    MathematicaViewElementExtractingVisitor visitor = new MathematicaViewElementExtractingVisitor();
-    myElement.accept(visitor);
-    final HashMap<String, List<SymbolDefinition>> definedSymbols = visitor.getDefinedSymbols();
-    final Collection<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>();
-    for (String symbolName : definedSymbols.keySet()) {
-      children.add(new MathematicaStructureViewDefinitionElement(symbolName, definedSymbols.get(symbolName)));
+    GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
+    final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
+    final Collection<AssignmentSymbolNodeViewTreeElement> children = new ArrayList<AssignmentSymbolNodeViewTreeElement>(assignments.size());
+
+    for (String key : assignments.keySet()) {
+      children.add(new AssignmentSymbolNodeViewTreeElement(key, assignments.get(key)));
     }
 
-    return children.toArray(new StructureViewTreeElement[children.size()]);
+    return children.toArray(new AssignmentSymbolNodeViewTreeElement[children.size()]);
   }
 
   @Override

@@ -61,8 +61,8 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
     cacheFromSetAssignment(set);
   }
 
-  public void visitTagSet(TagSet element) {
-    final PsiElement tag = element.getFirstChild();
+  public void visitTagSet(TagSet tagSet) {
+    final PsiElement tag = tagSet.getFirstChild();
     if (tag instanceof Symbol) {
       myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
     }

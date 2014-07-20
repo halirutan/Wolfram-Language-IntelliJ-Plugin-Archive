@@ -26,72 +26,84 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 /**
- * Class for holding information about the details of a (function)-definition. This includes: <ul> <li>PsiElement of the
- * symbol which is defined</li> <li>Symbol name</li> <li>Type of the definition: Set, SetDelayed, TagSet,
- * TagSetDelayed</li> <li>The LHS (or parts of it) as string</li> <li>Line number</li> </ul>
- *
- * @author patrick (6/20/14)
+ * @author patrick (7/20/14)
  */
-public class SymbolDefinition implements StructureViewTreeElement {
+public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement {
 
-  Symbol myElement;
-  PsiElement mySetType;
-  String myLhs;
-  int myLineNumber;
+  private final String mySymbolName;
+  private final PsiElement myNavigationElement;
+  private final HashSet<GlobalDefinitionCollector.AssignmentProperty> myAssignments;
 
-  public SymbolDefinition(Symbol symbol, PsiElement setType) {
-    myElement = symbol;
-    mySetType = setType;
-    myLhs = "";
-    if (mySetType != null) {
-      myLhs = mySetType.getFirstChild().getText();
-      myLhs = myLhs.substring(0, Math.min(80, myLhs.length()));
-    }
-    myLineNumber = 0;
-  }
 
-  public PsiElement getSetType() {
-    return mySetType;
-  }
-
-  public String getLhs() {
-    return myLhs;
+  public AssignmentSymbolNodeViewTreeElement(final String symbolName, final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignments) {
+    mySymbolName = symbolName;
+    myAssignments = assignments;
+    myNavigationElement = myAssignments.iterator().next().myAssignmentSymbol;
   }
 
   @Override
   public Object getValue() {
-    return myElement;
+    return myNavigationElement;
   }
 
   @Override
   public void navigate(final boolean requestFocus) {
-    ((Expression) myElement).navigate(requestFocus);
+    ((Expression) myNavigationElement).navigate(requestFocus);
+
   }
 
   @Override
   public boolean canNavigate() {
-    return ((Expression) myElement).canNavigate();
+    return ((Expression) myNavigationElement).canNavigate();
   }
 
   @Override
   public boolean canNavigateToSource() {
-    return ((Expression) myElement).canNavigateToSource();
+    return ((Expression) myNavigationElement).canNavigateToSource();
   }
 
   @NotNull
   @Override
   public ItemPresentation getPresentation() {
-    return new SymbolDefinitionRepresentation(this);
+    return new ItemPresentation() {
+      @Nullable
+      @Override
+      public String getPresentableText() {
+        return mySymbolName;
+      }
+
+      @Nullable
+      @Override
+      public String getLocationString() {
+        return null;
+      }
+
+      @Nullable
+      @Override
+      public Icon getIcon(final boolean unused) {
+        return null;
+      }
+    };
   }
 
   @NotNull
   @Override
   public TreeElement[] getChildren() {
-    return new TreeElement[0];
+    TreeSet<AssignmentLeafViewTreeElement> result = new TreeSet<AssignmentLeafViewTreeElement>(new TextPositionComparator());
+    for (GlobalDefinitionCollector.AssignmentProperty assignment : myAssignments) {
+      result.add(new AssignmentLeafViewTreeElement(assignment));
+    }
+    return result.toArray(new TreeElement[result.size()]);
   }
-}
 
+
+}

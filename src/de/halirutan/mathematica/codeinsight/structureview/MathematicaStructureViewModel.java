@@ -41,7 +41,7 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
   private Editor myEditor;
 
   public MathematicaStructureViewModel(@NotNull MathematicaPsiFile psiFile, @Nullable Editor editor) {
-    super(psiFile, editor, new MathematicaStructureViewFileElement(psiFile));
+    super(psiFile, editor, new StructureViewFileElement(psiFile));
     myEditor = editor;
     withSorters(Sorter.ALPHA_SORTER);
   }
@@ -49,7 +49,9 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
   @NotNull
   @Override
   public Sorter[] getSorters() {
-    return new Sorter[]{Sorter.ALPHA_SORTER};
+    return new Sorter[]{
+        Sorter.ALPHA_SORTER,
+    };
   }
 
   @Override
@@ -59,7 +61,7 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
 
   @Override
   public boolean isAlwaysLeaf(StructureViewTreeElement element) {
-    return element instanceof MathematicaPsiFile;
+    return element instanceof AssignmentLeafViewTreeElement;
   }
 
   @Override

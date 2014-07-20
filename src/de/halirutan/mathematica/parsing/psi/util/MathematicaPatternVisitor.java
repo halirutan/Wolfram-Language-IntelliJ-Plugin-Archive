@@ -151,9 +151,9 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   }
 
   @Override
-  public void visitTagSet(TagSet element) {
+  public void visitTagSet(TagSet tagSet) {
     myAssignmentType = Assignment.TAG_SET_;
-    final PsiElement firstChild = element.getFirstChild();
+    final PsiElement firstChild = tagSet.getFirstChild();
     if (firstChild == null) {
       return;
     } else {

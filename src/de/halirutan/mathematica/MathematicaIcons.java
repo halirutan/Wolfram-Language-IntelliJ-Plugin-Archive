@@ -32,9 +32,18 @@ public interface MathematicaIcons {
 
   Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
   Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
-  Icon SETDELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
+  Icon SET_DELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
   Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
-  Icon TAGSETDELAYED_ICON = IconLoader.getIcon("/icons/TagSetDelayed.png");
+  Icon TAGSET_DELAYED_ICON = IconLoader.getIcon("/icons/TagSetDelayed.png");
   Icon UPSET_ICON = IconLoader.getIcon("/icons/UpSet.png");
   Icon UPSETDELAYED_ICON = IconLoader.getIcon("/icons/UpSetDelayed.png");
+  Icon OPTIONS_ICON = IconLoader.getIcon("/icons/Options.png");
+  Icon ATTRIBUTES_ICON = IconLoader.getIcon("/icons/Attributes.png");
+  Icon DEFAULT_VALUES_ICON = IconLoader.getIcon("/icons/Default.png");
+  Icon FORMAT_VALUES_ICON = IconLoader.getIcon("/icons/Format.png");
+  Icon MESSAGES_ICON = IconLoader.getIcon("/icons/Messages.png");
+  Icon N_VALUES_ICON = IconLoader.getIcon("/icons/NValues.png");
+  Icon SYNTAX_INFORMATION_ICON = IconLoader.getIcon("/icons/SyntaxInformation.png");
+
+
 }

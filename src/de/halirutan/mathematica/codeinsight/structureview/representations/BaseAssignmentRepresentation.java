@@ -19,12 +19,10 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.structureview.representations;
 
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.MathematicaIcons;
-import de.halirutan.mathematica.parsing.psi.api.assignment.*;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -32,18 +30,18 @@ import javax.swing.*;
 /**
  * @author patrick (6/20/14)
  */
-public class SymbolDefinitionRepresentation implements ItemPresentation {
+public class BaseAssignmentRepresentation implements ItemPresentation {
 
-  private SymbolDefinition myDefinition;
+  private GlobalDefinitionCollector.AssignmentProperty myAssignmentProperty;
 
-  public SymbolDefinitionRepresentation(final SymbolDefinition symbolDefinition) {
-    myDefinition = symbolDefinition;
+  public BaseAssignmentRepresentation(GlobalDefinitionCollector.AssignmentProperty assignmentProperty) {
+    myAssignmentProperty = assignmentProperty;
   }
 
   @Nullable
   @Override
   public String getPresentableText() {
-    return myDefinition.getLhs();
+    return myAssignmentProperty.myLhsOfAssignment.getText();
   }
 
   @Nullable
@@ -55,20 +53,6 @@ public class SymbolDefinitionRepresentation implements ItemPresentation {
   @Nullable
   @Override
   public Icon getIcon(final boolean unused) {
-    final PsiElement setType = myDefinition.getSetType();
-    if (setType instanceof Set) {
-      return MathematicaIcons.SET_ICON;
-    } else if (setType instanceof SetDelayed) {
-      return MathematicaIcons.SETDELAYED_ICON;
-    } else if (setType instanceof TagSet) {
-      return MathematicaIcons.TAGSET_ICON;
-    } else if (setType instanceof TagSetDelayed) {
-      return MathematicaIcons.TAGSETDELAYED_ICON;
-    } else if (setType instanceof UpSet) {
-      return MathematicaIcons.UPSET_ICON;
-    } else if (setType instanceof UpSetDelayed) {
-      return MathematicaIcons.UPSETDELAYED_ICON;
-    }
     return null;
   }
 }
