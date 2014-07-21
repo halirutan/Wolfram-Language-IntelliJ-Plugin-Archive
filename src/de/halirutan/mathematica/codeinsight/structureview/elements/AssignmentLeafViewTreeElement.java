@@ -19,12 +19,16 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.structureview.elements;
 
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
+import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +36,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author patrick (7/20/14)
  */
-public class AssignmentLeafViewTreeElement implements StructureViewTreeElement {
+public class AssignmentLeafViewTreeElement implements
+    StructureViewTreeElement, SortableTreeElement {
 
   private final GlobalDefinitionCollector.AssignmentProperty myAssignment;
 
@@ -42,7 +47,8 @@ public class AssignmentLeafViewTreeElement implements StructureViewTreeElement {
 
   @Override
   public Object getValue() {
-    return myAssignment.myAssignmentSymbol;
+    final PsiElement myAssignmentSymbol = myAssignment.myAssignmentSymbol;
+    return myAssignmentSymbol.isValid() ? myAssignmentSymbol : null;
   }
 
   @Override
@@ -98,8 +104,56 @@ public class AssignmentLeafViewTreeElement implements StructureViewTreeElement {
   @NotNull
   @Override
   public TreeElement[] getChildren() {
-    return new TreeElement[0];
+    return StructureViewTreeElement.EMPTY_ARRAY;
   }
 
+  @NotNull
+  @Override
+  public String getAlphaSortKey() {
+    return myAssignment.myAssignmentSymbol.getText() + getTypeSortKey(myAssignment.myAssignmentType);
+  }
 
+  private String getTypeSortKey(final SymbolAssignmentType type) {
+    switch (myAssignment.myAssignmentType) {
+      case SET_DELAYED_ASSIGNMENT:
+        return "130";
+      case SET_ASSIGNMENT:
+        return "120";
+      case OPTIONS_ASSIGNMENT:
+        return "110";
+      case ATTRIBUTES_ASSIGNMENT:
+        return "115";
+      case DEFAULT_ASSIGNMENT:
+        return "200";
+      case FORMAT_ASSIGNMENT:
+        return "500";
+      case MESSAGE_ASSIGNMENT:
+        return "100";
+      case N_ASSIGNMENT:
+        return "510";
+      case SYNTAX_INFORMATION_ASSIGNMENT:
+        return "520";
+      case TAG_SET_ASSIGNMENT:
+        return "140";
+      case TAG_SET_DELAYED_ASSIGNMENT:
+        return "150";
+      case UP_SET_ASSIGNMENT:
+        return "160";
+      case UP_SET_DELAYED_ASSIGNMENT:
+        return "170";
+      default:
+        return "";
+    }
+
+  }
+
+//  @Override
+//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+//    return true;
+//  }
+//
+//  @Override
+//  public boolean isSmartExpand() {
+//    return true;
+//  }
 }

@@ -19,33 +19,35 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.structureview.elements;
 
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author patrick (6/14/14)
  */
-public class StructureViewFileElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
+public class MathematicaFileElement extends PsiTreeElementBase<MathematicaPsiFile> implements StructureViewModel.ExpandInfoProvider{
 
   private MathematicaPsiFile myElement;
 
-  public StructureViewFileElement(MathematicaPsiFile element) {
-    myElement = element;
+  public MathematicaFileElement(final MathematicaPsiFile psiElement) {
+    super(psiElement);
+    myElement = psiElement;
   }
+//
+//  public MathematicaFileElement(MathematicaPsiFile element) {
+//    myElement = element;
+//  }
 
   @Override
   public void navigate(boolean requestFocus) {
@@ -90,26 +92,61 @@ public class StructureViewFileElement implements StructureViewTreeElement, Struc
 
   @NotNull
   @Override
-  public StructureViewTreeElement[] getChildren() {
+  public Collection<StructureViewTreeElement> getChildrenBase() {
+    if (!myElement.isValid()) {
+      return Collections.emptyList();
+    }
     GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
     final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
-    final Collection<AssignmentSymbolNodeViewTreeElement> children = new ArrayList<AssignmentSymbolNodeViewTreeElement>(assignments.size());
+    final Collection<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>(assignments.size());
 
     for (String key : assignments.keySet()) {
-      children.add(new AssignmentSymbolNodeViewTreeElement(key, assignments.get(key)));
+      final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
+      for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
+        children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
+      }
+
     }
 
-    return children.toArray(new AssignmentSymbolNodeViewTreeElement[children.size()]);
+    return children;
   }
 
+  @Nullable
   @Override
-  public Expression getValue() {
-    return myElement;
+  public String getPresentableText() {
+    return myElement.getText();
   }
+
+//  @NotNull
+//  @Override
+//  public StructureViewTreeElement[] getChildren() {
+//    if (!myElement.isValid()) {
+//      return StructureViewTreeElement.EMPTY_ARRAY;
+//    }
+//    GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
+//    final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
+//    final Collection<AssignmentLeafViewTreeElement> children = new ArrayList<AssignmentLeafViewTreeElement>(assignments.size());
+//
+//    for (String key : assignments.keySet()) {
+//      final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
+//      for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
+//        children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
+//      }
+//
+//    }
+//
+//    return children.toArray(new AssignmentLeafViewTreeElement[children.size()]);
+//  }
+
+//  @Override
+//  public MathematicaPsiFile getValue() {
+//    return myElement.isValid() ? myElement : null;
+//  }
 
   @Override
   public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-    return false;
+//    return element == myElement;
+    return true;
   }
 
   @Override

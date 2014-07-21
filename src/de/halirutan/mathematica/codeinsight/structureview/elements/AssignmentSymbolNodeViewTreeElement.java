@@ -19,40 +19,42 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.structureview.elements;
 
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.HashSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author patrick (7/20/14)
  */
-public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement {
+public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
 
   private final String mySymbolName;
   private final PsiElement myNavigationElement;
-  private final HashSet<GlobalDefinitionCollector.AssignmentProperty> myAssignments;
+  private final TreeSet<GlobalDefinitionCollector.AssignmentProperty> myAssignments;
 
 
   public AssignmentSymbolNodeViewTreeElement(final String symbolName, final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignments) {
     mySymbolName = symbolName;
-    myAssignments = assignments;
-    myNavigationElement = myAssignments.iterator().next().myAssignmentSymbol;
+    myAssignments = new TreeSet<GlobalDefinitionCollector.AssignmentProperty>(new CodePositionAssignmentPropertyComparator());
+    myAssignments.addAll(assignments);
+    myNavigationElement = myAssignments.first().myAssignmentSymbol;
   }
 
   @Override
   public Object getValue() {
-    return myNavigationElement;
+    return myNavigationElement.isValid() ? myNavigationElement : null;
   }
 
   @Override
@@ -69,6 +71,16 @@ public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeEle
   @Override
   public boolean canNavigateToSource() {
     return ((Expression) myNavigationElement).canNavigateToSource();
+  }
+
+  @Override
+  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+    return false;
+  }
+
+  @Override
+  public boolean isSmartExpand() {
+    return true;
   }
 
   @NotNull
@@ -93,17 +105,28 @@ public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeEle
         return null;
       }
     };
+
+
   }
 
   @NotNull
   @Override
   public TreeElement[] getChildren() {
-    TreeSet<AssignmentLeafViewTreeElement> result = new TreeSet<AssignmentLeafViewTreeElement>(new TextPositionComparator());
+    List<AssignmentLeafViewTreeElement> result = new LinkedList<AssignmentLeafViewTreeElement>();
     for (GlobalDefinitionCollector.AssignmentProperty assignment : myAssignments) {
       result.add(new AssignmentLeafViewTreeElement(assignment));
     }
-    return result.toArray(new TreeElement[result.size()]);
+    return result.toArray(new AssignmentLeafViewTreeElement[result.size()]);
   }
 
+  private class CodePositionAssignmentPropertyComparator implements Comparator<GlobalDefinitionCollector.AssignmentProperty> {
+    @Override
+    public int compare(final GlobalDefinitionCollector.AssignmentProperty o1, final GlobalDefinitionCollector.AssignmentProperty o2) {
+      return o1.myAssignmentSymbol.getTextOffset() - o2.myAssignmentSymbol.getTextOffset();
+    }
 
+  }
 }
+
+
+

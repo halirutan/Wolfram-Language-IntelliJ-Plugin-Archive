@@ -22,28 +22,47 @@
 package de.halirutan.mathematica.codeinsight.structureview;
 
 import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.StructureViewModelBase;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.ide.util.treeView.smartTree.Filter;
+import com.intellij.ide.util.treeView.smartTree.Grouper;
+import com.intellij.ide.util.treeView.smartTree.NodeProvider;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
+import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileElement;
+import de.halirutan.mathematica.codeinsight.structureview.groupers.SymbolNameGrouper;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 /**
  * @author patrick (6/13/14)
  */
-public class MathematicaStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider, StructureViewModel.ExpandInfoProvider {
+public class MathematicaStructureViewModel extends TextEditorBasedStructureViewModel implements StructureViewModel.ElementInfoProvider {
+
+  private static final Grouper[] ourGroupers;
+
+  private final MathematicaPsiFile myRootElement;
+
+  static {
+    ourGroupers = new Grouper[]{
+        new SymbolNameGrouper()
+    };
+  }
+
   private Editor myEditor;
 
+
   public MathematicaStructureViewModel(@NotNull MathematicaPsiFile psiFile, @Nullable Editor editor) {
-    super(psiFile, editor, new StructureViewFileElement(psiFile));
+    super(editor, psiFile);
+    myRootElement = psiFile;
     myEditor = editor;
-    withSorters(Sorter.ALPHA_SORTER);
   }
 
   @NotNull
@@ -56,23 +75,25 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
 
   @Override
   public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
+//    return element instanceof MathematicaFileElement;
     return false;
   }
 
   @Override
   public boolean isAlwaysLeaf(StructureViewTreeElement element) {
-    return element instanceof AssignmentLeafViewTreeElement;
+    return !(element instanceof MathematicaFileElement);
   }
 
-  @Override
-  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-    return false;
-  }
-
-  @Override
-  public boolean isSmartExpand() {
-    return true;
-  }
+//  @Override
+//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+////    return element instanceof MathematicaFileElement;
+//    return false;
+//  }
+//
+//  @Override
+//  public boolean isSmartExpand() {
+//    return false;
+//  }
 
   @NotNull
   @Override
@@ -91,6 +112,19 @@ public class MathematicaStructureViewModel extends StructureViewModelBase implem
       return parent;
     }
     return null;
+  }
+
+  @NotNull
+  @Override
+  public StructureViewTreeElement getRoot() {
+    return new MathematicaFileElement(myRootElement);
+  }
+
+  @NotNull
+  @Override
+  public Grouper[] getGroupers() {
+//    return ourGroupers;
+    return ourGroupers;
   }
 
 }

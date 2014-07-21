@@ -19,23 +19,39 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
+package de.halirutan.mathematica.codeinsight.structureview.representations;
 
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
+import com.intellij.navigation.ItemPresentation;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
+import javax.swing.*;
 
 /**
- * @author patrick (7/20/14)
+ * @author patrick (7/21/14)
  */
-public class TextPositionComparator implements Comparator<AssignmentLeafViewTreeElement> {
+public class SimpleFunctionNameRepresentation implements ItemPresentation{
+
+  private final String myName;
+
+  public SimpleFunctionNameRepresentation(final String name) {
+    this.myName = name;
+  }
+
+  @Nullable
   @Override
-  public int compare(final AssignmentLeafViewTreeElement o1, final AssignmentLeafViewTreeElement o2) {
-    if (o1.getValue() instanceof PsiElement && o2.getValue() instanceof PsiElement) {
-      return ((PsiElement) o1.getValue()).getTextOffset() - ((PsiElement) o2.getValue()).getTextOffset();
-    }
-    return 0;
+  public String getPresentableText() {
+    return myName;
+  }
+
+  @Nullable
+  @Override
+  public String getLocationString() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public Icon getIcon(final boolean unused) {
+    return null;
   }
 }
-
