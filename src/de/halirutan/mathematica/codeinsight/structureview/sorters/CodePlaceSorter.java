@@ -19,46 +19,54 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview.groupers;
+package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.util.treeView.smartTree.Group;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.codeinsight.structureview.representations.SimpleFunctionNameRepresentation;
-import de.halirutan.mathematica.codeinsight.structureview.sorters.TextPositionProvider;
+import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
+import com.intellij.ide.util.treeView.smartTree.Sorter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import javax.swing.*;
+import java.util.Comparator;
 
 /**
  * @author patrick (7/21/14)
  */
-public class SymbolNameGroup implements Group, TextPositionProvider {
+public class CodePlaceSorter implements Sorter {
+  @Override
+  public Comparator getComparator() {
+    return new TextPositionComparator();
+  }
 
-  private final Collection<TreeElement> myTreeElements;
-  private final String myName;
-
-  public SymbolNameGroup(final String symbolName, final Collection<TreeElement> treeElements) {
-    this.myTreeElements = treeElements;
-    this.myName = symbolName;
+  @Override
+  public boolean isVisible() {
+    return true;
   }
 
   @NotNull
   @Override
-  public ItemPresentation getPresentation() {
-    return new SimpleFunctionNameRepresentation(myName);
+  public ActionPresentation getPresentation() {
+    return new ActionPresentation() {
+      @NotNull
+      @Override
+      public String getText() {
+        return "Sort by Line Number";
+      }
+
+      @Override
+      public String getDescription() {
+        return "Sorts the entries by appearance in the code";
+      }
+
+      @Override
+      public Icon getIcon() {
+        return null;
+      }
+    };
   }
 
   @NotNull
   @Override
-  public Collection<TreeElement> getChildren() {
-    return myTreeElements;
-  }
-
-  @Override
-  public int getPosition() {
-    return myName.charAt(0);
+  public String getName() {
+    return "LINE_NUMBER_SORTER";
   }
 }

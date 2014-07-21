@@ -19,21 +19,18 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview;
-
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
+package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
 import java.util.Comparator;
 
 /**
  * @author patrick (7/20/14)
  */
-public class TextPositionComparator implements Comparator<AssignmentLeafViewTreeElement> {
+public class TextPositionComparator implements Comparator<TextPositionProvider> {
   @Override
-  public int compare(final AssignmentLeafViewTreeElement o1, final AssignmentLeafViewTreeElement o2) {
-    if (o1.getValue() instanceof PsiElement && o2.getValue() instanceof PsiElement) {
-      return ((PsiElement) o1.getValue()).getTextOffset() - ((PsiElement) o2.getValue()).getTextOffset();
+  public int compare(final TextPositionProvider o1, final TextPositionProvider o2) {
+    if (o1 != null && o2 != null) {
+      return o1.getPosition() - o2.getPosition();
     }
     return 0;
   }

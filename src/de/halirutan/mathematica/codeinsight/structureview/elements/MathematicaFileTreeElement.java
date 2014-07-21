@@ -21,9 +21,9 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.elements;
 
-import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
@@ -36,18 +36,14 @@ import java.util.*;
 /**
  * @author patrick (6/14/14)
  */
-public class MathematicaFileElement extends PsiTreeElementBase<MathematicaPsiFile> implements StructureViewModel.ExpandInfoProvider{
+public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPsiFile> implements ItemPresentation {
 
   private MathematicaPsiFile myElement;
 
-  public MathematicaFileElement(final MathematicaPsiFile psiElement) {
+  public MathematicaFileTreeElement(final MathematicaPsiFile psiElement) {
     super(psiElement);
     myElement = psiElement;
   }
-//
-//  public MathematicaFileElement(MathematicaPsiFile element) {
-//    myElement = element;
-//  }
 
   @Override
   public void navigate(boolean requestFocus) {
@@ -98,16 +94,15 @@ public class MathematicaFileElement extends PsiTreeElementBase<MathematicaPsiFil
     }
     GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
     final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
-    final Collection<StructureViewTreeElement> children = new ArrayList<StructureViewTreeElement>(assignments.size());
+    final Collection<StructureViewTreeElement> children = new HashSet<StructureViewTreeElement>(assignments.size());
 
-    for (String key : assignments.keySet()) {
+    for (String key : assignments.keySet())
+    {
       final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
       for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
         children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
       }
-
     }
-
     return children;
   }
 
@@ -115,43 +110,6 @@ public class MathematicaFileElement extends PsiTreeElementBase<MathematicaPsiFil
   @Override
   public String getPresentableText() {
     return myElement.getText();
-  }
-
-//  @NotNull
-//  @Override
-//  public StructureViewTreeElement[] getChildren() {
-//    if (!myElement.isValid()) {
-//      return StructureViewTreeElement.EMPTY_ARRAY;
-//    }
-//    GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
-//    final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
-//    final Collection<AssignmentLeafViewTreeElement> children = new ArrayList<AssignmentLeafViewTreeElement>(assignments.size());
-//
-//    for (String key : assignments.keySet()) {
-//      final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
-//      for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
-//        children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
-//      }
-//
-//    }
-//
-//    return children.toArray(new AssignmentLeafViewTreeElement[children.size()]);
-//  }
-
-//  @Override
-//  public MathematicaPsiFile getValue() {
-//    return myElement.isValid() ? myElement : null;
-//  }
-
-  @Override
-  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-//    return element == myElement;
-    return true;
-  }
-
-  @Override
-  public boolean isSmartExpand() {
-    return true;
   }
 
 }

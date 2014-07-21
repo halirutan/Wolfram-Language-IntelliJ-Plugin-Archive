@@ -26,20 +26,16 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.Grouper;
-import com.intellij.ide.util.treeView.smartTree.NodeProvider;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileElement;
+import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.groupers.SymbolNameGrouper;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * @author patrick (6/13/14)
@@ -70,30 +66,20 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
   public Sorter[] getSorters() {
     return new Sorter[]{
         Sorter.ALPHA_SORTER,
+//        new CodePlaceSorter()
     };
   }
 
   @Override
   public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
-//    return element instanceof MathematicaFileElement;
+//    return element instanceof MathematicaFileTreeElement;
     return false;
   }
 
   @Override
   public boolean isAlwaysLeaf(StructureViewTreeElement element) {
-    return !(element instanceof MathematicaFileElement);
+    return false;
   }
-
-//  @Override
-//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-////    return element instanceof MathematicaFileElement;
-//    return false;
-//  }
-//
-//  @Override
-//  public boolean isSmartExpand() {
-//    return false;
-//  }
 
   @NotNull
   @Override
@@ -117,14 +103,14 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
   @NotNull
   @Override
   public StructureViewTreeElement getRoot() {
-    return new MathematicaFileElement(myRootElement);
+    return new MathematicaFileTreeElement(myRootElement);
   }
 
   @NotNull
   @Override
   public Grouper[] getGroupers() {
 //    return ourGroupers;
-    return ourGroupers;
+    return Grouper.EMPTY_ARRAY;
   }
 
 }

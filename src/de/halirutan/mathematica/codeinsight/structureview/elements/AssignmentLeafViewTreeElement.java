@@ -21,49 +21,64 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.elements;
 
-import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.TextPositionProvider;
 import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author patrick (7/20/14)
  */
-public class AssignmentLeafViewTreeElement implements
-    StructureViewTreeElement, SortableTreeElement {
+public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, TextPositionProvider {
 
   private final GlobalDefinitionCollector.AssignmentProperty myAssignment;
 
-  public AssignmentLeafViewTreeElement(final GlobalDefinitionCollector.AssignmentProperty assignment) {
-    this.myAssignment = assignment;
+  protected AssignmentLeafViewTreeElement(final GlobalDefinitionCollector.AssignmentProperty assignment) {
+    super(assignment.myAssignmentSymbol);
+    myAssignment = assignment;
   }
 
   @Override
-  public Object getValue() {
+  public int getPosition() {
+    return myAssignment.myAssignmentSymbol != null? myAssignment.myAssignmentSymbol.getTextOffset(): 0;
+  }
+
+  @Override
+  public PsiElement getValue() {
     final PsiElement myAssignmentSymbol = myAssignment.myAssignmentSymbol;
     return myAssignmentSymbol.isValid() ? myAssignmentSymbol : null;
   }
 
   @Override
   public void navigate(final boolean requestFocus) {
-    ((Expression) myAssignment.myAssignmentSymbol).navigate(requestFocus);
+    ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).navigate(requestFocus);
   }
 
   @Override
   public boolean canNavigate() {
-    return ((Expression) myAssignment.myAssignmentSymbol).canNavigate();
+    return ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).canNavigate();
   }
 
   @Override
   public boolean canNavigateToSource() {
-    return ((Expression) myAssignment.myAssignmentSymbol).canNavigateToSource();
+    return ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).canNavigateToSource();
+  }
+
+  @NotNull
+  @Override
+  public Collection<StructureViewTreeElement> getChildrenBase() {
+    return Collections.emptyList();
   }
 
   @NotNull
@@ -99,12 +114,6 @@ public class AssignmentLeafViewTreeElement implements
       default:
         return new BaseAssignmentRepresentation(myAssignment);
     }
-  }
-
-  @NotNull
-  @Override
-  public TreeElement[] getChildren() {
-    return StructureViewTreeElement.EMPTY_ARRAY;
   }
 
   @NotNull
@@ -147,13 +156,18 @@ public class AssignmentLeafViewTreeElement implements
 
   }
 
-//  @Override
-//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-//    return true;
-//  }
-//
-//  @Override
-//  public boolean isSmartExpand() {
-//    return true;
-//  }
+  @Nullable
+  @Override
+  public String getPresentableText() {
+    return null;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (o instanceof AssignmentLeafViewTreeElement) {
+      final AssignmentLeafViewTreeElement leaf = (AssignmentLeafViewTreeElement) o;
+      return leaf.getValue().equals(getValue());
+    }
+    return super.equals(o);
+  }
 }
