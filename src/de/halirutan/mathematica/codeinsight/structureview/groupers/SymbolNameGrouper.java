@@ -21,6 +21,8 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
+import com.intellij.ide.structureView.StructureViewModel;
+import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
 import de.halirutan.mathematica.MathematicaIcons;

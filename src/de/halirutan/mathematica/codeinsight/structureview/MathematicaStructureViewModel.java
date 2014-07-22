@@ -26,10 +26,12 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.ide.util.treeView.smartTree.Filter;
 import com.intellij.ide.util.treeView.smartTree.Grouper;
+import com.intellij.ide.util.treeView.smartTree.NodeProvider;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.groupers.SymbolNameGrouper;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
@@ -40,7 +42,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/13/14)
  */
-public class MathematicaStructureViewModel extends TextEditorBasedStructureViewModel implements StructureViewModel.ElementInfoProvider {
+public class MathematicaStructureViewModel extends TextEditorBasedStructureViewModel
+    implements StructureViewModel.ElementInfoProvider, StructureViewModel.ExpandInfoProvider  {
 
   private static final Grouper[] ourGroupers;
 
@@ -72,13 +75,13 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
 
   @Override
   public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
-//    return element instanceof MathematicaFileTreeElement;
-    return false;
+    return element instanceof MathematicaFileTreeElement;
+//    return false;
   }
 
   @Override
   public boolean isAlwaysLeaf(StructureViewTreeElement element) {
-    return false;
+    return element instanceof AssignmentLeafViewTreeElement;
   }
 
   @NotNull
@@ -109,8 +112,17 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
   @NotNull
   @Override
   public Grouper[] getGroupers() {
-//    return ourGroupers;
-    return Grouper.EMPTY_ARRAY;
+    return ourGroupers;
+//    return Grouper.EMPTY_ARRAY;
   }
 
+  @Override
+  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+    return false;
+  }
+
+  @Override
+  public boolean isSmartExpand() {
+    return true;
+  }
 }

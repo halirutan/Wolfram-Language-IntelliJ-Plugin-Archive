@@ -23,6 +23,7 @@ package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.util.treeView.WeighedItem;
 import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
@@ -35,7 +36,7 @@ import java.util.Collection;
 /**
  * @author patrick (7/21/14)
  */
-public class SymbolNameGroup implements Group, TextPositionProvider {
+public class SymbolNameGroup implements Group, TextPositionProvider, WeighedItem {
 
   private final Collection<TreeElement> myTreeElements;
   private final String myName;
@@ -60,5 +61,10 @@ public class SymbolNameGroup implements Group, TextPositionProvider {
   @Override
   public int getPosition() {
     return myName.charAt(0);
+  }
+
+  @Override
+  public int getWeight() {
+    return 60;
   }
 }
