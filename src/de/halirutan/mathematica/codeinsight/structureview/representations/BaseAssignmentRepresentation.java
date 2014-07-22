@@ -32,7 +32,7 @@ import javax.swing.*;
  */
 public class BaseAssignmentRepresentation implements ItemPresentation {
 
-  private GlobalDefinitionCollector.AssignmentProperty myAssignmentProperty;
+  protected GlobalDefinitionCollector.AssignmentProperty myAssignmentProperty;
 
   public BaseAssignmentRepresentation(GlobalDefinitionCollector.AssignmentProperty assignmentProperty) {
     myAssignmentProperty = assignmentProperty;
@@ -44,10 +44,11 @@ public class BaseAssignmentRepresentation implements ItemPresentation {
     return myAssignmentProperty.myLhsOfAssignment.getText();
   }
 
+
   @Nullable
   @Override
   public String getLocationString() {
-    return null;
+    return myAssignmentProperty.myAssignmentSymbol.getText();
   }
 
   @Nullable

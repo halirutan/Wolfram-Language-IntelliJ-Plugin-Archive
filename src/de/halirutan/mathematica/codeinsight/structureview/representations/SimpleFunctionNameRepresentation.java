@@ -29,7 +29,7 @@ import javax.swing.*;
 /**
  * @author patrick (7/21/14)
  */
-public class SimpleFunctionNameRepresentation implements ItemPresentation{
+public class SimpleFunctionNameRepresentation implements ItemPresentation {
 
   private final String myName;
 

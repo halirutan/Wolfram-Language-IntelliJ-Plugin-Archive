@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.elements;
 
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
@@ -28,7 +29,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
-import de.halirutan.mathematica.codeinsight.structureview.sorters.TextPositionProvider;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
 import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ import java.util.Collections;
 /**
  * @author patrick (7/20/14)
  */
-public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, TextPositionProvider {
+public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, CodePlaceProvider, StructureViewModel.ExpandInfoProvider {
 
   private final GlobalDefinitionCollector.AssignmentProperty myAssignment;
 
@@ -49,9 +50,13 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
     myAssignment = assignment;
   }
 
+  public SymbolAssignmentType getAssignmentType() {
+    return myAssignment.myAssignmentType;
+  }
+
   @Override
   public int getPosition() {
-    return myAssignment.myAssignmentSymbol != null? myAssignment.myAssignmentSymbol.getTextOffset(): 0;
+    return myAssignment.myAssignmentSymbol != null ? myAssignment.myAssignmentSymbol.getTextOffset() : 0;
   }
 
   @Override
@@ -119,10 +124,10 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
   @NotNull
   @Override
   public String getAlphaSortKey() {
-    return myAssignment.myAssignmentSymbol.getText() + getTypeSortKey(myAssignment.myAssignmentType);
+    return myAssignment.myAssignmentSymbol.getText() + getTypeSortKey();
   }
 
-  private String getTypeSortKey(final SymbolAssignmentType type) {
+  private String getTypeSortKey() {
     switch (myAssignment.myAssignmentType) {
       case SET_DELAYED_ASSIGNMENT:
         return "130";
@@ -169,5 +174,15 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
       return leaf.getValue().equals(getValue());
     }
     return super.equals(o);
+  }
+
+  @Override
+  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+    return false;
+  }
+
+  @Override
+  public boolean isSmartExpand() {
+    return true;
   }
 }

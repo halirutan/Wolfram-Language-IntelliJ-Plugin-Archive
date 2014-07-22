@@ -41,4 +41,5 @@ public class OptionsRepresentation extends BaseAssignmentRepresentation {
   public Icon getIcon(final boolean unused) {
     return MathematicaIcons.OPTIONS_ICON;
   }
+
 }

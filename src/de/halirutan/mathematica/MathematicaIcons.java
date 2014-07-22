@@ -30,7 +30,7 @@ import javax.swing.*;
  */
 public interface MathematicaIcons {
 
-  Icon FILE_ICON = IconLoader.getIcon("/icons/spiky3_file.png");
+  Icon FILE_ICON = IconLoader.getIcon("/icons/spikeyV10.png");
   Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
   Icon SET_DELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
   Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
@@ -44,6 +44,9 @@ public interface MathematicaIcons {
   Icon MESSAGES_ICON = IconLoader.getIcon("/icons/Messages.png");
   Icon N_VALUES_ICON = IconLoader.getIcon("/icons/NValues.png");
   Icon SYNTAX_INFORMATION_ICON = IconLoader.getIcon("/icons/SyntaxInformation.png");
+  Icon GROUP_BY_NAME_ICON = IconLoader.getIcon("/icons/GroupByName.png");
+  Icon GROUP_BY_TYPE_ICON = IconLoader.getIcon("/icons/GroupByType.png");
+  Icon SORT_BY_TYPE_APPEARANCE = IconLoader.getIcon("/icons/SortByAppearance.png");
 
 
 }

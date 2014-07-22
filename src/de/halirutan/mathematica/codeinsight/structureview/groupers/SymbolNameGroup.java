@@ -21,14 +21,11 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.util.treeView.WeighedItem;
 import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.codeinsight.structureview.representations.SimpleFunctionNameRepresentation;
-import de.halirutan.mathematica.codeinsight.structureview.sorters.TextPositionProvider;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -36,7 +33,7 @@ import java.util.Collection;
 /**
  * @author patrick (7/21/14)
  */
-public class SymbolNameGroup implements Group, TextPositionProvider, WeighedItem {
+public class SymbolNameGroup implements Group, CodePlaceProvider {
 
   private final Collection<TreeElement> myTreeElements;
   private final String myName;
@@ -63,8 +60,4 @@ public class SymbolNameGroup implements Group, TextPositionProvider, WeighedItem
     return myName.charAt(0);
   }
 
-  @Override
-  public int getWeight() {
-    return 60;
-  }
 }

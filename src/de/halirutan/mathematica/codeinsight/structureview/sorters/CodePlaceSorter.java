@@ -23,6 +23,7 @@ package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
+import de.halirutan.mathematica.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -32,9 +33,24 @@ import java.util.Comparator;
  * @author patrick (7/21/14)
  */
 public class CodePlaceSorter implements Sorter {
+
+  public static final CodePlaceSorter INSTANCE = new CodePlaceSorter();
+  private static final String CODE_SORTER_ID = "CODE_PLACE_COMPARATOR";
+
+  private CodePlaceSorter() {
+  }
+
   @Override
   public Comparator getComparator() {
-    return new TextPositionComparator();
+    return new Comparator() {
+      @Override
+      public int compare(final Object o1, final Object o2) {
+        if (o1 instanceof CodePlaceProvider && o2 instanceof CodePlaceProvider) {
+          return ((CodePlaceProvider) o1).getPosition() - ((CodePlaceProvider) o2).getPosition();
+        }
+        return 0;
+      }
+    };
   }
 
   @Override
@@ -49,7 +65,7 @@ public class CodePlaceSorter implements Sorter {
       @NotNull
       @Override
       public String getText() {
-        return "Sort by Line Number";
+        return "Sort by appearance";
       }
 
       @Override
@@ -59,7 +75,7 @@ public class CodePlaceSorter implements Sorter {
 
       @Override
       public Icon getIcon() {
-        return null;
+        return MathematicaIcons.SORT_BY_TYPE_APPEARANCE;
       }
     };
   }
@@ -67,6 +83,6 @@ public class CodePlaceSorter implements Sorter {
   @NotNull
   @Override
   public String getName() {
-    return "LINE_NUMBER_SORTER";
+    return CODE_SORTER_ID;
   }
 }

@@ -23,7 +23,6 @@ package de.halirutan.mathematica.codeinsight.structureview.elements;
 
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
@@ -31,7 +30,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author patrick (6/14/14)
@@ -96,8 +98,7 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
     final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
     final Collection<StructureViewTreeElement> children = new HashSet<StructureViewTreeElement>(assignments.size());
 
-    for (String key : assignments.keySet())
-    {
+    for (String key : assignments.keySet()) {
       final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
       for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
         children.add(new AssignmentLeafViewTreeElement(assignmentProperty));

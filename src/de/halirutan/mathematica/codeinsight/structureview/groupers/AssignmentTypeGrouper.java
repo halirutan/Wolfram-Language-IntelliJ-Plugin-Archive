@@ -26,7 +26,7 @@ import com.intellij.ide.util.treeView.smartTree.*;
 import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -35,32 +35,32 @@ import java.util.*;
 /**
  * @author patrick (7/21/14)
  */
-public class SymbolNameGrouper implements Grouper, Sorter {
+public class AssignmentTypeGrouper implements Grouper, Sorter {
+
+  private static final String ID = "ASSIGNMENT_TYPE_GROUPER";
+
   @NotNull
   @Override
   public Collection<Group> group(@NotNull final AbstractTreeNode parent, @NotNull final Collection<TreeElement> children) {
 
     if (!(parent.getValue() instanceof MathematicaFileTreeElement)) return Collections.emptySet();
-    final HashMap<String, Collection<TreeElement>> groupedElements = new HashMap<String, Collection<TreeElement>>(children.size());
+    final HashMap<SymbolAssignmentType, Collection<TreeElement>> groupedElements = new HashMap<SymbolAssignmentType, Collection<TreeElement>>(children.size());
 
     for (TreeElement definition : children) {
       if (definition instanceof AssignmentLeafViewTreeElement) {
-        final Object symbol = ((AssignmentLeafViewTreeElement) definition).getValue();
-        if (symbol instanceof Symbol) {
-          final String symbolName = ((Symbol) symbol).getSymbolName();
-          if (groupedElements.containsKey(symbolName)) {
-            groupedElements.get(symbolName).add(definition);
-          } else {
-            groupedElements.put(symbolName, new HashSet<TreeElement>());
-            groupedElements.get(symbolName).add(definition);
-          }
+        final SymbolAssignmentType type = ((AssignmentLeafViewTreeElement) definition).getAssignmentType();
+        if (groupedElements.containsKey(type)) {
+          groupedElements.get(type).add(definition);
+        } else {
+          groupedElements.put(type, new HashSet<TreeElement>());
+          groupedElements.get(type).add(definition);
         }
       }
     }
 
     Collection<Group> result = new HashSet<Group>(groupedElements.size());
-    for (final String key : groupedElements.keySet()) {
-      result.add(new SymbolNameGroup(key, groupedElements.get(key)));
+    for (final SymbolAssignmentType key : groupedElements.keySet()) {
+      result.add(new SymbolNameGroup(key.toString(), groupedElements.get(key)));
     }
 
     return result;
@@ -74,17 +74,17 @@ public class SymbolNameGrouper implements Grouper, Sorter {
       @NotNull
       @Override
       public String getText() {
-        return "Group by Name";
+        return "Group by Assignment Type";
       }
 
       @Override
       public String getDescription() {
-        return "Very long descripton";
+        return "Groups all assignments by their type.";
       }
 
       @Override
       public Icon getIcon() {
-        return MathematicaIcons.GROUP_BY_NAME_ICON;
+        return MathematicaIcons.GROUP_BY_TYPE_ICON;
       }
     };
   }
@@ -92,7 +92,7 @@ public class SymbolNameGrouper implements Grouper, Sorter {
   @NotNull
   @Override
   public String getName() {
-    return "Group by Symbol name";
+    return ID;
   }
 
   @Override

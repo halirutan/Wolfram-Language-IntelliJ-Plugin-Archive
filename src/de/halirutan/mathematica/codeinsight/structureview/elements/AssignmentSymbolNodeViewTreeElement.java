@@ -26,7 +26,6 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +37,7 @@ import java.util.*;
 /**
  * @author patrick (7/20/14)
  */
+@SuppressWarnings("UnusedDeclaration")
 public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
 
   private final String mySymbolName;

@@ -41,5 +41,37 @@ public enum SymbolAssignmentType {
   SYNTAX_INFORMATION_ASSIGNMENT,
   DEFAULT_ASSIGNMENT,
   N_ASSIGNMENT,
-  UNKNOWN
+  UNKNOWN;
+
+  @Override
+  public String toString() {
+    switch (this) {
+      case ATTRIBUTES_ASSIGNMENT: return "Attributes";
+      case UP_SET_DELAYED_ASSIGNMENT:
+        return "UpSetDelayed";
+      case UP_SET_ASSIGNMENT:
+        return "UpSet";
+      case TAG_SET_DELAYED_ASSIGNMENT:
+        return "TagSetDelayed";
+      case DEFAULT_ASSIGNMENT:
+        return "Default";
+      case FORMAT_ASSIGNMENT:
+        return "Format";
+      case MESSAGE_ASSIGNMENT:
+        return "Message";
+      case N_ASSIGNMENT:
+        return "N";
+      case OPTIONS_ASSIGNMENT:
+        return "Options";
+      case SET_ASSIGNMENT:
+        return "Set";
+      case SET_DELAYED_ASSIGNMENT:
+        return "SetDelayed";
+      case SYNTAX_INFORMATION_ASSIGNMENT:
+        return "SyntaxInformation";
+      case TAG_SET_ASSIGNMENT:
+        return "TagSet";
+    }
+    return super.toString();
+  }
 }

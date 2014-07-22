@@ -21,18 +21,9 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
-import java.util.Comparator;
-
 /**
- * @author patrick (7/20/14)
+ * @author patrick (7/21/14)
  */
-public class TextPositionComparator implements Comparator<TextPositionProvider> {
-  @Override
-  public int compare(final TextPositionProvider o1, final TextPositionProvider o2) {
-    if (o1 != null && o2 != null) {
-      return o1.getPosition() - o2.getPosition();
-    }
-    return 0;
-  }
+public interface CodePlaceProvider {
+  public int getPosition();
 }
-
