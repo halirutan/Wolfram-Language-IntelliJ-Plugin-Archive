@@ -2,7 +2,7 @@
     <id>de.halirutan.mathematica</id>
     <name>Mathematica Support</name>
     <category>Custom Language</category>
-    <version>0.2.61</version>
+    <version>0.3.0</version>
     <idea-version since-build="123.94"/>
     <vendor email="pscheibe@trm.uni-leipzig.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
     <depends>com.intellij.modules.lang</depends>
@@ -22,7 +22,6 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-
         <internalFileTemplate name="Package"/>
 
         <errorHandler implementation="de.halirutan.mathematica.errorreporting.YouTrackBugReporter"/>
@@ -78,16 +77,6 @@
         <enterHandlerDelegate
                 implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
-
-        <!-- Find Usage provider -->
-        <!-- Currently, we don't need it since the standard implementation does find in most cases. There is one case, where it
-        doesn't work, but I'll look into that later. The current implementation would be too slow for real use. -->
-        <!--<lang.findUsagesProvider language="Mathematica"-->
-        <!--implementationClass="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageProvider"/>-->
-        <!--<findUsagesHandlerFactory-->
-        <!--implementation="de.halirutan.mathematica.codeinsight.findusage.MathematicaFindUsageHandlerFactory"/>-->
-
-
         <!-- Code-style and colors-->
         <colorSettingsPage
                 implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
@@ -106,9 +95,6 @@
         <enterHandlerDelegate
                 implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
-        <!-- Error recovery and intentions-->
-        <!--<inspectionToolProvider-->
-                <!--implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>-->
     </extensions>
 
     <actions>
