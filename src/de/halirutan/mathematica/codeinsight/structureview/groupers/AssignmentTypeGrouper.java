@@ -21,8 +21,10 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
+import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
+import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
@@ -43,7 +45,8 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
   @Override
   public Collection<Group> group(@NotNull final AbstractTreeNode parent, @NotNull final Collection<TreeElement> children) {
 
-    if (!(parent.getValue() instanceof MathematicaFileTreeElement)) return Collections.emptySet();
+    if (!(parent.getValue() instanceof PsiTreeElementBase)) return Collections.emptySet();
+
     final HashMap<SymbolAssignmentType, Collection<TreeElement>> groupedElements = new HashMap<SymbolAssignmentType, Collection<TreeElement>>(children.size());
 
     for (TreeElement definition : children) {
@@ -60,7 +63,7 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
 
     Collection<Group> result = new HashSet<Group>(groupedElements.size());
     for (final SymbolAssignmentType key : groupedElements.keySet()) {
-      result.add(new SymbolNameGroup(key.toString(), groupedElements.get(key)));
+      result.add(new AssignmentTypeGroup(key.toString(), groupedElements.get(key)));
     }
 
     return result;

@@ -21,6 +21,8 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
+import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import com.intellij.ide.structureView.newStructureView.StructureViewComponent;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
 import de.halirutan.mathematica.MathematicaIcons;
@@ -40,7 +42,10 @@ public class SymbolNameGrouper implements Grouper, Sorter {
   @Override
   public Collection<Group> group(@NotNull final AbstractTreeNode parent, @NotNull final Collection<TreeElement> children) {
 
-    if (!(parent.getValue() instanceof MathematicaFileTreeElement)) return Collections.emptySet();
+    if (parent.getValue() instanceof SymbolNameGroup){
+      return Collections.emptySet();
+    }
+
     final HashMap<String, Collection<TreeElement>> groupedElements = new HashMap<String, Collection<TreeElement>>(children.size());
 
     for (TreeElement definition : children) {
@@ -104,5 +109,7 @@ public class SymbolNameGrouper implements Grouper, Sorter {
   public boolean isVisible() {
     return true;
   }
+
+
 
 }

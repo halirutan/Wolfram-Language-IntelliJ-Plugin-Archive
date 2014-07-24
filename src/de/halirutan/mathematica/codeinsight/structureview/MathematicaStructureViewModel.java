@@ -52,8 +52,8 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
 
   static {
     ourGroupers = new Grouper[]{
-        new SymbolNameGrouper(),
-        new AssignmentTypeGrouper()
+        new AssignmentTypeGrouper(),
+        new SymbolNameGrouper()
     };
   }
 

@@ -24,6 +24,8 @@ package de.halirutan.mathematica.codeinsight.structureview.elements;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.impl.file.PsiFileImplUtil;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
@@ -94,6 +96,8 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
     if (!myElement.isValid()) {
       return Collections.emptyList();
     }
+
+
     GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
     final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
     final Collection<StructureViewTreeElement> children = new HashSet<StructureViewTreeElement>(assignments.size());
@@ -104,7 +108,25 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
         children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
       }
     }
-    return children;
+
+    StructureViewTreeElement root  = new PsiTreeElementBase<MathematicaPsiFile>(myElement) {
+      @NotNull
+      @Override
+      public Collection<StructureViewTreeElement> getChildrenBase() {
+        return children;
+      }
+
+      @Nullable
+      @Override
+      public String getPresentableText() {
+        return myElement.getName();
+      }
+    };
+
+    Collection<StructureViewTreeElement> result = new HashSet<StructureViewTreeElement>();
+    result.add(root);
+
+    return result;
   }
 
   @Nullable

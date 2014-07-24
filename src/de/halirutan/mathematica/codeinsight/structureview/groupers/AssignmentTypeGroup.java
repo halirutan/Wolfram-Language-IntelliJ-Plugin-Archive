@@ -28,19 +28,17 @@ import de.halirutan.mathematica.codeinsight.structureview.representations.Simple
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * @author patrick (7/21/14)
  */
-public class SymbolNameGroup implements Group, CodePlaceProvider {
+public class AssignmentTypeGroup implements Group, CodePlaceProvider {
 
   private final Collection<TreeElement> myTreeElements;
   private final String myName;
 
-  public SymbolNameGroup(final String symbolName, final Collection<TreeElement> treeElements) {
+  public AssignmentTypeGroup(final String symbolName, final Collection<TreeElement> treeElements) {
     this.myTreeElements = treeElements;
     this.myName = symbolName;
   }

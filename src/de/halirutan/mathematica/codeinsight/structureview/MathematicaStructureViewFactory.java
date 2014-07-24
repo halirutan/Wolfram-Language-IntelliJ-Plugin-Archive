@@ -45,6 +45,11 @@ public class MathematicaStructureViewFactory implements PsiStructureViewFactory 
         public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
           return new MathematicaStructureViewModel((MathematicaPsiFile) psiFile, editor);
         }
+
+        @Override
+        public boolean isRootNodeShown() {
+          return false;
+        }
       };
     }
     return null;
