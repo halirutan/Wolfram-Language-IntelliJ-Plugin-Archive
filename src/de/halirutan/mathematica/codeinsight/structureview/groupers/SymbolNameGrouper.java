@@ -21,13 +21,12 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
-import com.intellij.ide.structureView.newStructureView.StructureViewComponent;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.AlphaSorterWithCase;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,14 +34,18 @@ import javax.swing.*;
 import java.util.*;
 
 /**
+ * Groups assignment by the symbols they are assigning.
  * @author patrick (7/21/14)
  */
 public class SymbolNameGrouper implements Grouper, Sorter {
+
+  private static final String ID = "SYMBOL_NAME_GROUPER";
+
   @NotNull
   @Override
   public Collection<Group> group(@NotNull final AbstractTreeNode parent, @NotNull final Collection<TreeElement> children) {
 
-    if (parent.getValue() instanceof SymbolNameGroup){
+    if (parent.getValue() instanceof SymbolNameGroup) {
       return Collections.emptySet();
     }
 
@@ -79,12 +82,12 @@ public class SymbolNameGrouper implements Grouper, Sorter {
       @NotNull
       @Override
       public String getText() {
-        return "Group by Name";
+        return MathematicaBundle.message("structureview.grouper.by.symbol.name.text");
       }
 
       @Override
       public String getDescription() {
-        return "Very long descripton";
+        return MathematicaBundle.message("structureview.grouper.by.symbol.name.description");
       }
 
       @Override
@@ -97,19 +100,18 @@ public class SymbolNameGrouper implements Grouper, Sorter {
   @NotNull
   @Override
   public String getName() {
-    return "Group by Symbol name";
+    return ID;
   }
 
   @Override
   public Comparator getComparator() {
-    return Sorter.ALPHA_SORTER.getComparator();
+    return AlphaSorterWithCase.INSTANCE.getComparator();
   }
 
   @Override
   public boolean isVisible() {
     return true;
   }
-
 
 
 }

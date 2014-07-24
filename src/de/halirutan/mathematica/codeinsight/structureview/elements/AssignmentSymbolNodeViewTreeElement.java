@@ -23,6 +23,7 @@ package de.halirutan.mathematica.codeinsight.structureview.elements;
 
 import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.util.treeView.smartTree.Grouper;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
@@ -35,6 +36,8 @@ import javax.swing.*;
 import java.util.*;
 
 /**
+ * @deprecated
+ * Not used anymore. I try to accomplish the same behavior by using {@link Grouper}
  * @author patrick (7/20/14)
  */
 @SuppressWarnings("UnusedDeclaration")

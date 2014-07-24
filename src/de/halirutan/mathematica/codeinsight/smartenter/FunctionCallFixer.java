@@ -31,16 +31,17 @@ public class FunctionCallFixer extends SmartEnterProcessorWithFixers.Fixer<Mathe
             doc.insertString(textOffset + prevSibling.getTextLength(), "]");
           }
         }
-      } else {
-
+        return;
+      }
         final PsiElement prevSibling = lastChild.getPrevSibling();
         if (prevSibling != null && prevSibling.getNode().getElementType() == COMMA) {
           doc.insertString(prevSibling.getTextOffset() + 1, "\n\n");
           editor.getCaretModel().moveToOffset(prevSibling.getTextOffset() + 2);
           processor.commit(editor);
+//          return;
         }
+//      editor.getCaretModel().moveToOffset(lastChild.getTextOffset() + 1, true);
 
-      }
     }
   }
 }

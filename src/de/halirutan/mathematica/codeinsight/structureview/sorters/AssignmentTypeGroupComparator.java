@@ -19,46 +19,30 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview.groupers;
+package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
 import com.intellij.ide.util.treeView.smartTree.Group;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.codeinsight.structureview.representations.SimpleFunctionNameRepresentation;
-import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.util.treeView.smartTree.SorterUtil;
+import de.halirutan.mathematica.codeinsight.structureview.groupers.AssignmentTypeGroup;
 
-import java.util.Collection;
+import java.util.Comparator;
 
 /**
- * The representation of a group node in the structure view, when the user has clicked "group by symbol-name"
- * @author patrick (7/21/14)
+ * Provides functionality to sort the assignment-type nodes in the structure-view correctly
+ *
+ * @author patrick (7/24/14)
  */
-public class SymbolNameGroup implements Group, CodePlaceProvider {
-
-  private final Collection<TreeElement> myTreeElements;
-  private final String myName;
-
-  public SymbolNameGroup(final String symbolName, final Collection<TreeElement> treeElements) {
-    this.myTreeElements = treeElements;
-    this.myName = symbolName;
-  }
-
-  @NotNull
-  @Override
-  public ItemPresentation getPresentation() {
-    return new SimpleFunctionNameRepresentation(myName);
-  }
-
-  @NotNull
-  @Override
-  public Collection<TreeElement> getChildren() {
-    return myTreeElements;
-  }
+public class AssignmentTypeGroupComparator implements Comparator<Group> {
 
   @Override
-  public int getPosition() {
-    return myName.charAt(0);
+  public int compare(final Group o1, final Group o2) {
+    if (o1 instanceof AssignmentTypeGroup && o2 instanceof AssignmentTypeGroup) {
+      return ((AssignmentTypeGroup) o1).getPosition() - ((AssignmentTypeGroup) o2).getPosition();
+    }
+    String s1 = SorterUtil.getStringPresentation(o1);
+    String s2 = SorterUtil.getStringPresentation(o2);
+    return s1.compareToIgnoreCase(s2);
   }
-
 }
+
+

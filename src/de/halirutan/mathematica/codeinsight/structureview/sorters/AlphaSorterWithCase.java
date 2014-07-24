@@ -21,38 +21,35 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
+import com.intellij.icons.AllIcons;
+import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
+import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
-import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.MathematicaIcons;
+import com.intellij.ide.util.treeView.smartTree.SorterUtil;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.Comparator;
 
 /**
- * Provides a way to sort assignments by there appearance in the source file. Basically, this is
- * sorting by line-number of the assignment.
- * @see {@link CodePlaceProvider}
- * @author patrick (7/21/14)
+ * Szabolcs pointed out that in Mathematica, functions starting with upper case are usually the ones
+ * that get exported from a package. Therefore, and until I have a reliable way to extract the contexts
+ * from a package file, I will sort the entries in the structure view alphabetically, but taking the
+ * capitalization into account.
+ * @author patrick (7/24/14)
  */
-public class CodePlaceSorter implements Sorter {
+public class AlphaSorterWithCase implements Sorter {
 
-  public static final CodePlaceSorter INSTANCE = new CodePlaceSorter();
-  private static final String CODE_SORTER_ID = "CODE_PLACE_COMPARATOR";
-
-  private CodePlaceSorter() {
-  }
+  public static final AlphaSorterWithCase INSTANCE = new AlphaSorterWithCase();
 
   @Override
   public Comparator getComparator() {
     return new Comparator() {
       @Override
-      public int compare(final Object o1, final Object o2) {
-        if (o1 instanceof CodePlaceProvider && o2 instanceof CodePlaceProvider) {
-          return ((CodePlaceProvider) o1).getPosition() - ((CodePlaceProvider) o2).getPosition();
-        }
-        return 0;
+      public int compare(Object o1, Object o2) {
+        String s1 = SorterUtil.getStringPresentation(o1);
+        String s2 = SorterUtil.getStringPresentation(o2);
+        return s1.compareTo(s2);
       }
     };
   }
@@ -62,31 +59,23 @@ public class CodePlaceSorter implements Sorter {
     return true;
   }
 
-  @NotNull
-  @Override
-  public ActionPresentation getPresentation() {
-    return new ActionPresentation() {
-      @NotNull
-      @Override
-      public String getText() {
-        return MathematicaBundle.message("structureview.sorter.by.appearance.text");
-      }
-
-      @Override
-      public String getDescription() {
-        return MathematicaBundle.message("structureview.sorter.by.appearance.description");
-      }
-
-      @Override
-      public Icon getIcon() {
-        return MathematicaIcons.SORT_BY_TYPE_APPEARANCE;
-      }
-    };
+  public String toString() {
+    return getName();
   }
 
-  @NotNull
   @Override
+  @NotNull
+  public ActionPresentation getPresentation() {
+    return new ActionPresentationData(IdeBundle.message("action.sort.alphabetically"),
+        IdeBundle.message("action.sort.alphabetically"),
+        AllIcons.ObjectBrowser.Sorted);
+  }
+
+  @Override
+  @NotNull
   public String getName() {
-    return CODE_SORTER_ID;
+    return ALPHA_SORTER_ID;
   }
 }
+
+

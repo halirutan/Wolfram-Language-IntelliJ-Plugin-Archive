@@ -17,7 +17,7 @@ public class CompoundExpressionFixer extends SmartEnterProcessorWithFixers.Fixer
   @Override
   public void apply(@NotNull Editor editor, @NotNull MathematicaSmartEnter processor, @NotNull PsiElement element) throws IncorrectOperationException {
     Document doc = editor.getDocument();
-    if (element instanceof CompoundExpression) {
+    if (element instanceof CompoundExpression && element.getTextOffset()+element.getTextLength() == editor.getCaretModel().getOffset()) {
       final PsiElement lastChild = element.getLastChild();
       if (!lastChild.getNode().getElementType().equals(SEMICOLON)) {
         final int offset = lastChild.getTextOffset() + lastChild.getTextLength();

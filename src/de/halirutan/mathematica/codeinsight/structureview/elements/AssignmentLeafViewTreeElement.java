@@ -21,11 +21,11 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.elements;
 
-import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.pom.Navigatable;
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
@@ -39,9 +39,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * The leafs of all structure view trees. A single assignment is always at the end of a structure view.
  * @author patrick (7/20/14)
  */
-public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, CodePlaceProvider, StructureViewModel.ExpandInfoProvider {
+public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, CodePlaceProvider {
 
   private final GlobalDefinitionCollector.AssignmentProperty myAssignment;
 
@@ -67,17 +68,28 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
 
   @Override
   public void navigate(final boolean requestFocus) {
-    ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).navigate(requestFocus);
+    final PsiElement symbol = myAssignment.myAssignmentSymbol;
+    if (symbol != null) {
+      ((Navigatable) symbol).navigate(requestFocus);
+    }
   }
 
   @Override
   public boolean canNavigate() {
-    return ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).canNavigate();
+    final PsiElement symbol = myAssignment.myAssignmentSymbol;
+    if (symbol != null) {
+      return ((Navigatable) symbol).canNavigate();
+    }
+    return false;
   }
 
   @Override
   public boolean canNavigateToSource() {
-    return ((NavigatablePsiElement) myAssignment.myAssignmentSymbol).canNavigateToSource();
+    final PsiElement symbol = myAssignment.myAssignmentSymbol;
+    if (symbol != null) {
+      return ((Navigatable) symbol).canNavigateToSource();
+    }
+    return false;
   }
 
   @NotNull
@@ -175,14 +187,15 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
     }
     return super.equals(o);
   }
+//
+//  @Override
+//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
+//    return false;
+//  }
+//
+//  @Override
+//  public boolean isSmartExpand() {
+//    return true;
+//  }
 
-  @Override
-  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-    return false;
-  }
-
-  @Override
-  public boolean isSmartExpand() {
-    return true;
-  }
 }

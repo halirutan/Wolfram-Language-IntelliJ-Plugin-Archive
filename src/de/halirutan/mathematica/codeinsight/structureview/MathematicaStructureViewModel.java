@@ -34,6 +34,7 @@ import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLea
 import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.groupers.AssignmentTypeGrouper;
 import de.halirutan.mathematica.codeinsight.structureview.groupers.SymbolNameGrouper;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.AlphaSorterWithCase;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceSorter;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -70,7 +71,7 @@ public class MathematicaStructureViewModel extends TextEditorBasedStructureViewM
   @Override
   public Sorter[] getSorters() {
     return new Sorter[]{
-        Sorter.ALPHA_SORTER,
+        AlphaSorterWithCase.INSTANCE,
         CodePlaceSorter.INSTANCE
     };
   }

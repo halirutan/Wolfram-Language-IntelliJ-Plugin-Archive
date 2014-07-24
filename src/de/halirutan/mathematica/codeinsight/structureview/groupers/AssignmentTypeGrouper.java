@@ -21,13 +21,16 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.ide.util.treeView.smartTree.*;
-import com.intellij.psi.PsiElement;
+import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
+import com.intellij.ide.util.treeView.smartTree.Group;
+import com.intellij.ide.util.treeView.smartTree.Grouper;
+import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
-import de.halirutan.mathematica.codeinsight.structureview.elements.MathematicaFileTreeElement;
+import de.halirutan.mathematica.codeinsight.structureview.elements.SimpleStringTreeElement;
+import de.halirutan.mathematica.codeinsight.structureview.sorters.AssignmentTypeGroupComparator;
 import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,9 +38,11 @@ import javax.swing.*;
 import java.util.*;
 
 /**
+ * Provides a way to group a collection of {@link AssignmentLeafViewTreeElement} by the type of the assignment.
+ *
  * @author patrick (7/21/14)
  */
-public class AssignmentTypeGrouper implements Grouper, Sorter {
+public class AssignmentTypeGrouper implements Grouper {
 
   private static final String ID = "ASSIGNMENT_TYPE_GROUPER";
 
@@ -45,7 +50,7 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
   @Override
   public Collection<Group> group(@NotNull final AbstractTreeNode parent, @NotNull final Collection<TreeElement> children) {
 
-    if (!(parent.getValue() instanceof PsiTreeElementBase)) return Collections.emptySet();
+    if (!(parent.getValue() instanceof SimpleStringTreeElement)) return Collections.emptySet();
 
     final HashMap<SymbolAssignmentType, Collection<TreeElement>> groupedElements = new HashMap<SymbolAssignmentType, Collection<TreeElement>>(children.size());
 
@@ -61,11 +66,10 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
       }
     }
 
-    Collection<Group> result = new HashSet<Group>(groupedElements.size());
+    Collection<Group> result = new TreeSet<Group>(new AssignmentTypeGroupComparator());
     for (final SymbolAssignmentType key : groupedElements.keySet()) {
-      result.add(new AssignmentTypeGroup(key.toString(), groupedElements.get(key)));
+      result.add(new AssignmentTypeGroup(key, groupedElements.get(key)));
     }
-
     return result;
 
   }
@@ -77,12 +81,12 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
       @NotNull
       @Override
       public String getText() {
-        return "Group by Assignment Type";
+        return MathematicaBundle.message("structureview.grouper.by.type.text");
       }
 
       @Override
       public String getDescription() {
-        return "Groups all assignments by their type.";
+        return MathematicaBundle.message("structureview.grouper.by.type.description");
       }
 
       @Override
@@ -96,16 +100,6 @@ public class AssignmentTypeGrouper implements Grouper, Sorter {
   @Override
   public String getName() {
     return ID;
-  }
-
-  @Override
-  public Comparator getComparator() {
-    return Sorter.ALPHA_SORTER.getComparator();
-  }
-
-  @Override
-  public boolean isVisible() {
-    return true;
   }
 
 }

@@ -19,46 +19,78 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.structureview.groupers;
+package de.halirutan.mathematica.codeinsight.structureview.elements;
 
-import com.intellij.ide.util.treeView.smartTree.Group;
+import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.codeinsight.structureview.representations.SimpleFunctionNameRepresentation;
-import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Collection;
 
 /**
- * The representation of a group node in the structure view, when the user has clicked "group by symbol-name"
- * @author patrick (7/21/14)
+ * A very basic node in the structure view which has no other capabilities than having a name.
+ * @author patrick (7/24/14)
  */
-public class SymbolNameGroup implements Group, CodePlaceProvider {
+public class SimpleStringTreeElement implements StructureViewTreeElement, ItemPresentation {
 
-  private final Collection<TreeElement> myTreeElements;
   private final String myName;
+  private final Collection<StructureViewTreeElement> myChildren;
 
-  public SymbolNameGroup(final String symbolName, final Collection<TreeElement> treeElements) {
-    this.myTreeElements = treeElements;
-    this.myName = symbolName;
+  public SimpleStringTreeElement(final String name, Collection<StructureViewTreeElement> children) {
+    this.myName = name;
+    myChildren = children;
   }
 
   @NotNull
   @Override
   public ItemPresentation getPresentation() {
-    return new SimpleFunctionNameRepresentation(myName);
+    return this;
   }
 
   @NotNull
   @Override
-  public Collection<TreeElement> getChildren() {
-    return myTreeElements;
+  public TreeElement[] getChildren() {
+    return myChildren.toArray(new TreeElement[myChildren.size()]);
+  }
+
+  @Nullable
+  @Override
+  public String getPresentableText() {
+    return myName;
+  }
+
+  @Nullable
+  @Override
+  public String getLocationString() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public Icon getIcon(final boolean unused) {
+    return null;
   }
 
   @Override
-  public int getPosition() {
-    return myName.charAt(0);
+  public Object getValue() {
+    return myName;
   }
 
+  @Override
+  public void navigate(final boolean requestFocus) {
+
+  }
+
+  @Override
+  public boolean canNavigate() {
+    return false;
+  }
+
+  @Override
+  public boolean canNavigateToSource() {
+    return false;
+  }
 }

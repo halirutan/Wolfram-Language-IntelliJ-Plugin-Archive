@@ -38,6 +38,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
+ * The root-node of the structure view. Note that this is not shown due to work around some issue with the
+ * structure view: {@link http://youtrack.jetbrains.com/issue/IDEA-127688}
  * @author patrick (6/14/14)
  */
 public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPsiFile> implements ItemPresentation {
@@ -109,19 +111,7 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
       }
     }
 
-    StructureViewTreeElement root  = new PsiTreeElementBase<MathematicaPsiFile>(myElement) {
-      @NotNull
-      @Override
-      public Collection<StructureViewTreeElement> getChildrenBase() {
-        return children;
-      }
-
-      @Nullable
-      @Override
-      public String getPresentableText() {
-        return myElement.getName();
-      }
-    };
+    SimpleStringTreeElement root = new SimpleStringTreeElement(myElement.getName(), children);
 
     Collection<StructureViewTreeElement> result = new HashSet<StructureViewTreeElement>();
     result.add(root);

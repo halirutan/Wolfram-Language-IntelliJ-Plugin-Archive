@@ -22,6 +22,9 @@
 package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
 /**
+ * Interface for sorting objects by their appearance in a source file. Therefore,
+ * getPosition should return a number which corresponds to the position in the file
+ * I usually use the {@link com.intellij.psi.PsiElement#getTextOffset()}
  * @author patrick (7/21/14)
  */
 public interface CodePlaceProvider {

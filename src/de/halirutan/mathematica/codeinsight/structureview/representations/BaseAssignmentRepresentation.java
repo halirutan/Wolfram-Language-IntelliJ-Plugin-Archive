@@ -28,6 +28,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * Basic representation of an "assignment node" in a structure view. All different kinds of
+ * assignment extend from this and they only change their Icon and probably the way the represent
+ * themselves as text in the structure view.
  * @author patrick (6/20/14)
  */
 public class BaseAssignmentRepresentation implements ItemPresentation {

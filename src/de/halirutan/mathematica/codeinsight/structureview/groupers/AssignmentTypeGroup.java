@@ -22,31 +22,40 @@
 package de.halirutan.mathematica.codeinsight.structureview.groupers;
 
 import com.intellij.ide.util.treeView.smartTree.Group;
+import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.codeinsight.structureview.representations.SimpleFunctionNameRepresentation;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
+import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
+import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Collection;
 
 /**
+ * The way a node in the structure view is represented when the user groups the code by assignment type.
  * @author patrick (7/21/14)
  */
-public class AssignmentTypeGroup implements Group, CodePlaceProvider {
+public class AssignmentTypeGroup implements Group, CodePlaceProvider, ColoredItemPresentation, SortableTreeElement {
 
   private final Collection<TreeElement> myTreeElements;
-  private final String myName;
+  private final SymbolAssignmentType myType;
 
-  public AssignmentTypeGroup(final String symbolName, final Collection<TreeElement> treeElements) {
+  public AssignmentTypeGroup(final SymbolAssignmentType type, final Collection<TreeElement> treeElements) {
     this.myTreeElements = treeElements;
-    this.myName = symbolName;
+    this.myType = type;
   }
 
   @NotNull
   @Override
   public ItemPresentation getPresentation() {
-    return new SimpleFunctionNameRepresentation(myName);
+    return this;
   }
 
   @NotNull
@@ -57,7 +66,51 @@ public class AssignmentTypeGroup implements Group, CodePlaceProvider {
 
   @Override
   public int getPosition() {
-    return myName.charAt(0);
+    return myType.getTypeSortKey();
   }
 
+  @Nullable
+  @Override
+  public TextAttributesKey getTextAttributesKey() {
+    switch (myType) {
+      case SET_ASSIGNMENT:
+      case SET_DELAYED_ASSIGNMENT:
+      case TAG_SET_ASSIGNMENT:
+      case TAG_SET_DELAYED_ASSIGNMENT:
+      case UP_SET_ASSIGNMENT:
+      case UP_SET_DELAYED_ASSIGNMENT:
+        return DefaultLanguageHighlighterColors.INSTANCE_METHOD;
+      case MESSAGE_ASSIGNMENT:
+        return MathematicaSyntaxHighlighterColors.MESSAGE;
+      case OPTIONS_ASSIGNMENT:
+        return MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED;
+      case ATTRIBUTES_ASSIGNMENT:
+        return MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION;
+    }
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public String getPresentableText() {
+    return myType.toString();
+  }
+
+  @Nullable
+  @Override
+  public String getLocationString() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public Icon getIcon(final boolean unused) {
+    return myType.getIcon();
+  }
+
+  @NotNull
+  @Override
+  public String getAlphaSortKey() {
+    return String.valueOf(myType.getTypeSortKey());
+  }
 }
