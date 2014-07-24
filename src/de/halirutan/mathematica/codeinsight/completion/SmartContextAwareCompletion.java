@@ -30,6 +30,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.MathematicaIcons;
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.api.*;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,10 @@ import java.util.Set;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
+ * Smart completion is invoked by pressing Ctrl+Shift+Space in certain specific situations. Here, we handle two cases:
+ * First case is when you are inside a function call like Plot[...], then the smart completion suggests the
+ * options for the specific symbol. Secondly, we handel Message[...] calls and display a list of all messages
+ * from within the file.
  * @author patrick (4/2/13)
  */
 public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
@@ -72,7 +77,7 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
         if (options != null) {
           for (String opt : options) {
             String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
-            result.addElement(LookupElementBuilder.create(opt + ruleSymbol).withTypeText("Opt"));
+            result.addElement(LookupElementBuilder.create(opt + ruleSymbol).withIcon(MathematicaIcons.OPTIONS_ICON));
           }
         }
       }
@@ -84,46 +89,18 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
           @Override
           public void visitMessageName(final MessageName messageName) {
-            final Expression symbol = messageName.getSymbol();
-            final StringifiedSymbol tag = messageName.getTag();
-            final StringifiedSymbol lang = messageName.getLang();
-
-            if (symbol instanceof Symbol && tag != null) {
-              StringBuilder lookup = new StringBuilder(((Symbol) symbol).getSymbolName());
-              lookup.append("::");
-              lookup.append(tag.getText());
-              if (lang != null) {
-                lookup.append("::");
-                lookup.append(lang.getText());
-              }
-              usages.add(LookupElementBuilder.create(lookup.toString()).withTypeText("Msg"));
-            }
-
+              usages.add(
+                  LookupElementBuilder.create(messageName.getText()).
+                      withIcon(MathematicaIcons.MESSAGES_ICON).
+                      withCaseSensitivity(false)); // make it case insensitive so you can type argx in Sym::argx to
+                                                    // find the correct completion
           }
-//
-//          @Override
-//          public void visitElement(PsiElement element) {
-//            if (element instanceof MessageName) {
-//              final PsiElement[] args = element.getChildren();
-//              if (args.length == 2) {
-//                final PsiElement symbol = args[0];
-//                final PsiElement msg = args[1];
-//                if (symbol instanceof Symbol && msg instanceof Symbol) {
-//                  usages.add(LookupElementBuilder.create(((Symbol) symbol).getSymbolName() + "::" + ((Symbol) msg).getSymbolName()).
-//                      withTypeText("Msg"));
-//                }
-//              }
-//            }
-//            element.acceptChildren(this);
-//          }
         };
         visitor.visitFile(parameters.getOriginalFile());
         result.addAllElements(usages);
       }
 
     }
-
-
   }
 }
 
