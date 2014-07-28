@@ -42,8 +42,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     PsiElement current = psiFile.findElementAt(offset);
     PsiElement saveOriginal = current;
     int steps = 0;
-
-    while (current != null && steps++ < MAX_UPWALK) {
+     while (current != null && steps++ < MAX_UPWALK) {
       if (current instanceof List ||
           current instanceof CompoundExpression ||
           current instanceof FunctionCall ||

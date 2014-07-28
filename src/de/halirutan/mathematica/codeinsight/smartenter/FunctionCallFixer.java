@@ -4,8 +4,10 @@ import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.COMMA;
@@ -33,13 +35,16 @@ public class FunctionCallFixer extends SmartEnterProcessorWithFixers.Fixer<Mathe
         }
         return;
       }
-        final PsiElement prevSibling = lastChild.getPrevSibling();
-        if (prevSibling != null && prevSibling.getNode().getElementType() == COMMA) {
-          doc.insertString(prevSibling.getTextOffset() + 1, "\n\n");
-          editor.getCaretModel().moveToOffset(prevSibling.getTextOffset() + 2);
-          processor.commit(editor);
+      PsiElement prevSibling = lastChild.getPrevSibling();
+      while (prevSibling != null && prevSibling instanceof PsiWhiteSpace) {
+        prevSibling = prevSibling.getPrevSibling();
+      }
+      if (prevSibling != null && prevSibling.getNode().getElementType() == COMMA) {
+        doc.insertString(prevSibling.getTextOffset() + 1, "\n\n");
+        editor.getCaretModel().moveToOffset(prevSibling.getTextOffset() + 2);
+        processor.commit(editor);
 //          return;
-        }
+      }
 //      editor.getCaretModel().moveToOffset(lastChild.getTextOffset() + 1, true);
 
     }

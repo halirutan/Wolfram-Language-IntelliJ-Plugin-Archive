@@ -3,16 +3,7 @@
 <templateSet group="Mathematica">
     <!-- Localization/scoping constructs -->
     <template name="blk" description="Block[{vars}, body]" toReformat="true"
-              value="Block[{$VARS$}, $BODY$]$END$">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
-        <variable name="BODY" expression="" defaultValue="&quot;Null&quot;" alwaysStopAt="true" />
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
-
-    <template name="blks" description="Surround with Block" toReformat="true"
-              value="Block[{$VARS$}, $SELECTION$]$END$">
+              value="Block[{$VARS$}, $SELECTION$$END$]">
         <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
@@ -20,16 +11,7 @@
     </template>
 
     <template name="mdl" description="Module[{vars}, body]" toReformat="true"
-              value="Module[{$VARS$}, $BODY$]$END$">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
-        <variable name="BODY" expression="" defaultValue="&quot;Null&quot;" alwaysStopAt="true" />
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
-
-    <template name="mdls" description="Surround with Module" toReformat="true"
-              value="Module[{$VARS$}, $SELECTION$]$END$">
+              value="Module[{$VARS$}, $SELECTION$$END$]">
         <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
@@ -37,61 +19,44 @@
     </template>
 
     <template name="wth" description="With[{vars}, body]" toReformat="true"
-              value="With[{$VARS$}, $BODY$]$END$">
+              value="With[{$VARS$}, $SELECTION$$END$]">
         <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
-        <variable name="BODY" expression="" defaultValue="&quot;Null&quot;" alwaysStopAt="true" />
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
-    <template name="wths" description="Surround with With" toReformat="true"
-              value="With[{$VARS$}, $SELECTION$]$END$">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
 
     <!-- Iteration -->
     <template name="do" description="Do[body, {iter}]" toReformat="true"
-              value="Do[$BODY$, {$ITER$$MORE_ARGS$}]$END$">
-        <variable name="BODY" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true" />
+              value="Do[$SELECTION$$END$, {$ITER$}]">
         <variable name="ITER" expression="" defaultValue="&quot;iter&quot;" alwaysStopAt="true" />
-        <variable name="MORE_ARGS" expression="" defaultValue="" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
     <template name="for" description="For[start, test, inc, body]" toReformat="true"
-              value="For[$VAR$ = $VAL$, $VAR$$TEST$$MAX$, $VAR$$INC$, $BODY$]$END$">
+              value="For[$VAR$ = 0, $VAR$ &lt; $MAX$, $VAR$++, $SELECTION$$END$]">
         <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true" />
-        <variable name="VAL" expression="" defaultValue="&quot;0&quot;" alwaysStopAt="true" />
-        <variable name="TEST" expression="" defaultValue="&quot;&lt;&quot;" alwaysStopAt="true" />
         <variable name="MAX" expression="" defaultValue="&quot;max&quot;" alwaysStopAt="true" />
-        <variable name="INC" expression="" defaultValue="&quot;++&quot;" alwaysStopAt="true" />
-        <variable name="BODY" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
     <template name="tbl" description="Table[body, {var, min, max}]" toReformat="true"
-              value="Table[$BODY$, {$VAR$, $START$, $STOP$$INC$}]$END$">
-        <variable name="BODY" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true" />
+              value="Table[$SELECTION$$END$, {$VAR$, $LIMITS$}]">
         <variable name="VAR" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true" />
-        <variable name="START" expression="" defaultValue="&quot;xmin&quot;" alwaysStopAt="true" />
-        <variable name="STOP" expression="" defaultValue="&quot;xmax&quot;" alwaysStopAt="true" />
-        <variable name="INC" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="LIMITS" expression="" defaultValue="&quot;min, max, stepSize&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
-    <template name="fld" description="Fold[func, x, list]" toReformat="true"
-              value="Fold[$FUNC$, $FIRST$, $LIST$]$END$">
-        <variable name="FUNC" expression="" defaultValue="&quot;func&quot;" alwaysStopAt="true" />
+    <template name="fld" description="Fold[func, firstElement, list]" toReformat="true"
+              value="Fold[$SELECTION$$END$, $FIRST$, $LIST$]">
         <variable name="FIRST" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true" />
         <variable name="LIST" expression="" defaultValue="&quot;list&quot;" alwaysStopAt="true" />
         <context>
@@ -111,9 +76,8 @@
 
     <!-- Control Flow -->
     <template name="if" description="If[cond, then]" toReformat="true"
-              value="If[$COND$, $THEN$]$END$">
+              value="If[$COND$, $SELECTION$$END$]">
         <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true" />
-        <variable name="THEN" expression="" defaultValue="&quot;then&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -181,14 +145,6 @@
         </context>
     </template>
 
-    <template name="fnc" description="Surround selection with f[]" toReformat="true"
-              value="$SYM$[$SELECTION$$MORE_ARGS$]$END$">
-        <variable name="SYM" expression="" defaultValue="" alwaysStopAt="true" />
-        <variable name="MORE_ARGS" expression="" defaultValue="" alwaysStopAt="true" />
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
 
     <!-- Parentheses, lists and associations -->
     <template name="lst" description="Surround selection with {}" toReformat="true"
