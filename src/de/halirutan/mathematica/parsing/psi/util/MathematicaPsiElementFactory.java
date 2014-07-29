@@ -27,6 +27,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +57,13 @@ public class MathematicaPsiElementFactory {
     return (MathematicaPsiFile) PsiFileFactory.getInstance(myProject).createFileFromText(DUMMY_FILE_NAME, type, code);
   }
 
+  public Expression createExpressionFromText(@NotNull String expr) {
+    final PsiElement exprFile = createDummyFile(expr).getFirstChild();
+    if (exprFile != null && exprFile instanceof Expression) {
+      return (Expression) exprFile;
+    }
+    throw new IncorrectOperationException("The supplied string is not a valid Mathematica expression.");
+  }
 
   @NotNull
   public Symbol createSymbol(@NotNull String symbolName) {

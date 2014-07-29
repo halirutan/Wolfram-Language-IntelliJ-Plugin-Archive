@@ -27,8 +27,24 @@
         </context>
     </template>
 
+  <template name="cmpl" description="Compile[{vars}, body]" toReformat="true"
+            value="Compile[{$VARS$}, $SELECTION$$END$]">
+    <variable name="VARS" expression="" defaultValue="&quot;{x, _Real}&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="Mathematica" value="true"/>
+    </context>
+  </template>
 
-    <!-- Iteration -->
+  <template name="fnct" description="Function[{vars}, body]" toReformat="true"
+            value="Function[{$VARS$}, $SELECTION$$END$]">
+    <variable name="VARS" expression="" defaultValue="&quot;var&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="Mathematica" value="true"/>
+    </context>
+  </template>
+
+
+  <!-- Iteration -->
     <template name="do" description="Do[body, {iter}]" toReformat="true"
               value="Do[$SELECTION$$END$, {$ITER$}]">
         <variable name="ITER" expression="" defaultValue="&quot;iter&quot;" alwaysStopAt="true" />
@@ -107,12 +123,8 @@
     </template>
 
     <template name="whch" description="Which[test1, value1, test2, value2]" toReformat="true"
-              value="Which[$TEST1$, $VAL1$, $TEST2$, $VAL2$$MORE_ARGS$]$END$">
-        <variable name="TEST1" expression="" defaultValue="&quot;test1&quot;" alwaysStopAt="true" />
-        <variable name="VAL1" expression="" defaultValue="&quot;value1&quot;" alwaysStopAt="true" />
-        <variable name="TEST2" expression="" defaultValue="&quot;test2&quot;" alwaysStopAt="true" />
-        <variable name="VAL2" expression="" defaultValue="&quot;value2&quot;" alwaysStopAt="true" />
-        <variable name="MORE_ARGS" expression="" defaultValue="" alwaysStopAt="true" />
+              value="Which[$BODY$$END$]">
+        <variable name="BODY" expression="" defaultValue="&quot;test1, val1, test2, val2&quot;" alwaysStopAt="true" />
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -146,20 +158,7 @@
     </template>
 
 
-    <!-- Parentheses, lists and associations -->
-    <template name="lst" description="Surround selection with {}" toReformat="true"
-              value="{$SELECTION$}$END$">
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
-
-    <template name="par" description="Surround selection with ()" toReformat="true"
-              value="($SELECTION$)$END$">
-        <context>
-            <option name="Mathematica" value="true"/>
-        </context>
-    </template>
+    <!-- associations -->
 
     <template name="ass" description="Surround selection with &lt;| |&gt;" toReformat="true"
               value="&lt;|$SELECTION$|&gt;$END$">

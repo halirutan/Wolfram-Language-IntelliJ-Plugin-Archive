@@ -37,12 +37,14 @@ import org.jetbrains.annotations.Nullable;
 public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   private static final Surrounder SURROUNDERS[] = {
       new FunctionCallSurrounder(),
-      new AnonymousFunctionSurrounder(),
-      new LocalizationSurrounder("Module"),
-      new LocalizationSurrounder("With"),
-      new LocalizationSurrounder("Block"),
-      new LocalizationSurrounder("Function"),
-      new LocalizationSurrounder("Compile")
+      new ParenthesesSurrounder("(", ")", "Surround with ()"),
+      new ParenthesesSurrounder("{", "}", "Surround with {}"),
+      new AnonymousFunctionSurrounder()
+//      new LocalizationSurrounder("Module"),
+//      new LocalizationSurrounder("With"),
+//      new LocalizationSurrounder("Block"),
+//      new LocalizationSurrounder("Function"),
+//      new LocalizationSurrounder("Compile")
   };
 
   @Nullable
@@ -50,9 +52,12 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
     Expression element = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, Expression.class);
     if (element == null) return null;
     PsiElement result = element;
-    while (result.getTextRange().getEndOffset() < endOffset) {
-      result = result.getParent();
-    }
+    // Here I'm still unsure about the best approach to select the final PsiElements if the
+    // text-range goes over several scopes.
+//    while (result.getTextRange().getEndOffset() < endOffset) {
+//      result = result.getParent();
+//    }
+    //noinspection ConstantConditions
     if (result instanceof Expression) {
       return (Expression) result;
     }
@@ -76,6 +81,12 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
 
   private PsiElement[] findElementsInRange(PsiFile file, int startOffset, int endOffset) {
 
+    if (endOffset < startOffset) {
+      int tmp = endOffset;
+      endOffset = startOffset;
+      startOffset = tmp;
+    }
+
     // adjust start/end
     PsiElement element1 = file.findElementAt(startOffset);
     PsiElement element2 = file.findElementAt(endOffset - 1);
@@ -85,10 +96,18 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
     if (element2 instanceof PsiWhiteSpace) {
       endOffset = element2.getTextRange().getStartOffset();
     }
+    final PsiElement elementAtStart = file.findElementAt(startOffset);
+    final PsiElement elementAtEnd = file.findElementAt(endOffset);
+    if (elementAtStart != null && elementAtEnd != null) {
 
-    final Expression expression = findElementAtStrict(file, startOffset, endOffset);
-    if (expression != null) return new Expression[]{expression};
+      final PsiElement commonContext = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
+      if (commonContext != null && commonContext instanceof Expression && !(commonContext instanceof PsiFile))
+        return new PsiElement[]{commonContext};
 
+//      final Expression expression = findElementAtStrict(file, startOffset, endOffset);
+//      if (expression != null) return new Expression[]{expression};
+
+    }
     return PsiElement.EMPTY_ARRAY;
   }
 }
