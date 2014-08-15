@@ -21,6 +21,7 @@ public class MathematicaEnterBetweenBracesHandler extends EnterHandlerDelegateAd
 
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeinsight.editorActions.enter.EnterBetweenBracesHandler");
 
+  @SuppressWarnings("deprecation")
   @Override
   public Result preprocessEnter(@NotNull final PsiFile file,
                                 @NotNull final Editor editor,
@@ -38,6 +39,7 @@ public class MathematicaEnterBetweenBracesHandler extends EnterHandlerDelegateAd
     if (offset <= 0 || offset >= text.length() || !isBracePair(text.charAt(offset - 1), text.charAt(offset))) {
       return Result.Continue;
     }
+
 
     originalHandler.execute(editor, dataContext);
     PsiDocumentManager.getInstance(file.getProject()).commitDocument(document);

@@ -91,6 +91,7 @@ public class MathematicaPsiUtilities {
       return result;
     }
 
+    //noinspection OverlyComplexAnonymousInnerClass
     PsiElementVisitor patternVisitor = new PsiRecursiveElementVisitor() {
 
       private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");

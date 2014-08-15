@@ -7,13 +7,8 @@ CreateHtmlUsageForContext::usage = "CreateHtmlUsageForContext[context, exportPat
 defined functions in context and exports them to folder exportPath";
 
 
-(*Begin["Private`"];*)
+Begin["Private`"];
 
-a_ + b_;
-
-
-Function[ Null,
-#+#,  {Listable}  ]
 
 (*	Here we replace Mathematica box expressions with HTML constructs. If we lack of some things we just use a
 	a string representation like with UnderscriptBox *)
@@ -95,7 +90,7 @@ CreateHTMLUsage[s_String] := Module[{
   link, linkName},
 
 	{linkName, link} = createLinkName[s];
- 	result = "<h3><a href=\"http://reference.wolfram.com/mathematica/ref/" <>
+ 	result = "<h3><a href=\"http://reference.wolfram.com/language/ref/" <>
     link <> ".html\">" <> linkName <> "</a></h3>" <> If[usg =!= "",
       "<ul><li>" <> StringReplace[StringReplace[usg, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :>
     			convertBoxExpressionToHTML[replaceNestedStyleString[content]], "\n" :> "<li>"}
@@ -129,9 +124,7 @@ createOnlineLink[symbol_String, context_String] := Module[
    root <> middle <> "ref/" <> charPart <> symbolPart <> ".html";
   If[URLFetch[finalLink, "StatusCode"] === 404,
    finalLink =
-    "http://reference.wolfram.com/documentation-search.html?query=" <>
-      linkName <> "%20" <> StringDrop[context, -1] <>
-     "&collection=reference&lang=en"
+    "http://reference.wolfram.com/search/?q=" <> linkName
    ];
 
 

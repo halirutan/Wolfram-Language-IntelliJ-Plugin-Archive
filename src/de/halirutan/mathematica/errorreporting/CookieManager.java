@@ -162,8 +162,7 @@ public class CookieManager {
     try {
       conn.setRequestProperty(COOKIE, cookieStringBuffer.toString());
     } catch (IllegalStateException ise) {
-      IOException ioe = new IOException("Illegal State! Cookies cannot be set on a URLConnection that is already connected. Only call setCookies(java.net.URLConnection) AFTER calling java.net.URLConnection.connect().");
-      throw ioe;
+      throw new IOException("Illegal State! Cookies cannot be set on a URLConnection that is already connected. Only call setCookies(java.net.URLConnection) AFTER calling java.net.URLConnection.connect().");
     }
   }
 
@@ -186,16 +185,13 @@ public class CookieManager {
     }
   }
 
+  @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
   private boolean comparePaths(String cookiePath, String targetPath) {
     if (cookiePath == null) {
       return true;
     } else if (cookiePath.equals("/")) {
       return true;
-    } else if (targetPath.regionMatches(0, cookiePath, 0, cookiePath.length())) {
-      return true;
-    } else {
-      return false;
-    }
+    } else return targetPath.regionMatches(0, cookiePath, 0, cookiePath.length());
 
   }
 

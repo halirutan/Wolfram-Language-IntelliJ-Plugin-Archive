@@ -58,7 +58,6 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
 
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
     for (String name : symbols.keySet()) {
-      if (name.length() < 3) continue;
       SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
       LookupElementBuilder elm = LookupElementBuilder
           .create(name)

@@ -29,7 +29,6 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (6/11/14)
@@ -46,23 +45,6 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
 //      new LocalizationSurrounder("Function"),
 //      new LocalizationSurrounder("Compile")
   };
-
-  @Nullable
-  private static Expression findElementAtStrict(PsiFile file, int startOffset, int endOffset) {
-    Expression element = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, Expression.class);
-    if (element == null) return null;
-    PsiElement result = element;
-    // Here I'm still unsure about the best approach to select the final PsiElements if the
-    // text-range goes over several scopes.
-//    while (result.getTextRange().getEndOffset() < endOffset) {
-//      result = result.getParent();
-//    }
-    //noinspection ConstantConditions
-    if (result instanceof Expression) {
-      return (Expression) result;
-    }
-    return null;
-  }
 
   @NotNull
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
@@ -97,16 +79,20 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
       endOffset = element2.getTextRange().getStartOffset();
     }
     final PsiElement elementAtStart = file.findElementAt(startOffset);
-    final PsiElement elementAtEnd = file.findElementAt(endOffset);
+    final PsiElement elementAtEnd = file.findElementAt(endOffset - 1);
     if (elementAtStart != null && elementAtEnd != null) {
 
-      final PsiElement commonContext = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
-      if (commonContext != null && commonContext instanceof Expression && !(commonContext instanceof PsiFile))
-        return new PsiElement[]{commonContext};
+      if (elementAtStart == elementAtEnd && !(elementAtStart instanceof Expression)) {
+        final PsiElement elementToSurround = elementAtStart.getParent();
+        if (elementToSurround instanceof Expression) {
+          return new PsiElement[]{elementToSurround};
+        }
+      } else {
 
-//      final Expression expression = findElementAtStrict(file, startOffset, endOffset);
-//      if (expression != null) return new Expression[]{expression};
-
+        final PsiElement commonContext = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
+        if (commonContext != null && !(commonContext instanceof PsiFile))
+          return new PsiElement[]{commonContext};
+      }
     }
     return PsiElement.EMPTY_ARRAY;
   }

@@ -2,7 +2,7 @@
 (* Created by IntelliJ IDEA    *)
 
 (* :Title: ${NAME}     *)
-(* :Context: ${PROJECT_NAME}`${NAME}`  *)
+(* :Context: ${NAME}`  *)
 (* :Author: ${USER}            *)
 (* :Date: ${DATE}              *)
 
@@ -12,7 +12,7 @@
 (* :Keywords:                  *)
 (* :Discussion:                *)
 
-BeginPackage["${PROJECT_NAME}`${NAME}`"]
+BeginPackage["${NAME}`"]
 (* Exported symbols added here with SymbolName::usage *)  
 
 Begin["`Private`"] (* Begin Private Context *) 
