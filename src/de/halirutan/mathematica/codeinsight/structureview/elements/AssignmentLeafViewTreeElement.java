@@ -55,6 +55,7 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
     return myAssignment.myAssignmentType;
   }
 
+
   @Override
   public int getPosition() {
     return myAssignment.myAssignmentSymbol != null ? myAssignment.myAssignmentSymbol.getTextOffset() : 0;
@@ -187,15 +188,6 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
     }
     return super.equals(o);
   }
-//
-//  @Override
-//  public boolean isAutoExpand(@NotNull final StructureViewTreeElement element) {
-//    return false;
-//  }
-//
-//  @Override
-//  public boolean isSmartExpand() {
-//    return true;
-//  }
+
 
 }
