@@ -118,7 +118,7 @@
         <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
         <!--</action>-->
 
-        <!-- Action for throwing an exception just to test the reporting of errors into the YouTrack database -->
+         <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
         <!--<action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"-->
         <!--class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">-->
         <!--<keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>-->
