@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/AffineStateSpaceModel.html">AffineStateSpaceModel</a></h3>
+<ul>
+    <li>AffineStateSpaceModel[{<em>a</em>,<em>b</em>,<em>c</em>,<em>d</em>},<em>x</em>] represents the affine
+        state-space model <em>x</em>'(<em>t</em>)
+        <math>
+            <ms>==</ms>
+        </math>
+        <em>a</em>(<em>x</em>(<em>t</em>))+<em>b</em>(<em>x</em>(<em>t</em>)).<em>u</em>(<em>t</em>),
+        <em>y</em>(<em>t</em>)=<em>c</em>(<em>x</em>(<em>t</em>))+<em>d</em>(<em>x</em>(<em>t</em>)).<em>u</em>(<em>t</em>).
+    <li>AffineStateSpaceModel[<em>sys</em>] gives an affine state-space model corresponding to the system model
+        <em>sys</em>.
+    <li>AffineStateSpaceModel[<em>eqns</em>,{{<em>x</em><sub>1</sub>,<em>x</em><sub>10</sub>},
+        <math>
+            <ms>...</ms>
+        </math>
+        }{{<em>u</em><sub>1</sub>,<em>u</em><sub>10</sub>},
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>g</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>t</em>] gives the affine state-space model obtained by Taylor input linearization about the dependent
+        variable <em>x</em><sub><em>i</em></sub> at <em>x</em><sub><em>i</em><sub>0</sub></sub> and input
+        <em>u</em><sub><em>j</em></sub> at <em>u</em><sub><em>j</em></sub><sub>0</sub> of the differential equations
+        <em>eqns</em> with outputs <em>g</em><sub><em>i</em></sub> and independent variable <em>t</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

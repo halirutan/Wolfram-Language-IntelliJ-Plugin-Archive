@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Lookup.html">Lookup</a></h3>
+<ul>
+    <li>Lookup[<em>assoc</em>,<em>key</em>] looks up the value associated with <em>key</em> in the association
+        <em>assoc</em>; if the key is not present, Missing["KeyAbsent",<em>key</em>] is returned.
+    <li>Lookup[<em>assoc</em>,{<em>key</em><sub>1</sub>,<em>key</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] gives a list of the values associated with the <em>key</em><sub><em>i</em></sub>.
+    <li>Lookup[{<em>assoc</em><sub>1</sub>,<em>assoc</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>key</em>] gives a list corresponding to the value of <em>key</em> in each
+        <em>assoc</em><sub><em>i</em></sub>.
+    <li>Lookup[<em>assoc</em>,<em>key</em>,<em>default</em>] gives <em>default</em> if the <em>key</em> is not present.
+    <li>Lookup[<em>key</em>] represents an operator form of Lookup that can be applied to an expression.
+</ul><p><b>Attributes:</b>HoldAllComplete, Protected</p><p><b>Symbol has no options.</b></p>

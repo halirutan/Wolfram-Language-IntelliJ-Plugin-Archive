@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/SemanticImport.html">SemanticImport</a></h3>
+<ul>
+    <li>SemanticImport[<em>file</em>] attempts to import a file semantically to give a Dataset object.
+    <li>SemanticImport[<em>file</em>,<em>type</em>] attempts to interpret all elements in the file as being of the
+        specified type.
+    <li>SemanticImport[<em>file</em>,{<em>type</em><sub>1</sub>,<em>type</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] attempts to interpret elements in successive columns as being of the specified types.
+    <li>SemanticImport[<em>file</em>,
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>col</em><sub>1</sub>-><em>type</em><sub>1</sub>,<em>col</em><sub>2</sub>-><em>type</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ] keeps only the columns <em>col</em><sub><em>i</em></sub> specified by their positions or names.
+    <li>SemanticImport[<em>file</em>,<em>typespec</em>,<em>form</em>] puts the result in the specified form.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

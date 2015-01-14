@@ -1,0 +1,38 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NonlinearStateSpaceModel.html">NonlinearStateSpaceModel</a>
+</h3>
+<ul>
+    <li>NonlinearStateSpaceModel[{<em>f</em>,<em>g</em>},<em>x</em>,<em>u</em>] represents the model
+        <em>x</em>'(<em>t</em>)
+        <math>
+            <ms>==</ms>
+        </math>
+        <em>f</em>(<em>x</em>(<em>t</em>),<em>u</em>(<em>t</em>)), <em>y</em>(<em>t</em>)
+        <math>
+            <ms>==</ms>
+        </math>
+        <em>g</em>(<em>x</em>(<em>t</em>),<em>u</em>(<em>t</em>)).
+    <li>NonlinearStateSpaceModel[<em>sys</em>] gives a state-space representation corresponding to the systems model
+        <em>sys</em>.
+    <li>NonlinearStateSpaceModel[<em>eqns</em>,{{<em>x</em><sub>1</sub>,<em>x</em><sub>10</sub>},
+        <math>
+            <ms>...</ms>
+        </math>
+        },{{<em>u</em><sub>1</sub>,<em>u</em><sub>10</sub>},
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em><em>g</em><sub>1</sub></em>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>t</em>] gives the state-space model of the differential equations <em>eqns</em> with dependent variables
+        <em>x</em><sub><em>i</em></sub>, input variables <em>u</em><sub><em>i</em></sub>, operating vaues
+        <em>x</em><sub><em>i0</em></sub> and <em>u</em><sub><em>i0</em></sub>, outputs <em>g</em><sub><em>i</em></sub>,
+        and independent variable <em>t</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

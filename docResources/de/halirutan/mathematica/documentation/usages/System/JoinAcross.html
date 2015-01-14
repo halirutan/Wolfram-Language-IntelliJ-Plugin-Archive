@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/JoinAcross.html">JoinAcross</a></h3>
+<ul>
+    <li>JoinAcross[{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>b</em><sub>1</sub>,<em>b</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>key</em>] gives a list of associations obtained by joining those pairs of associations <em>a</em><sub><em>i</em></sub>
+        and <em>b</em><sub><em>j</em></sub> in which the values associated with <em>key</em> are the same.
+    <li>JoinAcross[{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>b</em><sub>1</sub>,<em>b</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>key</em><sub>1</sub>,<em>key</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] joins pairs of associations only when the values associated with all keys <em>key</em><sub><em>i</em></sub>
+        are the same.
+    <li>JoinAcross[{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>b</em><sub>1</sub>,<em>b</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>keys</em><sub><em>a</em></sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>keys</em><sub><em>b</em></sub>] joins pairs of associations <em>a</em><sub><em>i</em></sub>, <em>b</em><sub><em>j</em></sub>
+        in which the values associated with <em>key</em><sub><em>a</em></sub> in the <em>a</em><sub><em>i</em></sub> are
+        the same as those associated with <em>key</em><sub><em>b</em></sub> in the <em>b</em><sub><em>j</em></sub>.
+    <li>JoinAcross[{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>b</em><sub>1</sub>,<em>b</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>{</em><em>keys</em><sub><em>a1</em></sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>keys</em><sub><em>b1</em></sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] joins pairs of associations in which pairs of corresponding values agree.
+    <li>JoinAcross[<em>alist</em>,<em>blist</em>,<em>spec</em>,"jspec"] uses <em>jspec</em> to determine when to allow
+        associations that contain missing elements to be generated.
+</ul><p><b>Attributes:</b>Protected</p><p><b>Symbol has no options.</b></p>

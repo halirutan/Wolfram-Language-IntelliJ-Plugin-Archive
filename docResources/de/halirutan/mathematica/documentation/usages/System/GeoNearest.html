@@ -1,0 +1,59 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GeoNearest.html">GeoNearest</a></h3>
+<ul>
+    <li>GeoNearest[<em>enttype</em>,<em>loc</em>] returns the geographic entity of type <em>enttype</em> closest to the
+        geo location <em>loc</em>.
+    <li>GeoNearest[{<em>reg</em><sub>1</sub>,<em>reg</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>reg</em><sub><em>n</em></sub>},<em>loc</em>] returns the nearest of the <em>reg</em><sub><em>i</em></sub>.
+    <li>GeoNearest[{<em>reg</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>1</sub>, <em>reg</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>reg</em><sub><em>n</em></sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub><em>n</em></sub>},<em>loc</em>] returns the <em>val</em><sub><em>i</em></sub> corresponding to
+        the nearest <em>reg</em><sub><em>i</em></sub>.
+    <li>GeoNearest[{<em>reg</em><sub>1</sub>,<em>reg</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>reg</em><sub><em>n</em></sub>}
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>val</em><sub>1</sub>,<em>val</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>val</em><sub><em>n</em></sub>},<em>loc</em>] returns the same result.
+    <li>GeoNearest[{<em>reg</em><sub>1</sub>,<em>reg</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>reg</em><sub><em>n</em></sub>}
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        Automatic,<em>loc</em>] takes the <em>val</em><sub><em>i</em></sub> to be successive integers <em>i</em>.
+    <li>GeoNearest[<em>spec</em>,<em>loc</em>,<em>n</em>] returns <em>n</em> nearest values.
+    <li>GeoNearest[<em>spec</em>,<em>loc</em>,{<em>n</em>,<em>r</em>}] returns up to <em>n</em> matches within a radius
+        <em>r</em> of <em>loc</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

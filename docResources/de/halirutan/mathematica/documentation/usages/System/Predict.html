@@ -1,0 +1,43 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Predict.html">Predict</a></h3>
+<ul>
+    <li>Predict[{<em>in</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>out</em><sub>1</sub>,<em>in</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>out</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] generates a PredictorFunction[
+        <math>
+            <ms>...</ms>
+        </math>
+        ] based on the example input-output pairs given.
+    <li>Predict[{<em>in</em><sub>1</sub>,<em>in</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>out</em><sub>1</sub>,<em>out</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] generates the same result.
+    <li>Predict[<em>training</em>,<em>input</em>] attempts to predict the output associated with <em>input</em> from the
+        training examples given.
+    <li>Predict["name",<em>input</em>] uses the built-in predictor function represented by "<em>name</em>".
+    <li>Predict["name",<em>input</em>,<em>prop</em>] gives the specified property of the prediction associated with <em>input</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

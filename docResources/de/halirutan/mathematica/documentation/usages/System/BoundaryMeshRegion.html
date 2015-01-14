@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/BoundaryMeshRegion.html">BoundaryMeshRegion</a></h3>
+<ul>
+    <li>BoundaryMeshRegion[{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>bcell</em><sub>1</sub>[{<em>i</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }],<em>bcell</em><sub>2</sub>[{<em>j</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }],
+        <math>
+            <ms>...</ms>
+        </math>
+        }] yields a mesh with boundary cells <em>bcell</em><sub><em>j</em></sub>, where coordinates given as integer
+        <em>i</em> are taken to be <em>p</em><sub><em>i</em></sub>, where the cells together represent a closed curve,
+        surface, etc.
+    <li>BoundaryMeshRegion[
+        <math>
+            <ms>...</ms>
+        </math>
+        ,{
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>w</em><sub><em>i</em></sub>[<em>bcell</em><sub><em>i</em></sub>[
+        <math>
+            <ms>...</ms>
+        </math>
+        ]],
+        <math>
+            <ms>...</ms>
+        </math>
+        }] yields a mesh with cell properties defined by the symbolic wrapper <em>w</em><sub><em>i</em></sub>.
+    <li>BoundaryMeshRegion[
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>boundary</em><sub>1</sub>,<em>boundary</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ] yields a mesh from multiple boundaries <em>boundary</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b>Protected</p><p><b>Options: </b>MeshCellLabel, MeshCellMarker, MeshCellStyle, Method,
+    Properties</p>

@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/CloudObject.html">CloudObject</a></h3>
+<ul>
+    <li>CloudObject[] represents a new anonymous cloud object.
+    <li>CloudObject[http://StyleBox[
+        <math>
+            <ms>...</ms>
+        </math>
+        , TR]], CloudObject[https://StyleBox[
+        <math>
+            <ms>...</ms>
+        </math>
+        , TR]] represents a cloud object with a given URI.
+    <li>CloudObject[user:StyleBox[user, TI]/StyleBox[path, TI]] represents a cloud object of a given <em>user</em> with
+        a given <em>path</em>.
+    <li>CloudObject[/StyleBox[abspath, TI]] represents a cloud object of the currently authenticated user at an absolute
+        path.
+    <li>CloudObject["relpath"] represents a cloud object of the currently authenticated user at a relative path.
+    <li>CloudObject["relpath",<em>cbase</em>] represents a cloud object with a path relative to the base <em>cbase</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

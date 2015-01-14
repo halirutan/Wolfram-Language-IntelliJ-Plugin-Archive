@@ -88,20 +88,25 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     return "Report to halirutan";
   }
 
-  @Override
-  public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
-    return submit(events, this.myDescription, notNullize(ErrorReportConfigurable.getInstance()
-        .ITN_LOGIN, "<anonymous>"), parentComponent);
-  }
+//  @Override
+//  public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
+//    return submit(events, this.myDescription, notNullize(ErrorReportConfigurable.getInstance()
+//        .ITN_LOGIN, "<anonymous>"), parentComponent);
+//  }
+//
+//  @Override
+//  public void submitAsync(IdeaLoggingEvent[] events, String additionalInfo, Component parentComponent,
+//                          Consumer<SubmittedReportInfo> consumer) {
+//
+//    this.myDescription = additionalInfo;
+//    super.submitAsync(events, additionalInfo, parentComponent, consumer);
+//  }
 
   @Override
-  public void submitAsync(IdeaLoggingEvent[] events, String additionalInfo, Component parentComponent,
-                          Consumer<SubmittedReportInfo> consumer) {
-
-    this.myDescription = additionalInfo;
-    super.submitAsync(events, additionalInfo, parentComponent, consumer);
+  public boolean submit(@NotNull final IdeaLoggingEvent[] events, @Nullable final String additionalInfo, @NotNull final Component parentComponent, @NotNull final Consumer<SubmittedReportInfo> consumer) {
+    submit(events, additionalInfo, notNullize(ErrorReportConfigurable.getInstance().ITN_LOGIN, "<anonymous>"), parentComponent);
+    return true;
   }
-
 
 
   private SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, String description, String user,

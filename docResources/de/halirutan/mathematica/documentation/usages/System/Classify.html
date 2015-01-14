@@ -1,0 +1,77 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Classify.html">Classify</a></h3>
+<ul>
+    <li>Classify[{<em>example</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>class</em><sub>1</sub>,<em>example</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>class</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] generates a ClassifierFunction[
+        <math>
+            <ms>...</ms>
+        </math>
+        ] based on the examples and classes given.
+    <li>Classify[{<em>example</em><sub>1</sub>,<em>example</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>class</em><sub>1</sub>,<em>class</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] generates the same result.
+    <li>Classify[
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>class</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>example</em><sub>11</sub>,<em>example</em><sub>12</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>class</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>example</em><sub>21</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },
+        <math>
+            <ms>...</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ] generates a ClassifierFunction[
+        <math>
+            <ms>...</ms>
+        </math>
+        ] based on an association of classes with their examples.
+    <li>Classify[<em>training</em>,<em>data</em>] attempts to classify <em>data</em> using a classifier function deduced
+        from the training set given.
+    <li>Classify["name",<em>data</em>] attempts to classify <em>data</em> using the built-in classifier function
+        represented by "<em>name</em>".
+    <li>Classify["name",<em>data</em>,<em>prop</em>] gives the specified property of the classification associated with
+        <em>data</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

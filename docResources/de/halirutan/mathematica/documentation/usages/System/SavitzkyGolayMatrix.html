@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/SavitzkyGolayMatrix.html">SavitzkyGolayMatrix</a></h3>
+<ul>
+    <li>SavitzkyGolayMatrix[<em>r</em>,<em>k</em>] gives a matrix corresponding to a smoothing kernel of radius
+        <em>r</em> for performing polynomial regression of degree <em>k</em>.
+    <li>
+        SavitzkyGolayMatrix[{<em>r</em><sub>1</sub>,<em>r</em><sub>2</sub>},{<em>k</em><sub>1</sub>,<em>k</em><sub>2</sub>}]
+        gives a matrix for performing polynomial regression of degree <em>k</em><sub>1</sub> over a window of radius
+        <em>r</em><sub>1</sub> along rows, and degree <em>k</em><sub>2</sub> over a window of radius
+        <em>r</em><sub>2</sub> along columns.
+    <li>SavitzkyGolayMatrix[<em>r</em>,<em>k</em>,<em>n</em>] gives a matrix for performing the <em>n</em><sup>th</sup>
+        derivative of a polynomial regression of degree <em>k</em>.
+    <li>SavitzkyGolayMatrix[{<em>r</em><sub>1</sub>,<em>r</em><sub>2</sub>
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>k</em><sub>1</sub>,<em>k</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },
+        <math>
+            <ms>...</ms>
+        </math>
+        ] gives an array using the specified parameters for each direction <em>i</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

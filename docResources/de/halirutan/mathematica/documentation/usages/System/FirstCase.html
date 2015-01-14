@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FirstCase.html">FirstCase</a></h3>
+<ul>
+    <li>FirstCase[{<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>pattern</em>] gives the first <em>e</em><sub><em>i</em></sub> to match <em>pattern</em>, or
+        Missing["NotFound"] if none matching <em>pattern</em> is found.
+    <li>FirstCase[{<em>e</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>pattern</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>rhs</em>] gives the value of <em>rhs</em> corresponding to the first <em>e</em><sub><em>i</em></sub> to
+        match <em>pattern</em>.
+    <li>FirstCase[<em>expr</em>,<em>pattern</em>,<em>default</em>] gives <em>default</em> if no element matching <em>pattern</em>
+        is found.
+    <li>FirstCase[<em>expr</em>,<em>pattern</em>,<em>default</em>,<em>levelspec</em>] finds only objects that appear on
+        levels specified by <em>levelspec</em>.
+    <li>FirstCase[<em>pattern</em>] represents an operator form of FirstCase that can be applied to an expression.
+</ul><p><b>Attributes:</b>HoldRest, Protected</p><p><b>Options: </b>Heads</p>
