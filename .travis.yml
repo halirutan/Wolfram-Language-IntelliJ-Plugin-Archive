@@ -2,18 +2,10 @@ language: java
 jdk: openjdk6
 script: mvn clean package
 after_success:
-- cd /tmp
-- git clone --branch=${TRAVIS_BRANCH} https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} mathematica_repl_tmp
-- cd mathematica_repl_tmp
-- cp $CI_HOME/target/Mathematica\ REPL.jar .
-- git config --global user.name $GIT_AUTHOR_NAME
-- git config --global user.email $GIT_AUTHOR_EMAIL
-- git commit -m "[ci skip] Committed by Travis-CI" Mathematica\ REPL.jar
-- git push https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} 2>&1
 env:
   global:
   - GH_PROJECT_NAME: Mathematica-IntelliJ-Plugin
   - GIT_AUTHOR_NAME: TravisCI
   - GIT_AUTHOR_EMAIL: noreply@travis-ci.org
   - CI_HOME=`pwd`
-  - secure: n9hiVlKeqsFLPkUZrdfWEij/AIsgKHx+03iKdGFBeFWBxfI5gAX6U1nbLF8PKQ8Op1Ylwdv7Dpk7udiCMgjcGZ22Bs776iLFP5fc+1wR+KGDhtIb/X3Q81wxC8EejrYMdPyHDADEz4WrlGkl23DCTbDpkkIZItsK3FdjlDktBRw=
+  - secure: EtVpVE54lkCGHxShrBXspb1dNZ0kgBgaiziWNLUlgt1dZx9yVrj4/dcc+OxHpjIoI/lxR/tNwZ5byPJCgYUdS8skjdPuqgf13dTh0Mi72M3xSF6q1D/K12YT5KT8qgJNqKxjm4fsIPcktFWPJAcZFRvKcEeeiSBdrnDgdrLIhSs=
