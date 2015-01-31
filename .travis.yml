@@ -1,7 +1,6 @@
 language: java
 jdk: openjdk6
 script: mvn clean package
-after_success:
 env:
   global:
   - GH_PROJECT_NAME: Mathematica-IntelliJ-Plugin
