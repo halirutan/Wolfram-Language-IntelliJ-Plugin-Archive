@@ -1,9 +1,11 @@
 #Mathematica (Wolfram Language) support for IntelliJ IDEA
 
+![teaser](http://i.stack.imgur.com/sYHlk.gif)
+
 This is an easy to install plug-in for almost all IntelliJ based IDEs like IDEA or PyCharm. It will turn the IDE you love into into a powerful development tool for Mathematica and Wolfram Language  code. Since the plug-in and the Community Edition of IDEA  is open-source, you can use everything completely free of charge.
 People, who just want to use the plug-in should take a look at the official website [wlplugin.halirutan.de](http://wlplugin.halirutan.de/).
 
-For a very quick start just downloade and install the free [Community Edition of IDEA](https://www.jetbrains.com/idea/download/). After you have done that, open the *Settings* by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>,</kbd> on OS X) and navigate to *Plugins* in the right column. On the right side you find the button *Browse repositories* and there you use the search box to find the **Mathematica Support**. With a right-click you can install it and after the suggested restart of IDEA everything is set up.
+For a very quick start just download and install the free [Community Edition of IDEA](https://www.jetbrains.com/idea/download/). After you have done that, open the *Settings* by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>,</kbd> on OS X) and navigate to *Plugins* in the right column. On the right side you find the button *Browse repositories* and there you use the search box to find the **Mathematica Support**. With a right-click you can install it and after the suggested restart of IDEA everything is set up.
 
 
 ##![Docs][doc-image]Documentation
@@ -22,7 +24,7 @@ Finally, there I have posted information on [stack exchange](http://mathematica.
 
 ### Code
 
-When you want to crawl through the code, you should know that the [master branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/tree/master) only contains the latest stable release. The current development will (almost) always take place in feature or bugfix branches that are take from the [develop branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin). This kind of follows the [GitFlow branching model](http://nvie.com/posts/a-successful-git-branching-model/).
+When you want to crawl through the code, you should know that the [master branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/tree/master) only contains the latest stable release. The current development will (almost) always take place in feature or bugfix branches that derive from the [develop branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin). This kind of follows the [GitFlow branching model](http://nvie.com/posts/a-successful-git-branching-model/).
 
 ###Testing and Continuous Integration
 
