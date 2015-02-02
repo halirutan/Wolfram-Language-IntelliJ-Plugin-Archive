@@ -20,6 +20,7 @@
   ~ THE SOFTWARE.
   -->
 
+<!--suppress MavenModelInspection -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -51,7 +52,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <tagNameFormat>@{project.version}</tagNameFormat>
+          <!--<tagNameFormat>v@{project.version}</tagNameFormat>-->
         </configuration>
       </plugin>
       <plugin>
@@ -67,11 +68,15 @@
             </goals>
             <configuration>
               <target>
-                <!-- download file -->
+                <!-- Download IDEA sources which are required to build the plugin-->
+                <!-- For local testing, I included a copy target below -->
                 <get src="http://download.jetbrains.com/idea/ideaIC-14.0.3.tar.gz"
-                     dest="${project.build.directory}"
-                     verbose="false"
-                     usetimestamp="true"/>
+                dest="${project.build.directory}"
+                verbose="true"
+                usetimestamp="true"/>
+                <!--<copy file="/home/patrick/Downloads/ideaIC-14.0.3.tar.gz"-->
+                      <!--tofile="${project.build.directory}/ideaIC-14.0.3.tar.gz"-->
+                      <!--verbose="true"/>-->
               </target>
             </configuration>
           </execution>
@@ -80,8 +85,9 @@
             <phase>validate</phase>
             <configuration>
               <tasks>
-                <echo message="prepare phase" />
-                <untar compression="gzip" src="${project.build.directory}/ideaIC-14.0.3.tar.gz" dest="${project.build.directory}" />
+                <echo message="prepare phase"/>
+                <untar compression="gzip" src="${project.build.directory}/ideaIC-14.0.3.tar.gz"
+                       dest="${project.build.directory}"/>
               </tasks>
             </configuration>
             <goals>
@@ -97,20 +103,22 @@
             <configuration>
               <target>
                 <path id="maven.plugin.complete.classpath">
-                  <path refid="maven.plugin.classpath" />
+                  <path refid="maven.plugin.classpath"/>
                   <fileset dir="${project.build.directory}/idea-IC-139.1117.1/lib">
                     <include name="**/*.jar"/>
                   </fileset>
                 </path>
-                <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="maven.plugin.complete.classpath" />
+                <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions"
+                         classpathref="maven.plugin.complete.classpath"/>
                 <path id="sourcepath">
                   <dirset dir="${project.basedir}">
                     <include name="src"/>
                   </dirset>
                 </path>
-                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}" extdirs="${project.build.directory}/idea-IC-139.1117.1/lib">
-                  <classpath refid="maven.compile.classpath" />
-                  <src refid="sourcepath" />
+                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
+                                          extdirs="${project.build.directory}/idea-IC-139.1117.1/lib">
+                  <classpath refid="maven.compile.classpath"/>
+                  <src refid="sourcepath"/>
                 </instrumentIdeaExtensions>
               </target>
             </configuration>
@@ -118,11 +126,16 @@
         </executions>
         <dependencies>
           <dependency>
+            <!--suppress MavenModelInspection -->
             <groupId>com.sun</groupId>
+            <!--suppress MavenModelInspection -->
             <artifactId>tools</artifactId>
+            <!--suppress MavenModelInspection -->
             <version>1.6.0</version>
             <scope>system</scope>
+            <!--suppress MavenModelInspection -->
             <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+            <!--<systemPath>/home/patrick/build/share/java/jdk/lib/tools.jar</systemPath>-->
           </dependency>
         </dependencies>
       </plugin>
@@ -156,6 +169,24 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.1</version>
+        <configuration>
+          <descriptors>
+            <descriptor>assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assembly everything</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
