@@ -1,6 +1,6 @@
 #Mathematica (Wolfram Language) support for IntelliJ IDEA
 
-![teaser](http://i.stack.imgur.com/sYHlk.gif)
+![teaser](http://i.stack.imgur.com/N5KVt.gif)
 
 This is an easy to install plug-in for almost all IntelliJ based IDEs like IDEA or PyCharm. It will turn the IDE you love into into a powerful development tool for Mathematica and Wolfram Language  code. Since the plug-in and the Community Edition of IDEA  is open-source, you can use everything completely free of charge.
 People, who just want to use the plug-in should take a look at the official website [wlplugin.halirutan.de](http://wlplugin.halirutan.de/).
