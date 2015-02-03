@@ -7,7 +7,8 @@ People, who just want to use the plug-in should take a look at the official webs
 
 For a very quick start just download and install the free [Community Edition of IDEA](https://www.jetbrains.com/idea/download/). After you have done that, open the *Settings* by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>,</kbd> on OS X) and navigate to *Plugins* in the right column. On the right side you find the button *Browse repositories* and there you use the search box to find the **Mathematica Support**. With a right-click you can install it and after the suggested restart of IDEA everything is set up.
 
-
+**If you use the plug-in**, please leave a comment and rating at the [IntelliJ IDEA Plugins page](https://plugins.jetbrains.com/plugin/writeComment?pr=idea&pluginId=7232)
+ (note that you don't have to provide a username. Just leave the field blank).
 ##![Docs][doc-image]Documentation
 
 There are two kinds of documentation: For **users** there is the [documentation page](http://wlplugin.halirutan.de/index.php/features) and a very detailed [blog post](http://wlplugin.halirutan.de/index.php/blog/7-how-to-use-idea-effectively-with-mathematica-code) on the official website. There, you will learn what features the plug-in provides and how you can use them.
@@ -45,16 +46,32 @@ No problem. If you like to contribute something, then there are a lot more ways 
 ##![bug image][issues-image] Reporting issues
 
 For issue- and bug-tracking [Jetbrains YouTrack](http://halirutan.myjetbrains.com/youtrack/issues) is used.
-If you find bugs, experience weird behavior or have feature suggestions please [create a new issue there](http://halirutan.myjetbrains.com/youtrack/issues#newissue=yes).
+If you find bugs, experience weird behavior or have feature suggestions please [create a new issue there](http://halirutan.myjetbrains.com/youtrack/issues#newissue=yes). Of course I will answer any issues that are reported through [GitHub](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues) as well.
 
 Note that the plug-in itself contains a bug-reporter. When an unhandled exception is thrown, you are notified by IDEA and
 you can give as much details as possibles which are then automatically turned into a new issue in the bug-tracker.
 
-##![contact image][contact-image] Contact
+##![contact image][contact-image] Credits and Contact
+###Credits
+A lot of people helped to bring this project to life. Without them, it would probably have died a long time ago. Especially 4 people supported the plug-in from its very buggy first version. They were never tired of discussing feature details, testing new stuff, reporting bugs and suggesting future improvements:
 
-The easiest way to contact me is ping me (@halirutan) in the [dedicated stackexchange chat](http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica). If you don't have enough reputation to talk there, feel free to write me an email. My address can be seen by evaluating this in *Mathematica*
+- [rsmenon:](https://github.com/rsmenon) Provided parts of the Module and Color Scheme implementations, testing. Improvements of the parsing for *Mathematica* version 10.
+
+- [Szabolcs Horvát:](https://github.com/szhorvat) Heavy testing. Convinced me to implement a *Structure View* provider and discussed every detail, especially how it should work.
+
+- [Leonid Shifrin:](https://github.com/lshifr) Most interesting discussions about implementation design and details.
+
+- [Rolf Mertig:](http://www.gluonvision.com/) Testing and discussions about important features that are available in Wolfram Workbench.
+
+In addition to that, a special thanks goes to [Aliaksandr Dubrouski](https://github.com/dubrousky) and [Jakub Kuczmarski](https://github.com/jkuczm). The first on pointed me to Travis CI and explained how I can add support for it. The second one discussed details of the ``MUnit` `` support in Wolfram Workbench.
+
+###Contact
+
+The easiest way to make contact is to write in the the [dedicated stackexchange chat](http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica). There, you should ping me (@halirutan) so that I get notified. If you don't have enough reputation to talk there, feel free to write me an email. My address can be seen by evaluating this in *Mathematica*
 
     Uncompress["1:eJxTTMoPChZhYGAoSCwpykzOdshIzMksKi1JzNNLSQUAgX0JmQ=="]
+
+If you have specific feature questions, please don't hesitate to [open a new issue](http://halirutan.myjetbrains.com/youtrack/newissue) in YouTrack.
 
 ----
 
