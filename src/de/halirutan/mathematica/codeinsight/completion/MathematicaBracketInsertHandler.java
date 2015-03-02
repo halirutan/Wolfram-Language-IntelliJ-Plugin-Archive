@@ -29,6 +29,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -67,7 +68,7 @@ public class MathematicaBracketInsertHandler implements InsertHandler<LookupElem
 //        }
 
     if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
-      SymbolInformationProvider.SymbolInformation symbol = SymbolInformationProvider.getSymbolNames().get(item.getLookupString());
+      SymbolInformation symbol = SymbolInformationProvider.getSymbolNames().get(item.getLookupString());
       boolean insertBrackets = (symbol != null) && symbol.function;
       if (insertBrackets) {
         document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));

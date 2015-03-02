@@ -23,87 +23,94 @@
 
 <!--I assume FONT_TYPE values are the ones defined in java.awt.Font-->
 <list>
-    <option name="MMA.IDENTIFIER">
-        <value>
-            <option name="FOREGROUND" value="000000" />
-        </value>
-    </option>
+  <option name="MMA.IDENTIFIER">
+    <value>
+      <option name="FOREGROUND" value="000000"/>
+    </value>
+  </option>
 
-    <option name="MMA.BUILTIN_FUNCTION">
-        <value>
-            <!--<option name="FOREGROUND" value="377b94" />-->
-            <option name="FOREGROUND" value="0000FF" />
+  <option name="MMA.BUILTIN_FUNCTION">
+    <value>
+      <!--<option name="FOREGROUND" value="377b94" />-->
+      <option name="FOREGROUND" value="0000FF"/>
 
-        </value>
-    </option>
+    </value>
+  </option>
 
-    <option name="MMA.BRACE">
-        <value>
-            <option name="FOREGROUND" value="000000" />
-            <option name="FONT_TYPE" value="1" />
-        </value>
-    </option>
+  <option name="MMA.BRACE">
+    <value>
+      <option name="FOREGROUND" value="000000"/>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
 
-    <option name="MMA.STRING">
-        <value>
-            <option name="FOREGROUND" value="7F0000" />
-            <option name="FONT_TYPE" value="0" />
-        </value>
-    </option>
+  <option name="MMA.STRING">
+    <value>
+      <option name="FOREGROUND" value="7F0000"/>
+      <option name="FONT_TYPE" value="0"/>
+    </value>
+  </option>
 
-    <option name="MMA.OPERATOR">
-        <value>
-            <option name="FOREGROUND" value="000000" />
-        </value>
-    </option>
+  <option name="MMA.OPERATOR">
+    <value>
+      <option name="FOREGROUND" value="000000"/>
+    </value>
+  </option>
 
-    <option name="MMA.COMMENT">
-        <value>
-            <option name="FOREGROUND" value="808080" />
-        </value>
-    </option>
+  <option name="MMA.COMMENT">
+    <value>
+      <option name="FOREGROUND" value="808080"/>
+    </value>
+  </option>
 
-    <option name="MMA.PATTERN">
-        <value>
-            <option name="FOREGROUND" value="007000" />
-            <option name="FONT_TYPE" value="2"/>
-        </value>
-    </option>
+  <option name="MMA.COMMENT_SPECIAL">
+    <value>
+      <option name="FOREGROUND" value="808080"/>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
 
-    <option name="MMA.MODULE_LOCALIZED">
-        <value>
-            <option name="FOREGROUND" value="8a653b" />
-        </value>
-    </option>
+  <option name="MMA.PATTERN">
+    <value>
+      <option name="FOREGROUND" value="007000"/>
+      <option name="FONT_TYPE" value="2"/>
+    </value>
+  </option>
 
-    <option name="MMA.BLOCK_LOCALIZED">
-        <value>
-            <option name="FOREGROUND" value="8a653b" />
-        </value>
-    </option>
+  <option name="MMA.MODULE_LOCALIZED">
+    <value>
+      <option name="FOREGROUND" value="8a653b"/>
+    </value>
+  </option>
 
-    <option name="MMA.OTHERS_LOCALIZED">
-        <value>
-            <option name="FOREGROUND" value="8a653b" />
-        </value>
-    </option>
+  <option name="MMA.BLOCK_LOCALIZED">
+    <value>
+      <option name="FOREGROUND" value="8a653b"/>
+    </value>
+  </option>
 
-    <option name="MMA.USAGE_MESSAGE">
-        <value>
-            <option name="FONT_TYPE" value="1" />
-        </value>
-    </option>
+  <option name="MMA.OTHERS_LOCALIZED">
+    <value>
+      <option name="FOREGROUND" value="8a653b"/>
+    </value>
+  </option>
 
-    <option name="MMA.MESSAGE">
-        <value>
-            <option name="FOREGROUND" value="C57633" />
-            <option name="FONT_TYPE" value="0" />
-        </value>
-    </option>
+  <option name="MMA.USAGE_MESSAGE">
+    <value>
+      <option name="FONT_TYPE" value="1"/>
+    </value>
+  </option>
 
-    <option name="MMA.ANONYMOUS_FUNCTION">
-        <value>
-            <option name="FONT_TYPE" value="2" />
-        </value>
-    </option>
+  <option name="MMA.MESSAGE">
+    <value>
+      <option name="FOREGROUND" value="C57633"/>
+      <option name="FONT_TYPE" value="0"/>
+    </value>
+  </option>
+
+  <option name="MMA.ANONYMOUS_FUNCTION">
+    <value>
+      <option name="FONT_TYPE" value="2"/>
+    </value>
+  </option>
 </list>

@@ -76,13 +76,16 @@ public interface MathematicaElementTypes {
       WHITE_SPACE, LINE_BREAK
   );
   IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
-  IElementType COMMENT = new MathematicaElementType("COMMENT");
+  IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
+  IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
+  IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
+  IElementType COMMENT_KEYWORD = new MathematicaElementType("COMMENT_KEYWORD");
   TokenSet COMMENTS = TokenSet.create(
-      COMMENT
+      COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_KEYWORD
   );
   @SuppressWarnings("UnusedDeclaration")
   TokenSet WHITE_SPACE_OR_COMMENTS = TokenSet.create(
-      WHITE_SPACE, LINE_BREAK, COMMENT
+      WHITE_SPACE, LINE_BREAK, COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_KEYWORD
   );
   IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
   IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");

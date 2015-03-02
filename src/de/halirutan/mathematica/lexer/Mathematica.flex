@@ -35,10 +35,9 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 LineTerminator = \n | \r | \r\n
 WhiteSpace = [\ \t\f]
 
-Comment   = "(*" [^*] ~"*)" | "(*" "*"+ ")"
-
 CommentStart = "(*"
 CommentEnd = "*)"
+CommentSection = {CommentStart}" ::"[A-Z][a-zA-Z ]+":: "{CommentEnd}
 
 Identifier = [a-zA-Z\$] [a-zA-Z0-9\$]*
 IdInContext = (`?){Identifier}(`{Identifier})*(`?)
@@ -70,12 +69,13 @@ Out = "%"+
 %%
 
 <YYINITIAL> {
-	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
-	{WhiteSpace}+ 		{ return MathematicaElementTypes.WHITE_SPACE; }
-    "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
+  {CommentSection}      { return MathematicaElementTypes.COMMENT_KEYWORD; }
+	{CommentStart}				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START; }
+	{WhiteSpace}+ 	    	{ return MathematicaElementTypes.WHITE_SPACE; }
+  "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
-	{LineTerminator}+   { return MathematicaElementTypes.LINE_BREAK; }
-	\"				 	{ yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
+	{LineTerminator}+     { return MathematicaElementTypes.LINE_BREAK; }
+	\"				 	          { yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 	{NamedCharacter}    { return MathematicaElementTypes.IDENTIFIER; }
@@ -196,13 +196,6 @@ Out = "%"+
 	.       			{ return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
-//<IN_STRING> {
-//	\\                  { return MathematicaElementTypes.STRING_LITERAL; }
-//	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
-//	\"					{ yypushstate(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
-//
-//}
-
 <PUT_START> {
   {WhiteSpace}+                 { yybegin(PUT_RHS); return MathematicaElementTypes.WHITE_SPACE; }
   .                             { yypushback(1); yybegin(PUT_RHS);}
@@ -227,22 +220,17 @@ Out = "%"+
   \"                             { yypopstate(); return MathematicaElementTypes.STRING_LITERAL_END; }
   [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
   "\\"{LineTerminator}           { return MathematicaElementTypes.STRING_LITERAL; }
-  "\\\\"                         {  return MathematicaElementTypes.STRING_LITERAL; }
+  "\\\\"                         { return MathematicaElementTypes.STRING_LITERAL; }
   "\\\""                         { return MathematicaElementTypes.STRING_LITERAL; }
   "\\"                           { return MathematicaElementTypes.STRING_LITERAL; }
 }
 
-
-
 <IN_COMMENT> {
-	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
-	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
-	"*)"				{ yypopstate(); return MathematicaElementTypes.COMMENT; }
-	[\*\)\(]			{ return MathematicaElementTypes.COMMENT; }
-	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
-
+	{CommentStart}    { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
+	[^\(\*\):]*        { return MathematicaElementTypes.COMMENT_CONTENT; }
+	{CommentEnd}      { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
+	[\*\)\(:]			    { return MathematicaElementTypes.COMMENT_CONTENT; }
+	.					        { return MathematicaElementTypes.BAD_CHARACTER; }
 }
-
-
 
 .|{LineTerminator}+ 	{ return MathematicaElementTypes.BAD_CHARACTER; }
