@@ -13,8 +13,8 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 %unicode
 %function advance
 %type IElementType
-%eof{ return;
-%eof}
+//%eof{ return;
+//%eof}
 
 %{
     // This adds support for nested states. I'm no JFlex pro, so maybe this is overkill, but it works quite well.
@@ -69,13 +69,12 @@ Out = "%"+
 %%
 
 <YYINITIAL> {
-  {CommentSection}      { return MathematicaElementTypes.COMMENT_KEYWORD; }
-	{CommentStart}				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START; }
-	{WhiteSpace}+ 	    	{ return MathematicaElementTypes.WHITE_SPACE; }
+	{CommentStart}		{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START; }
+	{WhiteSpace}+ 	    { return MathematicaElementTypes.WHITE_SPACE; }
   "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
-	{LineTerminator}+     { return MathematicaElementTypes.LINE_BREAK; }
-	\"				 	          { yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
+	{LineTerminator}+   { return MathematicaElementTypes.LINE_BREAK; }
+	\"				 	{ yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 
 	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 	{NamedCharacter}    { return MathematicaElementTypes.IDENTIFIER; }
@@ -158,8 +157,8 @@ Out = "%"+
 	"..."				{ return MathematicaElementTypes.REPEATED_NULL; }
 // The next two lines need explanation: The problem is that .3 is short for 0.3 in Mathematica. Now, x=.3 should
 // be parsed as x = 0.3 and not as x=. 3
-	"=."[0-9] 	{ yypushback(2); return MathematicaElementTypes.SET; }
-	"=."       	{ return MathematicaElementTypes.UNSET; }
+	"=."[0-9]       	{ yypushback(2); return MathematicaElementTypes.SET; }
+	"=."       	        { return MathematicaElementTypes.UNSET; }
 
 	".."				{ return MathematicaElementTypes.REPEATED; }
 	"."					{ return MathematicaElementTypes.POINT; }
@@ -179,7 +178,7 @@ Out = "%"+
 
     {SlotSequence}		{ return MathematicaElementTypes.SLOT_SEQUENCE; }
     {Slot}				{ return MathematicaElementTypes.SLOT; }
-    {AssociationSlot} { return MathematicaElementTypes.ASSOCIATION_SLOT; }
+    {AssociationSlot}   { return MathematicaElementTypes.ASSOCIATION_SLOT; }
 
     "?"					{ return MathematicaElementTypes.QUESTION_MARK; }
     "!"					{ return MathematicaElementTypes.EXCLAMATION_MARK; }
@@ -226,11 +225,13 @@ Out = "%"+
 }
 
 <IN_COMMENT> {
-	{CommentStart}    { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
-	[^\(\*\):]*        { return MathematicaElementTypes.COMMENT_CONTENT; }
-	{CommentEnd}      { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
-	[\*\)\(:]			    { return MathematicaElementTypes.COMMENT_CONTENT; }
-	.					        { return MathematicaElementTypes.BAD_CHARACTER; }
+	{CommentStart}               { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
+	[^\(\*\):]*                  { return MathematicaElementTypes.COMMENT_CONTENT; }
+	"::"[A-Z][A-Za-z]*"::"       {return MathematicaElementTypes.COMMENT_SECTION; }
+	":"[A-Z][A-Za-z ]*":"        {return MathematicaElementTypes.COMMENT_ANNOTATION; }
+	{CommentEnd}                 { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
+	[\*\)\(:]			         { return MathematicaElementTypes.COMMENT_CONTENT; }
+	.					         { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
-.|{LineTerminator}+ 	{ return MathematicaElementTypes.BAD_CHARACTER; }
+.|{LineTerminator}+ 	         { return MathematicaElementTypes.BAD_CHARACTER; }

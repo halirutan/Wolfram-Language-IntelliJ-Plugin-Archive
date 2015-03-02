@@ -79,13 +79,14 @@ public interface MathematicaElementTypes {
   IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
   IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
   IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
-  IElementType COMMENT_KEYWORD = new MathematicaElementType("COMMENT_KEYWORD");
+  IElementType COMMENT_SECTION = new MathematicaElementType("COMMENT_SECTION");
+  IElementType COMMENT_ANNOTATION = new MathematicaElementType("COMMENT_ANNOTATION");
   TokenSet COMMENTS = TokenSet.create(
-      COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_KEYWORD
+      COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
   );
   @SuppressWarnings("UnusedDeclaration")
   TokenSet WHITE_SPACE_OR_COMMENTS = TokenSet.create(
-      WHITE_SPACE, LINE_BREAK, COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_KEYWORD
+      WHITE_SPACE, LINE_BREAK, COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
   );
   IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
   IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");
