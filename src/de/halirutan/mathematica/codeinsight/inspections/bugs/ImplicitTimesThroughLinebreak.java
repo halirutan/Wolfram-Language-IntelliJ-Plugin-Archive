@@ -22,17 +22,26 @@
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
 
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiErrorElement;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getFirstListElement;
+import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
+
 /**
- * @author patrick (7/8/14)
+ *
+ * @author halirutan
  */
 public class ImplicitTimesThroughLinebreak extends AbstractInspection {
 
@@ -59,12 +68,57 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    return new MathematicaVisitor() {
-      @Override
-      public void visitCompoundExpression(final CompoundExpression compoundExpression) {
-        // todo: Implement locic that checks whether implicit multiplication could be unwanted.
+    return new ImplicitTimesVisitor(holder);
+  }
+
+  private static class ImplicitTimesVisitor extends MathematicaVisitor {
+
+
+    private final ProblemsHolder myHolder;
+
+    public ImplicitTimesVisitor(final ProblemsHolder holder) {
+      this.myHolder = holder;
+    }
+
+    @Override
+    public void visitFunctionCall(final FunctionCall functionCall) {
+      final PsiElement head = functionCall.getFirstChild();
+      if (head == null) {
+        return;
       }
-    };
+      PsiElement elm = getNextSiblingSkippingWhitespace(head);
+      int argsWithoutComma = 0;
+      while ((elm = getNextSiblingSkippingWhitespace(elm)) != null &&
+          elm.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACKET) {
+        if (elm instanceof PsiErrorElement) continue;
+        if (elm.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          argsWithoutComma = 0;
+        } else {
+          argsWithoutComma++;
+          if (argsWithoutComma > 1) {
+            myHolder.registerProblem(elm, TextRange.from(0, 1), MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+          }
+        }
+      }
+    }
+
+    @Override
+    public void visitList(final List list) {
+      PsiElement elm = getFirstListElement(list);
+      int argsWithoutComma = 1;
+      while ((elm = getNextSiblingSkippingWhitespace(elm)) != null &&
+          elm.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACE) {
+        if (elm instanceof PsiErrorElement) continue;
+        if (elm.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          argsWithoutComma = 0;
+        } else {
+          argsWithoutComma++;
+          if (argsWithoutComma > 1) {
+            myHolder.registerProblem(elm, TextRange.from(0, 1), MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+          }
+        }
+      }
+    }
   }
 }
 

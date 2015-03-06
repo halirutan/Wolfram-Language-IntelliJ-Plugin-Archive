@@ -23,7 +23,7 @@ package de.halirutan.mathematica.codeinsight.inspections;
 
 import com.intellij.codeInspection.InspectionToolProvider;
 import de.halirutan.mathematica.codeinsight.inspections.bugs.ImplicitTimesThroughLinebreak;
-import de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistenCompoundExpressionInFile;
+import de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionInFile;
 
 /**
  * @author patrick (7/8/14)
@@ -32,7 +32,7 @@ public class MathematicaInspectionProvider implements InspectionToolProvider {
   @Override
   public Class[] getInspectionClasses() {
     return new Class[]{
-        ConsistenCompoundExpressionInFile.class,
+        ConsistentCompoundExpressionInFile.class,
         ImplicitTimesThroughLinebreak.class
     };
 

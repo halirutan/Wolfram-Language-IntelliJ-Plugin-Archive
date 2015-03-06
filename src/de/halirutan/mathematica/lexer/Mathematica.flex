@@ -13,8 +13,6 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 %unicode
 %function advance
 %type IElementType
-//%eof{ return;
-//%eof}
 
 %{
     // This adds support for nested states. I'm no JFlex pro, so maybe this is overkill, but it works quite well.
@@ -31,13 +29,11 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 %}
 
-
 LineTerminator = \n | \r | \r\n
 WhiteSpace = [\ \t\f]
 
 CommentStart = "(*"
 CommentEnd = "*)"
-CommentSection = {CommentStart}" ::"[A-Z][a-zA-Z ]+":: "{CommentEnd}
 
 Identifier = [a-zA-Z\$] [a-zA-Z0-9\$]*
 IdInContext = (`?){Identifier}(`{Identifier})*(`?)
@@ -230,8 +226,8 @@ Out = "%"+
 	"::"[A-Z][A-Za-z]*"::"       {return MathematicaElementTypes.COMMENT_SECTION; }
 	":"[A-Z][A-Za-z ]*":"        {return MathematicaElementTypes.COMMENT_ANNOTATION; }
 	{CommentEnd}                 { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
-	[\*\)\(:]			         { return MathematicaElementTypes.COMMENT_CONTENT; }
-	.					         { return MathematicaElementTypes.BAD_CHARACTER; }
+	[\*\)\(:]			               { return MathematicaElementTypes.COMMENT_CONTENT; }
+	.					                   { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
 .|{LineTerminator}+ 	         { return MathematicaElementTypes.BAD_CHARACTER; }

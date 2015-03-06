@@ -21,23 +21,21 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+
+import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
 
 /**
  * @author patrick (7/8/14)
  */
-public class ConsistenCompoundExpressionInFile extends AbstractInspection {
+public class ConsistentCompoundExpressionInFile extends AbstractInspection {
 
 
   @Nls
@@ -67,23 +65,18 @@ public class ConsistenCompoundExpressionInFile extends AbstractInspection {
     return new MathematicaVisitor() {
       @Override
       public void visitFile(final PsiFile file) {
-        boolean sawCompExpr = false;
-        final PsiElement[] children = file.getChildren();
-        for (PsiElement child : children) {
-          if (child instanceof PsiComment) {
-            continue;
-          }
-          if (child instanceof CompoundExpression) {
-            sawCompExpr = true;
-            continue;
-          }
-          if (sawCompExpr) {
-            PsiElement errorElement = child.getPrevSibling();
-            while (errorElement.getLastChild() != null) {
-              errorElement = errorElement.getLastChild();
+        PsiElement child = file.getFirstChild();
+        while (child instanceof PsiWhiteSpace || child instanceof PsiComment) {
+          child = child.getNextSibling();
+        }
+        while (child != null) {
+          if (getNextSiblingSkippingWhitespace(child) != null) {
+            final PsiElement lastChild = child.getLastChild();
+            if (lastChild != null && lastChild.getTextLength() > 0) {
+              holder.registerProblem(lastChild, TextRange.from(lastChild.getTextLength(), 1), getStaticDescription());
             }
-            holder.registerProblem(errorElement, getStaticDescription(), LocalQuickFix.EMPTY_ARRAY);
           }
+          child = getNextSiblingSkippingWhitespace(child);
         }
       }
     };
