@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
 
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -28,6 +29,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
@@ -67,8 +69,10 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
 
   @NotNull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    return new ImplicitTimesVisitor(holder);
+  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
+    if(session.getFile().getFileType() instanceof MathematicaFileType) {
+      return new ImplicitTimesVisitor(holder);
+    } else return PsiElementVisitor.EMPTY_VISITOR;
   }
 
   private static class ImplicitTimesVisitor extends MathematicaVisitor {

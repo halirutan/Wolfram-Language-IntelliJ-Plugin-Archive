@@ -21,11 +21,13 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -61,24 +63,27 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
   @SuppressWarnings("OverlyComplexAnonymousInnerClass")
   @NotNull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    return new MathematicaVisitor() {
-      @Override
-      public void visitFile(final PsiFile file) {
-        PsiElement child = file.getFirstChild();
-        while (child instanceof PsiWhiteSpace || child instanceof PsiComment) {
-          child = child.getNextSibling();
-        }
-        while (child != null) {
-          if (getNextSiblingSkippingWhitespace(child) != null) {
-            final PsiElement lastChild = child.getLastChild();
-            if (lastChild != null && lastChild.getTextLength() > 0) {
-              holder.registerProblem(lastChild, TextRange.from(lastChild.getTextLength(), 1), getStaticDescription());
-            }
+  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly,@NotNull LocalInspectionToolSession session) {
+    if(session.getFile().getFileType() instanceof MathematicaFileType) {
+      return new MathematicaVisitor() {
+        @Override
+        public void visitFile(final PsiFile file) {
+          PsiElement child = file.getFirstChild();
+          while (child instanceof PsiWhiteSpace || child instanceof PsiComment) {
+            child = child.getNextSibling();
           }
-          child = getNextSiblingSkippingWhitespace(child);
+          while (child != null) {
+            if (getNextSiblingSkippingWhitespace(child) != null) {
+              final PsiElement lastChild = child.getLastChild();
+              if (lastChild != null && lastChild.getTextLength() > 0) {
+                holder.registerProblem(lastChild, TextRange.from(lastChild.getTextLength(), 1), getStaticDescription());
+              }
+            }
+            child = getNextSiblingSkippingWhitespace(child);
+          }
         }
-      }
-    };
+      };
+    }
+    return PsiElementVisitor.EMPTY_VISITOR;
   }
 }
