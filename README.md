@@ -51,7 +51,7 @@ If you find bugs, experience weird behavior or have feature suggestions please [
 Note that the plug-in itself contains a bug-reporter. When an unhandled exception is thrown, you are notified by IDEA and
 you can give as much details as possibles which are then automatically turned into a new issue in the bug-tracker.
 
-##![contact image][contact-image] Credits and Contact
+##![contact image][contact-image] Credits, Contact and Licensing
 ###Credits
 A lot of people helped to bring this project to life. Without them, it would probably have died a long time ago. Especially 4 people supported the plug-in from its very buggy first version. They were never tired of discussing feature details, testing new stuff, reporting bugs and suggesting future improvements:
 
@@ -72,6 +72,15 @@ The easiest way to make contact is to write in the the [dedicated stackexchange 
     Uncompress["1:eJxTTMoPChZhYGAoSCwpykzOdshIzMksKi1JzNNLSQUAgX0JmQ=="]
 
 If you have specific feature questions, please don't hesitate to [open a new issue](http://halirutan.myjetbrains.com/youtrack/newissue) in YouTrack.
+
+###Licensing
+
+The general license for the IntelliJ IDEA Plugin is the [MIT License](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/blob/develop/LICENSE). Users should note that *Wolfram Research Inc.* (WRI) has generously granted this project the right to use the internal documentation of *Mathematica* and make it available as part of the plugin. The only requirement was to put the legal information in a place where end-users find it. Therefore, please note that..
+
+> This software includes information that is Copyright © 2013 Wolfram Research, Inc.
+> Such information is used with permission and for the limited purpose of enabling
+> code completion and hints in the Mathematica IntelliJIDEA Plugin.  Any other use
+> requires written permission from the copyright holder.
 
 ----
 
