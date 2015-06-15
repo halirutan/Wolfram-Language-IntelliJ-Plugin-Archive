@@ -70,7 +70,7 @@
               <target>
                 <!-- Download IDEA sources which are required to build the plugin-->
                 <!-- For local testing, I included a copy target below -->
-                <get src="http://download.jetbrains.com/idea/ideaIC-14.0.3.tar.gz"
+                <get src="http://download.jetbrains.com/idea/ideaIC-14.1.3.tar.gz"
                 dest="${project.build.directory}"
                 verbose="true"
                 usetimestamp="true"/>
@@ -86,7 +86,7 @@
             <configuration>
               <tasks>
                 <echo message="prepare phase"/>
-                <untar compression="gzip" src="${project.build.directory}/ideaIC-14.0.3.tar.gz"
+                <untar compression="gzip" src="${project.build.directory}/ideaIC-14.1.3.tar.gz"
                        dest="${project.build.directory}"/>
               </tasks>
             </configuration>
