@@ -28,7 +28,7 @@
   <groupId>org.jetbrains.plugins</groupId>
   <artifactId>mathematica-intellij-plugin</artifactId>
   <version>0.3.4</version>
-  <name>Mathematica Support for IntellJ IDEA</name>
+  <name>Mathematica Support for IntelliJ IDEA</name>
   <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting, etc.</description>
 
   <properties>
@@ -74,8 +74,8 @@
                 dest="${project.build.directory}"
                 verbose="true"
                 usetimestamp="true"/>
-                <!--<copy file="/home/patrick/Downloads/ideaIC-14.0.3.tar.gz"-->
-                      <!--tofile="${project.build.directory}/ideaIC-14.0.3.tar.gz"-->
+                <!--<copy file="/home/patrick/tmp/ideaIC-14.1.3.tar.gz"-->
+                      <!--tofile="${project.build.directory}/ideaIC-14.1.3.tar.gz"-->
                       <!--verbose="true"/>-->
               </target>
             </configuration>
@@ -104,7 +104,7 @@
               <target>
                 <path id="maven.plugin.complete.classpath">
                   <path refid="maven.plugin.classpath"/>
-                  <fileset dir="${project.build.directory}/idea-IC-139.1117.1/lib">
+                  <fileset dir="${project.build.directory}/idea-IC-141.1010.3/lib">
                     <include name="**/*.jar"/>
                   </fileset>
                 </path>
@@ -116,7 +116,7 @@
                   </dirset>
                 </path>
                 <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
-                                          extdirs="${project.build.directory}/idea-IC-139.1117.1/lib">
+                                          extdirs="${project.build.directory}/idea-IC-141.1010.3/lib">
                   <classpath refid="maven.compile.classpath"/>
                   <src refid="sourcepath"/>
                 </instrumentIdeaExtensions>
@@ -164,7 +164,7 @@
         <version>2.5.1</version>
         <configuration>
           <compilerArguments>
-            <extdirs>${project.build.directory}/idea-IC-139.1117.1/lib/</extdirs>
+            <extdirs>${project.build.directory}/idea-IC-141.1010.3/lib/</extdirs>
           </compilerArguments>
           <source>1.6</source>
           <target>1.6</target>
