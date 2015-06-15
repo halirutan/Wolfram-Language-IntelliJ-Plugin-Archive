@@ -56,12 +56,12 @@ public class CookieManager {
   private static final String COOKIE = "Cookie";
   private static final char NAME_VALUE_SEPARATOR = '=';
   private static final char DOT = '.';
-  private Map store;
+  private HashMap<String, HashMap<String, HashMap<String, String>>> store;
   private DateFormat dateFormat;
 
   public CookieManager() {
 
-    store = new HashMap();
+    store = new HashMap<String, HashMap<String, HashMap<String, String>>>();
     dateFormat = new SimpleDateFormat(DATE_FORMAT);
   }
 
@@ -82,25 +82,25 @@ public class CookieManager {
     String domain = getDomainFromHost(conn.getURL().getHost());
 
 
-    Map domainStore; // this is where we will store cookies for this domain
+    HashMap<String, HashMap<String, String>> domainStore; // this is where we will store cookies for this domain
 
 // now let's check the store to see if we have an entry for this domain
     if (store.containsKey(domain)) {
       // we do, so lets retrieve it from the store
-      domainStore = (Map) store.get(domain);
+      domainStore = store.get(domain);
     } else {
       // we don't, so let's create it and put it in the store
-      domainStore = new HashMap();
+      domainStore = new HashMap<String, HashMap<String, String>>();
       store.put(domain, domainStore);
     }
 
 
 // OK, now we are ready to get the cookies out of the URLConnection
 
-    String headerName = null;
+    String headerName;
     for (int i = 1; (headerName = conn.getHeaderFieldKey(i)) != null; i++) {
       if (headerName.equalsIgnoreCase(SET_COOKIE)) {
-        Map cookie = new HashMap();
+        HashMap<String, String> cookie = new HashMap<String, String>();
         StringTokenizer st = new StringTokenizer(conn.getHeaderField(i), COOKIE_VALUE_DELIMITER);
 
 // the specification dictates that the first name/value pair
@@ -144,7 +144,7 @@ public class CookieManager {
 
     Map domainStore = (Map) store.get(domain);
     if (domainStore == null) return;
-    StringBuffer cookieStringBuffer = new StringBuffer();
+    StringBuilder cookieStringBuffer = new StringBuilder();
 
     Iterator cookieNames = domainStore.keySet().iterator();
     while (cookieNames.hasNext()) {
