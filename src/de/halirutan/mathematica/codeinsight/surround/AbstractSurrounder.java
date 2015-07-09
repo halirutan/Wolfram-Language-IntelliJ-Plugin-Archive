@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.codeinsight.surround;
 
 import com.intellij.lang.surroundWith.Surrounder;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
@@ -30,7 +29,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.MathematicaBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,8 +36,6 @@ import org.jetbrains.annotations.Nullable;
  * @author patrick (6/12/14)
  */
 public abstract class AbstractSurrounder implements Surrounder {
-
-  private static final Logger LOGGER = Logger.getInstance("#de.halirutan.mathematica.codeinsight.surround.MathematicaExpressionSurrounder");
 
   @Override
   abstract public String getTemplateDescription();

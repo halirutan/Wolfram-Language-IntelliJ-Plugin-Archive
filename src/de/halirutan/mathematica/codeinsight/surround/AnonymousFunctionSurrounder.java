@@ -21,23 +21,7 @@
 
 package de.halirutan.mathematica.codeinsight.surround;
 
-import com.intellij.lang.surroundWith.Surrounder;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (6/12/14)

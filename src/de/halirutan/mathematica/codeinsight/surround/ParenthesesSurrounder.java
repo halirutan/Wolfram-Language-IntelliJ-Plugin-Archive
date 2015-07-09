@@ -21,16 +21,6 @@
 
 package de.halirutan.mathematica.codeinsight.surround;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * @author patrick (7/28/14)
  */
