@@ -22,7 +22,9 @@
 package de.halirutan.mathematica.codeinsight.surround;
 
 import com.intellij.lang.surroundWith.Surrounder;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -40,32 +42,19 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/12/14)
  */
-public class AnonymousFunctionSurrounder implements Surrounder {
+public class AnonymousFunctionSurrounder extends AbstractSurrounder {
   @Override
   public String getTemplateDescription() {
     return MathematicaBundle.message("surround.anonymous.function.description");
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement[] elements) {
-    return elements.length == 1 && elements[0] != null && elements[0] instanceof Expression;
+  public String getOpening() {
+    return "(";
   }
 
-  @Nullable
   @Override
-  public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements) throws IncorrectOperationException {
-    assert (elements.length == 1 && elements[0] != null) || PsiTreeUtil.findCommonParent(elements) == elements[0].getParent();
-    final PsiElement e = elements[0];
-
-    final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-    final StringBuilder stringBuilder = new StringBuilder("(");
-    stringBuilder.append(e.getText());
-    stringBuilder.append(")&");
-
-    final PsiFile file = factory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, stringBuilder);
-    final Function[] func = PsiTreeUtil.getChildrenOfType(file, Function.class);
-    assert func != null && func[0] != null;
-    e.replace(func[0]);
-    return null;
+  public String getClosing() {
+    return ")&";
   }
 }

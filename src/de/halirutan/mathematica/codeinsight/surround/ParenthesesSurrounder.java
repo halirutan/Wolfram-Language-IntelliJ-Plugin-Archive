@@ -21,22 +21,20 @@
 
 package de.halirutan.mathematica.codeinsight.surround;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (7/28/14)
  */
-public class ParenthesesSurrounder extends MathematicaExpressionSurrounder {
+public class ParenthesesSurrounder extends AbstractSurrounder {
 
   private final String myOpener;
   private final String myCloser;
@@ -48,24 +46,14 @@ public class ParenthesesSurrounder extends MathematicaExpressionSurrounder {
     this.myDescription = description;
   }
 
-  /**
-   * As long as we have a complete expression, we can surround
-   */
   @Override
-  protected boolean isApplicable(final Expression element) {
-    return true;
+  public String getOpening() {
+    return myOpener;
   }
 
-  @Nullable
   @Override
-  public TextRange surroundElements(@NotNull final Project project, @NotNull final Editor editor, final Expression element) throws IncorrectOperationException {
-    MathematicaPsiElementFactory factory = new MathematicaPsiElementFactory(project);
-    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-
-    Expression parExpr = factory.createExpressionFromText(myOpener + element.getText() + myCloser);
-    parExpr = (Expression) codeStyleManager.reformat(parExpr);
-    final PsiElement replace = element.replace(parExpr);
-    return TextRange.from(replace.getTextOffset() + replace.getTextLength(), 0);
+  public String getClosing() {
+    return myCloser;
   }
 
   @Override

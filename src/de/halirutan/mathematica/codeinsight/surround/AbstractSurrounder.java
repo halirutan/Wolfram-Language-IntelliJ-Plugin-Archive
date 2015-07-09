@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2015 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,39 +23,54 @@ package de.halirutan.mathematica.codeinsight.surround;
 
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
+import de.halirutan.mathematica.MathematicaBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author patrick (7/28/14)
+ * @author patrick (6/12/14)
  */
-public abstract class MathematicaExpressionSurrounder implements Surrounder {
+public abstract class AbstractSurrounder implements Surrounder {
 
   private static final Logger LOGGER = Logger.getInstance("#de.halirutan.mathematica.codeinsight.surround.MathematicaExpressionSurrounder");
 
   @Override
-  public abstract String  getTemplateDescription();
+  abstract public String getTemplateDescription();
 
   @Override
-  public boolean isApplicable(@NotNull final PsiElement[] elements) {
-    LOGGER.assertTrue(elements.length == 1 && elements[0] instanceof Expression);
-    return isApplicable(((Expression) elements[0]));
+  public boolean isApplicable(@NotNull PsiElement[] elements) {
+    return true;
   }
 
-  protected abstract boolean isApplicable(final Expression element);
+  abstract public String getOpening();
+  abstract public String getClosing();
 
   @Nullable
   @Override
-  public TextRange surroundElements(@NotNull final Project project, @NotNull final Editor editor, @NotNull final PsiElement[] elements) throws IncorrectOperationException {
-    return surroundElements(project, editor, ((Expression) elements[0]));
+  public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements) throws IncorrectOperationException {
+    final SelectionModel selectionModel = editor.getSelectionModel();
+    if (selectionModel.hasSelection()) {
+      final Document document = editor.getDocument();
+      if (document.isWritable()) {
+        final int selectionStart = selectionModel.getSelectionStart();
+        final int selectionEnd = selectionModel.getSelectionEnd();
+        final String expr = document.getText(TextRange.create(selectionStart, selectionEnd));
+        document.replaceString(selectionStart, selectionEnd, getOpening() + expr + getClosing());
+        modifySelection(TextRange.create(selectionStart,selectionEnd), selectionModel);
+      }
+    }
+    return null;
   }
 
-  @Nullable
-  protected abstract TextRange surroundElements(final Project project, final Editor editor, final Expression element);
+  public void modifySelection(TextRange textRange, SelectionModel model) {
+    model.removeSelection();
+  }
+
 }

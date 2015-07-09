@@ -38,12 +38,8 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
       new FunctionCallSurrounder(),
       new ParenthesesSurrounder("(", ")", "Surround with ()"),
       new ParenthesesSurrounder("{", "}", "Surround with {}"),
+      new ParenthesesSurrounder("[", "]", "Surround with []"),
       new AnonymousFunctionSurrounder()
-//      new LocalizationSurrounder("Module"),
-//      new LocalizationSurrounder("With"),
-//      new LocalizationSurrounder("Block"),
-//      new LocalizationSurrounder("Function"),
-//      new LocalizationSurrounder("Compile")
   };
 
   @NotNull
@@ -90,7 +86,7 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
       } else {
 
         final PsiElement commonContext = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
-        if (commonContext != null && !(commonContext instanceof PsiFile))
+        if (commonContext != null)
           return new PsiElement[]{commonContext};
       }
     }
