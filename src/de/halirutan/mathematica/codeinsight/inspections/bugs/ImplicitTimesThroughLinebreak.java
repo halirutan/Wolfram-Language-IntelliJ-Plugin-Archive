@@ -27,6 +27,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
@@ -75,6 +77,8 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
     } else return PsiElementVisitor.EMPTY_VISITOR;
   }
 
+
+
   private static class ImplicitTimesVisitor extends MathematicaVisitor {
 
 
@@ -84,6 +88,13 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
       this.myHolder = holder;
     }
 
+    private void registerProblem(final PsiElement element) {
+      myHolder.registerProblem(
+          element,
+          TextRange.from(element.getTextLength()-1,1),
+          MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+    }
+
     @Override
     public void visitFunctionCall(final FunctionCall functionCall) {
       final PsiElement head = functionCall.getFirstChild();
@@ -91,36 +102,40 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
         return;
       }
       PsiElement elm = getNextSiblingSkippingWhitespace(head);
+      PsiElement next;
       int argsWithoutComma = 0;
-      while ((elm = getNextSiblingSkippingWhitespace(elm)) != null &&
-          elm.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACKET) {
-        if (elm instanceof PsiErrorElement) continue;
-        if (elm.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+      while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
+          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACKET) {
+        if (next instanceof PsiErrorElement) continue;
+        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
           argsWithoutComma = 0;
         } else {
           argsWithoutComma++;
           if (argsWithoutComma > 1) {
-            myHolder.registerProblem(elm, TextRange.from(0, 1), MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+            registerProblem(elm);
           }
         }
+        elm = next;
       }
     }
 
     @Override
     public void visitList(final List list) {
       PsiElement elm = getFirstListElement(list);
+      PsiElement next;
       int argsWithoutComma = 1;
-      while ((elm = getNextSiblingSkippingWhitespace(elm)) != null &&
-          elm.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACE) {
-        if (elm instanceof PsiErrorElement) continue;
-        if (elm.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+      while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
+          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACE) {
+        if (next instanceof PsiErrorElement) continue;
+        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
           argsWithoutComma = 0;
         } else {
           argsWithoutComma++;
           if (argsWithoutComma > 1) {
-            myHolder.registerProblem(elm, TextRange.from(0, 1), MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+            registerProblem(elm);
           }
         }
+        elm = next;
       }
     }
   }

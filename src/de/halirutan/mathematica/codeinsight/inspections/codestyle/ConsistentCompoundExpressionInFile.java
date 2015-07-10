@@ -76,7 +76,11 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
             if (getNextSiblingSkippingWhitespace(child) != null) {
               final PsiElement lastChild = child.getLastChild();
               if (lastChild != null && lastChild.getTextLength() > 0) {
-                holder.registerProblem(lastChild, TextRange.from(lastChild.getTextLength(), 1), getStaticDescription());
+                holder.registerProblem(
+                    lastChild,
+                    TextRange.from(lastChild.getTextLength()-1, 1),
+                    MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
+                    new ConsistentCompoundExpressionQuickFix());
               }
             }
             child = getNextSiblingSkippingWhitespace(child);
