@@ -16,7 +16,7 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 %{
     // This adds support for nested states. I'm no JFlex pro, so maybe this is overkill, but it works quite well.
-    private final LinkedList<Integer> states = new LinkedList();
+    private final LinkedList<Integer> states = new LinkedList<Integer>();
 
     private void yypushstate(int state) {
         states.addFirst(yystate());
