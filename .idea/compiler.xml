@@ -29,5 +29,7 @@
       <module name="Mathematica-IntelliJ-Plugin" target="1.6" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:unchecked" />
+  </component>
 </project>
-

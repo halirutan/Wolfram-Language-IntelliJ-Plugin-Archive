@@ -1,13 +1,12 @@
 package de.halirutan.mathematica.codeinsight.smartenter;
 
-import com.intellij.lang.SmartEnterProcessorWithFixers;
+import com.intellij.lang.SmartEnterProcessorWithFixers.Fixer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.COMMA;
@@ -16,7 +15,7 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.RIGHT_BRA
 /**
  * @author patrick (30/10/13)
  */
-public class FunctionCallFixer extends SmartEnterProcessorWithFixers.Fixer<MathematicaSmartEnter> {
+public class FunctionCallFixer extends Fixer<MathematicaSmartEnter> {
   @Override
   public void apply(@NotNull Editor editor, @NotNull MathematicaSmartEnter processor, @NotNull PsiElement element) throws IncorrectOperationException {
     Document doc = editor.getDocument();

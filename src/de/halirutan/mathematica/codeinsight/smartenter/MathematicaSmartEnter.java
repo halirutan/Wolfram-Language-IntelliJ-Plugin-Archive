@@ -1,6 +1,8 @@
 package de.halirutan.mathematica.codeinsight.smartenter;
 
+import com.google.common.collect.Lists;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
+import com.intellij.lang.SmartEnterProcessorWithFixers.Fixer;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -23,9 +25,10 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
 
   static final int MAX_UPWALK = 10;
 
+  @SuppressWarnings("unchecked")
   public MathematicaSmartEnter() {
-    addFixers(new FunctionCallFixer());
-    addFixers(new CompoundExpressionFixer());
+    final Fixer[] fixers = {new FunctionCallFixer(), new CompoundExpressionFixer()};
+    addFixers(fixers);
     addEnterProcessors(new FunctionCallEnterProcessor());
   }
 
