@@ -40,10 +40,10 @@ import java.util.Map;
  */
 public class ParseletProvider {
 
-  private static final Map<IElementType, PrefixParselet> PREFIX_PARSELETS = new HashMap<IElementType, PrefixParselet>();
-  private static final Map<IElementType, InfixParselet> INFIX_PARSELETS = new HashMap<IElementType, InfixParselet>();
-  private static final Map<PrefixParselet, IElementType> PREFIX_TO_PSI_ELEMENT = new HashMap<PrefixParselet, IElementType>();
-  private static final Map<InfixParselet, IElementType> INFIX_PARSELET_TO_PSI_ELEMENT = new HashMap<InfixParselet, IElementType>();
+  private static final Map<IElementType, PrefixParselet> IELEMENT_TO_PREFIX = new HashMap<IElementType, PrefixParselet>();
+  private static final Map<IElementType, InfixParselet> IELEMENT_TO_INFIX = new HashMap<IElementType, InfixParselet>();
+  private static final Map<PrefixParselet, IElementType> PREFIX_TO_IELEMENT = new HashMap<PrefixParselet, IElementType>();
+  private static final Map<InfixParselet, IElementType> INFIX_TO_IELEMENT = new HashMap<InfixParselet, IElementType>();
 
   static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()
@@ -187,7 +187,7 @@ public class ParseletProvider {
    * @return The {@link PrefixParselet} if available for this token and {@code null} otherwise.
    */
   public static PrefixParselet getPrefixParselet(IElementType token) {
-    return PREFIX_PARSELETS.get(token);
+    return IELEMENT_TO_PREFIX.get(token);
   }
 
   /**
@@ -198,7 +198,7 @@ public class ParseletProvider {
    * @return The {@link InfixParselet} if available for this token and {@code null} otherwise.
    */
   public static InfixParselet getInfixParselet(IElementType token) {
-    return INFIX_PARSELETS.get(token);
+    return IELEMENT_TO_INFIX.get(token);
   }
 
   /**
@@ -209,7 +209,7 @@ public class ParseletProvider {
    * @return The precedence of the specified token or 0 whether the precedence is not available.
    */
   public static int getPrecedence(IElementType token) {
-    InfixParselet parselet = INFIX_PARSELETS.get(token);
+    InfixParselet parselet = IELEMENT_TO_INFIX.get(token);
     if (parselet != null) {
       return parselet.getMyPrecedence();
     }
@@ -228,7 +228,7 @@ public class ParseletProvider {
     if (token == null) {
       return 0;
     }
-    InfixParselet parselet = INFIX_PARSELETS.get(token);
+    InfixParselet parselet = IELEMENT_TO_INFIX.get(token);
     if (parselet != null) {
       return parselet.getMyPrecedence();
     }
@@ -247,7 +247,7 @@ public class ParseletProvider {
    * @return The node type.
    */
   public static IElementType getInfixPsiElement(InfixParselet parselet) {
-    IElementType elm = INFIX_PARSELET_TO_PSI_ELEMENT.get(parselet);
+    IElementType elm = INFIX_TO_IELEMENT.get(parselet);
     if (elm == null) {
       return MathematicaElementTypes.FAILBACK;
     }
@@ -262,7 +262,7 @@ public class ParseletProvider {
    * @return The element of the node in the AST tree
    */
   public static IElementType getPrefixPsiElement(PrefixParselet parselet) {
-    IElementType elm = PREFIX_TO_PSI_ELEMENT.get(parselet);
+    IElementType elm = PREFIX_TO_IELEMENT.get(parselet);
     if (elm == null) {
       return MathematicaElementTypes.FAILBACK;
     }
@@ -270,18 +270,18 @@ public class ParseletProvider {
   }
 
   private static void register(IElementType token, IElementType expressionToken, PrefixParselet parselet) {
-    PREFIX_PARSELETS.put(token, parselet);
-    PREFIX_TO_PSI_ELEMENT.put(parselet, expressionToken);
+    IELEMENT_TO_PREFIX.put(token, parselet);
+    PREFIX_TO_IELEMENT.put(parselet, expressionToken);
   }
 
   private static void register(IElementType token, IElementType expressionToken, InfixParselet parselet) {
-    INFIX_PARSELETS.put(token, parselet);
-    INFIX_PARSELET_TO_PSI_ELEMENT.put(parselet, expressionToken);
+    IELEMENT_TO_INFIX.put(token, parselet);
+    INFIX_TO_IELEMENT.put(parselet, expressionToken);
   }
 
   private static void registerPrefixExplicitly(IElementType token, IElementType expressionToken, PrefixParselet parselet) {
-    PREFIX_PARSELETS.put(token, parselet);
-    PREFIX_TO_PSI_ELEMENT.put(parselet, expressionToken);
+    IELEMENT_TO_PREFIX.put(token, parselet);
+    PREFIX_TO_IELEMENT.put(parselet, expressionToken);
   }
 
   private static void postfix(IElementType token, IElementType expressionToken, int precedence) {
