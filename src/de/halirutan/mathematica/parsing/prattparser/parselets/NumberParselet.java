@@ -21,14 +21,36 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
+import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
+
 /**
  * Parselet for numbers. Does not need to do anything, because all kind of numbers are recognized by the lexer and this
  * parselet needs only to advance over the lexer token.
  *
  * @author patrick (3/27/13)
  */
-public class NumberParselet extends AtomParselet {
+public class NumberParselet implements PrefixParselet {
+
+  private final int myPrecedence;
+
   public NumberParselet(int precedence) {
-    super(precedence);
+    this.myPrecedence = precedence;
+  }
+
+  @Override
+  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+    IElementType token = parser.getTokenType();
+    PsiBuilder.Marker symbolMark = parser.mark();
+    parser.advanceLexer();
+    symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
+    return MathematicaParser.result(symbolMark, token, true);
+  }
+
+  public int getPrecedence() {
+    return myPrecedence;
   }
 }
