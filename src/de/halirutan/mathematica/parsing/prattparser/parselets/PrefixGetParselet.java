@@ -22,11 +22,13 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
@@ -42,20 +44,18 @@ public class PrefixGetParselet implements PrefixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker getMark = parser.mark();
-    IElementType nodeToken = MathematicaElementTypes.GET_PREFIX;
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
+    Marker getMark = parser.mark();
+    IElementType type = MathematicaElementTypes.GET_PREFIX;
     parser.advanceLexer();
-    boolean result;
-    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
-      final PrefixParselet prefixParselet = ParseletProvider.getPrefixParselet(MathematicaElementTypes.STRINGIFIED_IDENTIFIER);
-      result = prefixParselet.parse(parser).isParsed();
-      getMark.done(nodeToken);
+    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER) || parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_BEGIN)) {
+      final Result result1 = parser.parseExpression(myPrecedence);
+      getMark.done(type);
+      return MathematicaParser.result(getMark, type, result1.isParsed());
     } else {
       getMark.error(ParserBundle.message("Get.stringified.symbol.expected"));
-      result = false;
+      return MathematicaParser.result(getMark, type, false);
     }
-    return MathematicaParser.result(getMark, nodeToken, result);
   }
 
   public int getPrecedence() {

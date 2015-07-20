@@ -21,12 +21,13 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * @author patrick (3/27/13)
@@ -39,14 +40,14 @@ public class PutParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
     if (!left.isValid()) return MathematicaParser.notParsed();
-    PsiBuilder.Marker putMark = left.getMark().precede();
+    Marker putMark = left.getMark().precede();
     final IElementType tokenType = parser.getTokenType();
     final IElementType type = tokenType.equals(MathematicaElementTypes.PUT) ? MathematicaElementTypes.PUT_EXPRESSION : MathematicaElementTypes.PUT_APPEND_EXPRESSION;
     parser.advanceLexer();
-    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER)) {
-      final MathematicaParser.Result result1 = parser.parseExpression(myPrecedence);
+    if (parser.matchesToken(MathematicaElementTypes.STRINGIFIED_IDENTIFIER) || parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_BEGIN)) {
+      final Result result1 = parser.parseExpression(myPrecedence);
       putMark.done(type);
       return MathematicaParser.result(putMark, type, result1.isParsed());
     } else {

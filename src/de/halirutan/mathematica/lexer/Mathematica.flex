@@ -202,11 +202,13 @@ Out = "%"+
 
 <PUT_RHS> {
   [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+   \"				 									                     { yybegin(YYINITIAL); yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
   .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
 <GET_RHS> {
   [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+  \"				 									                     { yybegin(YYINITIAL); yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
   .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
