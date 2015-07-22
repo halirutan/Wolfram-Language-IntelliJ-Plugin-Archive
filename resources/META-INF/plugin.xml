@@ -2,21 +2,23 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>0.3.6.1</version>
+  <version>0.3.7</version>
   <idea-version since-build="135.1230"/>
   <vendor email="pscheibe@trm.uni-leipzig.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
   <description><![CDATA[
         Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
-        lookup, refactoring, code formatting, etc. This plugin is currently under heavy development. If you want to help, check out the
-        <a href="http://mathematicaplugin.halirutan.de">Official Website</a> for more information or take a look at the open-source
-        <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.
+        lookup, refactoring, code formatting, etc. </p>
+        Check out the <a href="http://mathematicaplugin.halirutan.de">Official Website</a> for more information or take a look at the open-source
+        <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.</p>
+        If you want to discuss specific topics or just drop some flowers, visit the dedicated
+        <a href="http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica">chat room at stackexchange</a>.
       ]]></description>
 
   <change-notes>
     <![CDATA[
-            For a detailed list of bugfixes please see the <a href="http://mathematicaplugin.halirutan.de/index.php/history">
-            Updates page in the GitHub Wiki.</a>
+            For a detailed list of bugfixes please look into the <a href="http://halirutan.myjetbrains.com/youtrack/issues/MMAP">
+            official bug database</a>.
         ]]>
   </change-notes>
 
