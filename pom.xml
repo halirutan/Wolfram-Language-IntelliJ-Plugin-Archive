@@ -84,11 +84,11 @@
             <id>prepare</id>
             <phase>validate</phase>
             <configuration>
-              <tasks>
+              <target>
                 <echo message="prepare phase"/>
                 <untar compression="gzip" src="${project.build.directory}/ideaIC-14.1.4.tar.gz"
                        dest="${project.build.directory}"/>
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
