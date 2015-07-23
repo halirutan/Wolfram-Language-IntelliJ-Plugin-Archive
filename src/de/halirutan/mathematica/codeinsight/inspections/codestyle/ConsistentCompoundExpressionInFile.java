@@ -29,6 +29,7 @@ import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,21 +70,24 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
         @Override
         public void visitFile(final PsiFile file) {
           PsiElement child = file.getFirstChild();
-          while (child instanceof PsiWhiteSpace || child instanceof PsiComment) {
-            child = child.getNextSibling();
-          }
           while (child != null) {
-            if (getNextSiblingSkippingWhitespace(child) != null) {
-              final PsiElement lastChild = child.getLastChild();
-              if (lastChild != null && lastChild.getTextLength() > 0) {
-                holder.registerProblem(
-                    lastChild,
-                    TextRange.from(lastChild.getTextLength()-1, 1),
-                    MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
-                    new ConsistentCompoundExpressionQuickFix());
-              }
+            if (child instanceof PsiWhiteSpace ||
+                child instanceof PsiComment ||
+                child instanceof CompoundExpression && getNextSiblingSkippingWhitespace(child) == null
+                ) {
+              child = child.getNextSibling();
+              continue;
             }
-            child = getNextSiblingSkippingWhitespace(child);
+            final PsiElement lastChild = child.getLastChild();
+            if (lastChild != null && lastChild.getTextLength() > 0) {
+              holder.registerProblem(
+                  child,
+                  TextRange.from(child.getTextLength() - 1, 1),
+                  MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
+                  new ConsistentCompoundExpressionQuickFix());
+            }
+            child = child.getNextSibling();
+
           }
         }
       };

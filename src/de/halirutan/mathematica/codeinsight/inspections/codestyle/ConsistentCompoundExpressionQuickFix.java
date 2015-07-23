@@ -24,6 +24,7 @@ package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -35,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase {
 
+  private static final Logger LOG = Logger.getInstance("#de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionQuickFix");
+
   public ConsistentCompoundExpressionQuickFix() {
     super("Fix missing semicolon");
   }
@@ -43,11 +46,16 @@ public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase {
   public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
     final PsiElement elm = descriptor.getPsiElement();
 
-    if (!FileModificationService.getInstance().prepareFileForWrite(elm.getContainingFile())) return;
+    if (!FileModificationService.getInstance().prepareFileForWrite(elm.getContainingFile())) {
+      LOG.warn("Could not access file for writing");
+      return;
+    }
 
     final Document doc = PsiDocumentManager.getInstance(project).getDocument(elm.getContainingFile());
     if (doc != null) {
       doc.insertString(elm.getTextOffset() + elm.getTextLength(), ";");
+    } else {
+      LOG.warn("Document was null");
     }
   }
 }
