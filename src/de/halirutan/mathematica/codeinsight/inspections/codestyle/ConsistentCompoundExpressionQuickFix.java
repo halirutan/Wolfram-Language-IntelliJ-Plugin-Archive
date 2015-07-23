@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 
+import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.editor.Document;
@@ -41,6 +42,9 @@ public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase {
   @Override
   public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
     final PsiElement elm = descriptor.getPsiElement();
+
+    if (!FileModificationService.getInstance().prepareFileForWrite(elm.getContainingFile())) return;
+
     final Document doc = PsiDocumentManager.getInstance(project).getDocument(elm.getContainingFile());
     if (doc != null) {
       doc.insertString(elm.getTextOffset() + elm.getTextLength(), ";");
