@@ -22,6 +22,9 @@
 package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.codeInsight.intention.HighPriorityAction;
+import com.intellij.codeInspection.BatchQuickFix;
+import com.intellij.codeInspection.CommonProblemDescriptor;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -31,10 +34,12 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * @author patrick (10.07.15)
  */
-public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase {
+public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase implements HighPriorityAction {
 
   private static final Logger LOG = Logger.getInstance("#de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionQuickFix");
 
@@ -46,16 +51,14 @@ public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase {
   public void applyFix(@NotNull final Project project, @NotNull final ProblemDescriptor descriptor) {
     final PsiElement elm = descriptor.getPsiElement();
 
-    if (!FileModificationService.getInstance().prepareFileForWrite(elm.getContainingFile())) {
-      LOG.warn("Could not access file for writing");
-      return;
-    }
+    if (!FileModificationService.getInstance().prepareFileForWrite(elm.getContainingFile())) return;
 
-    final Document doc = PsiDocumentManager.getInstance(project).getDocument(elm.getContainingFile());
-    if (doc != null) {
-      doc.insertString(elm.getTextOffset() + elm.getTextLength(), ";");
+    final PsiDocumentManager manager = PsiDocumentManager.getInstance(project);
+    final Document doc = manager.getDocument(elm.getContainingFile());
+    if (doc != null && doc.isWritable()) {
+      doc.insertString(descriptor.getTextRangeInElement().getEndOffset(), ";");
     } else {
-      LOG.warn("Document was null");
+      LOG.warn("Document was null or not writable!");
     }
   }
 }

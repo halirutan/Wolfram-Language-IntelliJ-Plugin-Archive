@@ -64,7 +64,7 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
   @SuppressWarnings("OverlyComplexAnonymousInnerClass")
   @NotNull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly,@NotNull LocalInspectionToolSession session) {
+  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly,@NotNull final LocalInspectionToolSession session) {
     if(session.getFile().getFileType() instanceof MathematicaFileType) {
       return new MathematicaVisitor() {
         @Override
@@ -78,14 +78,12 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
               child = child.getNextSibling();
               continue;
             }
-            final PsiElement lastChild = child.getLastChild();
-            if (lastChild != null && lastChild.getTextLength() > 0) {
               holder.registerProblem(
-                  child,
-                  TextRange.from(child.getTextLength() - 1, 1),
+                  file,
+                  TextRange.from(child.getTextOffset() + child.getTextLength() - 1, 1),
                   MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
                   new ConsistentCompoundExpressionQuickFix());
-            }
+//            }
             child = child.getNextSibling();
 
           }
