@@ -81,6 +81,8 @@
     <enterHandlerDelegate
         implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
+    <codeFoldingOptionsProvider instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
+
     <!-- Code-style and colors-->
     <colorSettingsPage
         implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
