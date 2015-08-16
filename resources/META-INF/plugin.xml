@@ -76,12 +76,10 @@
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
     <lang.foldingBuilder language="Mathematica"
-                         implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaFolding"/>
+                         implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
 
     <enterHandlerDelegate
         implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
-
-    <codeFoldingOptionsProvider instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
 
     <!-- Code-style and colors-->
     <colorSettingsPage
@@ -118,11 +116,8 @@
 
     </action>
 
-    <!-- Actions for debugging purpose only -->
-    <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
-    <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
-    <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
-    <!--</action>-->
+
+
 
     <!-- Action to test the resolving of symbol definitions and their usages -->
     <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
@@ -135,5 +130,25 @@
     <!--class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">-->
     <!--<keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>-->
     <!--</action>-->
+    <group id="MathematicaMenu" text="Mathematica" popup="true">
+      <action id="Mathematica.ExpandNamedCharacters"
+              class="de.halirutan.mathematica.actions.ExpandNamedCharactersAction"
+              text="Expand all \[Name] sections" description="Expands all closed named characters into their FullForm.">
+      </action>
+
+      <action id="Mathematica.CollapseNamedCharacters"
+              class="de.halirutan.mathematica.actions.CollapseNamedCharactersAction"
+              text="Collapse all \[Name] sections" description="Collapse all named characters into their utf8 counterpart.">
+      </action>
+
+      <separator/>
+
+      <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
+      text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
+      </action>
+
+
+      <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
+    </group>
   </actions>
 </idea-plugin>

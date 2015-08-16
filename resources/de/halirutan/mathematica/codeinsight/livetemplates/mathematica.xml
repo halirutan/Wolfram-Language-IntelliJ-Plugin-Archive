@@ -175,6 +175,17 @@
             <option name="Mathematica" value="true"/>
         </context>
     </template>
+
+  <template name="opt" description="Create options for a symbol" toReformat="true"
+            value="Options[$SYM$] = { $LHS$ -> $END$}">
+    <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
+    <variable name="LHS" expression="" defaultValue="&quot;optionName&quot;" alwaysStopAt="true" />
+    <variable name="END" expression="" defaultValue="&quot;Automatic&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="Mathematica" value="true"/>
+    </context>
+  </template>
+
     <template name="msg" description="Create usage message" toReformat="true"
               value="$SYM$::$TAG$ = &quot;$END$&quot;;">
         <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />

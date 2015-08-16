@@ -80,7 +80,7 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
             }
               holder.registerProblem(
                   file,
-                  TextRange.from(child.getTextOffset() + child.getTextLength() - 1, 1),
+                  TextRange.from(Math.max(child.getTextOffset() + child.getTextLength() - 1, 0), 1),
                   MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
                   new ConsistentCompoundExpressionQuickFix());
 //            }

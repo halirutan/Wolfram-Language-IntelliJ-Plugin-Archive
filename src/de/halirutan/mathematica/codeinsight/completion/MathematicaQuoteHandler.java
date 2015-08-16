@@ -37,7 +37,7 @@ import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
  */
 public class MathematicaQuoteHandler extends SimpleTokenSetQuoteHandler {
   public MathematicaQuoteHandler() {
-    super(STRING_LITERAL, STRING_LITERAL_BEGIN, STRING_LITERAL_END);
+    super(STRING_LITERAL,STRING_NAMED_CHARACTER, STRING_LITERAL_BEGIN, STRING_LITERAL_END);
   }
 
   /**

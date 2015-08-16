@@ -36,7 +36,7 @@ CommentStart = "(*"
 CommentEnd = "*)"
 
 Identifier = [[:letter:]\$] [[:letter:][:digit:]\$]*
-NamedCharacter = "\\["{Identifier}"]"
+NamedCharacter = "\\["{Identifier}?"]"
 Symbol = ({Identifier} | {NamedCharacter})+
 SymbolInContext = (`?){Symbol}(`{Symbol})*
 
@@ -215,6 +215,7 @@ Out = "%"+
 <IN_STRING> {
   \"                             { yypopstate(); return MathematicaElementTypes.STRING_LITERAL_END; }
   [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
+  {NamedCharacter}               { return MathematicaElementTypes.STRING_NAMED_CHARACTER; }
   "\\"{LineTerminator}           { return MathematicaElementTypes.STRING_LITERAL; }
   "\\\\"                         { return MathematicaElementTypes.STRING_LITERAL; }
   "\\\""                         { return MathematicaElementTypes.STRING_LITERAL; }

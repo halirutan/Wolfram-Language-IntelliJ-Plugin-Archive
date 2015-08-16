@@ -47,6 +47,7 @@ public class MathematicaSyntaxHighlighter extends SyntaxHighlighterBase {
     myLexer = new MathematicaLexer();
 
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL);
+    fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_NAMED_CHARACTER);
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_BEGIN);
     fillMap(colors, MathematicaSyntaxHighlighterColors.STRING, MathematicaElementTypes.STRING_LITERAL_END);
     fillMap(colors, MathematicaSyntaxHighlighterColors.IDENTIFIER, MathematicaElementTypes.IDENTIFIER);

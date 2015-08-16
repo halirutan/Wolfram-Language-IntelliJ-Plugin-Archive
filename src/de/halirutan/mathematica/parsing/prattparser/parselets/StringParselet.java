@@ -53,7 +53,7 @@ public class StringParselet implements PrefixParselet {
     Marker stringMark = parser.mark();
     boolean parsedQ = true;
     parser.advanceLexer();
-    while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL)) {
+    while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL) || parser.matchesToken(MathematicaElementTypes.STRING_NAMED_CHARACTER)) {
       parser.advanceLexer();
     }
     if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {

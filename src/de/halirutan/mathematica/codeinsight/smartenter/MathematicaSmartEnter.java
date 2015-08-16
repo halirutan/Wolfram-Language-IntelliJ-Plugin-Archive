@@ -1,8 +1,6 @@
 package de.halirutan.mathematica.codeinsight.smartenter;
 
-import com.google.common.collect.Lists;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
-import com.intellij.lang.SmartEnterProcessorWithFixers.Fixer;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -82,7 +80,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     @Override
     public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
       final CaretModel caretModel = editor.getCaretModel();
-      if (modified) {
+      if (modified && file.isValid()) {
         CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, caretModel.getOffset());
         reformat(atCaret);
         commit(editor);
