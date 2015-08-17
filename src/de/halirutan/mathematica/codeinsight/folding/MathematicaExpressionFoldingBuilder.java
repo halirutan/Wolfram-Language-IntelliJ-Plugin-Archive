@@ -54,8 +54,6 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
   private static final HashMap<String, String> ourNamedCharacters;
   private static final Pattern namedCharacterPattern = Pattern.compile("\\\\\\[[A-Z][a-zA-Z]+\\]");
 
-  public static final FoldingGroup NAMED_CHARACTERS_FOLDING_GROUP = FoldingGroup.newGroup("Mathematica Named Characters");
-
   static {
     ourCharactersResourceBundle = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/folding/namedCharacters");
     ourNamedCharacters = new HashMap<String, String>(ourCharactersResourceBundle.keySet().size());
@@ -80,8 +78,10 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
                                          @NotNull final Document document,
                                          @NotNull List<FoldingDescriptor> descriptors) {
 
+    final boolean foldCharacters = getMathematicaFoldingSettings().isCollapseNamedCharacters();
+
     final IElementType elementType = node.getElementType();
-    if (elementType == MathematicaElementTypes.IDENTIFIER) {
+    if (foldCharacters && elementType == MathematicaElementTypes.IDENTIFIER) {
       final String symbol = node.getText();
       final Matcher matcher = namedCharacterPattern.matcher(symbol);
       while (matcher.find()) {
@@ -94,7 +94,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
           }
         }
       }
-    } else if (elementType == MathematicaElementTypes.STRING_NAMED_CHARACTER) {
+    } else if (foldCharacters && elementType == MathematicaElementTypes.STRING_NAMED_CHARACTER) {
       final String name = node.getText();
       final String key = name.substring(2,name.length()-1);
       if (ourNamedCharacters.containsKey(key)) {
@@ -147,6 +147,10 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
   @Override
   public boolean isCollapsedByDefault(@NotNull final ASTNode node) {
     return node.getElementType() == MathematicaElementTypes.IDENTIFIER || node.getElementType() == MathematicaElementTypes.STRING_NAMED_CHARACTER;
+  }
+
+  private MathematicaCodeFoldingSettings getMathematicaFoldingSettings() {
+    return MathematicaCodeFoldingSettingsImpl.getInstance();
   }
 
 

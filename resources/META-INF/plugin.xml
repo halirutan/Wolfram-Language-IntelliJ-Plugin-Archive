@@ -78,6 +78,12 @@
     <lang.foldingBuilder language="Mathematica"
                          implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
 
+    <applicationService
+        serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"
+        serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>
+    <codeFoldingOptionsProvider
+        instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
+
     <enterHandlerDelegate
         implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 

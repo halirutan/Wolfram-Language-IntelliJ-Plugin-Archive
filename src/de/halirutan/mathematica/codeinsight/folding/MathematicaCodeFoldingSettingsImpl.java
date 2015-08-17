@@ -21,29 +21,42 @@
 
 package de.halirutan.mathematica.codeinsight.folding;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.components.*;
+import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author patrick (17.08.15)
+ */
 @State(
-    name = "MathematicaFoldingSettings",
+    name = "MathematicaCodeFoldingSettingsImpl",
     storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
 )
-/**
- * @author patrick (02.08.15)
- */
-public class MathematicaFoldingSettings implements MathematicaCodeFoldingSettings, PersistentStateComponent<MathematicaFoldingSettings> {
+public class MathematicaCodeFoldingSettingsImpl implements MathematicaCodeFoldingSettings,PersistentStateComponent<MathematicaCodeFoldingSettingsImpl> {
 
-  @Nullable
-  @Override
-  public MathematicaFoldingSettings getState() {
-    return null;
+  public static MathematicaCodeFoldingSettingsImpl getInstance() {
+    return ServiceManager.getService(MathematicaCodeFoldingSettingsImpl.class);
   }
 
   @Override
-  public void loadState(final MathematicaFoldingSettings state) {
+  public boolean isCollapseNamedCharacters() {
+    return COLLAPSE_NAMED_CHARACTERS;
+  }
 
+  public void setCollapseNamedCharacters(final boolean state) {
+    this.COLLAPSE_NAMED_CHARACTERS = state;
+  }
+
+  public boolean COLLAPSE_NAMED_CHARACTERS = true;
+
+  @Nullable
+  @Override
+  public MathematicaCodeFoldingSettingsImpl getState() {
+    return this;
+  }
+
+  @Override
+  public void loadState(final MathematicaCodeFoldingSettingsImpl state) {
+    XmlSerializerUtil.copyBean(state, this);
   }
 }

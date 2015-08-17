@@ -25,4 +25,5 @@ package de.halirutan.mathematica.codeinsight.folding;
  * @author patrick (02.08.15)
  */
 public interface MathematicaCodeFoldingSettings {
+  boolean isCollapseNamedCharacters();
 }

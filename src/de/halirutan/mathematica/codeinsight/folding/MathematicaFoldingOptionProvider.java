@@ -27,8 +27,10 @@ import com.intellij.openapi.options.BeanConfigurable;
 /**
  * @author patrick (02.08.15)
  */
-public class MathematicaFoldingOptionProvider extends BeanConfigurable<MathematicaFoldingSettings> implements CodeFoldingOptionsProvider {
-  protected MathematicaFoldingOptionProvider(final MathematicaFoldingSettings beanInstance) {
-    super(beanInstance);
+public class MathematicaFoldingOptionProvider extends BeanConfigurable<MathematicaCodeFoldingSettingsImpl> implements CodeFoldingOptionsProvider {
+  protected MathematicaFoldingOptionProvider() {
+    super(MathematicaCodeFoldingSettingsImpl.getInstance());
+    checkBox("COLLAPSE_NAMED_CHARACTERS", "Collapse Mathematica Named Characters");
   }
+
 }
