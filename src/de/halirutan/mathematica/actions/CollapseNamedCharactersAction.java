@@ -23,8 +23,9 @@ package de.halirutan.mathematica.actions;
 
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.actions.BaseCodeInsightAction;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettings;
+import de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,5 +37,12 @@ public class CollapseNamedCharactersAction extends BaseCodeInsightAction {
   @Override
   protected CodeInsightActionHandler getHandler() {
     return new CollapseExpandNamedCharactersHandler(false);
+  }
+
+  @Override
+  public void update(final AnActionEvent event) {
+    super.update(event);
+    MathematicaCodeFoldingSettings settings = MathematicaCodeFoldingSettingsImpl.getInstance();
+    event.getPresentation().setEnabled(settings.isCollapseNamedCharacters());
   }
 }
