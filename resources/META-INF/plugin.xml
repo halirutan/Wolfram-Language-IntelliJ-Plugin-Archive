@@ -2,24 +2,55 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>0.3.7.3</version>
+  <version>1.0</version>
   <idea-version since-build="135.1230"/>
-  <vendor email="pscheibe@trm.uni-leipzig.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
+  <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
   <description><![CDATA[
-        Mathematica support for IntelliJIDEA. Includes syntax highlighting, function completion, documentation
-        lookup, refactoring, code formatting, etc. </p>
-        Check out the <a href="http://mathematicaplugin.halirutan.de">Official Website</a> for more information or take a look at the open-source
-        <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub repository</a>.</p>
-        If you want to discuss specific topics or just drop some flowers, visit the dedicated
-        <a href="http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica">chat room at stackexchange</a>.
+    <strong>Mathematica (Wolfram Language) support for IntelliJ IDEA</strong>
+    <br/>
+    <br/>
+    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub</a> |
+    <a href="http://halirutan.myjetbrains.com/youtrack/issues/MMAP">Bug Tracker</a> |
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=876XDFGUQHKH6">Donate</a>
+    <br/>
+    <br/>
+
+    This plugin turns your IntelliJ IDEA into a powerful coding environment for Mathematica. For more information
+    check out the <a href="http://mathematicaplugin.halirutan.de">official website</a>.
+    If you want to discuss specific topics, then ping me
+    (<a href="http://mathematica.stackexchange.com/users/187/halirutan?tab=profile">halirutan</a>) in the dedicated
+    <a href="http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica">chat room on stackexchange</a>.
+    <br/>
+    <b>Features:</b>
+    <ul>
+      <li>Advanced syntax highlighting including patterns, anonymous functions, comment tags, and more</li>
+      <li>CamelHump autocompletion for all built-in Mathematica functions, local variables and package definitions</li>
+      <li>Smart completion for function options, messages and comment tags</li>
+      <li>Coloring and resolving of Module/Block/Table/... variables</li>
+      <li>Renaming of variables and functions</li>
+      <li>Code folding support for localization constructs like Module, With, Block, ...
+      <li>Quick documentation lookup for all built-in symbols and operators</li>
+      <li>Structured View for package definitions</li>
+      <li>Correct display of Mathematica's <a href="https://reference.wolfram.com/language/guide/ListingOfNamedCharacters.html">named characters</a>
+      <li>Inspection of missing commas and semicolons
+      <li>Autocompletion suggestions sorted by importance</li>
+      <li>Highlighting and smart inserting of braces, brackets and parenthesis</li>
+    </ul>
       ]]></description>
 
   <change-notes>
     <![CDATA[
-            For a detailed list of bugfixes please look into the <a href="http://halirutan.myjetbrains.com/youtrack/issues/MMAP">
-            official bug database</a>.
-        ]]>
+      <i>New features and bugfixes:</i>
+      <br/>
+      <ul>
+        <li>Implemented code folding for Module, Block, With <a href="http://halirutan.myjetbrains.com/youtrack/issue/MMAP-69">(MMAP-69)</a></li>
+        <li>Implemented correct display for named characters like <code>\[Gamma]</code></li>
+        <li>Improved "Fix all missing semicolon feature" to work correctly on large files <a href="http://halirutan.myjetbrains.com/youtrack/issue/MMAP-68">(MMAP-68)</a></li>
+        <li>Added Live Template for creating options (opt) <a href="http://halirutan.myjetbrains.com/youtrack/issue/MMAP-71">(MMAP-71)</a></li>
+        <li>Small improvements in the file templates</li>
+      </ul>
+    ]]>
   </change-notes>
 
 
@@ -123,8 +154,6 @@
     </action>
 
 
-
-
     <!-- Action to test the resolving of symbol definitions and their usages -->
     <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
     <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
@@ -144,14 +173,15 @@
 
       <action id="Mathematica.CollapseNamedCharacters"
               class="de.halirutan.mathematica.actions.CollapseNamedCharactersAction"
-              text="Collapse all \[Name] sections" description="Collapse all named characters into their utf8 counterpart.">
+              text="Collapse all \[Name] sections"
+              description="Collapse all named characters into their utf8 counterpart.">
       </action>
 
-      <separator/>
+      <!--<separator/>-->
 
-      <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
-      text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
-      </action>
+      <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
+      <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
+      <!--</action>-->
 
 
       <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
