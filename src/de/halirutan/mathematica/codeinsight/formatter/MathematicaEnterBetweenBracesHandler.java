@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MathematicaEnterBetweenBracesHandler extends EnterHandlerDelegateAdapter {
 
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeinsight.editorActions.enter.EnterBetweenBracesHandler");
+  private static final Logger LOG = Logger.getInstance("#de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler");
 
   @SuppressWarnings("deprecation")
   @Override
