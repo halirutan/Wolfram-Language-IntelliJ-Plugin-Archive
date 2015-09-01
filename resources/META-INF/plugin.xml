@@ -2,7 +2,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>1.0</version>
+  <version>1.1</version>
   <idea-version since-build="135.1230"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
@@ -90,11 +90,11 @@
                             implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
 
     <lang.smartEnterProcessor language="Mathematica"
-                              implementationClass="de.halirutan.mathematica.codeinsight.smartenter.MathematicaSmartEnter"/>
+                              implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>
     <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
 
     <lang.commenter language="Mathematica"
-                    implementationClass="de.halirutan.mathematica.codeinsight.editor.MathematicaCommenter"/>
+                    implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>
 
     <lang.surroundDescriptor language="Mathematica"
                              implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
@@ -104,6 +104,14 @@
     <defaultLiveTemplatesProvider
         implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
+    <extendWordSelectionHandler
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.ArgumentSelectioner"/>
+    <extendWordSelectionHandler
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.ListSelectioner"/>
+
+    <basicWordSelectionFilter
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>
+    
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
     <lang.foldingBuilder language="Mathematica"

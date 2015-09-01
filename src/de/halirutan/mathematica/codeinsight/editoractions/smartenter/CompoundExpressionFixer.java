@@ -1,4 +1,4 @@
-package de.halirutan.mathematica.codeinsight.smartenter;
+package de.halirutan.mathematica.codeinsight.editoractions.smartenter;
 
 import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.editor.Document;
