@@ -27,6 +27,7 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 /**
  * @author patrick (11/2/13)
  */
+@SuppressWarnings({"StaticVariableNamingConvention", "NonConstantFieldWithUpperCaseName"})
 public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
   public static boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;

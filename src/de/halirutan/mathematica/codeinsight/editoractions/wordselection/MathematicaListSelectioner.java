@@ -21,37 +21,35 @@
 
 package de.halirutan.mathematica.codeinsight.editoractions.wordselection;
 
+import com.intellij.codeInsight.editorActions.wordSelection.BasicSelectioner;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.lists.List;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author patrick (01.09.15)
  */
-public class ListSelectioner extends AbstractSelectionFixer<List> {
-
+public class MathematicaListSelectioner extends BasicSelectioner {
   @Override
-  public boolean canSelect(final PsiElement psiElement) {
-    return (psiElement.getParent().getParent() instanceof List) || (psiElement.getParent() instanceof List);
+  public boolean canSelect(PsiElement e) {
+    return e instanceof de.halirutan.mathematica.parsing.psi.api.lists.List;
   }
 
   @Override
-  public boolean isType(final PsiElement psiElement) {
-    return psiElement instanceof List;
+  public List<TextRange> select(PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
+
+    int start;
+    int end;
+
+    List<TextRange> result = new ArrayList<TextRange>();
+    start = e.getTextOffset() + 1;
+    end = e.getTextOffset() + e.getTextLength() - 1;
+    if (start < end && start > 0)
+      result.add(new TextRange(start, end));
+    result.add(e.getTextRange());
+    return result;
   }
-
-  @Override
-  public TextRange getTextRange(final PsiElement element) {
-    if (element instanceof List) {
-      List list = (List) element;
-      return new TextRange(
-          list.getTextOffset() + 1,
-          list.getTextOffset() + list.getTextLength() - 1
-      );
-    }
-    return null;
-  }
-
-
-
 }

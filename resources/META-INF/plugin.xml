@@ -105,12 +105,12 @@
         implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
     <extendWordSelectionHandler
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.ArgumentSelectioner"/>
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>
     <extendWordSelectionHandler
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.ListSelectioner"/>
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
 
-    <basicWordSelectionFilter
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>
+    <!--<basicWordSelectionFilter-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>-->
     
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
@@ -124,7 +124,10 @@
         instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
 
     <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
+        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterInsideFunctionHandler"/>
+
+    <enterHandlerDelegate
+        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterAfterOperatorHandler"/>
 
     <!-- Code-style and colors-->
     <colorSettingsPage
@@ -140,9 +143,6 @@
     <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
-
-    <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterBetweenBracesHandler"/>
 
     <annotator language="Mathematica"
                implementationClass="de.halirutan.mathematica.codeinsight.highlighting.CommentAnnotator"/>

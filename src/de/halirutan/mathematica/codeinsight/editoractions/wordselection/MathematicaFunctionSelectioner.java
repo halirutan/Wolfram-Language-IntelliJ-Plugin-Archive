@@ -21,11 +21,10 @@
 
 package de.halirutan.mathematica.codeinsight.editoractions.wordselection;
 
-import com.intellij.codeInsight.editorActions.ExtendWordSelectionHandler;
+import com.intellij.codeInsight.editorActions.wordSelection.BasicSelectioner;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 
 import java.util.ArrayList;
@@ -34,30 +33,28 @@ import java.util.List;
 /**
  * @author patrick (01.09.15)
  */
-public class ArgumentSelectioner extends AbstractSelectionFixer<FunctionCall>{
-
+public class MathematicaFunctionSelectioner extends BasicSelectioner {
   @Override
-  public boolean canSelect(final PsiElement psiElement) {
-    return ((psiElement instanceof Expression) && psiElement.getParent().getParent() instanceof FunctionCall) ||
-        (psiElement.getParent() instanceof FunctionCall);
+  public boolean canSelect(PsiElement e) {
+    return e instanceof FunctionCall;
   }
 
   @Override
-  public boolean isType(final PsiElement psiElement) {
-    return psiElement instanceof FunctionCall;
-  }
+  public List<TextRange> select(PsiElement psiElement, CharSequence editorText, int cursorOffset, Editor editor) {
 
-  @Override
-  public TextRange getTextRange(final PsiElement psiElement) {
+    int start;
+    int end;
+
     if (psiElement instanceof FunctionCall) {
-      FunctionCall funcCall = (FunctionCall) psiElement;
-      final int headLength = funcCall.getHead().getTextLength();
-      return new TextRange(
-          funcCall.getTextOffset() + headLength + 1,
-        funcCall.getTextOffset() + funcCall.getTextLength() - 1
-      );
+      final FunctionCall funcCall = (FunctionCall) psiElement;
+      List<TextRange> result = new ArrayList<TextRange>();
+      start = funcCall.getTextOffset() + funcCall.getHead().getTextLength() + 1;
+      end = funcCall.getTextOffset() + funcCall.getTextLength() - 1;
+      if (start < end && start != 0)
+        result.add(new TextRange(start, end));
+      result.add(funcCall.getTextRange());
+      return result;
     }
     return null;
   }
-
 }
