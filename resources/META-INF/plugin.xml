@@ -2,7 +2,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>1.2</version>
+  <version>1.2.1</version>
   <idea-version since-build="135.1230"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
@@ -44,6 +44,7 @@
       <i>New features and bugfixes:</i>
       <br/>
       <ul>
+        <li>Fixed issue that introduced an empty line when Enter is pressed in a function call</li>
         <li>Implemented a feature for expand/shrink selection so that all arguments of a function or list can be selected without the braces</li>
         <li>Completely re-implemented the behavior of the Enter key. This should now insert correct indents on the next line, when Enter is pressed</li>
         <li>Implemented code folding for Module, Block, With <a href="http://halirutan.myjetbrains.com/youtrack/issue/MMAP-69">(MMAP-69)</a></li>
