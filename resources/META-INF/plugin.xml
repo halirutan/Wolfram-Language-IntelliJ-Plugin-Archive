@@ -126,10 +126,10 @@
         instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
 
     <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterInsideFunctionHandler"/>
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>
 
     <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.formatter.MathematicaEnterAfterOperatorHandler"/>
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
 
     <!-- Code-style and colors-->
     <colorSettingsPage
