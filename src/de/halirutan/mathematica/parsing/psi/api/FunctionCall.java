@@ -25,6 +25,8 @@ import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
@@ -75,4 +77,7 @@ public interface FunctionCall extends PsiElement {
    */
   @Nullable
   PsiElement getArgument(int n);
+
+  @Nullable
+  List<PsiElement> getAllArguments();
 }

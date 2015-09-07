@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.parsing.psi.impl;
 
+import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
@@ -31,7 +32,12 @@ import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
@@ -110,15 +116,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    LocalizationConstruct.ConstructType type = (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
-    return type != null && !type.equals(LocalizationConstruct.ConstructType.NULL);
+    ConstructType type = (ConstructType) getUserData(myScopeKey);
+    return type != null && !type.equals(ConstructType.NULL);
   }
 
-  public LocalizationConstruct.ConstructType getScopingConstruct() {
+  public ConstructType getScopingConstruct() {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    return (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
+    return (ConstructType) getUserData(myScopeKey);
   }
 
   private void cacheScopingConstruct() {
@@ -127,7 +133,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (head instanceof Symbol) {
       cacheScopingConstruct(((Symbol) head).getSymbolName());
     } else {
-      putUserData(myScopeKey, LocalizationConstruct.ConstructType.NULL);
+      putUserData(myScopeKey, ConstructType.NULL);
     }
     myIsUpToDate = true;
   }
@@ -149,5 +155,17 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   public boolean headMatches(final Class<?> clazz) {
     final String head = getFirstChild().getText();
     return clazz.getSimpleName().matches(head);
+  }
+
+  @Nullable
+  public List<PsiElement> getAllArguments() {
+    final PsiElement[] children = getChildren();
+    if (children.length > 1) {
+      final ArrayList<PsiElement> arguments = Lists.newArrayList(children);
+      // the head of the function call is argument number 0
+      arguments.remove(0);
+      return arguments;
+    }
+    return Lists.newArrayList();
   }
 }

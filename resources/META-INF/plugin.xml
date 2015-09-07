@@ -92,6 +92,9 @@
     <completion.contributor language="Mathematica"
                             implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
 
+    <codeInsight.parameterInfo language="Mathematica"
+                               implementationClass="de.halirutan.mathematica.codeinsight.parameterinfo.BuiltInParameterInfo"/>
+
     <lang.smartEnterProcessor language="Mathematica"
                               implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>
     <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
@@ -112,9 +115,6 @@
     <extendWordSelectionHandler
         implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
 
-    <!--<basicWordSelectionFilter-->
-        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>-->
-    
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
     <lang.foldingBuilder language="Mathematica"
