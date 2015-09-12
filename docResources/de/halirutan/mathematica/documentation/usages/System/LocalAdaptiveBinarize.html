@@ -1,0 +1,50 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LocalAdaptiveBinarize.html">LocalAdaptiveBinarize</a></h3>
+<ul>
+    <li>LocalAdaptiveBinarize[<em>image</em>,<em>r</em>] creates a binary image from <em>image</em> by replacing values
+        above the mean of the range-<em>r</em> neighborhood with 1 and others with 0.
+    <li>LocalAdaptiveBinarize[<em>image</em>,<em>r</em>,{
+        <math>
+            <ms>&alpha;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&beta;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&gamma;</ms>
+        </math>
+        }] replaces values above
+        <math>
+            <ms>&alpha;</ms>
+        </math>
+        <math>
+            <ms>&mu;</ms>
+        </math>
+        +
+        <math>
+            <ms>&beta;</ms>
+        </math>
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        +
+        <math>
+            <ms>&gamma;</ms>
+        </math>
+        with 1 and others with 0, where
+        <math>
+            <ms>&mu;</ms>
+        </math>
+        and
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        are the local mean and standard deviation.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

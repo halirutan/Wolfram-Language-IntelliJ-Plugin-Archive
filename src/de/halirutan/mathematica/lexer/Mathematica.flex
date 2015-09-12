@@ -13,12 +13,10 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 %unicode
 %function advance
 %type IElementType
-%eof{ return;
-%eof}
 
 %{
     // This adds support for nested states. I'm no JFlex pro, so maybe this is overkill, but it works quite well.
-    private final LinkedList<Integer> states = new LinkedList();
+    private final LinkedList<Integer> states = new LinkedList<Integer>();
 
     private void yypushstate(int state) {
         states.addFirst(yystate());
@@ -31,19 +29,16 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 
 %}
 
-
 LineTerminator = \n | \r | \r\n
 WhiteSpace = [\ \t\f]
-
-Comment   = "(*" [^*] ~"*)" | "(*" "*"+ ")"
 
 CommentStart = "(*"
 CommentEnd = "*)"
 
-Identifier = [a-zA-Z\$] [a-zA-Z0-9\$]*
-IdInContext = (`?){Identifier}(`{Identifier})*(`?)
-
-NamedCharacter = "\\["{Identifier}"]"
+Identifier = [[:letter:]\$] [[:letter:][:digit:]\$]*
+NamedCharacter = "\\["{Identifier}?"]"
+Symbol = ({Identifier} | {NamedCharacter})+
+SymbolInContext = (`?){Symbol}(`{Symbol})*
 
 Digits = [0-9]+
 Digits2 = [0-9a-zA-Z]+
@@ -70,15 +65,14 @@ Out = "%"+
 %%
 
 <YYINITIAL> {
-	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
-	{WhiteSpace}+ 		{ return MathematicaElementTypes.WHITE_SPACE; }
-    "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
+	{CommentStart}		{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START; }
+	{WhiteSpace}+ 	    { return MathematicaElementTypes.WHITE_SPACE; }
+  "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
 	{LineTerminator}+   { return MathematicaElementTypes.LINE_BREAK; }
 	\"				 	{ yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
 
-	{IdInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
-	{NamedCharacter}    { return MathematicaElementTypes.IDENTIFIER; }
+	{SymbolInContext} 		{ return MathematicaElementTypes.IDENTIFIER; }
 
 	{BaseScientificNumber}|
 	{BasePrecisionNumber}|
@@ -158,8 +152,8 @@ Out = "%"+
 	"..."				{ return MathematicaElementTypes.REPEATED_NULL; }
 // The next two lines need explanation: The problem is that .3 is short for 0.3 in Mathematica. Now, x=.3 should
 // be parsed as x = 0.3 and not as x=. 3
-	"=."[0-9] 	{ yypushback(2); return MathematicaElementTypes.SET; }
-	"=."       	{ return MathematicaElementTypes.UNSET; }
+	"=."[0-9]       	{ yypushback(2); return MathematicaElementTypes.SET; }
+	"=."       	        { return MathematicaElementTypes.UNSET; }
 
 	".."				{ return MathematicaElementTypes.REPEATED; }
 	"."					{ return MathematicaElementTypes.POINT; }
@@ -179,7 +173,7 @@ Out = "%"+
 
     {SlotSequence}		{ return MathematicaElementTypes.SLOT_SEQUENCE; }
     {Slot}				{ return MathematicaElementTypes.SLOT; }
-    {AssociationSlot} { return MathematicaElementTypes.ASSOCIATION_SLOT; }
+    {AssociationSlot}   { return MathematicaElementTypes.ASSOCIATION_SLOT; }
 
     "?"					{ return MathematicaElementTypes.QUESTION_MARK; }
     "!"					{ return MathematicaElementTypes.EXCLAMATION_MARK; }
@@ -196,13 +190,6 @@ Out = "%"+
 	.       			{ return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
-//<IN_STRING> {
-//	\\                  { return MathematicaElementTypes.STRING_LITERAL; }
-//	(\\\" | [^\"])*		{ return MathematicaElementTypes.STRING_LITERAL; }
-//	\"					{ yypushstate(YYINITIAL); return MathematicaElementTypes.STRING_LITERAL_END; }
-//
-//}
-
 <PUT_START> {
   {WhiteSpace}+                 { yybegin(PUT_RHS); return MathematicaElementTypes.WHITE_SPACE; }
   .                             { yypushback(1); yybegin(PUT_RHS);}
@@ -215,34 +202,34 @@ Out = "%"+
 
 <PUT_RHS> {
   [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+   \"				 									                     { yybegin(YYINITIAL); yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
   .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
 <GET_RHS> {
   [^\"\#\%\'\(\)\+\;\,<=>@\[\]\^\{\}\|\n\r\ \t\f]+ { yybegin(YYINITIAL); return MathematicaElementTypes.STRINGIFIED_IDENTIFIER;}
+  \"				 									                     { yybegin(YYINITIAL); yypushstate(IN_STRING); return MathematicaElementTypes.STRING_LITERAL_BEGIN; }
   .                                                { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
 <IN_STRING> {
   \"                             { yypopstate(); return MathematicaElementTypes.STRING_LITERAL_END; }
   [^\"\\]+                       { return MathematicaElementTypes.STRING_LITERAL; }
+  {NamedCharacter}               { return MathematicaElementTypes.STRING_NAMED_CHARACTER; }
   "\\"{LineTerminator}           { return MathematicaElementTypes.STRING_LITERAL; }
-  "\\\\"                         {  return MathematicaElementTypes.STRING_LITERAL; }
+  "\\\\"                         { return MathematicaElementTypes.STRING_LITERAL; }
   "\\\""                         { return MathematicaElementTypes.STRING_LITERAL; }
   "\\"                           { return MathematicaElementTypes.STRING_LITERAL; }
 }
 
-
-
 <IN_COMMENT> {
-	"(*"				{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT; }
-	[^\*\)\(]*			{ return MathematicaElementTypes.COMMENT; }
-	"*)"				{ yypopstate(); return MathematicaElementTypes.COMMENT; }
-	[\*\)\(]			{ return MathematicaElementTypes.COMMENT; }
-	.					{ return MathematicaElementTypes.BAD_CHARACTER; }
-
+	{CommentStart}               { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
+	[^\(\*\):]*                  { return MathematicaElementTypes.COMMENT_CONTENT; }
+	"::"[A-Z][A-Za-z]*"::"       {return MathematicaElementTypes.COMMENT_SECTION; }
+	":"[A-Z][A-Za-z ]*":"        {return MathematicaElementTypes.COMMENT_ANNOTATION; }
+	{CommentEnd}                 { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
+	[\*\)\(:]			               { return MathematicaElementTypes.COMMENT_CONTENT; }
+	.					                   { return MathematicaElementTypes.BAD_CHARACTER; }
 }
 
-
-
-.|{LineTerminator}+ 	{ return MathematicaElementTypes.BAD_CHARACTER; }
+.|{LineTerminator}+ 	         { return MathematicaElementTypes.BAD_CHARACTER; }

@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GroupBy.html">GroupBy</a></h3>
+<ul>
+    <li>GroupBy[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>f</em>] groups the <em>elem</em><sub><em>i</em></sub> into lists associated with distinct keys <em>f</em>[<em>elem</em><sub><em>i</em></sub>].
+    <li>GroupBy[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>f</em><sub><em>k</em></sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>f</em><sub><em>v</em></sub>] groups the <em>f</em><sub><em>v</em></sub>[<em>elem</em><sub><em>i</em></sub>]
+        according to the <em>f</em><sub><em>k</em></sub>[<em>elem</em><sub><em>i</em></sub>].
+    <li>GroupBy[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>fs</em><sub>1</sub>,<em>fs</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }]] groups into nested associations using <em>fs</em><sub><em>i</em></sub> at level <em>i</em>.
+    <li>GroupBy[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>spec</em>,<em>red</em>] applies the function <em>red</em> to reduce lists of values that are generated.
+    <li>GroupBy[<em>spec</em>] represents an operator form of GroupBy that can be applied to an expression.
+</ul><p><b>Attributes:</b>Protected</p><p><b>Symbol has no options.</b></p>

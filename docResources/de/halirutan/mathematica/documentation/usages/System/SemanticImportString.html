@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/SemanticImportString.html">SemanticImportString</a></h3>
+<ul>
+    <li>SemanticImportString["string"] attempts to import a string semantically to give a Dataset object.
+    <li>SemanticImportString["string",<em>type</em>] attempts to interpret all elements in the string as being of the
+        specified type.
+    <li>SemanticImportString["string",{<em>type</em><sub>1</sub>,<em>type</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] attempts to interpret elements in successive columns as being of the specified types.
+    <li>SemanticImportString["string",
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>col</em><sub>1</sub>-><em>type</em><sub>1</sub>,<em>col</em><sub>2</sub>-><em>type</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ] attempts to interpret elements in the named columns as being of the specified types.
+    <li>SemanticImportString["string",<em>typespec</em>,<em>form</em>] puts the result in the specified form.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

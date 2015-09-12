@@ -22,10 +22,12 @@
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Parsing a string.
@@ -47,11 +49,11 @@ public class StringParselet implements PrefixParselet {
    * @return Information about the success of the parsing.
    */
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker stringMark = parser.mark();
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
+    Marker stringMark = parser.mark();
     boolean parsedQ = true;
     parser.advanceLexer();
-    while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL)) {
+    while (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL) || parser.matchesToken(MathematicaElementTypes.STRING_NAMED_CHARACTER)) {
       parser.advanceLexer();
     }
     if (parser.matchesToken(MathematicaElementTypes.STRING_LITERAL_END)) {

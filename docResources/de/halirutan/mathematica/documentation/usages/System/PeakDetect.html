@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/PeakDetect.html">PeakDetect</a></h3>
+<ul>
+    <li>PeakDetect[<em>data</em>] gives a binary list in which 1s correspond to peak positions in <em>data</em>.
+    <li>PeakDetect[<em>data</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        ] detects peaks that survive Gaussian blurring up to scale
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        .
+    <li>PeakDetect[<em>data</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        ,<em>s</em>] detects peaks with minimum sharpness <em>s</em>.
+    <li>PeakDetect[<em>data</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        ,<em>s</em>,<em>t</em>] detects only peaks with values greater than <em>t</em>.
+    <li>PeakDetect[<em>data</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        ,{<em>s</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        <sub><em>s</em></sub>},{<em>t</em>,
+        <math>
+            <ms>&sigma;</ms>
+        </math>
+        <sub><em>t</em></sub>}] uses different scales for thresholding sharpness and value.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

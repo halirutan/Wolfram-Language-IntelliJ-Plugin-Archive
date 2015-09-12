@@ -40,6 +40,7 @@ import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
+import com.intellij.openapi.diagnostic.SubmittedReportInfo.SubmissionStatus;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.Consumer;
@@ -87,19 +88,26 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     return "Report to halirutan";
   }
 
-  @Override
-  public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
-    return submit(events, this.myDescription, notNullize(ErrorReportConfigurable.getInstance()
-        .ITN_LOGIN, "<anonymous>"), parentComponent);
-  }
+//  @Override
+//  public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
+//    return submit(events, this.myDescription, notNullize(ErrorReportConfigurable.getInstance()
+//        .ITN_LOGIN, "<anonymous>"), parentComponent);
+//  }
+//
+//  @Override
+//  public void submitAsync(IdeaLoggingEvent[] events, String additionalInfo, Component parentComponent,
+//                          Consumer<SubmittedReportInfo> consumer) {
+//
+//    this.myDescription = additionalInfo;
+//    super.submitAsync(events, additionalInfo, parentComponent, consumer);
+//  }
 
   @Override
-  public void submitAsync(IdeaLoggingEvent[] events, String additionalInfo, Component parentComponent,
-                          Consumer<SubmittedReportInfo> consumer) {
-
-    this.myDescription = additionalInfo;
-    super.submitAsync(events, additionalInfo, parentComponent, consumer);
+  public boolean submit(@NotNull final IdeaLoggingEvent[] events, @Nullable final String additionalInfo, @NotNull final Component parentComponent, @NotNull final Consumer<SubmittedReportInfo> consumer) {
+    submit(events, additionalInfo, notNullize(ErrorReportConfigurable.getInstance().ITN_LOGIN, "<anonymous>"), parentComponent);
+    return true;
   }
+
 
   private SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, String description, String user,
                                      Component component) {
@@ -171,7 +179,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       // Syntax error in the regular expression
     }
 
-    SubmittedReportInfo.SubmissionStatus status = NEW_ISSUE;
+    SubmissionStatus status = NEW_ISSUE;
 
     if (resultString == null) {
       return new SubmittedReportInfo(SERVER_ISSUE_URL, "", FAILED);
@@ -375,16 +383,18 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     }
   }
 
+
   private void popupResultInfo(final SubmittedReportInfo reportInfo, final Project project) {
     //noinspection OverlyComplexAnonymousInnerClass
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {
         StringBuilder text = new StringBuilder("<html>");
-        final String url = IdeErrorsDialog.getUrl(reportInfo, false);
-        IdeErrorsDialog.appendSubmissionInformation(reportInfo, text, url);
+
+        final String url = reportInfo.getURL();
+        IdeErrorsDialog.appendSubmissionInformation(reportInfo, text);
         text.append(".");
-        final SubmittedReportInfo.SubmissionStatus status = reportInfo.getStatus();
+        final SubmissionStatus status = reportInfo.getStatus();
         if (status == NEW_ISSUE) {
           text.append("<br/>").append(DiagnosticBundle.message("error.report.gratitude"));
         } else if (status == DUPLICATE) {

@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GeoPath.html">GeoPath</a></h3>
+<ul>
+    <li>GeoPath[{<em>loc</em><sub>1</sub>,<em>loc</em><sub>2</sub>},<em>pathtype</em>] is a GeoGraphics primitive that
+        represents a path of type <em>pathtype</em> between locations <em>loc</em><sub>1</sub> and
+        <em>loc</em><sub>2</sub>.
+    <li>GeoPath[{<em>loc</em><sub>1</sub>,<em>loc</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>pathtype</em>] represents a path formed by joining paths of type <em>pathtype</em> between consecutive
+        locations <em>loc</em><sub><em>i</em></sub>.
+    <li>GeoPath[{<em>loc</em><sub>1</sub>,<em>d</em>,
+        <math>
+            <ms>&alpha;</ms>
+        </math>
+        },<em>pathtype</em>] represents a path moving from location <em>loc</em><sub>1</sub> a distance <em>d</em> with
+        initial bearing
+        <math>
+            <ms>&alpha;</ms>
+        </math>
+        .
+    <li>GeoPath[{{<em>loc</em><sub>11</sub>,<em>loc</em><sub>12</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>loc</em><sub>21</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>pathtype</em>] represents a disjoint collection of paths of type <em>pathtype</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Options: </b>CurveClosed, VertexColors</p>

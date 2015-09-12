@@ -149,7 +149,7 @@ public class GlobalDefinitionCollector {
           arg1.accept(visitor);
           final java.util.Set<Symbol> symbols = visitor.getUnboundSymbols();
           for (Symbol symbol : symbols) {
-            addAssignment(symbol, arg1, visitor.getAssignmentType());
+            addAssignment(symbol, arg1,functionCall.matchesHead("Set") ? SET_ASSIGNMENT : SET_DELAYED_ASSIGNMENT);
           }
         } else if (functionCall.matchesHead("TagSet|TagSetDelayed")) {
           if (arg1 instanceof Symbol) {

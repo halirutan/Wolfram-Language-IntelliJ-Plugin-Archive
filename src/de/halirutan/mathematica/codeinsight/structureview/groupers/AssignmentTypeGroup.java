@@ -66,6 +66,9 @@ public class AssignmentTypeGroup implements Group, CodePlaceProvider, ColoredIte
 
   @Override
   public int getPosition() {
+    if (myType == null) {
+      return 0;
+    }
     return myType.getTypeSortKey();
   }
 

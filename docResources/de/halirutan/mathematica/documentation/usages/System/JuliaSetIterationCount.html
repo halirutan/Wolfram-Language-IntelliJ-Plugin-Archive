@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/JuliaSetIterationCount.html">JuliaSetIterationCount</a></h3>
+<ul>
+    <li>JuliaSetIterationCount[<em>f</em>,<em>z</em>,<em>p</em>] returns the number of iterations, beginning with the
+        complex number <em>z</em>
+        <math>
+            <ms></ms>
+        </math>
+        <em>p</em>, of the function <em>f</em>(<em>z</em>) needed to determine whether <em>p</em> is in the Julia set of
+        <em>f</em>.
+    <li>JuliaSetIterationCount[<em>c</em>,<em>p</em>] returns the number of iterations, beginning with the complex
+        number <em>z</em>
+        <math>
+            <ms></ms>
+        </math>
+        <em>p</em>, of the function <em>f</em>(<em>z</em>)
+        <math>
+            <ms></ms>
+        </math>
+        <em>z</em><sup>2</sup>+<em>c</em> needed to determine whether <em>p</em> is in the Julia set of
+        <em>f</em>(<em>z</em>)
+        <math>
+            <ms></ms>
+        </math>
+        <em>z</em><sup>2</sup>+<em>c</em>.
+    <li>JuliaSetIterationCount[<em>f</em>,<em>z</em>,{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] returns a list of the number of iterations required to determine whether each member of
+        {<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        } is in the Julia set of <em>f</em>.
+    <li>JuliaSetIterationCount[<em>c</em>,{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }] returns a list of the number of iterations required to determine whether each member of
+        {<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        } is in the Julia set of <em>f</em>(<em>z</em>)
+        <math>
+            <ms></ms>
+        </math>
+        <em>z</em><sup>2</sup>+<em>c</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

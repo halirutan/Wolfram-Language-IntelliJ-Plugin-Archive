@@ -1,2 +1,12 @@
 (* Mathematica Test File    *)
-(* Created by IntelliJ IDEA *)
+(* Created by Mathematica Plugin for IntelliJ IDEA *)
+
+BeginTestSection["${NAME}.mt"]
+
+VerificationTest[(* 1 *)
+        1+1
+        ,
+        2
+]
+
+EndTestSection[]

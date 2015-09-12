@@ -23,6 +23,7 @@ package de.halirutan.mathematica.actions;
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
+import com.intellij.ide.actions.CreateFileFromTemplateDialog.Builder;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.project.DumbAware;
@@ -74,11 +75,11 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
   }
 
   @Override
-  protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
-    builder.setTitle(NEW_M_FILE).addKind("Notebook", MathematicaIcons.FILE_ICON, "Notebook");
+  protected void buildDialog(Project project, PsiDirectory directory, Builder builder) {
     builder.setTitle(NEW_M_FILE).addKind("Package", MathematicaIcons.FILE_ICON, "Package");
     builder.setTitle(NEW_M_FILE).addKind("Plain", MathematicaIcons.FILE_ICON, "Plain");
     builder.setTitle(NEW_M_FILE).addKind("Test", MathematicaIcons.FILE_ICON, "Test");
+    builder.setTitle(NEW_M_FILE).addKind("Notebook", MathematicaIcons.FILE_ICON, "Notebook");
   }
 
   @Override
@@ -98,7 +99,7 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
 
   @Override
   protected PsiFile createFile(String name, String templateName, PsiDirectory dir) {
-    final FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+    final FileTemplate template = FileTemplateManager.getInstance(dir.getProject()).getInternalTemplate(templateName);
     String fileName = removeExtension(name);
     return createFileFromTemplate(fileName, template, dir);
   }

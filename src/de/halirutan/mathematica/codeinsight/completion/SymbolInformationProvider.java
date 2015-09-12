@@ -37,9 +37,9 @@ public class SymbolInformationProvider {
 
   private static void initialize() {
 
-    ResourceBundle info = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/completion/symbolInformation");
+    ResourceBundle info = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/completion/symbolInformationV10_0_2");
 
-    ourSymbols = new HashMap<String, SymbolInformation>();
+    ourSymbols = new HashMap<String, SymbolInformation>(6000);
 
     Enumeration<String> names = info.getKeys();
     while (names.hasMoreElements()) {

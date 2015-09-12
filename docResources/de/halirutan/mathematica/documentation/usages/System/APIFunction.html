@@ -1,0 +1,61 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/APIFunction.html">APIFunction</a></h3>
+<ul>
+    <li>APIFunction[{<em>name</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>,<em>name</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>fun</em>] represents an API with parameters <em>name</em><sub><em>i</em></sub> that evaluates the function
+        <em>fun</em> whenever it is called. The function <em>fun</em> is applied to
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>name</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>1</sub>,<em>name</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        , where the <em>val</em><sub><em>i</em></sub> are the settings for the parameters, interpreted as being of types
+        <em>type</em><sub><em>i</em></sub>.
+    <li>APIFunction[{<em>name</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>default</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>fun</em>] takes the value of the parameter <em>name</em><sub><em>i</em></sub> to be
+        <em>default</em><sub><em>i</em></sub> if it is not specified when the API is called.
+    <li>APIFunction[<em>params</em>,<em>fun</em>,<em>fmt</em>] specifies that the result from applying <em>fun</em>
+        should be returned in format <em>fmt</em>.
+    <li>APIFunction[<em>params</em>,<em>fun</em>,{<em>fmt</em>,<em>rform</em>}] specifies that result should be returned
+        as a response of the form <em>rform</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

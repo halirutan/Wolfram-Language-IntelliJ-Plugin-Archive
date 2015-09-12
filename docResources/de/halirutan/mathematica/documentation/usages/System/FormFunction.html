@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FormFunction.html">FormFunction</a></h3>
+<ul>
+    <li>FormFunction[<em>formspec</em>,<em>func</em>] represents an active form that, when submitted, applies
+        <em>func</em> to the values obtained from the form specified by <em>formspec</em>.
+    <li>FormFunction[{<em>name</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>func</em>] represents an active form with fields named <em>name</em><sub><em>i</em></sub> interpreted as
+        types <em>type</em><sub><em>i</em></sub>.
+    <li>FormFunction[{{<em>name</em><sub>1</sub>,<em>label</em><sub>1</sub>}
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>func</em>] uses <em>label</em><sub><em>i</em></sub> as the label for the field named
+        <em>name</em><sub><em>i</em></sub>.
+    <li>FormFunction[{<em>namespec</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>default</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>func</em>] uses <em>default</em><sub><em>i</em></sub> as the default for the field specified by <em>namespec</em><sub><em>i</em></sub>.
+    <li>FormFunction[<em>formspec</em>,<em>func</em>,<em>fmt</em>] specifies that in the cloud the result from applying
+        <em>func</em> should be returned in format <em>fmt</em>.
+    <li>FormFunction[{<em>formspec</em><sub>1</sub>,<em>formspec</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },<em>func</em>,
+        <math>
+            <ms>...</ms>
+        </math>
+        ] represents a multipage form, in which the successive <em>formspec</em><sub><em>i</em></sub> can be functions
+        that are applied to the values obtained so far.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

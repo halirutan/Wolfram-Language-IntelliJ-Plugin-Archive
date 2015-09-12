@@ -44,7 +44,7 @@ public class MathematicaIndentProcessor {
 
 
     if (parent == null ||
-        elementType == COMMENT ||
+        COMMENTS.contains(elementType) ||
         parentType == FILE) {
       return Indent.getNoneIndent();
     }

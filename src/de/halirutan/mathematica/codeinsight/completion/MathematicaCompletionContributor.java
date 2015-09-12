@@ -37,6 +37,7 @@ public class MathematicaCompletionContributor extends CompletionContributor {
     new BuiltinFunctionCompletionProvider().addTo(this);
     new SmartContextAwareCompletion().addTo(this);
     new VariableNameCompletion().addTo(this);
+    new CommentCompletionProvider().addTo(this);
   }
 
   @Override

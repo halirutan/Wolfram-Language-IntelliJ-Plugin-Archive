@@ -13,9 +13,26 @@
 (* :Discussion:                *)
 
 BeginPackage["FunctionInformation`"]
-(* Exported symbols added here with SymbolName::usage *)
+
+CreateCompletionInformation::usage = "CreateCompletionInformation[] returns a list of strings where each element is an \
+entry of the .properties file that is used to enable autocompletion in idea.";
 
 Begin["`Private`"] (* Begin Private Context *)
+
+(* For good code completion we need an ordering of all possible completions. This is done with the *)
+(* function frequency list that comes with Mathematica nowadays. I just assign numbers according to the *)
+(* place in this list. The higher the number, the more important and the more like is the completion result. *)
+$functionFrequency = With[{file = First[FileNames["all_top_level.m", {$InstallationDirectory}, Infinity]]},
+  Dispatch[Append[
+    MapIndexed[Rule[#1, ToString @@ #2]&, Reverse[Get[file]]],
+    _ -> "0"
+  ]]
+];
+
+(* Call patterns, attributes and options of functions are available too and don't need to be extracted manually *)
+$functionInformation = With[{file = First[FileNames["FunctionInformation.m", {$InstallationDirectory}, Infinity]]},
+  Rule @@@ Get[file]
+];
 
 makeContextNames[context_String] :=
     Append[StringReplace[
@@ -52,11 +69,6 @@ getAttributes[str_String] :=
             Riffle[ToString /@ Attributes[Unevaluated[expr]], " "] //
                 StringJoin, HoldAll] @@ ToHeldExpression[str], "{" | "}"]
 
-f = FileNameJoin[{$InstallationDirectory,
-  "/SystemFiles/Kernel/TextResources/English/FunctionInformation.m"}
-];
-info1 = Rule @@@ Import[f];
-
 isFunction[str_String] :=
     With[{usg =
         ToString[
@@ -79,16 +91,25 @@ getOptions[str_String] :=
           ToHeldExpression[str], "{" | "}" | ","]
 
 
-createInformation[name_String] := Module[{info},
-  info = Cases[
-    Context[name] /.
-        info1, {ToHeldExpression[name] /.
-        Hold[expr_] :> SymbolName[Unevaluated[expr]], __}];
-  If[info === {}, info = "",
-    info = ";" <> Riffle[ToString /@ First[info], ";"]
-  ];
-  isFunction[name] <> ";" <> getAttributes[name] <> StringJoin[info]
-]
+createInformation[name_String] := Module[{importance, info, context},
+  importance = name /. $functionFrequency;
+  Check[
+    context = Context[name];
+    info = Cases[
+      context /.
+          $functionInformation, {ToHeldExpression[name] /.
+          Hold[expr_] :> SymbolName[Unevaluated[expr]], __}];
+    If[info === {}, info = "",
+      info = ";" <> Riffle[ToString /@ First[info], ";"]
+    ];
+    name <> "=" <> importance <> ";" <> getAttributes[name] <> StringJoin[info] <> "\n",
+    ""
+  ]
+];
+
+CreateCompletionInformation[] := createInformation /@ names;
+
+
 
 End[] (* End Private Context *)
 

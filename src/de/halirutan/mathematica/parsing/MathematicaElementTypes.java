@@ -76,19 +76,24 @@ public interface MathematicaElementTypes {
       WHITE_SPACE, LINE_BREAK
   );
   IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
-  IElementType COMMENT = new MathematicaElementType("COMMENT");
+  IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
+  IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
+  IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
+  IElementType COMMENT_SECTION = new MathematicaElementType("COMMENT_SECTION");
+  IElementType COMMENT_ANNOTATION = new MathematicaElementType("COMMENT_ANNOTATION");
   TokenSet COMMENTS = TokenSet.create(
-      COMMENT
+      COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
   );
   @SuppressWarnings("UnusedDeclaration")
   TokenSet WHITE_SPACE_OR_COMMENTS = TokenSet.create(
-      WHITE_SPACE, LINE_BREAK, COMMENT
+      WHITE_SPACE, LINE_BREAK, COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
   );
   IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
+  IElementType STRING_NAMED_CHARACTER = new MathematicaElementType("STRING_NAMED_CHARACTER");
   IElementType STRING_LITERAL_BEGIN = new MathematicaElementType("STRING_LITERAL_BEGIN");
   IElementType STRING_LITERAL_END = new MathematicaElementType("STRING_LITERAL_END");
   TokenSet STRING_LITERALS = TokenSet.create(
-      STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN
+      STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN, STRING_NAMED_CHARACTER
   );
   IElementType IDENTIFIER = new MathematicaElementType("IDENTIFIER");
   IElementType ASSOCIATION_SLOT = new MathematicaElementType("ASSOCIATION_SLOT");
@@ -206,6 +211,26 @@ public interface MathematicaElementTypes {
       TAG_SET, TIMES, TIMES_BY,
       UNEQUAL, UNSAME_Q, UNSET, UP_SET, UP_SET_DELAYED, PREFIX_CALL, STRING_JOIN, STRING_LITERAL_EXPRESSION
   );
+
+  TokenSet INDENTABLE_OPERATORS = TokenSet.create(
+      ADD_TO, ALTERNATIVE, AND, APPLY, APPLY1,
+      COLON, CONDITION,
+      DECREMENT, DIVIDE, DIVIDE_BY, EQUAL,
+      GET, GREATER, GREATER_EQUAL,
+      INCREMENT, INFIX_CALL,
+      LESS, LESS_EQUAL,
+      MAP, MINUS,
+      NON_COMMUTATIVE_MULTIPLY,
+      DEFAULT, OR,
+      PLUS, POSTFIX, PREFIX, PUT, PUT_APPEND,
+      QUESTION_MARK,
+      REPLACE_ALL, REPLACE_REPEATED, RULE, RULE_DELAYED,
+      SAME_Q, SET, SET_DELAYED,
+      TAG_SET, TIMES, TIMES_BY,
+      UNEQUAL, UNSAME_Q, UNSET, UP_SET, UP_SET_DELAYED, PREFIX_CALL, STRING_JOIN
+  );
+
+
   IElementType GROUP_EXPRESSION = new MathematicaElementType("GROUP_EXPRESSION");
 
 

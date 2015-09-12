@@ -21,18 +21,31 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
 
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getFirstListElement;
+import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
+
 /**
- * @author patrick (7/8/14)
+ *
+ * @author halirutan
  */
 public class ImplicitTimesThroughLinebreak extends AbstractInspection {
 
@@ -58,13 +71,73 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
 
   @NotNull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    return new MathematicaVisitor() {
-      @Override
-      public void visitCompoundExpression(final CompoundExpression compoundExpression) {
-        // todo: Implement locic that checks whether implicit multiplication could be unwanted.
+  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
+    if(session.getFile().getFileType() instanceof MathematicaFileType) {
+      return new ImplicitTimesVisitor(holder);
+    } else return PsiElementVisitor.EMPTY_VISITOR;
+  }
+
+
+
+  private static class ImplicitTimesVisitor extends MathematicaVisitor {
+
+
+    private final ProblemsHolder myHolder;
+
+    public ImplicitTimesVisitor(final ProblemsHolder holder) {
+      this.myHolder = holder;
+    }
+
+    private void registerProblem(final PsiElement element) {
+      myHolder.registerProblem(
+          element,
+          TextRange.from(element.getTextLength()-1,1),
+          MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+    }
+
+    @Override
+    public void visitFunctionCall(final FunctionCall functionCall) {
+      final PsiElement head = functionCall.getFirstChild();
+      if (head == null) {
+        return;
       }
-    };
+      PsiElement elm = getNextSiblingSkippingWhitespace(head);
+      PsiElement next;
+      int argsWithoutComma = 0;
+      while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
+          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACKET) {
+        if (next instanceof PsiErrorElement) continue;
+        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          argsWithoutComma = 0;
+        } else {
+          argsWithoutComma++;
+          if (argsWithoutComma > 1) {
+            registerProblem(elm);
+          }
+        }
+        elm = next;
+      }
+    }
+
+    @Override
+    public void visitList(final List list) {
+      PsiElement elm = getFirstListElement(list);
+      PsiElement next;
+      int argsWithoutComma = 1;
+      while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
+          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACE) {
+        if (next instanceof PsiErrorElement) continue;
+        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          argsWithoutComma = 0;
+        } else {
+          argsWithoutComma++;
+          if (argsWithoutComma > 1) {
+            registerProblem(elm);
+          }
+        }
+        elm = next;
+      }
+    }
   }
 }
 

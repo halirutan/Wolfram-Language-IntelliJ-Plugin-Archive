@@ -33,7 +33,7 @@ public class MathematicaFileTypeFactory extends FileTypeFactory {
 
   @Override
   public void createFileTypes(@NotNull FileTypeConsumer consumer) {
-    consumer.consume(MathematicaFileType.INSTANCE, "m;mb;mt;nb");
+    consumer.consume(MathematicaFileType.INSTANCE, "m;mb;mt;nb;wl;wlt");
   }
 
 

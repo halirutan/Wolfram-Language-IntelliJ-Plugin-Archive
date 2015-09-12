@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/MeshRegion.html">MeshRegion</a></h3>
+<ul>
+    <li>MeshRegion[{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        },{<em>mcell</em><sub>1</sub>[{<em>i</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }],<em>mcell</em><sub>2</sub>[{<em>j</em><sub>1</sub>,
+        <math>
+            <ms>...</ms>
+        </math>
+        }],
+        <math>
+            <ms>...</ms>
+        </math>
+        }] yields a mesh with cells <em>mcell</em><sub><em>j</em></sub>, where coordinates given as integer <em>i</em>
+        are taken to be <em>p</em><sub><em>i</em></sub>.
+    <li>MeshRegion[
+        <math>
+            <ms>...</ms>
+        </math>
+        ,{
+        <math>
+            <ms>...</ms>
+        </math>
+        ,<em>w</em><sub><em>i</em></sub>[<em>mcell</em><sub><em>i</em></sub>[
+        <math>
+            <ms>...</ms>
+        </math>
+        ]],
+        <math>
+            <ms>...</ms>
+        </math>
+        }] yields a mesh with cell properties defined by the symbolic wrapper <em>w</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b>Protected</p><p><b>Options: </b>MeshCellLabel, MeshCellMarker, MeshCellStyle, Method,
+    Properties</p>

@@ -1,22 +1,22 @@
-(* Mathematica Package         *)
-(* Created by IntelliJ IDEA    *)
+(* Mathematica Package *)
+(* Created by Mathematica Plugin for IntelliJ IDEA *)
 
-(* :Title: ${NAME}     *)
-(* :Context: ${NAME}`  *)
-(* :Author: ${USER}            *)
-(* :Date: ${DATE}              *)
+(* :Title: ${NAME} *)
+(* :Context: ${NAME}` *)
+(* :Author: ${USER} *)
+(* :Date: ${YEAR}-${MONTH}-${DAY} *)
 
-(* :Package Version: 1.0       *)
-(* :Mathematica Version:       *)
+(* :Package Version: 0.1 *)
+(* :Mathematica Version: *)
 (* :Copyright: (c) ${YEAR} ${USER} *)
-(* :Keywords:                  *)
-(* :Discussion:                *)
+(* :Keywords: *)
+(* :Discussion: *)
 
 BeginPackage["${NAME}`"]
-(* Exported symbols added here with SymbolName::usage *)  
+(* Exported symbols added here with SymbolName::usage *)
 
-Begin["`Private`"] (* Begin Private Context *) 
+Begin["`Private`"]
 
-End[] (* End Private Context *)
+End[] (* `Private` *)
 
 EndPackage[]
