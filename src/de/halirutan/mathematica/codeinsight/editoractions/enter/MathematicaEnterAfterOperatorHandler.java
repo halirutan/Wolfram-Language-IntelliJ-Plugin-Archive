@@ -70,7 +70,8 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
 
     final int offset = caretOffset.get();
     final int lineNumber = document.getLineNumber(offset);
-    final int lineStartOffset = document.getLineStartOffset(lineNumber);
+    final int lineStartOffset1 = document.getLineStartOffset(lineNumber);
+    final int lineStartOffset = lineStartOffset1;
     final int prevLineStartOffset = lineNumber > 0 ? document.getLineStartOffset(lineNumber - 1) : lineStartOffset;
 
     if (project == null || offset <= 0) {
@@ -85,9 +86,9 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
       final CodeStyleSettings currentSettings = CodeStyleSettingsManager.getInstance(project).getCurrentSettings();
       final int contIndentSize = currentSettings.getIndentOptionsByFile(file).CONTINUATION_INDENT_SIZE;
 
-      final int indentInPrevLine = EditorActionUtil.findFirstNonSpaceColumnOnTheLine(editor, lineNumber);
+      final int indentInPrevLine = EditorActionUtil.findFirstNonSpaceOffsetOnTheLine(document, lineNumber);
 
-      final String newIndent = StringUtil.repeatSymbol(' ', contIndentSize + Math.max(0,indentInPrevLine));
+      final String newIndent = StringUtil.repeatSymbol(' ', contIndentSize + Math.max(0,indentInPrevLine- lineStartOffset1));
       EditorModificationUtil.insertStringAtCaret(editor, "\n" + newIndent);
       PsiDocumentManager.getInstance(project).commitDocument(document);
       return Result.Stop;
