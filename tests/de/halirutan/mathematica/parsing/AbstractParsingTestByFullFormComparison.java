@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2015 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,15 +26,22 @@ import de.halirutan.mathematica.MathematicaTestUtils;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition;
 
 /**
- * @author patrick (8/16/14)
+ * @author patrick (12.09.15)
  */
-public class MathematicaParsingTest extends ParsingTestCase {
-  public MathematicaParsingTest() {
+public abstract class AbstractParsingTestByFullFormComparison extends ParsingTestCase {
+
+  public AbstractParsingTestByFullFormComparison() {
     super("parsing", "m", new MathematicaParserDefinition());
   }
 
-  public void testParsingTestData() throws Exception {
-    doTest(true);
+  @Override
+  protected String getTestDataPath() {
+    return MathematicaTestUtils.TEST_PATH;
+  }
+
+  @Override
+  protected boolean includeRanges() {
+    return true;
   }
 
 }
