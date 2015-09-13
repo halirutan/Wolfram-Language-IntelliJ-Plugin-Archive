@@ -28,10 +28,7 @@ import de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition;
 /**
  * @author patrick (8/16/14)
  */
-public class MathematicaParsingTest extends ParsingTestCase {
-  public MathematicaParsingTest() {
-    super("parsing", "m", new MathematicaParserDefinition());
-  }
+public class MathematicaParsingTest extends AbstractParsingTestByFullFormComparison {
 
   public void testParsingTestData() throws Exception {
     doTest(true);
