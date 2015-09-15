@@ -2,7 +2,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
   <idea-version since-build="135.1230"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
@@ -44,6 +44,7 @@
       <i>New features and bugfixes:</i>
       <br/>
       <ul>
+        <li>Fixed null pointer exception. <a href="http://halirutan.myjetbrains.com/youtrack/issue/MMAP-75">(MMAP-75)</a></li>
         <li>Fixed exception when you press Enter near the end of a file and you have folded many regions.</li>
         <li>Fixed issue that introduced an empty line when Enter is pressed in a function call</li>
         <li>Implemented a feature for expand/shrink selection so that all arguments of a function or list can be selected without the braces</li>
