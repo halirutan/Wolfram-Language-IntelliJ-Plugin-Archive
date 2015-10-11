@@ -37,6 +37,7 @@ import de.halirutan.mathematica.parsing.psi.impl.files.GetImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutAppendImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutImpl;
 import de.halirutan.mathematica.parsing.psi.impl.function.*;
+import de.halirutan.mathematica.parsing.psi.impl.graph.UndirectedEdgeImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.AssociationImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.ListImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.PartImpl;
@@ -145,6 +146,7 @@ public interface MathematicaElementTypes {
   IElementType UNEQUAL = new MathematicaElementType("UNEQUAL");
   IElementType LESS_EQUAL = new MathematicaElementType("LESS_EQUAL");
   IElementType GREATER_EQUAL = new MathematicaElementType("GREATER_EQUAL");
+  IElementType UNDIRECTED_EDGE = new MathematicaElementType("UNDIRECTED_EDGE");
   IElementType LESS = new MathematicaElementType("LESS");
   IElementType GREATER = new MathematicaElementType("GREATER");
   IElementType SET = new MathematicaElementType("SET");
@@ -314,6 +316,7 @@ public interface MathematicaElementTypes {
   IElementType PUT_EXPRESSION = new MathematicaElementType("PUT_EXPRESSION");
   IElementType PUT_APPEND_EXPRESSION = new MathematicaElementType("PUT_APPEND_EXPRESSION");
   IElementType COMPOUND_EXPRESSION_EXPRESSION = new MathematicaElementType("COMPOUND_EXPRESSION_EXPRESSION");
+  IElementType UNDIRECTED_EDGE_EXPRESSION = new MathematicaElementType("UNDIRECTED_EDGE_EXPRESSION");
   IElementType FAILBACK = new MathematicaElementType("FAILBACK");
 
   class Factory {
@@ -422,6 +425,9 @@ public interface MathematicaElementTypes {
       if (type.equals(STRING_EXPRESSION_EXPRESSION)) return new StringExpressionImpl(node);
       if (type.equals(STRING_JOIN_EXPRESSION)) return new StringJoinImpl(node);
       if (type.equals(MESSAGE_NAME_EXPRESSION)) return new MessageNameImpl(node);
+
+      // Edges
+      if (type.equals(UNDIRECTED_EDGE_EXPRESSION)) return new UndirectedEdgeImpl(node);
 
       if (type.equals(COMPOUND_EXPRESSION_EXPRESSION)) return new CompoundExpressionImpl(node);
 

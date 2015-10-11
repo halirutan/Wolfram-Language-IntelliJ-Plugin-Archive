@@ -119,6 +119,8 @@ public class ParseletProvider {
     register(MathematicaElementTypes.SPAN, MathematicaElementTypes.SPAN_EXPRESSION, new SpanParselet(38)); // Span(;;)
     registerPrefixExplicitly(MathematicaElementTypes.SPAN, MathematicaElementTypes.SPAN_EXPRESSION, new PrefixSpanParselet(38)); // Span(;;)
 
+    infixLeft(MathematicaElementTypes.UNDIRECTED_EDGE, MathematicaElementTypes.UNDIRECTED_EDGE_EXPRESSION, 37); // UndirectedEdge(<->)
+
     infixLeft(MathematicaElementTypes.EQUAL, MathematicaElementTypes.EQUAL_EXPRESSION, 36); // Equal(==)
     infixLeft(MathematicaElementTypes.UNEQUAL, MathematicaElementTypes.UNEQUAL_EXPRESSION, 36); // Unequal(!=)
     infixLeft(MathematicaElementTypes.GREATER, MathematicaElementTypes.GREATER_EXPRESSION, 36); // Greater(>)

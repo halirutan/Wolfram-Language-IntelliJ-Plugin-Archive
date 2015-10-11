@@ -30,7 +30,7 @@ import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,14 +51,15 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
   private boolean myIsUpToDate;
-  private LocalizationConstruct.ConstructType myLocalization;
+  private ConstructType myLocalization;
   private Symbol myDefinitionElement;
   private PsiElement myLocalizationElement;
 
   public SymbolImpl(@NotNull ASTNode node) {
     super(node);
-    myLocalization = LocalizationConstruct.ConstructType.NULL;
+    myLocalization = ConstructType.NULL;
     myDefinitionElement = null;
+    myLocalizationElement = null;
     myIsUpToDate = false;
   }
 
@@ -76,13 +77,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public String getName() {
-//    return MathematicaPsiUtilities.getSymbolName(this);
     return getText();
   }
 
   @Override
   public String getMathematicaContext() {
-//    String myName = MathematicaPsiUtilities.getSymbolName(this);
     String myName = getName();
     String context = "System`";
     if (myName != null) {
@@ -95,7 +94,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public String getSymbolName() {
-//    String myName = MathematicaPsiUtilities.getSymbolName(this);
     String myName = getName();
     if (myName == null) return "";
     if (myName.lastIndexOf('`') == -1) {
@@ -108,7 +106,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Nullable
   @Override
   public PsiElement getNameIdentifier() {
-//    return this.getNode().getPsi();
     return this;
   }
 
@@ -128,7 +125,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     }
     myIsUpToDate = false;
     myLocalizationElement = null;
-    myLocalization = LocalizationConstruct.ConstructType.NULL;
+    myLocalization = ConstructType.NULL;
   }
 
   public boolean cachedResolve() {
@@ -142,15 +139,15 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     return null;
   }
 
-  public LocalizationConstruct.ConstructType getLocalizationConstruct() {
+  public ConstructType getLocalizationConstruct() {
     if (myIsUpToDate && myLocalization != null) {
       return myLocalization;
     }
-    return LocalizationConstruct.ConstructType.NULL;
+    return ConstructType.NULL;
   }
 
   @Override
-  public void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement) {
+  public void setReferringElement(Symbol referringSymbol, ConstructType type, PsiElement localizationElement) {
     myDefinitionElement = referringSymbol;
     referringSymbol.addElementReferencingToMe(this);
     myLocalizationElement = localizationElement;

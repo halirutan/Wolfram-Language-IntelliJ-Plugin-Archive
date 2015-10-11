@@ -27,6 +27,7 @@ import de.halirutan.mathematica.parsing.psi.api.arithmetic.ArithmeticOperation;
 import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
+import de.halirutan.mathematica.parsing.psi.api.graph.UndirectedEdge;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceAll;
@@ -166,5 +167,9 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitSlot(Slot slot) {
     visitElement(slot);
+  }
+
+  public void visitUndirectedEdge(final UndirectedEdge undirectedEdge) {
+    visitElement(undirectedEdge);
   }
 }

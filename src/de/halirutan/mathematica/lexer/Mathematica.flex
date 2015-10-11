@@ -124,6 +124,7 @@ Out = "%"+
 	"!="				{ return MathematicaElementTypes.UNEQUAL; }
 	"<="				{ return MathematicaElementTypes.LESS_EQUAL; }
 	">="				{ return MathematicaElementTypes.GREATER_EQUAL; }
+	"<->"				{ return MathematicaElementTypes.UNDIRECTED_EDGE; }
 	"<"					{ return MathematicaElementTypes.LESS; }
 	">"					{ return MathematicaElementTypes.GREATER; }
 	"+="				{ return MathematicaElementTypes.ADD_TO; }
@@ -142,13 +143,13 @@ Out = "%"+
 
 
 
-    "<>"				{ return MathematicaElementTypes.STRING_JOIN; }
-    "~~"				{ return MathematicaElementTypes.STRING_EXPRESSION; }
-    "~"					{ return MathematicaElementTypes.INFIX_CALL; }
+  "<>"				{ return MathematicaElementTypes.STRING_JOIN; }
+  "~~"				{ return MathematicaElementTypes.STRING_EXPRESSION; }
+	"~"					{ return MathematicaElementTypes.INFIX_CALL; }
 
-    "`"					{ return MathematicaElementTypes.BACK_TICK; }
+	"`"					{ return MathematicaElementTypes.BACK_TICK; }
 
-    ","					{ return MathematicaElementTypes.COMMA; }
+	","					{ return MathematicaElementTypes.COMMA; }
 	"..."				{ return MathematicaElementTypes.REPEATED_NULL; }
 // The next two lines need explanation: The problem is that .3 is short for 0.3 in Mathematica. Now, x=.3 should
 // be parsed as x = 0.3 and not as x=. 3
