@@ -36,6 +36,14 @@ import org.jetbrains.annotations.NotNull;
 import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
 
 /**
+ *
+ * On file-scope it is not necessary to end every expression with a ;
+ * It is common practise for package developers to leave those semicolons out but regarding style issue, I see this
+ * as inconsistent (for instance because Get will only return the result of the last expression which is exactly
+ * what a CompoundExpression is for).
+ *
+ * This inspection will mark missing semicolons on file scope
+ *
  * @author patrick (7/8/14)
  */
 public class ConsistentCompoundExpressionInFile extends AbstractInspection {
