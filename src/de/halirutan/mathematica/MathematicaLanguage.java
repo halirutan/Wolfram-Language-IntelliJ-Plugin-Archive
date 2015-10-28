@@ -22,6 +22,7 @@
 package de.halirutan.mathematica;
 
 import com.intellij.lang.Language;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/4/13)
@@ -34,8 +35,14 @@ public class MathematicaLanguage extends Language {
     super(Mathematica.NAME);
   }
 
+  @NotNull
   @Override
   public String getDisplayName() {
     return "Mathematica";
+  }
+
+  @Override
+  public boolean isCaseSensitive() {
+    return true;
   }
 }
