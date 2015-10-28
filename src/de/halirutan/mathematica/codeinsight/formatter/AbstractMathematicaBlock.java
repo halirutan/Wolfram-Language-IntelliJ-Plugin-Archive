@@ -35,6 +35,7 @@ import de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeSt
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.ASSOCIATION_EXPRESSION;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.FUNCTION_CALL_EXPRESSION;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.LIST_EXPRESSION;
 
@@ -86,6 +87,8 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock implements 
       return new MathematicaFunctionBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
     } else if (elementType == LIST_EXPRESSION) {
       return new MathematicaListBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
+    }else if (elementType == ASSOCIATION_EXPRESSION) {
+      return new MathematicaAssociationBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
     } else {
       return new MathematicaBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);
     }
