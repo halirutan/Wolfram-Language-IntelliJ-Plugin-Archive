@@ -35,7 +35,7 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.Slot;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
 import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;

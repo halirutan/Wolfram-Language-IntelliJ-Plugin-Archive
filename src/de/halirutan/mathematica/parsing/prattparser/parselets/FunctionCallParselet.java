@@ -29,7 +29,8 @@ import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
 
 /**
- * Parses functions calls like f[x] and array element access like l[[i]] since both start with an opening bracket.
+ * Parses functions calls like f[x] or slot expressions like #["name"] or #[name] (used often with Associations)
+ * and array element access like l[[i]] since they all start with an opening bracket.
  *
  * @author patrick (3/27/13)
  */
@@ -50,7 +51,10 @@ public class FunctionCallParselet implements InfixParselet {
 
     PsiBuilder.Marker mainMark = left.getMark().precede();
 
-    // parse the start. Either a Part expression like list[[ or a function call f[
+    // parse the start. Could be one of the following:
+    //   1. a Part expression like list[[
+    //   2. a function call f[
+    //   3. a slot expression like #[ which could be a function call or an Association lookup
     boolean isPartExpr = false;
     boolean isAssociationSlot = false;
     if (parser.matchesToken(MathematicaElementTypes.LEFT_BRACKET, MathematicaElementTypes.LEFT_BRACKET)) {
@@ -87,8 +91,8 @@ public class FunctionCallParselet implements InfixParselet {
         return MathematicaParser.result(mainMark, MathematicaElementTypes.PART_EXPRESSION, false);
       } else if (isAssociationSlot) {
         parser.advanceLexer();
-        mainMark.done(MathematicaElementTypes.SLOT);
-        return MathematicaParser.result(mainMark, MathematicaElementTypes.SLOT, true);
+        mainMark.done(MathematicaElementTypes.SLOT_EXPRESSION);
+        return MathematicaParser.result(mainMark, MathematicaElementTypes.SLOT_EXPRESSION, true);
       } else {
         parser.advanceLexer();
         mainMark.done(MathematicaElementTypes.FUNCTION_CALL_EXPRESSION);
