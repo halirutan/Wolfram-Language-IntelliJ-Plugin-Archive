@@ -52,7 +52,7 @@ ScientificNumber = {PrecisionNumber} "\*^"(-?){Digits}
 BaseScientificNumber = {BasePrecisionNumber} "\*^"(-?){Digits}
 
 Slot = "#" [0-9]*
-AssociationSlot = "#" {Identifier} | "#\"" {Identifier} "\""
+AssociationSlot = "#" {Identifier} | "#\"" {Identifier} "\"" | "#\\[" {Identifier} "\\]"
 SlotSequence = "##" [0-9]*
 
 Out = "%"+
