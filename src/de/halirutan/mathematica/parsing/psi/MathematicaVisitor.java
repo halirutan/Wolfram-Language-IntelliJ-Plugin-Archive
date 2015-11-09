@@ -34,6 +34,8 @@ import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceAll;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceRepeated;
 import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
+import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
 
 
 /**
@@ -167,6 +169,10 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitSlot(Slot slot) {
     visitElement(slot);
+  }
+
+  public void visitSlotExpression(SlotExpression slotExpr) {
+    visitElement(slotExpr);
   }
 
   public void visitUndirectedEdge(final UndirectedEdge undirectedEdge) {

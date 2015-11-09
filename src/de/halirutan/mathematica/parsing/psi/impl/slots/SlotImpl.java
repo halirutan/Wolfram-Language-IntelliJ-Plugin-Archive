@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2015 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,21 +19,18 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.impl;
+package de.halirutan.mathematica.parsing.psi.impl.slots;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Slot;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
+import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
- * Mathematica are not only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the
- * functions you call like <code>Sqrt[2]</code> are expression having a symbol as head (the <code>Sqrt</code>).
- * <p/>
- * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class
- * provides methods to separate the parts.
+ * Implementation of Slots (#) and SlotSequences (##). Association style slots (#name) and
+ * function call like uses (#["name"]) are implemented by SlotExpressionIml.
  *
  * @author patrick (3/28/13)
  */
