@@ -23,8 +23,6 @@ package de.halirutan.mathematica.codeinsight.inspections.codestyle;
 
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.BatchQuickFix;
-import com.intellij.codeInspection.CommonProblemDescriptor;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
@@ -34,9 +32,9 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
+ * Provides a {@link com.intellij.codeInspection.LocalQuickFix} for inserting missing semicolons on file scope.
+ *
  * @author patrick (10.07.15)
  */
 public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase implements HighPriorityAction {

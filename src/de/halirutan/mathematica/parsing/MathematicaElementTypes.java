@@ -37,6 +37,7 @@ import de.halirutan.mathematica.parsing.psi.impl.files.GetImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutAppendImpl;
 import de.halirutan.mathematica.parsing.psi.impl.files.PutImpl;
 import de.halirutan.mathematica.parsing.psi.impl.function.*;
+import de.halirutan.mathematica.parsing.psi.impl.graph.UndirectedEdgeImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.AssociationImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.ListImpl;
 import de.halirutan.mathematica.parsing.psi.impl.lists.PartImpl;
@@ -49,6 +50,8 @@ import de.halirutan.mathematica.parsing.psi.impl.rules.ReplaceAllImpl;
 import de.halirutan.mathematica.parsing.psi.impl.rules.ReplaceRepeatedImpl;
 import de.halirutan.mathematica.parsing.psi.impl.rules.RuleDelayedImpl;
 import de.halirutan.mathematica.parsing.psi.impl.rules.RuleImpl;
+import de.halirutan.mathematica.parsing.psi.impl.slots.SlotExpressionImpl;
+import de.halirutan.mathematica.parsing.psi.impl.slots.SlotImpl;
 import de.halirutan.mathematica.parsing.psi.impl.string.StringExpressionImpl;
 import de.halirutan.mathematica.parsing.psi.impl.string.StringImpl;
 import de.halirutan.mathematica.parsing.psi.impl.string.StringJoinImpl;
@@ -96,7 +99,6 @@ public interface MathematicaElementTypes {
       STRING_LITERAL, STRING_LITERAL_END, STRING_LITERAL_BEGIN, STRING_NAMED_CHARACTER
   );
   IElementType IDENTIFIER = new MathematicaElementType("IDENTIFIER");
-  IElementType ASSOCIATION_SLOT = new MathematicaElementType("ASSOCIATION_SLOT");
   IElementType STRINGIFIED_IDENTIFIER = new MathematicaElementType("STRINGIFIED_IDENTIFIER");
   IElementType NUMBER = new MathematicaElementType("NUMBER");
   TokenSet LITERALS = TokenSet.create(
@@ -145,6 +147,7 @@ public interface MathematicaElementTypes {
   IElementType UNEQUAL = new MathematicaElementType("UNEQUAL");
   IElementType LESS_EQUAL = new MathematicaElementType("LESS_EQUAL");
   IElementType GREATER_EQUAL = new MathematicaElementType("GREATER_EQUAL");
+  IElementType UNDIRECTED_EDGE = new MathematicaElementType("UNDIRECTED_EDGE");
   IElementType LESS = new MathematicaElementType("LESS");
   IElementType GREATER = new MathematicaElementType("GREATER");
   IElementType SET = new MathematicaElementType("SET");
@@ -181,9 +184,8 @@ public interface MathematicaElementTypes {
   IElementType QUESTION_MARK = new MathematicaElementType("QUESTION_MARK");
   IElementType SLOT = new MathematicaElementType("SLOT");
   IElementType SLOT_SEQUENCE = new MathematicaElementType("SLOT_SEQUENCE");
-  TokenSet SLOTS = TokenSet.create(
-      SLOT, SLOT_SEQUENCE, ASSOCIATION_SLOT
-  );
+  IElementType ASSOCIATION_SLOT = new MathematicaElementType("ASSOCIATION_SLOT");
+  TokenSet SLOTS = TokenSet.create(SLOT, SLOT_SEQUENCE);
   IElementType FUNCTION = new MathematicaElementType("FUNCTION");
   IElementType BACK_TICK = new MathematicaElementType("BACK_TICK");
   IElementType INFIX_CALL = new MathematicaElementType("INFIX_CALL");
@@ -237,6 +239,7 @@ public interface MathematicaElementTypes {
   // THIS SECTION IS AUTOMATICALLY CREATED WITH MATHEMATICA
   IElementType LIST_EXPRESSION = new MathematicaElementType("LIST_EXPRESSION");
   IElementType ASSOCIATION_EXPRESSION = new MathematicaElementType("ASSOCIATION_EXPRESSION");
+  IElementType SLOT_EXPRESSION = new MathematicaElementType("SLOT_EXPRESSION");
   IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");
   IElementType SYMBOL_EXPRESSION = new MathematicaElementType("SYMBOL_EXPRESSION");
   IElementType STRINGIFIED_SYMBOL_EXPRESSION = new MathematicaElementType("STRINGIFIED_SYMBOL_EXPRESSION");
@@ -314,6 +317,7 @@ public interface MathematicaElementTypes {
   IElementType PUT_EXPRESSION = new MathematicaElementType("PUT_EXPRESSION");
   IElementType PUT_APPEND_EXPRESSION = new MathematicaElementType("PUT_APPEND_EXPRESSION");
   IElementType COMPOUND_EXPRESSION_EXPRESSION = new MathematicaElementType("COMPOUND_EXPRESSION_EXPRESSION");
+  IElementType UNDIRECTED_EDGE_EXPRESSION = new MathematicaElementType("UNDIRECTED_EDGE_EXPRESSION");
   IElementType FAILBACK = new MathematicaElementType("FAILBACK");
 
   class Factory {
@@ -328,6 +332,7 @@ public interface MathematicaElementTypes {
       if (type.equals(SYMBOL_EXPRESSION)) return new SymbolImpl(node);
       if (type.equals(STRINGIFIED_SYMBOL_EXPRESSION)) return new StringifiedSymbolImpl(node);
       if (SLOTS.contains(type)) return new SlotImpl(node);
+      if (type.equals(SLOT_EXPRESSION) || type.equals(ASSOCIATION_SLOT)) return new SlotExpressionImpl(node);
       if (type.equals(NUMBER_EXPRESSION)) return new NumberImpl(node);
       if (type.equals(STRING_LITERAL_EXPRESSION)) return new StringImpl(node);
 
@@ -422,6 +427,9 @@ public interface MathematicaElementTypes {
       if (type.equals(STRING_EXPRESSION_EXPRESSION)) return new StringExpressionImpl(node);
       if (type.equals(STRING_JOIN_EXPRESSION)) return new StringJoinImpl(node);
       if (type.equals(MESSAGE_NAME_EXPRESSION)) return new MessageNameImpl(node);
+
+      // Edges
+      if (type.equals(UNDIRECTED_EDGE_EXPRESSION)) return new UndirectedEdgeImpl(node);
 
       if (type.equals(COMPOUND_EXPRESSION_EXPRESSION)) return new CompoundExpressionImpl(node);
 

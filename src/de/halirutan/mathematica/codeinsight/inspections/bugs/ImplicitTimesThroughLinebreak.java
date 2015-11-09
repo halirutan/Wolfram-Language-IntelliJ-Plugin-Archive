@@ -27,12 +27,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
@@ -44,6 +42,10 @@ import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.
 import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
 
 /**
+ * Provides warnings when commas or semicolons are missing. Unlike in other languages, Mathematica regards whitespaces
+ * between expressions as multiplication to make a more mathematical input style possible. Therefore, {a, b c} is
+ * syntactically correct and means {a, b*c}. While it is easy to see such mistakes when they happen in one line,
+ * it can be hard to notice when list entries are separated through linebreak.
  *
  * @author halirutan
  */
@@ -105,9 +107,9 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
       PsiElement next;
       int argsWithoutComma = 0;
       while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
-          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACKET) {
-        if (next instanceof PsiErrorElement) continue;
-        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          !(next instanceof LeafPsiElement && next.getText().equals("]"))) {
+        if (next instanceof PsiErrorElement) return;
+        if (next instanceof LeafPsiElement && next.getText().equals(",")) {
           argsWithoutComma = 0;
         } else {
           argsWithoutComma++;
@@ -125,9 +127,9 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
       PsiElement next;
       int argsWithoutComma = 1;
       while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&
-          next.getNode().getElementType() != MathematicaElementTypes.RIGHT_BRACE) {
-        if (next instanceof PsiErrorElement) continue;
-        if (next.getNode().getElementType() == MathematicaElementTypes.COMMA) {
+          !(next instanceof LeafPsiElement && next.getText().equals("}"))) {
+        if (next instanceof PsiErrorElement) return;
+        if (next instanceof LeafPsiElement && next.getText().equals(",")) {
           argsWithoutComma = 0;
         } else {
           argsWithoutComma++;

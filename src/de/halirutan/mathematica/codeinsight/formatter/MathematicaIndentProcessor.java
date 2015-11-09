@@ -71,6 +71,13 @@ public class MathematicaIndentProcessor {
       return Indent.getNormalIndent();
     }
 
+    if (parentType.equals(ASSOCIATION_EXPRESSION)) {
+      if (elementType.equals(LEFT_ASSOCIATION) || elementType.equals(RIGHT_ASSOCIATION)) {
+        return Indent.getNoneIndent();
+      }
+      return Indent.getNormalIndent();
+    }
+
     if (parentType == COMPOUND_EXPRESSION_EXPRESSION) {
       return Indent.getNoneIndent();
     }

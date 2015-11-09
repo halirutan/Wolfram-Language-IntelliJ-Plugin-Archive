@@ -30,15 +30,18 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.Slot;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
 import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
+import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
@@ -121,6 +124,16 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
       @Override
       public void visitSlot(final Slot slot) {
         setHighlighting(slot, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
+      }
+
+      @Override
+      public void visitSlotExpression(final SlotExpression slotExpr) {
+        IElementType head = slotExpr.getFirstChild().getNode().getElementType();
+        if (head.equals(MathematicaElementTypes.ASSOCIATION_SLOT)) {
+          setHighlighting(slotExpr, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
+        } else {
+          setHighlighting(slotExpr.getFirstChild(), myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
+        }
       }
     };
     function.accept(slotVisitor);

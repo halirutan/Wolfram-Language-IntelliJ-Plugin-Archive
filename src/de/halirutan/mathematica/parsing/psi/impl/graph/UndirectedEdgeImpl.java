@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2015 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,30 +19,30 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.parsing.psi.impl.graph;
 
-import com.intellij.lang.Language;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.graph.UndirectedEdge;
+import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
+import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/4/13)
+ * @author patrick (4/14/13)
  */
-public class MathematicaLanguage extends Language {
-
-  public static final Language INSTANCE = new MathematicaLanguage();
-
-  public MathematicaLanguage() {
-    super(Mathematica.NAME);
-  }
-
-  @NotNull
-  @Override
-  public String getDisplayName() {
-    return "Mathematica";
+public class UndirectedEdgeImpl extends OperatorNameProviderImpl implements UndirectedEdge {
+  public UndirectedEdgeImpl(@NotNull ASTNode node) {
+    super(node);
   }
 
   @Override
-  public boolean isCaseSensitive() {
-    return true;
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitUndirectedEdge(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

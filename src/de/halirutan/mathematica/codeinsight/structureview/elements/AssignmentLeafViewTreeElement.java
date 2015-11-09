@@ -186,7 +186,7 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
       final AssignmentLeafViewTreeElement leaf = (AssignmentLeafViewTreeElement) o;
       return leaf.getValue().equals(getValue());
     }
-    return super.equals(o);
+    return false;
   }
 
 

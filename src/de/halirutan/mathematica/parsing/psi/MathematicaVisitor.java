@@ -27,12 +27,15 @@ import de.halirutan.mathematica.parsing.psi.api.arithmetic.ArithmeticOperation;
 import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
+import de.halirutan.mathematica.parsing.psi.api.graph.UndirectedEdge;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceAll;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceRepeated;
 import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
+import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
 
 
 /**
@@ -166,5 +169,13 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitSlot(Slot slot) {
     visitElement(slot);
+  }
+
+  public void visitSlotExpression(SlotExpression slotExpr) {
+    visitElement(slotExpr);
+  }
+
+  public void visitUndirectedEdge(final UndirectedEdge undirectedEdge) {
+    visitElement(undirectedEdge);
   }
 }
