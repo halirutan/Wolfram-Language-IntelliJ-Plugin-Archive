@@ -21,16 +21,16 @@
 
 package de.halirutan.mathematica.parsing;
 
-import com.intellij.testFramework.ParsingTestCase;
-import de.halirutan.mathematica.MathematicaTestUtils;
-import de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition;
-
 /**
  * @author patrick (8/16/14)
  */
 public class MathematicaParsingTest extends AbstractParsingTestByFullFormComparison {
 
   public void testParsingTestData() throws Exception {
+    doTest(true);
+  }
+
+  public void testSlot() throws Exception {
     doTest(true);
   }
 
