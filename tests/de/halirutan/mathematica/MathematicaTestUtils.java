@@ -24,7 +24,8 @@ package de.halirutan.mathematica;
 import java.io.File;
 
 /**
- * @author patrick (8/16/14)
+ * Provides a function to locate resources for the unit tests
+ * @author hal (8/16/14)
  */
 public class MathematicaTestUtils {
 
