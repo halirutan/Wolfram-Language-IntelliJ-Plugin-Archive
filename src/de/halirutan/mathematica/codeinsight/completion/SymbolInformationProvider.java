@@ -26,30 +26,32 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
- * @author patrick (4/3/13)
+ * Loads and extracts all information of Mathematica built-in symbols that are used for completion and intelligent
+ * code insight.
+ * @author hal (4/3/13)
  */
 public class SymbolInformationProvider {
 
-  private static HashMap<String, SymbolInformation> ourSymbols;
+  private final static String ourSymbolInformationFile = "/de/halirutan/mathematica/codeinsight/completion/symbolInformationV10_3_1";
+  private final static HashMap<String, SymbolInformation> ourSymbols;
 
-  private SymbolInformationProvider() {
-  }
+  private SymbolInformationProvider() {}
 
-  private static void initialize() {
+  static {
 
-    ResourceBundle info = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/completion/symbolInformationV10_0_2");
-
+    ResourceBundle info = ResourceBundle.getBundle(ourSymbolInformationFile);
     ourSymbols = new HashMap<String, SymbolInformation>(6000);
 
     Enumeration<String> names = info.getKeys();
     while (names.hasMoreElements()) {
       String name = names.nextElement();
+      String context = name.split("`")[0] + "`";
+      String nameWithoutContext = name.substring(context.length());
       String parts[] = info.getString(name).split(";");
 
       boolean isFunction = false;
       int importance = 0;
       String attributes[] = {};
-      String shortName = "";
       String pattern = "";
       String options[] = {};
 
@@ -67,10 +69,8 @@ public class SymbolInformationProvider {
         attributes = parts[1].trim().split(" ");
       }
 
-      if (parts.length > 2) {
-        shortName = parts[2];
-
-      }
+      // part 2 is missing because it was used as "ShortName" until everything was refactored and the short name is
+      // now extracted from the full context name of a symbol
 
       if (parts.length > 3) {
         pattern = parts[3].trim();
@@ -84,57 +84,36 @@ public class SymbolInformationProvider {
         isFunction = true;
       }
 
-      ourSymbols.put(name, new SymbolInformation(name, shortName, importance, pattern, isFunction, attributes, options));
+      ourSymbols.put(name, new SymbolInformation(name, nameWithoutContext, context, importance, pattern, isFunction, attributes, options));
     }
 
   }
 
   public static HashMap<String, SymbolInformation> getSymbolNames() {
-    if (ourSymbols == null) {
-      initialize();
-    }
     return ourSymbols;
   }
 
+  @SuppressWarnings("InstanceVariableNamingConvention")
   public static class SymbolInformation {
     public final String name;
     public final int importance;
-    public final String shortName;
     public final String callPattern;
     public final boolean function;
     public final String attributes[];
     public final String options[];
-    public String context = "System";
+    public String context;
     public String nameWithoutContext;
 
-    public SymbolInformation(String name, String shortName, int importance, String callPattern, boolean function, String[] attributes, String[] options) {
-      this.name = name;
-      this.nameWithoutContext = name;
-      this.shortName = shortName.length() == 0 ? name : shortName;
-      this.importance = importance;
-      this.callPattern = callPattern;
-      this.function = function;
-      this.attributes = attributes;
-      this.options = options;
-
-      if (name.contains("`")) {
-        context = name.split("`")[0];
-        nameWithoutContext = name.substring(context.length() + 1);
-      }
-
-
+    public SymbolInformation(String nameIn, String nameWithoutContextIn, String contextIn, int importanceIn, String callPatternIn, boolean functionIn, String[] attributesIn, String[] optionsIn) {
+      this.name = nameIn;
+      this.nameWithoutContext = nameWithoutContextIn;
+      this.context = contextIn;
+      this.importance = importanceIn;
+      this.callPattern = callPatternIn;
+      this.function = functionIn;
+      this.attributes = attributesIn;
+      this.options = optionsIn;
     }
-
-    public SymbolInformation(String name) {
-      this.name = name;
-      shortName = name;
-      importance = 0;
-      callPattern = "";
-      function = false;
-      attributes = new String[0];
-      options = new String[0];
-    }
-
 
   }
 

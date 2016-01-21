@@ -12,12 +12,14 @@
 (* :Keywords:                  *)
 (* :Discussion:                *)
 
-BeginPackage["FunctionInformation`"]
+BeginPackage["FunctionInformation`"];
 
 CreateCompletionInformation::usage = "CreateCompletionInformation[] returns a list of strings where each element is an \
 entry of the .properties file that is used to enable autocompletion in idea.";
 
 Begin["`Private`"] (* Begin Private Context *)
+
+<< JLink`;
 
 (* For good code completion we need an ordering of all possible completions. This is done with the *)
 (* function frequency list that comes with Mathematica nowadays. I just assign numbers according to the *)
@@ -34,15 +36,11 @@ $functionInformation = With[{file = First[FileNames["FunctionInformation.m", {$I
   Rule @@@ Get[file]
 ];
 
-makeContextNames[context_String] :=
-    Append[StringReplace[
-      Names[RegularExpression[context <> "`\$?[A-Z]\\w*"]],
-      context ~~ "`" ~~ rest__ :> rest], context];
+makeContextNames[context_String] := Block[{$ContextPath = {context}},
+  StringJoin[context, #]& /@ Names[RegularExpression[context <> "\$?[A-Z]\\w*"]]
+];
 
-names = Sort[
-  Join[Names[RegularExpression["\$?[A-Z]\\w*"]],
-    makeContextNames["JLink"],
-    Names[RegularExpression["(Developer|Internal)`\$?[A-Z]\\w*"]]]];
+names = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
 
 isFunction[str_String] :=
     With[{usg =
@@ -92,7 +90,7 @@ getOptions[str_String] :=
 
 
 createInformation[name_String] := Module[{importance, info, context},
-  importance = name /. $functionFrequency;
+  importance = StringReplace[name, "System`" ~~ n__ :> n] /. $functionFrequency;
   Check[
     context = Context[name];
     info = Cases[

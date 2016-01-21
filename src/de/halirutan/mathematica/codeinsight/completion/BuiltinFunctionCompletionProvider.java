@@ -24,9 +24,10 @@ package de.halirutan.mathematica.codeinsight.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,19 +36,21 @@ import java.util.HashMap;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
- * @author patrick (4/2/13)
+ * Provides completion for Mathematica built-in symbols. The underlying important file with all information can be
+ * found in the resource directory de/halirutan/mathematica/codeinsight/completion.
+ * @author hal (4/2/13)
  */
 public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
 
   @Override
   void addTo(CompletionContributor contributor) {
-    final PsiElementPattern.Capture<PsiElement> psiElementCapture = psiElement().withElementType(MathematicaElementTypes.IDENTIFIER);
+    final Capture<PsiElement> psiElementCapture = psiElement().withElementType(MathematicaElementTypes.IDENTIFIER);
     contributor.extend(CompletionType.BASIC, psiElementCapture, this);
   }
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    HashMap<String, SymbolInformationProvider.SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
+    HashMap<String, SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
 
     if (Character.isLowerCase(parameters.getPosition().getText().charAt(0))) {
       return;
@@ -58,11 +61,11 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
 
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
     for (String name : symbols.keySet()) {
-      SymbolInformationProvider.SymbolInformation symbol = symbols.get(name);
+      SymbolInformation symbol = symbols.get(name);
       LookupElementBuilder elm = LookupElementBuilder
-          .create(name)
+          .create(symbol.context.compareTo("System`") == 0 ? symbol.nameWithoutContext : symbol.name)
           .withInsertHandler(MathematicaBracketInsertHandler.getInstance())
-          .withTypeText(symbol.context + "`")
+          .withTypeText(symbol.context)
           .withPresentableText(symbol.nameWithoutContext);
       result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
     }
