@@ -32,7 +32,8 @@ public class LocalizationConstruct {
 
   private static final Set<String> myModuleLike = Sets.newHashSet("Module", "Block", "With", "DynamicModule");
   private static final Set<String> myFunctionLike = Sets.newHashSet("Function");
-  private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D", "ContourPlot", "ContourPlot3D");
+  private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D",
+      "ContourPlot", "ContourPlot3D", "ParametricPlot", "ParametricPlot3D", "Do");
   private static final Set<String> myCompileLike = Sets.newHashSet("Compile");
   private static final Set<String> myLimitLike = Sets.newHashSet("Limit");
   private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
@@ -112,8 +113,8 @@ public class LocalizationConstruct {
   }
 
   public enum ConstructType {
-    MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
-    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION
+    MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, DO, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
+    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D
   }
 
 
