@@ -37,13 +37,13 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
 import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
+import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
 import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -86,9 +86,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    PsiElement id = symbol.getFirstChild();
-
-    if (NAMES.contains(id.getText())) {
+    if (NAMES.contains(symbol.getMathematicaContext()+symbol.getSymbolName())) {
       setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
       return;
     }
@@ -96,7 +94,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
     PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
 
-    final LocalizationConstruct.ConstructType scope = processor.getMyLocalization();
+    final ConstructType scope = processor.getMyLocalization();
     switch (scope) {
       case NULL:
         break;
