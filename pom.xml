@@ -70,7 +70,7 @@
               <target>
                 <!-- Download IDEA sources which are required to build the plugin-->
                 <!-- For local testing, I included a copy target below -->
-                <get src="http://download.jetbrains.com/idea/ideaIU-2016.1.tar.gz"
+                <get src="http://download.jetbrains.com/idea/ideaIC-2016.1.tar.gz"
                 dest="${project.build.directory}"
                 verbose="true"
                 usetimestamp="true"/>
