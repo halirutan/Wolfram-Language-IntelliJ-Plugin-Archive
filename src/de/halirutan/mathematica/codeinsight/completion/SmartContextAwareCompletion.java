@@ -27,12 +27,15 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.api.*;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.parsing.psi.api.MessageName;
+import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -47,20 +50,21 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  * First case is when you are inside a function call like Plot[...], then the smart completion suggests the
  * options for the specific symbol. Secondly, we handel Message[...] calls and display a list of all messages
  * from within the file.
+ *
  * @author patrick (4/2/13)
  */
-public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
+class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
 
-  static final HashMap<String, SymbolInformationProvider.SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-  static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
+  private static final HashMap<String, SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
+  private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
       "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
       "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"
   }));
 
   @Override
   void addTo(CompletionContributor contributor) {
-    final PsiElementPattern.Capture<PsiElement> funcPattern = psiElement().withSuperParent(2, FunctionCall.class);
+    final Capture<PsiElement> funcPattern = psiElement().withSuperParent(2, FunctionCall.class);
     contributor.extend(CompletionType.SMART, funcPattern, this);
   }
 
@@ -70,9 +74,12 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
     final PsiElement position = parameters.getPosition();
     final PsiElement function = position.getParent().getParent();
     if (function instanceof FunctionCall) {
-      String functionName = ((Symbol) function.getFirstChild()).getSymbolName();
-      if (ourSymbolInformation.containsKey(functionName) && ourSymbolInformation.get(functionName).function) {
-        final SymbolInformationProvider.SymbolInformation functionInformation = ourSymbolInformation.get(functionName);
+      final Symbol head = (Symbol) ((FunctionCall) function).getHead();
+      String functionName = head.getSymbolName();
+      String functionContext = head.getMathematicaContext();
+      final String key = functionContext + functionName;
+      if (ourSymbolInformation.containsKey(key) && ourSymbolInformation.get(key).function) {
+        final SymbolInformation functionInformation = ourSymbolInformation.get(key);
         final String[] options = functionInformation.options;
         if (options != null) {
           for (String opt : options) {
@@ -89,11 +96,11 @@ public class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
           @Override
           public void visitMessageName(final MessageName messageName) {
-              usages.add(
-                  LookupElementBuilder.create(messageName.getText()).
-                      withIcon(MathematicaIcons.MESSAGES_ICON).
-                      withCaseSensitivity(false)); // make it case insensitive so you can type argx in Sym::argx to
-                                                    // find the correct completion
+            usages.add(
+                LookupElementBuilder.create(messageName.getText()).
+                    withIcon(MathematicaIcons.MESSAGES_ICON).
+                    withCaseSensitivity(false)); // make it case insensitive so you can type argx in Sym::argx to
+            // find the correct completion
           }
         };
         visitor.visitFile(parameters.getOriginalFile());
