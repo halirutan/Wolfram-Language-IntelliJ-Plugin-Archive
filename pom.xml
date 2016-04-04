@@ -27,13 +27,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jetbrains.plugins</groupId>
   <artifactId>mathematica-intellij-plugin</artifactId>
-  <version>0.3.4</version>
+  <version>1.3.5</version>
   <name>Mathematica Support for IntelliJ IDEA</name>
   <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting, etc.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <idea.version>14.0.3</idea.version>
+    <idea.version>2016.1</idea.version>
     <ij.plugin>true</ij.plugin>
   </properties>
 
@@ -86,7 +86,7 @@
             <configuration>
               <target>
                 <echo message="prepare phase"/>
-                <untar compression="gzip" src="${project.build.directory}/ideaIU-2016.1.tar.gz"
+                <untar compression="gzip" src="${project.build.directory}/ideaIC-2016.1.tar.gz"
                        dest="${project.build.directory}"/>
               </target>
             </configuration>
