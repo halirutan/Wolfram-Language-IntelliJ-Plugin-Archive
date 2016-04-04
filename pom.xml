@@ -70,11 +70,11 @@
               <target>
                 <!-- Download IDEA sources which are required to build the plugin-->
                 <!-- For local testing, I included a copy target below -->
-                <get src="http://download.jetbrains.com/idea/ideaIC-15.0.3.tar.gz"
+                <get src="http://download.jetbrains.com/idea/ideaIU-2016.1.tar.gz"
                 dest="${project.build.directory}"
                 verbose="true"
                 usetimestamp="true"/>
-                <!--<copy file="/home/patrick/tmp/ideaIC-15.0.3.tar.gz"-->
+                <!--<copy file="/home/patrick/tmp/ideaIU-2016.1.tar.gz"-->
                       <!--tofile="${project.build.directory}/ideaIC-15.0.3.tar.gz"-->
                       <!--verbose="true"/>-->
               </target>
@@ -86,7 +86,7 @@
             <configuration>
               <target>
                 <echo message="prepare phase"/>
-                <untar compression="gzip" src="${project.build.directory}/ideaIC-15.0.3.tar.gz"
+                <untar compression="gzip" src="${project.build.directory}/ideaIU-2016.1.tar.gz"
                        dest="${project.build.directory}"/>
               </target>
             </configuration>
@@ -104,7 +104,7 @@
               <target>
                 <path id="maven.plugin.complete.classpath">
                   <path refid="maven.plugin.classpath"/>
-                  <fileset dir="${project.build.directory}/idea-IC-143.1821.5/lib">
+                  <fileset dir="${project.build.directory}/idea-IC-145.258.11/lib">
                     <include name="**/*.jar"/>
                   </fileset>
                 </path>
@@ -116,7 +116,7 @@
                   </dirset>
                 </path>
                 <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
-                                          extdirs="${project.build.directory}/idea-IC-143.1821.5/lib">
+                                          extdirs="${project.build.directory}/idea-IC-145.258.11/lib">
                   <classpath refid="maven.compile.classpath"/>
                   <src refid="sourcepath"/>
                 </instrumentIdeaExtensions>
@@ -164,7 +164,7 @@
         <version>2.5.1</version>
         <configuration>
           <compilerArguments>
-            <extdirs>${project.build.directory}/idea-IC-143.1821.5/lib/</extdirs>
+            <extdirs>${project.build.directory}/idea-IC-145.258.11/lib/</extdirs>
           </compilerArguments>
           <source>1.6</source>
           <target>1.6</target>
