@@ -46,7 +46,7 @@ No problem. If you like to contribute something, then there are a lot more ways 
 ##![bug image][issues-image] Reporting issues
 
 For issue- and bug-tracking [GitHub Issues](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues) is used.
-If you find bugs, experience weird behavior or have feature suggestions please [create a new issue]https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/new). 
+If you find bugs, experience weird behavior or have feature suggestions please [create a new issue](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/new). 
 
 Note that the plug-in itself contains a bug-reporter. When an unhandled exception is thrown, you are notified by IDEA and
 you can give as much details as possibles which are then automatically turned into a new issue in the bug-tracker.
