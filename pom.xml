@@ -75,7 +75,7 @@
                                 <!-- Download IDEA sources which are required to build the plugin-->
                                 <!-- For local testing, I included a copy target below and comment our the "get" -->
                                 <echo message="Downloading ${idea.ic.source} to ${project.build.directory}"/>
-                                <get src="http://download.jetbrains.com/idea/${idea.ic.source}"
+                                <get src="http://download-cf.jetbrains.com/idea/${idea.ic.source}"
                                      dest="${project.build.directory}"
                                      verbose="false"
                                      usetimestamp="true"/>
