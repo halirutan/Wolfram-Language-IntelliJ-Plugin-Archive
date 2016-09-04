@@ -24,183 +24,195 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jetbrains.plugins</groupId>
-  <artifactId>mathematica-intellij-plugin</artifactId>
-  <version>1.3.5</version>
-  <name>Mathematica Support for IntelliJ IDEA</name>
-  <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting, etc.</description>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jetbrains.plugins</groupId>
+    <artifactId>mathematica-intellij-plugin</artifactId>
+    <version>1.3.5</version>
+    <name>Mathematica Support for IntelliJ IDEA</name>
+    <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting,
+        etc.
+    </description>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <idea.version>2016.2.3</idea.version>
-    <ij.plugin>true</ij.plugin>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <idea.ic.source>ideaIC-2016.2.3.tar.gz</idea.ic.source>
+        <idea.ic.dir>${project.build.directory}/idea-IC</idea.ic.dir>
+        <ij.plugin>true</ij.plugin>
+    </properties>
 
-  <build>
-    <resources>
-      <resource>
-        <directory>${project.basedir}/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-    <finalName>Mathematica-IntelliJ-Plugin</finalName>
-    <sourceDirectory>src/</sourceDirectory>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <!--<tagNameFormat>v@{project.version}</tagNameFormat>-->
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.7</version>
-        <executions>
-          <execution>
-            <id>download-files</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <!-- Download IDEA sources which are required to build the plugin-->
-                <!-- For local testing, I included a copy target below -->
-                <get src="http://download.jetbrains.com/idea/ideaIC-2016.2.3.tar.gz"
-                dest="${project.build.directory}"
-                verbose="true"
-                usetimestamp="true"/>
-                <!--<copy file="/home/patrick/tmp/ideaIU-2016.2.3.tar.gz"-->
-                      <!--tofile="${project.build.directory}/ideaIC-15.0.3.tar.gz"-->
-                      <!--verbose="true"/>-->
-              </target>
-            </configuration>
-          </execution>
-          <execution>
-            <id>prepare</id>
-            <phase>validate</phase>
-            <configuration>
-              <target>
-                <echo message="prepare phase"/>
-                <untar compression="gzip" src="${project.build.directory}/ideaIC-2016.2.3.tar.gz"
-                       dest="${project.build.directory}"/>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>compile-forms</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <path id="maven.plugin.complete.classpath">
-                  <path refid="maven.plugin.classpath"/>
-                  <fileset dir="${project.build.directory}/idea-IC-162.1628.40/lib">
-                    <include name="**/*.jar"/>
-                  </fileset>
-                </path>
-                <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions"
-                         classpathref="maven.plugin.complete.classpath"/>
-                <path id="sourcepath">
-                  <dirset dir="${project.basedir}">
-                    <include name="src"/>
-                  </dirset>
-                </path>
-                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
-                                          extdirs="${project.build.directory}/idea-IC-162.1628.40/lib">
-                  <classpath refid="maven.compile.classpath"/>
-                  <src refid="sourcepath"/>
-                </instrumentIdeaExtensions>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <!--suppress MavenModelInspection -->
-            <groupId>com.sun</groupId>
-            <!--suppress MavenModelInspection -->
-            <artifactId>tools</artifactId>
-            <!--suppress MavenModelInspection -->
-            <version>1.6.0</version>
-            <scope>system</scope>
-            <!--suppress MavenModelInspection -->
-            <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
-            <!--<systemPath>/home/patrick/build/share/java/jdk/lib/tools.jar</systemPath>-->
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <outputDirectory>${project.build.directory}/lib/</outputDirectory>
-          <overWriteReleases>false</overWriteReleases>
-          <overWriteSnapshots>false</overWriteSnapshots>
-          <overWriteIfNewer>true</overWriteIfNewer>
-        </configuration>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
-        <configuration>
-          <compilerArguments>
-            <extdirs>${project.build.directory}/idea-IC-162.1628.40/lib/</extdirs>
-          </compilerArguments>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2.1</version>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>assembly everything</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <finalName>Mathematica-IntelliJ-Plugin</finalName>
+        <sourceDirectory>src/</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!--<tagNameFormat>v@{project.version}</tagNameFormat>-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>download-files</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Download IDEA sources which are required to build the plugin-->
+                                <!-- For local testing, I included a copy target below -->
+                                <echo message="Downloading ${idea.ic.source} to ${project.build.directory}"/>
+                                <get src="http://download.jetbrains.com/idea/${idea.ic.source}"
+                                     dest="${project.build.directory}"
+                                     verbose="false"
+                                     usetimestamp="true"/>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>sonatype-public-repository</id>
-      <url>https://oss.sonatype.org/content/groups/public</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
+
+                                <!--<copy file="/home/patrick/Software/intellij/${idea.ic.source}"-->
+                                <!--tofile="${project.build.directory}/${idea.ic.source}"-->
+                                <!--verbose="true"/>-->
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target>
+                                <echo message="unpacking ${idea.version}"/>
+                                <untar compression="gzip" src="${project.build.directory}/${idea.ic.source}"
+                                       dest="${project.build.directory}"/>
+                                <exec executable="sh">
+                                    <arg value="-c"/>
+                                    <arg value="mv ${project.build.directory}/idea-IC-* ${idea.ic.dir}"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>compile-forms</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="maven.plugin.complete.classpath">
+                                    <path refid="maven.plugin.classpath"/>
+                                    <fileset dir="${idea.ic.dir}/lib">
+                                        <include name="**/*.jar"/>
+                                    </fileset>
+                                </path>
+                                <taskdef name="instrumentIdeaExtensions"
+                                         classname="com.intellij.ant.InstrumentIdeaExtensions"
+                                         classpathref="maven.plugin.complete.classpath"/>
+                                <path id="sourcepath">
+                                    <dirset dir="${project.basedir}">
+                                        <include name="src"/>
+                                    </dirset>
+                                </path>
+                                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
+                                                          extdirs="${idea.ic.dir}/lib">
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <src refid="sourcepath"/>
+                                </instrumentIdeaExtensions>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <!--suppress MavenModelInspection -->
+                        <groupId>com.sun</groupId>
+                        <!--suppress MavenModelInspection -->
+                        <artifactId>tools</artifactId>
+                        <!--suppress MavenModelInspection -->
+                        <version>1.6.0</version>
+                        <scope>system</scope>
+                        <!--suppress MavenModelInspection -->
+                        <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+
+                        <!--<systemPath>/home/patrick/build/share/java/jdk/lib/tools.jar</systemPath>-->
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>false</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <compilerArguments>
+                        <extdirs>${idea.ic.dir}/lib/</extdirs>
+                    </compilerArguments>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly everything</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-public-repository</id>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
