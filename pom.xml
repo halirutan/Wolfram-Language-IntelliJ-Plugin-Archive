@@ -55,7 +55,6 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <!--<tagNameFormat>v@{project.version}</tagNameFormat>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -63,6 +62,8 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
+                    <!-- We need to download and unpack the IntelliJ IDEA Community Edition to -->
+                    <!-- compile the plugin on travis. The first execution just downloads the tar.gz -->
                     <execution>
                         <id>download-files</id>
                         <phase>validate</phase>
@@ -72,7 +73,7 @@
                         <configuration>
                             <target>
                                 <!-- Download IDEA sources which are required to build the plugin-->
-                                <!-- For local testing, I included a copy target below -->
+                                <!-- For local testing, I included a copy target below and comment our the "get" -->
                                 <echo message="Downloading ${idea.ic.source} to ${project.build.directory}"/>
                                 <get src="http://download.jetbrains.com/idea/${idea.ic.source}"
                                      dest="${project.build.directory}"
@@ -91,9 +92,11 @@
                         <phase>validate</phase>
                         <configuration>
                             <target>
-                                <echo message="unpacking ${idea.version}"/>
+                                <echo message="unpacking ${idea.ic.source}"/>
                                 <untar compression="gzip" src="${project.build.directory}/${idea.ic.source}"
                                        dest="${project.build.directory}"/>
+
+                                <echo message="moving idea sources to ${idea.ic.dir}"/>
                                 <exec executable="sh">
                                     <arg value="-c"/>
                                     <arg value="mv ${project.build.directory}/idea-IC-* ${idea.ic.dir}"/>
@@ -142,7 +145,7 @@
                         <!--suppress MavenModelInspection -->
                         <artifactId>tools</artifactId>
                         <!--suppress MavenModelInspection -->
-                        <version>1.6.0</version>
+                        <version>1.8</version>
                         <scope>system</scope>
                         <!--suppress MavenModelInspection -->
                         <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
@@ -173,13 +176,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.5.1</version>
                 <configuration>
+                    <showWarnings>true</showWarnings>
+                    <compilerVersion>1.8</compilerVersion>
                     <compilerArguments>
                         <extdirs>${idea.ic.dir}/lib/</extdirs>
                     </compilerArguments>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -202,17 +207,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>sonatype-public-repository</id>
-            <url>https://oss.sonatype.org/content/groups/public</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
