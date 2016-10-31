@@ -126,12 +126,15 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
       @Override
       public void visitSlotExpression(final SlotExpression slotExpr) {
+
         IElementType head = slotExpr.getFirstChild().getNode().getElementType();
         if (head.equals(MathematicaElementTypes.ASSOCIATION_SLOT)) {
           setHighlighting(slotExpr, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
         } else {
           setHighlighting(slotExpr.getFirstChild(), myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
         }
+        slotExpr.acceptChildren(this);
+
       }
     };
     function.accept(slotVisitor);
