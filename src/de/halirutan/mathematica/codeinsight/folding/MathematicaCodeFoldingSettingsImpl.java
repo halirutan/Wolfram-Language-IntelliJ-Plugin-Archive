@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @State(
     name = "MathematicaCodeFoldingSettingsImpl",
-    storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
+    storages = @Storage(file = "editor.codeinsight.xml")
 )
 public class MathematicaCodeFoldingSettingsImpl implements MathematicaCodeFoldingSettings,PersistentStateComponent<MathematicaCodeFoldingSettingsImpl> {
 
@@ -40,14 +40,15 @@ public class MathematicaCodeFoldingSettingsImpl implements MathematicaCodeFoldin
 
   @Override
   public boolean isCollapseNamedCharacters() {
-    return COLLAPSE_NAMED_CHARACTERS;
+    return myCollapseNamedCharacters;
   }
 
+  @SuppressWarnings("unused")
   public void setCollapseNamedCharacters(final boolean state) {
-    this.COLLAPSE_NAMED_CHARACTERS = state;
+    this.myCollapseNamedCharacters = state;
   }
 
-  public boolean COLLAPSE_NAMED_CHARACTERS = true;
+  private boolean myCollapseNamedCharacters = true;
 
   @Nullable
   @Override
