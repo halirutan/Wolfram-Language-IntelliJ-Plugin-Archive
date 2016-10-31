@@ -35,7 +35,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <idea.ic.source>ideaIC-2016.2.3.tar.gz</idea.ic.source>
+        <idea.ic.source>ideaIC-2016.2.5.tar.gz</idea.ic.source>
         <idea.ic.dir>${project.build.directory}/idea-IC</idea.ic.dir>
         <ij.plugin>true</ij.plugin>
     </properties>
@@ -75,7 +75,7 @@
                                 <!-- Download IDEA sources which are required to build the plugin-->
                                 <!-- For local testing, I included a copy target below and comment our the "get" -->
                                 <echo message="Downloading ${idea.ic.source} to ${project.build.directory}"/>
-                                <get src="http://download-cf.jetbrains.com/idea/${idea.ic.source}"
+                                <get src="https://download-cf.jetbrains.com/idea/${idea.ic.source}"
                                      dest="${project.build.directory}"
                                      verbose="false"
                                      usetimestamp="true"/>
