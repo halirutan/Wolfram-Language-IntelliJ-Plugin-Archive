@@ -82,7 +82,7 @@
 
     <!-- Highlighting and annotating of code, StructureView and documentation lookup-->
 
-    <lang.syntaxHighlighterFactory key="Mathematica"
+    <lang.syntaxHighlighterFactory language="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
     <lang.psiStructureViewFactory language="Mathematica"
                                   implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
@@ -161,6 +161,9 @@
 
     <inspectionToolProvider
         implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
+
+    <fileBasedIndex implementation="de.halirutan.mathematica.index.MathematicaPackageExportIndex"/>
+
 
   </extensions>
 
