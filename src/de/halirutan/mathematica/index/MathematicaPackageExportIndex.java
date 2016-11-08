@@ -144,11 +144,11 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
     return BASE_VERSION;
   }
 
-  interface Key {
+  public interface Key {
     void writeValue(DataOutput out) throws IOException;
   }
 
-  private static class FileKey implements Key {
+  public static class FileKey implements Key {
     private final int myFileId;
 
     private FileKey(int fileId) {
@@ -158,6 +158,8 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
     private FileKey(VirtualFile file) {
       myFileId = FileBasedIndex.getFileId(file);
     }
+
+
 
     @Override
     public void writeValue(DataOutput out) throws IOException {

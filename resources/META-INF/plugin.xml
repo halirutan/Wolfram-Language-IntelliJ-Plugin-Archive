@@ -200,6 +200,9 @@
               description="Collapse all named characters into their utf8 counterpart.">
       </action>
 
+      <action id="Mathematica.PackageExportChecker" class="de.halirutan.mathematica.actions.PackageExportChecker"
+              text="PackageExportChecker"/>
+
       <!--<separator/>-->
 
       <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
