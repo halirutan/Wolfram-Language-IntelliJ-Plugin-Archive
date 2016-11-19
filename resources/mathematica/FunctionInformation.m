@@ -46,8 +46,8 @@ makeContextNames[context_String] := Block[{$ContextPath = {context}},
 names = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
 
 CreateSymbolVersions[] := Thread[names -> $VersionNumber];
-CreateSymbolVersions[existingNames_List] := With[{version = $VersionNumber},
-  existingNames /. (Function[n, (n -> _) :> (n -> version)] /@ names)
+CreateSymbolVersions[existingNames_List] := With[{currVersion = $VersionNumber},
+  existingNames /. (Function[n, (n -> oldVersion_) :> (n -> Min[{currVersion, oldVersion}])] /@ names)
 ];
 
 isFunction[str_String] :=
