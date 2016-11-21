@@ -23,9 +23,11 @@ package de.halirutan.mathematica.module;
 
 import com.intellij.ide.util.projectWizard.SdkSettingsStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
+import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -44,6 +46,13 @@ public class MathematicaModifiedSettingsStep extends SdkSettingsStep {
       }
     });
     myModuleBuilder = builder;
+  }
+
+  @Override
+  protected void onSdkSelected(Sdk sdk) {
+    if (sdk instanceof MathematicaSdkType) {
+
+    }
   }
 
   @Override

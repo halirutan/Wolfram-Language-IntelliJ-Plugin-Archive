@@ -75,6 +75,7 @@ public class MathematicaSdkType extends SdkType {
     return versionString;
   }
 
+
   private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
 
     final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
@@ -145,6 +146,7 @@ public class MathematicaSdkType extends SdkType {
     return null;
   }
 
+  @NotNull
   @Override
   public String getPresentableName() {
     return "Mathematica Sdk";
