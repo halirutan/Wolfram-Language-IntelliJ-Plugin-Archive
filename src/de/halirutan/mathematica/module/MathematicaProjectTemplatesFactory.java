@@ -68,21 +68,21 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
             MathematicaBundle.message("project.template.application.description"),
             new MathematicaModuleBuilder.Application())
     };
-
-    if (context.getProject() == null) {
-      return projectTemplates;
-    } else {
-      return new ProjectTemplate[]{
-
-          new MathematicaProjectTemplate(TEST_MODULE,
-              MathematicaBundle.message("project.template.test.description"),
-              new MathematicaModuleBuilder.Test()),
-
-          new MathematicaProjectTemplate(DOCUMENTATION_MODULE,
-              MathematicaBundle.message("project.template.documentation.description"),
-              new MathematicaModuleBuilder.Documentation())
-      };
-    }
+    return projectTemplates;
+//    if (context.getProject() == null) {
+//      return projectTemplates;
+//    } else {
+//      return new ProjectTemplate[]{
+//
+//          new MathematicaProjectTemplate(TEST_MODULE,
+//              MathematicaBundle.message("project.template.test.description"),
+//              new MathematicaModuleBuilder.Test()),
+//
+//          new MathematicaProjectTemplate(DOCUMENTATION_MODULE,
+//              MathematicaBundle.message("project.template.documentation.description"),
+//              new MathematicaModuleBuilder.Documentation())
+//      };
+//    }
   }
 
   private static class MathematicaProjectTemplate extends BuilderBasedTemplate {

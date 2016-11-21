@@ -16,6 +16,9 @@ BeginPackage["FunctionInformation`"];
 
 CreateCompletionInformation::usage = "CreateCompletionInformation[] returns a list of strings where each element is an \
 entry of the .properties file that is used to enable autocompletion in idea.";
+CreateSymbolVersions::usage = "CreateSymbolVersions[] creates a list all symbols in the form {sym1 -> $VersionNumber, \
+sym2 -> $VersionNumber}. CreateSymbolVersions[list] updates a list of versioned symbol with the current $VersionNumber.";
+
 
 Begin["`Private`"] (* Begin Private Context *)
 
@@ -41,6 +44,11 @@ makeContextNames[context_String] := Block[{$ContextPath = {context}},
 ];
 
 names = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
+
+CreateSymbolVersions[] := Thread[names -> $VersionNumber];
+CreateSymbolVersions[existingNames_List] := With[{currVersion = $VersionNumber},
+  existingNames /. (Function[n, (n -> oldVersion_) :> (n -> Min[{currVersion, oldVersion}])] /@ names)
+];
 
 isFunction[str_String] :=
     With[{usg =

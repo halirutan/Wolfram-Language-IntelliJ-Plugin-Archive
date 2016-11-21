@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
  */
 public class SymbolInformationProvider {
 
-  private final static String ourSymbolInformationFile = "/de/halirutan/mathematica/codeinsight/completion/symbolInformationV10_3_1";
+  private final static String ourSymbolInformationFile = "/de/halirutan/mathematica/codeinsight/completion/symbolInformationV11_0_1";
   private final static HashMap<String, SymbolInformation> ourSymbols;
 
   private SymbolInformationProvider() {}

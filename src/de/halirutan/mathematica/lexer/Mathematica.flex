@@ -225,7 +225,7 @@ Out = "%"+
 
 <IN_COMMENT> {
 	{CommentStart}               { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
-	[^\(\*\):]*                  { return MathematicaElementTypes.COMMENT_CONTENT; }
+	[^\(\*\):]+                  { return MathematicaElementTypes.COMMENT_CONTENT; }
 	"::"[A-Z][A-Za-z]*"::"       {return MathematicaElementTypes.COMMENT_SECTION; }
 	":"[A-Z][A-Za-z ]*":"        {return MathematicaElementTypes.COMMENT_ANNOTATION; }
 	{CommentEnd}                 { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
