@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ColorToneMapping.html">ColorToneMapping</a></h3>
+<ul>
+    <li>ColorToneMapping[<em>image</em>] applies a tone mapping to color values in <em>image</em> so as to make
+        variations of luminance visible even in small intervals of the dynamic range.
+    <li>ColorToneMapping[<em>image</em>,<em>c</em>] maps colors by compressing the overall range of luminance values by
+        a factor <em>c</em>.
+    <li>ColorToneMapping[<em>image</em>,<em>range</em>] applies a mapping only to colors whose initial luminance lies in
+        the specified range.
+    <li>ColorToneMapping[<em>image</em>,{<em>range</em>,<em>c</em>}] takes the specified range of colors and compresses
+        their overall luminance values by a factor <em>c</em>.
+    <li>ColorToneMapping[<em>image</em>,{{<em>range</em><sub>1</sub>,<em>c</em><sub>1</sub>},{<em>range</em><sub>2</sub>,<em>c</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] uses different compression factors <em>c</em><sub><em>i</em></sub> for different ranges
+        <em>range</em><sub><em>i</em></sub>.
+    <li>ColorToneMapping[<em>image</em>,<em>spec</em>,<em>s</em>] uses the color compensation factor <em>s</em> to
+        correct for saturation distortion introduced during tone mapping.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,117 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NetTrain.html">NetTrain</a></h3>
+<ul>
+    <li>NetTrain[<em>net</em>,{<em>input</em><sub>1</sub>,<em>input</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>output</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] trains the specified neural net by giving the <em>input</em><sub><em>i</em></sub> as input and minimizing the
+        discrepancy between the <em>output</em><sub><em>i</em></sub> and the actual output of the net, using an
+        automatically chosen loss function.
+    <li>NetTrain[<em>net</em>,{<em>input</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>output</em><sub>1</sub>,<em>input</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>output</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] also trains the specified neural net based on the examples <em>input</em><sub><em>i</em></sub> and the
+        outputs <em>output</em><sub><em>i</em></sub> given.
+    <li>NetTrain[<em>net</em>,
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>port</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>data</em><sub>11</sub>,<em>data</em><sub>12</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>port</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ] trains the specified net by supplying training data at the specified ports, with a loss function defined by
+        the "Loss" port in the net.
+    <li>NetTrain[<em>net</em>,{
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>port</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>port</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>port</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] trains the net using a list of instances of training data.
+    <li>NetTrain[<em>net</em>,<em>examples</em>,<em>loss</em>] uses <em>loss</em> as a loss function in comparing actual
+        and requested outputs from the net.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

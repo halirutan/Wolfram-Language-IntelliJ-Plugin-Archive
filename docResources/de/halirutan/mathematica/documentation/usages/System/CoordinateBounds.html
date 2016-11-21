@@ -1,0 +1,47 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/CoordinateBounds.html">CoordinateBounds</a></h3>
+<ul>
+    <li>CoordinateBounds[<em>coords</em>] gives a list
+        {{<em>x</em><sub><em>min</em></sub>,<em>x</em><sub><em>max</em></sub>},{<em>y</em><sub><em>min</em></sub>,<em>y</em><sub><em>max</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        } of the bounds in each dimension of the region defined by <em>coords</em>.
+    <li>CoordinateBounds[<em>coords</em>,
+        <math>
+            <ms>&#948;</ms>
+        </math>
+        ] pads the ranges of coordinates by
+        <math>
+            <ms>&#177;</ms>
+        </math>
+        <math>
+            <ms>&#948;</ms>
+        </math>
+        in each dimension.
+    <li>CoordinateBounds[<em>coords</em>,Scaled[<em>s</em>]] pads by the scaled amount <em>s</em> in each dimension.
+    <li>CoordinateBounds[<em>coords</em>,{<em>p</em><sub>1</sub>,<em>p</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] pads by <em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        in successive dimensions.
+    <li>
+        CoordinateBounds[<em>coords</em>,{{<em>p</em><sub><em>1min</em></sub>,<em>p</em><sub><em>1max</em></sub>},{<em>p</em><sub><em>2min</em></sub>,<em>p</em><sub><em>2max</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives {{<em>x</em><sub><em>min</em></sub>-<em>p</em><sub><em>1min</em></sub>,<em>x</em><sub><em>max</em></sub>+<em>p</em><sub><em>1max</em></sub>},{<em>y</em><sub><em>min</em></sub>-<em>p</em><sub><em>2min</em></sub>,<em>y</em><sub><em>max</em></sub>+<em>p</em><sub><em>2max</em></sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+</ul><p><b>Attributes:</b>Protected</p><p><b>Symbol has no options.</b></p>

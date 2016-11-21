@@ -1,0 +1,85 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/AnglePath.html">AnglePath</a></h3>
+<ul>
+    <li>AnglePath[{
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>1</sub>,
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>2</sub>,
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>3</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the list of 2D coordinates corresponding to a path that starts at {0,0}, then takes a series of steps
+        of unit length at successive relative angles
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub><em>i</em></sub>.
+    <li>AnglePath[{{<em>r</em><sub>1</sub>,
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>1</sub>},{<em>r</em><sub>2</sub>,
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>2</sub>},{<em>r</em><sub>3</sub>,
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>3</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes successive steps of lengths <em>r</em><sub><em>i</em></sub>.
+    <li>AnglePath[
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>0</sub>,{<em>step</em><sub>1</sub>,<em>step</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] starts at angle
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>0</sub> with respect to the <em>x</em> axis.
+    <li>AnglePath[{<em>x</em>,<em>y</em>},{<em>step</em><sub>1</sub>,<em>step</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] starts at the point {<em>x</em>,<em>y</em>} with initial angle 0 with respect to the <em>x</em> axis.
+    <li>AnglePath[{{<em>x</em>,<em>y</em>},
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>0</sub>},{<em>step</em><sub>1</sub>,<em>step</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] starts at {<em>x</em>,<em>y</em>} with initial angle
+        <math>
+            <ms>&#952;</ms>
+        </math>
+        <sub>0</sub> with respect to the <em>x</em> axis.
+    <li>
+        AnglePath[{{<em>x</em>,<em>y</em>},{<em>dx</em>,<em>dy</em>}},{<em>step</em><sub>1</sub>,<em>step</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes the first step to go from {<em>x</em>,<em>y</em>} to {<em>x</em>+<em>dx</em>,<em>y</em>+<em>dy</em>}.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

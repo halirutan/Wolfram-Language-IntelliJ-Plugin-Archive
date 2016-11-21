@@ -1,0 +1,53 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FormPage.html">FormPage</a></h3>
+<ul>
+    <li>FormPage[<em>formspec</em>,<em>func</em>] represents an active page that takes input from a form and generates
+        results on the same page by applying <em>func</em> to the values obtained from the form whose structure is
+        defined by <em>formspec</em>.
+    <li>FormPage[{<em>name</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>func</em>] represents an active form page with fields named <em>name</em><sub><em>i</em></sub> interpreted
+        as types <em>type</em><sub><em>i</em></sub>.
+    <li>FormPage[{{<em>name</em><sub>1</sub>,<em>label</em><sub>1</sub>}
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>func</em>] uses <em>label</em><sub><em>i</em></sub> as the label for the field named
+        <em>name</em><sub><em>i</em></sub>.
+    <li>FormPage[{<em>namespec</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>default</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>func</em>] uses <em>default</em><sub><em>i</em></sub> as the default for the field specified by <em>namespec</em><sub><em>i</em></sub>.
+    <li>FormPage[<em>formspec</em>,<em>func</em>,<em>form</em>] lays out the page according to the layout specification
+        <em>form</em>.
+    <li>FormPage[<em>formspec</em>,<em>func</em>,<em>initform</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>resform</em>] uses <em>initform</em> as the initial layout specification and <em>resform</em> as the layout
+        specification for result pages.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

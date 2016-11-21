@@ -1,0 +1,16 @@
+StringJoin["<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href=\"http://reference.wolfram.com/mathematica/ref/DeleteCloudExpression.html\">DeleteCloudExpression</a></h3>
+<ul>
+    <li>", StringReplace[StringReplace[StringReplace[StringJoin[ErrorBox["RowBox[{\"DeleteCloudExpression\", \"[\",
+        \"StyleBox[name, TI]StyleBox[\", TI], \"]\"}]"]], "<>" -> "&lt;&gt;"]~~" deletes the cloud expression identified
+        by <em>\"name\"</em>.
+    <li>DeleteCloudExpression[<em>obj</em>] deletes the cloud expression <em>obj</em>.", {"" :> "",
+        (IDEAPlugin`Private`a_)?(StringMatchQ[ToString[FullForm[#1]], "\"\\["~~__~~"]\""] & ) :>
+        StringReplace[ToString[IDEAPlugin`Private`a, MathMLForm], {WhitespaceCharacter :> ""}]}], {"<>" -> "&lt;&gt;", "&#62754;"
+        -> "&rarr;", "&#61715;" -> "&lt;&#x7c;", "&#61716;" -> "&#x7c;&gt;", "&#10740;" -> ":>", "&#10869;" -> "=="}], "
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>"]

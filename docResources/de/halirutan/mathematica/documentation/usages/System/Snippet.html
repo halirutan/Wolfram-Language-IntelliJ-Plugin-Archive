@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Snippet.html">Snippet</a></h3>
+<ul>
+    <li>Snippet[<em>doc</em>] gives a snippet of text from a document or other content object.
+    <li>Snippet[<em>doc</em>,<em>n</em>] gives about <em>n</em> lines from the beginning.
+    <li>Snippet[<em>doc</em>,-<em>n</em>] gives about <em>n</em> lines from the end.
+    <li>Snippet[<em>doc</em>,<em>n</em><sub>1</sub>;;<em>n</em><sub>2</sub>] gives a span from lines
+        <em>n</em><sub>1</sub> to <em>n</em><sub>2</sub>
+    <li>Snippet[<em>doc</em>,<em>n</em><sub>1</sub>;;<em>n</em><sub>2</sub>;;<em>n</em><sub>3</sub>] gives a span from
+        lines <em>n</em><sub>1</sub> to <em>n</em><sub>2</sub> in steps of <em>n</em><sub>3</sub>.
+    <li>Snippet[ContentObject[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ],SearchResultObject[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ]] gives contextual snippets from a content object based on search results.
+    <li>Snippet[<em>doc</em>,{<em>pos</em><sub>1</sub>,<em>pos</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives multiple snippets from different positions.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

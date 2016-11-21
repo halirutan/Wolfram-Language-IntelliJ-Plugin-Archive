@@ -1,0 +1,69 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ClusteringTree.html">ClusteringTree</a></h3>
+<ul>
+    <li>ClusteringTree[{<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] constructs a weighted tree from the hierarchical clustering of the elements <em>e</em><sub>1</sub>,
+        <em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>ClusteringTree[{<em>e</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>v</em><sub>1</sub>,<em>e</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>v</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents <em>e</em><sub><em>i</em></sub> with <em>v</em><sub><em>i</em></sub> in the constructed graph.
+    <li>ClusteringTree[{<em>e</em><sub>1</sub>,<em>e</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>v</em><sub>1</sub>,<em>v</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents <em>e</em><sub><em>i</em></sub> with <em>v</em><sub><em>i</em></sub> in the constructed graph.
+    <li>ClusteringTree[
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>label</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>e</em><sub>1</sub>,<em>label</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>e</em><sub><em>2
+            <math>
+                <ms>&#8230;</ms>
+            </math>
+        </em></sub>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ] represents <em>e</em><sub><em>i</em></sub> using labels <em>label</em><sub><em>i</em></sub> in the constructed
+        graph.
+    <li>ClusteringTree[<em>data</em>,<em>h</em>] constructs a weighted tree from the hierarchical clustering of
+        <em>data</em> by joining subclusters at distance less than <em>h</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

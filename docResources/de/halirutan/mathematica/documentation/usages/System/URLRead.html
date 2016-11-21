@@ -1,0 +1,32 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/URLRead.html">URLRead</a></h3>
+<ul>
+    <li>URLRead[<em>url</em>] sends a request to a URL and reads back the response, returning it as a response object.
+    <li>URLRead[<em>assoc</em>] sends a request to a URL built from an association of components and metadata elements.
+    <li>URLRead[HTTPRequest[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ]] sends a request specified by a symbolic HTTPRequest object.
+    <li>URLRead[<em>req</em>,"elem"] returns only the element <em>elem</em> from the response.
+    <li>URLRead[<em>req</em>,{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] returns an association of the values of the elements <em>elem</em><sub><em>i</em></sub>.
+    <li>URLRead[{<em>req</em><sub>1</sub>,<em>req</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] sends the requests <em>req</em><sub><em>i</em></sub> in parallel, giving a list of the results obtained.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Options: </b>VerifySecurityCertificates, FollowRedirects,
+    CookieFunction, TimeConstraint, Interactive, Authentication, CharacterEncoding</p>
