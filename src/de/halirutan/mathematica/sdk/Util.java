@@ -69,12 +69,12 @@ public class Util {
       }
     } else {
       if (OS.contains("mac")) {
-        final String contentsPath = rootDir.getAbsolutePath() + File.pathSeparator + "Contents";
+        final String contentsPath = rootDir.getAbsolutePath() + File.separatorChar + "Contents";
         if (!isAccessibleDir(contentsPath)) {
           return null;
         }
-        File contentsDir = new File(contentsPath + File.pathSeparator);
-        final File pkinfo = findFileInDir(contentsDir, "pkinfo.plist");
+        File contentsDir = new File(contentsPath);
+        final File pkinfo = findFileInDir(contentsDir, "Info.plist");
         if (pkinfo != null && pkinfo.canRead()) {
           try {
             final Dict dict = PListParser.load(pkinfo);

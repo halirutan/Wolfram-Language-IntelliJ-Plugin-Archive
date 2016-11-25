@@ -68,21 +68,30 @@ public class MathematicaSdkType extends SdkType {
       return Util.parseVersion(rootDir);
     }
     return null;
-    }
+  }
 
 
   private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
 
     final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
 
-    String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
-    jarFileSystem.setNoCopyJarForPath(path);
-    VirtualFile vFile = jarFileSystem.findFileByPath(path);
-    sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
-  }
+    Pattern jlinkPattern = Pattern.compile(".*JLink.jar");
+    List<File> jlinkFiles = FileUtil.findFilesByMask(jlinkPattern, new File(homePath));
+    for (File jlinkFile : jlinkFiles) {
+      jarFileSystem.setNoCopyJarForPath(jlinkFile.getAbsolutePath()+ JarFileSystem.JAR_SEPARATOR);
+      VirtualFile vFile = jarFileSystem.findFileByPath(jlinkFile.getAbsolutePath()+ JarFileSystem.JAR_SEPARATOR);
+      sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
+    }
+   }
 
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
-    File addOns = new File(homePath, "AddOns");
+    String addOnsDir = homePath + File.separatorChar + "AddOns";
+    File addOns;
+    if (OS.contains("mac") && !Util.isAccessibleDir(addOnsDir)) {
+      addOns = new File(homePath + File.separatorChar + "AddOns");
+    } else {
+      addOns = new File(addOnsDir);
+    }
     Pattern initMPattern = Pattern.compile(".*init\\.m");
     if (addOns.isDirectory()) {
       final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
@@ -102,8 +111,6 @@ public class MathematicaSdkType extends SdkType {
       sdkModificator.addRoot(fileSystem.findFileByIoFile(kernel), OrderRootType.CLASSES);
     }
   }
-
-
 
 
   @Nullable
