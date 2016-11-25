@@ -74,7 +74,6 @@
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
 
     <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
-
     <moduleType id="MATHEMATICA_MODULE"
                 implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
     <moduleConfigurationEditorProvider

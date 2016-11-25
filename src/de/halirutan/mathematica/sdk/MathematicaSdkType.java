@@ -45,8 +45,10 @@ import java.util.regex.Pattern;
 public class MathematicaSdkType extends SdkType {
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
 
+  private static final String OS = System.getProperty("os.name").toLowerCase();
+
   public MathematicaSdkType() {
-    super("Mathematica Sdk");
+    super("Mathematica SDK");
   }
 
   @NotNull
@@ -57,28 +59,22 @@ public class MathematicaSdkType extends SdkType {
   /**
    * Extracts the version from the .VersionID file for Mathematica version > 5
    *
-   * @param path
-   *     Path to the install directory
+   * @param path Path to the install directory
    * @return Version number in the format e.g. 9.0.1
    */
   private static String getMathematicaVersionString(String path) {
-    File versionID = new File(path + File.separatorChar + ".VersionID");
-    String versionString = "Unknown";
-
-    try {
-      if (versionID.exists()) {
-        Scanner scanner = new Scanner(versionID).useDelimiter("\\A");
-        if (scanner.hasNext()) versionString = scanner.next().trim();
-      }
-    } catch (FileNotFoundException ignored) {
+    if (Util.isAccessibleDir(path)) {
+      File rootDir = new File(path);
+      return Util.parseVersion(rootDir);
     }
-    return versionString;
-  }
+    return null;
+    }
 
 
   private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
 
     final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
+
     String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
     jarFileSystem.setNoCopyJarForPath(path);
     VirtualFile vFile = jarFileSystem.findFileByPath(path);
@@ -99,15 +95,29 @@ public class MathematicaSdkType extends SdkType {
     }
   }
 
+  private static void addKernels(SdkModificator sdkModificator, String homePath) {
+    final List<File> mathematicaKernels = Util.findMathematicaKernels(homePath);
+    final LocalFileSystem fileSystem = LocalFileSystem.getInstance();
+    for (File kernel : mathematicaKernels) {
+      sdkModificator.addRoot(fileSystem.findFileByIoFile(kernel), OrderRootType.CLASSES);
+    }
+  }
+
+
+
+
   @Nullable
   @Override
   public String suggestHomePath() {
-    final String property = System.getProperty("os.name");
     String path = "";
-    if (property.matches("Linux.*")) {
+    if (OS.contains("nux")) {
       path = "/usr/local/Wolfram";
+    } else if (OS.contains("win")) {
+      path = "C:";
+    } else if (OS.contains("mac")) {
+      path = "/Applications";
     }
-    if (new File(path).exists()) {
+    if (Util.isAccessibleDir(path)) {
       return path;
     }
     return null;
@@ -127,7 +137,18 @@ public class MathematicaSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(String path) {
-    return (new File(path + File.separatorChar + ".VersionID")).exists();
+    String kernelLocation = "";
+    if (OS.contains("win") || OS.contains("nux")) {
+      kernelLocation = path + File.separatorChar + "Executables" + File.separatorChar + "MathKernel";
+      if (OS.contains("win")) {
+        kernelLocation += ".exe";
+      }
+    } else if (OS.contains("mac")) {
+      kernelLocation = path + File.separatorChar + "Contents/MacOS/MathKernel";
+    }
+    File kernel = new File(kernelLocation);
+    return kernel.exists() && kernel.canExecute();
+
   }
 
   @Override
@@ -174,6 +195,7 @@ public class MathematicaSdkType extends SdkType {
     sdkModificator.setVersionString(getMathematicaVersionString(homePath));
     addAddOnPackageSources(sdkModificator, homePath);
     addJLinkJars(sdkModificator, homePath);
+    addKernels(sdkModificator, homePath);
     sdkModificator.commitChanges();
     return true;
 
