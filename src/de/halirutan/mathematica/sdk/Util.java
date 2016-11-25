@@ -81,7 +81,8 @@ class Util {
         if (pkinfo != null && pkinfo.canRead()) {
           try {
             final Dict dict = PListParser.load(pkinfo);
-            return (String) dict.get("CFBundleShortVersionString");
+            final String versionString = (String) dict.get("CFBundleShortVersionString");
+            return versionString.trim();
           } catch (XmlParseException e) {
             e.printStackTrace();
             return null;
