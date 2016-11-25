@@ -83,30 +83,22 @@ public class MathematicaSdkType extends SdkType {
    }
 
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
-    String addOnsDir = homePath + File.separatorChar + "AddOns";
-    File addOns;
-    if (OS.contains("mac") && !Util.isAccessibleDir(addOnsDir)) {
-      addOns = new File(homePath + File.separatorChar + "AddOns");
+    String addOnsPath = homePath + File.separatorChar + "AddOns";
+    File addOnsFile;
+    if (OS.contains("mac") && !Util.isAccessibleDir(addOnsPath)) {
+      addOnsFile = new File(homePath + File.separatorChar + "Contents/AddOns");
     } else {
-      addOns = new File(addOnsDir);
+      addOnsFile = new File(addOnsPath);
     }
     Pattern initMPattern = Pattern.compile(".*init\\.m");
-    if (addOns.isDirectory()) {
-      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
+    if (addOnsFile.isDirectory()) {
+      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOnsFile);
       for (File file : initFiles) {
         if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
           final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
           sdkModificator.addRoot(packageDirectory, OrderRootType.SOURCES);
         }
       }
-    }
-  }
-
-  private static void addKernels(SdkModificator sdkModificator, String homePath) {
-    final List<File> mathematicaKernels = Util.findMathematicaKernels(homePath);
-    final LocalFileSystem fileSystem = LocalFileSystem.getInstance();
-    for (File kernel : mathematicaKernels) {
-      sdkModificator.addRoot(fileSystem.findFileByIoFile(kernel), OrderRootType.CLASSES);
     }
   }
 
@@ -179,7 +171,8 @@ public class MathematicaSdkType extends SdkType {
   }
 
   @Override
-  public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
+  public void saveAdditionalData(@NotNull SdkAdditionalData sdkAdditionalData, @NotNull Element element) {
+
   }
 
   @Override
@@ -200,7 +193,6 @@ public class MathematicaSdkType extends SdkType {
     sdkModificator.setVersionString(getMathematicaVersionString(homePath));
     addAddOnPackageSources(sdkModificator, homePath);
     addJLinkJars(sdkModificator, homePath);
-    addKernels(sdkModificator, homePath);
     sdkModificator.commitChanges();
     return true;
 
