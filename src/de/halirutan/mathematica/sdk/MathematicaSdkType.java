@@ -61,7 +61,7 @@ public class MathematicaSdkType extends SdkType {
    *     Path to the install directory
    * @return Version number in the format e.g. 9.0.1
    */
-  public static String getMathematicaVersionString(String path) {
+  private static String getMathematicaVersionString(String path) {
     File versionID = new File(path + File.separatorChar + ".VersionID");
     String versionString = "Unknown";
 
@@ -136,20 +136,20 @@ public class MathematicaSdkType extends SdkType {
   }
 
   @Override
-  public boolean isRootTypeApplicable(OrderRootType type) {
+  public boolean isRootTypeApplicable(@NotNull OrderRootType type) {
     return type.equals(OrderRootType.SOURCES) || type.equals(OrderRootType.DOCUMENTATION) || type.equals(OrderRootType.CLASSES);
   }
 
   @Nullable
   @Override
-  public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
+  public AdditionalDataConfigurable createAdditionalDataConfigurable(@NotNull SdkModel sdkModel, @NotNull SdkModificator sdkModificator) {
     return null;
   }
 
   @NotNull
   @Override
   public String getPresentableName() {
-    return "Mathematica Sdk";
+    return "Mathematica SDK";
   }
 
   @Override
@@ -161,13 +161,14 @@ public class MathematicaSdkType extends SdkType {
     return MathematicaIcons.FILE_ICON;
   }
 
+  @NotNull
   @Override
   public Icon getIconForAddAction() {
     return MathematicaIcons.FILE_ICON;
   }
 
   @Override
-  public boolean setupSdkPaths(Sdk sdk, SdkModel sdkModel) {
+  public boolean setupSdkPaths(@NotNull Sdk sdk, @NotNull SdkModel sdkModel) {
     final SdkModificator sdkModificator = sdk.getSdkModificator();
     final String homePath = sdk.getHomePath();
     sdkModificator.setVersionString(getMathematicaVersionString(homePath));

@@ -21,10 +21,13 @@
 
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
 
+import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -40,14 +43,86 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 /**
- * Provides warnings when you are using Mathematica symbols that are introduces later then the version you are using.
+ * Provides warnings when you are using Mathematica symbols that are introduces later than the version you are using.
  *
  * @author halirutan
  */
 public class UnsupportedVersion extends AbstractInspection {
+
+  @SuppressWarnings("InstanceVariableNamingConvention")
+  public MathematicaLanguageLevel languageLevel = MathematicaLanguageLevel.HIGHEST;
+
+  @SuppressWarnings("InstanceVariableNamingConvention")
+  public boolean useSDKLanguageLevelOrHighest = true;
+
+  /**
+   * Sets the correct text for the info label in the inspection settings page
+   *
+   * @param label label to set the text
+   */
+  private void setLabelTextToVersion(JLabel label) {
+    if (useSDKLanguageLevelOrHighest) {
+      label.setText("Use language version from Project SDK");
+    } else {
+      label.setText(languageLevel.getPresentableText());
+    }
+  }
+
+  @Nullable
+  @Override
+  public JComponent createOptionsPanel() {
+    final JPanel mainPanel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP));
+    final JCheckBox useSDKCheckbox = new JCheckBox("Use Project SDK Language Level");
+    final JLabel infoLabel = new JLabel();
+    //noinspection Since15
+    final ComboBox<MathematicaLanguageLevel> versionComboBox = new ComboBox<MathematicaLanguageLevel>();
+
+    for (MathematicaLanguageLevel level : MathematicaLanguageLevel.values()) {
+      //noinspection unchecked
+      versionComboBox.addItem(level);
+    }
+    versionComboBox.setSelectedItem(languageLevel);
+    versionComboBox.setEditable(false);
+    //noinspection unchecked
+    versionComboBox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        final MathematicaLanguageLevel selectedItem = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
+        if (selectedItem != null) {
+          languageLevel = selectedItem;
+          setLabelTextToVersion(infoLabel);
+        }
+      }
+    });
+
+    useSDKCheckbox.setSelected(useSDKLanguageLevelOrHighest);
+    useSDKCheckbox.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        useSDKLanguageLevelOrHighest = useSDKCheckbox.isSelected();
+        versionComboBox.setVisible(!useSDKLanguageLevelOrHighest);
+        if (!useSDKLanguageLevelOrHighest) {
+          languageLevel = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
+        }
+        setLabelTextToVersion(infoLabel);
+      }
+    });
+
+    setLabelTextToVersion(infoLabel);
+    versionComboBox.setVisible(!useSDKLanguageLevelOrHighest);
+
+    mainPanel.add(infoLabel);
+    mainPanel.add(useSDKCheckbox);
+    mainPanel.add(versionComboBox);
+
+    return mainPanel;
+  }
 
   @Nls
   @NotNull
@@ -71,26 +146,40 @@ public class UnsupportedVersion extends AbstractInspection {
 
   @NotNull
   @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.ERROR;
+  }
+
+  @NotNull
+  @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
-    if(session.getFile().getFileType() instanceof MathematicaFileType) {
-      return new WrongVersionVisitor(holder);
+    if (session.getFile().getFileType() instanceof MathematicaFileType) {
+      if (useSDKLanguageLevelOrHighest) {
+        final ProjectRootManager manager = ProjectRootManager.getInstance(holder.getProject());
+        final Sdk projectSdk = manager.getProjectSdk();
+        if (projectSdk != null && projectSdk.getSdkType() instanceof MathematicaSdkType) {
+          languageLevel = MathematicaLanguageLevel.createFromSdk(projectSdk);
+        }
+      }
+      return new WrongVersionVisitor(holder, languageLevel);
     } else return PsiElementVisitor.EMPTY_VISITOR;
   }
 
-
-
+  /**
+   * This visitor just inspects all symbols in the file. For each symbol it checks whether it is in the list of built-in
+   * symbols and if yes, if it is already defined in the Mathematica version the user specified
+   */
   private static class WrongVersionVisitor extends MathematicaVisitor {
-
 
     private HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
     private MathematicaLanguageLevel myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
     private final ProblemsHolder myHolder;
 
-    WrongVersionVisitor(final ProblemsHolder holder) {
+    WrongVersionVisitor(final ProblemsHolder holder, final MathematicaLanguageLevel usedLanguageVersion) {
       this.myHolder = holder;
       final Sdk projectSdk = ProjectRootManager.getInstance(myHolder.getProject()).getProjectSdk();
       if (projectSdk != null && projectSdk.getSdkType() instanceof MathematicaSdkType) {
-        myLanguageLevel = MathematicaLanguageLevel.createFromSdk(projectSdk);
+        myLanguageLevel = usedLanguageVersion;
       }
 
     }
@@ -98,7 +187,7 @@ public class UnsupportedVersion extends AbstractInspection {
     private void registerProblem(final PsiElement element, final String message) {
       myHolder.registerProblem(
           element,
-          TextRange.from(0,element.getTextLength()),
+          TextRange.from(0, element.getTextLength()),
           message);
     }
 
@@ -113,12 +202,11 @@ public class UnsupportedVersion extends AbstractInspection {
       if (mySymbolVersions.containsKey(nameWithContext)) {
         double version = mySymbolVersions.get(nameWithContext);
         if (version > myLanguageLevel.getVersionNumber()) {
-          registerProblem(symbol, "Mathematica " + version + " required. Your project SDK is " + myLanguageLevel.getPresentableText());
+          registerProblem(symbol, "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());
         }
       }
-
-
     }
   }
 }
+
 

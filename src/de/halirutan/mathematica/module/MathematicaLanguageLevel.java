@@ -20,19 +20,13 @@
  */
 package de.halirutan.mathematica.module;
 
-import com.intellij.core.JavaCoreBundle;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.LanguageLevelModuleExtension;
 import com.intellij.openapi.roots.LanguageLevelProjectExtension;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ArrayUtil;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.lang.manifest.ManifestBundle;
 
 /**
  * @author dsl
@@ -52,7 +46,6 @@ public enum MathematicaLanguageLevel {
 
 
   public static final MathematicaLanguageLevel HIGHEST = M_11;
-  public static final Key<MathematicaLanguageLevel> KEY = Key.create("MATHEMATICA_LANGUAGE_LEVEL");
 
   private final String myName;
   private final String myPresentableText;
@@ -100,5 +93,11 @@ public enum MathematicaLanguageLevel {
 
   public boolean isLessThan(@NotNull MathematicaLanguageLevel level) {
     return compareTo(level) < 0;
+  }
+
+
+  @Override
+  public String toString() {
+    return myPresentableText;
   }
 }
