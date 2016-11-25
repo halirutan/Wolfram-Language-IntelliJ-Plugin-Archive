@@ -55,10 +55,10 @@ import java.util.HashMap;
  */
 public class UnsupportedVersion extends AbstractInspection {
 
-  @SuppressWarnings("InstanceVariableNamingConvention")
+  @SuppressWarnings({"InstanceVariableNamingConvention", "WeakerAccess"})
   public MathematicaLanguageLevel languageLevel = MathematicaLanguageLevel.HIGHEST;
 
-  @SuppressWarnings("InstanceVariableNamingConvention")
+  @SuppressWarnings({"InstanceVariableNamingConvention", "WeakerAccess"})
   public boolean useSDKLanguageLevelOrHighest = true;
 
   /**

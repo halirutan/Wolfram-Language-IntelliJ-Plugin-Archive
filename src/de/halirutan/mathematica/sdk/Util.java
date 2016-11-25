@@ -27,20 +27,22 @@ import com.btr.proxy.util.PListParser.XmlParseException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.StreamUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
  * @author patrick (25.11.16).
  */
-public class Util {
+class Util {
   private static final String OS = System.getProperty("os.name").toLowerCase();
 
-  public static boolean isAccessibleDir(final String dir) {
+  static boolean isAccessibleDir(final String dir) {
     File rootDir = new File(dir);
     return (rootDir.exists() && rootDir.isDirectory() && rootDir.canRead());
   }
@@ -51,7 +53,7 @@ public class Util {
    * @param rootDir the root directory of the Mathematica installation. On OSX the .app directory
    * @return version string or null
    */
-  public static String parseVersion(final File rootDir) {
+  static String parseVersion(final File rootDir) {
     // On Windows and Linux, there is always a .VersionID file in the root directory of the Mathematica installation
     if (OS.contains("win") || OS.contains("nux")) {
       String versionString;
@@ -59,8 +61,9 @@ public class Util {
       final List<File> creationFile = FileUtil.findFilesOrDirsByMask(Pattern.compile(".*\\.CreationID"), rootDir);
       if (versionFile.size() > 0 && creationFile.size() > 0) {
         try {
-          versionString = StreamUtil.readText(new FileInputStream(versionFile.get(0)), Charset.defaultCharset()).trim();
-          versionString += "." + StreamUtil.readText(new FileInputStream(creationFile.get(0)), Charset.defaultCharset());
+          final String vString = StreamUtil.readText(new FileInputStream(versionFile.get(0)), Charset.defaultCharset()).trim();
+          final String bString = StreamUtil.readText(new FileInputStream(creationFile.get(0)), Charset.defaultCharset()).trim();
+          versionString = vString +  "." + bString;
           return versionString;
         } catch (Exception e) {
           e.printStackTrace();
@@ -105,7 +108,7 @@ public class Util {
     return null;
   }
 
-  public static List<File> findMathematicaKernels(String homePath) {
+  static List<File> findMathematicaKernels(String homePath) {
     List<File> kernels = new ArrayList<File>();
     File rootDir = new File(homePath);
     Pattern kernelPattern;
