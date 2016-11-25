@@ -2,7 +2,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.0.0</version>
+  <version>2.0.2</version>
   <idea-version since-build="135.1230"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
