@@ -35,7 +35,7 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.module.MathematicaLanguageLevel;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;

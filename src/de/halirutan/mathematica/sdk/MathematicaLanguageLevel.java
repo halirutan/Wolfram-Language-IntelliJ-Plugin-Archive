@@ -18,20 +18,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.halirutan.mathematica.module;
+
+package de.halirutan.mathematica.sdk;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelModuleExtension;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author dsl
- * @see LanguageLevelProjectExtension
- * @see LanguageLevelModuleExtension
+ * Provides a way to represent the different versions of a Mathematica SDK
+ * @author patrick (11/22/2016)
  */
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "WeakerAccess"})
 public enum MathematicaLanguageLevel {

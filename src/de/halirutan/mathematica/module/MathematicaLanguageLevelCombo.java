@@ -21,17 +21,11 @@
 package de.halirutan.mathematica.module;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.ColoredListCellRendererWrapper;
-import com.intellij.ui.SimpleTextAttributes;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;
 

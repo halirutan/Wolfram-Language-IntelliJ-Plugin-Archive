@@ -81,7 +81,6 @@
 
     <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
-
     <!-- Highlighting and annotating of code, StructureView and documentation lookup-->
 
     <lang.syntaxHighlighterFactory language="Mathematica"

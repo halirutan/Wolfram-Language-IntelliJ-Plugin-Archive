@@ -34,6 +34,7 @@ import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaFileTemplateProvider;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,14 +45,14 @@ import java.io.IOException;
 /**
  * @author patrick (4/8/13)
  */
-public class MathematicaModuleBuilder extends JavaModuleBuilder {
+class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   private final ProjectType myProjectType;
   /**
    * Additions by rsmenon (5/6/13) Will need some more reworking to implement checkboxes for Test/Documentation.
    */
 
-  private String myProjectName;
+  private String myProjectName = null;
 
   public MathematicaLanguageLevel getLanguageLevel() {
     return myLanguageLevel;
