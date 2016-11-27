@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.errorreporting;
 
 import com.intellij.diagnostic.DiagnosticBundle;
-import com.intellij.diagnostic.ErrorReportConfigurable;
 import com.intellij.diagnostic.IdeErrorsDialog;
 import com.intellij.diagnostic.ReportMessages;
 import com.intellij.ide.BrowserUtil;
@@ -63,7 +62,6 @@ import java.util.regex.PatternSyntaxException;
 
 import static com.intellij.openapi.diagnostic.SubmittedReportInfo.SubmissionStatus.*;
 import static com.intellij.openapi.util.text.StringUtil.isEmpty;
-import static com.intellij.openapi.util.text.StringUtil.notNullize;
 
 /**
  * Created by IntelliJ IDEA. User: Jon S Akhtar Date: Oct 19, 2010 Time: 11:35:35 AM
@@ -83,28 +81,17 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
   private String myExtraInformation = "";
   private String myAffectedVersion = null;
 
+  @NotNull
   @Override
   public String getReportActionText() {
     return "Report to halirutan";
   }
 
-//  @Override
-//  public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
-//    return submit(events, this.myDescription, notNullize(ErrorReportConfigurable.getInstance()
-//        .ITN_LOGIN, "<anonymous>"), parentComponent);
-//  }
-//
-//  @Override
-//  public void submitAsync(IdeaLoggingEvent[] events, String additionalInfo, Component parentComponent,
-//                          Consumer<SubmittedReportInfo> consumer) {
-//
-//    this.myDescription = additionalInfo;
-//    super.submitAsync(events, additionalInfo, parentComponent, consumer);
-//  }
 
   @Override
   public boolean submit(@NotNull final IdeaLoggingEvent[] events, @Nullable final String additionalInfo, @NotNull final Component parentComponent, @NotNull final Consumer<SubmittedReportInfo> consumer) {
-    submit(events, additionalInfo, notNullize(ErrorReportConfigurable.getInstance().ITN_LOGIN, "<anonymous>"), parentComponent);
+    String name = "<anonymous>";
+    submit(events, additionalInfo, name, parentComponent);
     return true;
   }
 
@@ -179,20 +166,18 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       // Syntax error in the regular expression
     }
 
-    SubmissionStatus status = NEW_ISSUE;
-
     if (resultString == null) {
       return new SubmittedReportInfo(SERVER_ISSUE_URL, "", FAILED);
     }
 
 
     final SubmittedReportInfo reportInfo = new SubmittedReportInfo(SERVER_URL + "issue/" + resultString,
-        resultString, status);
+        resultString, NEW_ISSUE);
 
 
 
 
-        /* Now try to set the autosubmit user using a custom command */
+    /* Now try to set the auto-submit user using a custom command */
     if (user != null) {
       runCommand(resultString, "Autosubmit User " + user);
     }
@@ -206,7 +191,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     return reportInfo;
   }
 
-  public String submit() {
+  private String submit() {
     if (isEmpty(this.myDescription)) {
       throw new RuntimeException(DESCRIPTION);
     }
@@ -246,7 +231,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       }
 
       log.info(response);
-      myCookieManager.storeCookies(conn);
+      // myCookieManager.storeCookies(conn);
 
       // project=TST&assignee=beto&summary=new issue&myDescription=myDescription of new issue
       // #&priority=show-stopper&type=feature&subsystem=UI&state=Reopened&affectsVersion=2.0,
@@ -281,7 +266,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       conn = url.openConnection();
 
       conn.setDoOutput(true);
-      myCookieManager.setCookies(conn); // Use the login from earlier
+     // myCookieManager.setCookies(conn); // Use the login from earlier
 
       wr = new OutputStreamWriter(conn.getOutputStream());
       wr.write(data);
@@ -294,6 +279,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       }
 
     } catch (Exception e) {
+      e.printStackTrace();
       log.info("Error creating issue", e);
     }
 
@@ -334,7 +320,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
       }
 
       if (resultString != null) {
-        log.debug("could be dumplicate of " + resultString);
+        log.debug("could be duplicate of " + resultString);
         return resultString;
       }
 
