@@ -38,11 +38,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Provides a way to systematically extract information like version, AddOns packages, and JLink.jar location from a
+ * Mathematica installation. I don't support versions < 8.
+ *
  * @author patrick (4/27/13)
  */
 public class MathematicaSdkType extends SdkType {
-  private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
 
+  private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
   private static final String OS = System.getProperty("os.name").toLowerCase();
 
   public MathematicaSdkType() {
@@ -76,11 +79,11 @@ public class MathematicaSdkType extends SdkType {
     Pattern jlinkPattern = Pattern.compile(".*JLink.jar");
     List<File> jlinkFiles = FileUtil.findFilesByMask(jlinkPattern, new File(homePath));
     for (File jlinkFile : jlinkFiles) {
-      jarFileSystem.setNoCopyJarForPath(jlinkFile.getAbsolutePath()+ JarFileSystem.JAR_SEPARATOR);
-      VirtualFile vFile = jarFileSystem.findFileByPath(jlinkFile.getAbsolutePath()+ JarFileSystem.JAR_SEPARATOR);
+      jarFileSystem.setNoCopyJarForPath(jlinkFile.getAbsolutePath() + JarFileSystem.JAR_SEPARATOR);
+      VirtualFile vFile = jarFileSystem.findFileByPath(jlinkFile.getAbsolutePath() + JarFileSystem.JAR_SEPARATOR);
       sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
     }
-   }
+  }
 
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
     String addOnsPath = homePath + File.separatorChar + "AddOns";
@@ -171,7 +174,7 @@ public class MathematicaSdkType extends SdkType {
   }
 
   @Override
-  public void saveAdditionalData(@NotNull SdkAdditionalData sdkAdditionalData, @NotNull Element element) {
+  public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
 
   }
 
