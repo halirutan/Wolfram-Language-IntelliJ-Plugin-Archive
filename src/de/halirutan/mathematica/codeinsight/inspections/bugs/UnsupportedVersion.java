@@ -35,9 +35,9 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -171,17 +171,13 @@ public class UnsupportedVersion extends AbstractInspection {
    */
   private static class WrongVersionVisitor extends MathematicaVisitor {
 
-    private HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
+    private final HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
     private MathematicaLanguageLevel myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
     private final ProblemsHolder myHolder;
 
     WrongVersionVisitor(final ProblemsHolder holder, final MathematicaLanguageLevel usedLanguageVersion) {
       this.myHolder = holder;
-      final Sdk projectSdk = ProjectRootManager.getInstance(myHolder.getProject()).getProjectSdk();
-      if (projectSdk != null && projectSdk.getSdkType() instanceof MathematicaSdkType) {
         myLanguageLevel = usedLanguageVersion;
-      }
-
     }
 
     private void registerProblem(final PsiElement element, final String message) {
