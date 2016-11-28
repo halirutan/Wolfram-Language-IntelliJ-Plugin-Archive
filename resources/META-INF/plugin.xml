@@ -42,7 +42,7 @@
 
   <change-notes>
     <![CDATA[
-      <i>New features and bugfixes:</i>
+      <i>New features and bug-fixes:</i>
       <br/>
       <ul>
         <li>Fixed smart-completion of Options that stopped working (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/30">GH-30</a>)</li>
