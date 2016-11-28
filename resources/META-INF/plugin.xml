@@ -2,8 +2,8 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.0.7</version>
-  <idea-version since-build="135.1230"/>
+  <version>2.0.8</version>
+  <idea-version since-build="163.7743.44"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
   <description><![CDATA[
@@ -17,7 +17,8 @@
     <br/>
 
     This plugin turns your IntelliJ IDEA into a powerful coding environment for Mathematica. For more information
-    check out the <a href="http://mathematicaplugin.halirutan.de">official website</a>.
+    check out the <a href="http://mathematicaplugin.halirutan.de">official website</a>. I have started to create user-friendly
+    documentation of various features on the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki">Wiki pages of GitHub</a>.
     If you want to discuss specific topics, then ping me
     (<a href="http://mathematica.stackexchange.com/users/187/halirutan?tab=profile">halirutan</a>) in the dedicated
     <a href="http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica">chat room on stackexchange</a>.
@@ -33,7 +34,7 @@
       <li>Quick documentation lookup for all built-in symbols and operators</li>
       <li>Structured View for package definitions</li>
       <li>Correct display of Mathematica's <a href="https://reference.wolfram.com/language/guide/ListingOfNamedCharacters.html">named characters</a>
-      <li>Inspection of missing commas and semicolons
+      <li>Inspections for version mismatch of symbols, possible errors through multiplicaton at linebreak, and missing commas and semicolons
       <li>Autocompletion suggestions sorted by importance</li>
       <li>Highlighting and smart inserting of braces, brackets and parenthesis</li>
     </ul>
