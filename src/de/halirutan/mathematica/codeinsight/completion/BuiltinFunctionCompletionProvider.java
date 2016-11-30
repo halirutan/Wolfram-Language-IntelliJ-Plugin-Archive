@@ -57,17 +57,13 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
     }
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
+    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
 
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
-    for (String name : symbols.keySet()) {
-      SymbolInformation symbol = symbols.get(name);
-      LookupElementBuilder elm = LookupElementBuilder
-          .create(symbol.context.compareTo("System`") == 0 ? symbol.nameWithoutContext : symbol.name)
-          .withInsertHandler(MathematicaBracketInsertHandler.getInstance())
-          .withTypeText(symbol.context)
-          .withPresentableText(symbol.nameWithoutContext);
-      result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
+
+    for (SymbolInformation info : symbols.values()) {
+      BuiltinSymbolLookupElement lookup = new BuiltinSymbolLookupElement(info);
+      result2.addElement(PrioritizedLookupElement.withPriority(lookup, info.importance));
     }
   }
 }
