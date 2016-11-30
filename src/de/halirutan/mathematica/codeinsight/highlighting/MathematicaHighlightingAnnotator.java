@@ -148,9 +148,14 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitMessageName(final MessageName messageName) {
+    final StringifiedSymbol tag = messageName.getTag();
+    TextAttributesKey color = MathematicaSyntaxHighlighterColors.MESSAGE;
+    if ("usage".equals(tag.getText())) {
+      color = MathematicaSyntaxHighlighterColors.USAGE_MESSAGE;
+    }
     final ASTNode[] children = messageName.getNode().getChildren(null);
     for (int i = 1; i < children.length; i++) {
-      setHighlightingStrict(children[i].getPsi(), myHolder, MathematicaSyntaxHighlighterColors.MESSAGE);
+      setHighlightingStrict(children[i].getPsi(), myHolder, color);
     }
   }
 
