@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Mathematica Plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
+  <configuration default="false" name="Mathematica Plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true" show_console_on_std_out="true" show_console_on_std_err="true">
     <module name="Mathematica-IntelliJ-Plugin" />
     <option name="VM_PARAMETERS" value="-Xmx2G -Xms1G" />
     <option name="PROGRAM_PARAMETERS" value="" />

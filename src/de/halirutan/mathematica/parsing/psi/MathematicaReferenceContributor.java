@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2016 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,12 +19,26 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.parsing.psi.api.string;
+package de.halirutan.mathematica.parsing.psi;
 
-import com.intellij.psi.PsiNamedElement;
+import com.intellij.patterns.PlatformPatterns;
+import com.intellij.psi.PsiReferenceContributor;
+import com.intellij.psi.PsiReferenceRegistrar;
+import de.halirutan.mathematica.parsing.psi.api.string.MString;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (4/14/13)
+ * @author patrick (29.11.16).
  */
-public interface MString extends PsiNamedElement{
+public class MathematicaReferenceContributor extends PsiReferenceContributor {
+
+  /**
+   * Gives registrar the chance to do registrar
+   * @param registrar will work as registrar
+   */
+  @Override
+  public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
+        new MathematicaStringReferenceProvider());
+  }
 }

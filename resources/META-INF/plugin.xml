@@ -165,6 +165,7 @@
     <inspectionToolProvider
         implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
+    <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
   </extensions>
 
   <actions>
