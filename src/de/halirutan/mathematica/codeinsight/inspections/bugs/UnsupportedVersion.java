@@ -36,7 +36,9 @@ import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.api.lists.Association;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
@@ -185,6 +187,21 @@ public class UnsupportedVersion extends AbstractInspection {
           element,
           TextRange.from(0, element.getTextLength()),
           message);
+    }
+
+    @Override
+    public void visitFunctionCall(FunctionCall functionCall) {
+      final PsiElement head = functionCall.getHead();
+      if ("Association".equals(head.getText()) && myLanguageLevel.getVersionNumber() < 10 ) {
+        registerProblem(functionCall, "Associations where introduced in version 10. You are using " + myLanguageLevel.getPresentableText());
+      }
+    }
+
+    @Override
+    public void visitAssociation(Association association) {
+      if (myLanguageLevel.getVersionNumber() < 10) {
+        registerProblem(association, "Associations where introduced in version 10. You are using " + myLanguageLevel.getPresentableText());
+      }
     }
 
     @Override

@@ -28,6 +28,7 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.*;
 import de.halirutan.mathematica.parsing.psi.api.comparison.ComparisonOperation;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.api.graph.UndirectedEdge;
+import de.halirutan.mathematica.parsing.psi.api.lists.Association;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import de.halirutan.mathematica.parsing.psi.api.rules.ReplaceAll;
@@ -42,6 +43,10 @@ import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
  * @author patrick (10/9/13)
  */
 public class MathematicaVisitor extends PsiElementVisitor {
+
+  public void visitAssociation(Association association) {
+    visitElement(association);
+  }
 
   public void visitCompoundExpression(CompoundExpression compoundExpression) {
     visitElement(compoundExpression);
