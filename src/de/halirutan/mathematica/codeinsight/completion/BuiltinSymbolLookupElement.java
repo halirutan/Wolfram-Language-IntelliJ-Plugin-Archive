@@ -28,6 +28,7 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import org.jetbrains.annotations.NotNull;
@@ -79,8 +80,12 @@ public class BuiltinSymbolLookupElement extends LookupElement {
       if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
         if (myInfo.function) {
           document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));
-          editor.getCaretModel().moveToOffset(context.getTailOffset());
+          final int currentPosition = context.getTailOffset();
+          document.insertString(currentPosition, myInfo.getCallPattern());
           document.insertString(context.getTailOffset(), Character.toString(CLOSING_BRACKET));
+          final int endOffset = getFirstArgumentRange(myInfo).getEndOffset() + currentPosition;
+          editor.getSelectionModel().setSelection(currentPosition, endOffset);
+          editor.getCaretModel().moveToOffset(endOffset);
         } else {
           document.insertString(context.getTailOffset(), " ");
           editor.getCaretModel().moveToOffset(context.getTailOffset());
@@ -94,5 +99,14 @@ public class BuiltinSymbolLookupElement extends LookupElement {
 
     final Project project = context.getProject();
     PsiDocumentManager.getInstance(project).commitDocument(document);
+  }
+
+  private TextRange getFirstArgumentRange(SymbolInformation info) {
+    final String callPattern = info.getCallPattern();
+    final int firstComma = callPattern.indexOf(',');
+    if (firstComma == -1) {
+      return new TextRange(1, callPattern.length());
+    }
+    return new TextRange(1, firstComma);
   }
 }

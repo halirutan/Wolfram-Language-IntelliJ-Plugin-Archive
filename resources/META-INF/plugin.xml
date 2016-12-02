@@ -166,6 +166,10 @@
         implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
     <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
+
+    <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
+    <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
+                             <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
   </extensions>
 
   <actions>
