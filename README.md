@@ -21,7 +21,7 @@ Finally, there I have posted information on [stack exchange](http://mathematica.
 - the [first announcement](http://community.wolfram.com/groups/-/m/t/139047?p_p_auth=Lp2pA68y) on the Wolfram Community and a very detailed [new version post](http://community.wolfram.com/groups/-/m/t/353812?p_p_auth=Lp2pA68y)
 
 
-##![dev image][dev-image] Development  ![travis](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)
+##![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
 
 ### Code
 
