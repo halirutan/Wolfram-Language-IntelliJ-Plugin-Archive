@@ -150,7 +150,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
   public void visitMessageName(final MessageName messageName) {
     final StringifiedSymbol tag = messageName.getTag();
     TextAttributesKey color = MathematicaSyntaxHighlighterColors.MESSAGE;
-    if ("usage".equals(tag.getText())) {
+    if (tag != null && "usage".equals(tag.getText())) {
       color = MathematicaSyntaxHighlighterColors.USAGE_MESSAGE;
     }
     final ASTNode[] children = messageName.getNode().getChildren(null);
