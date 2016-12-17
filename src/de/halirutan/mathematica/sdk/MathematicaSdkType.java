@@ -34,19 +34,22 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
+ * Provides a way to systematically extract information like version, AddOns packages, and JLink.jar location from a
+ * Mathematica installation. I don't support versions < 8.
+ *
  * @author patrick (4/27/13)
  */
 public class MathematicaSdkType extends SdkType {
+
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
+  private static final String OS = System.getProperty("os.name").toLowerCase();
 
   public MathematicaSdkType() {
-    super("Mathematica Sdk");
+    super("Mathematica SDK");
   }
 
   @NotNull
@@ -57,38 +60,42 @@ public class MathematicaSdkType extends SdkType {
   /**
    * Extracts the version from the .VersionID file for Mathematica version > 5
    *
-   * @param path
-   *     Path to the install directory
+   * @param path Path to the install directory
    * @return Version number in the format e.g. 9.0.1
    */
-  public static String getMathematicaVersionString(String path) {
-    File versionID = new File(path + File.separatorChar + ".VersionID");
-    String versionString = "Unknown";
-
-    try {
-      if (versionID.exists()) {
-        Scanner scanner = new Scanner(versionID).useDelimiter("\\A");
-        if (scanner.hasNext()) versionString = scanner.next().trim();
-      }
-    } catch (FileNotFoundException ignored) {
+  private static String getMathematicaVersionString(String path) {
+    if (Util.isAccessibleDir(path)) {
+      File rootDir = new File(path);
+      return Util.parseVersion(rootDir);
     }
-    return versionString;
+    return null;
   }
+
 
   private static void addJLinkJars(SdkModificator sdkModificator, String homePath) {
 
     final JarFileSystem jarFileSystem = JarFileSystem.getInstance();
-    String path = homePath.replace(File.separatorChar, '/') + "/SystemFiles/Links/JLink/JLink.jar" + JarFileSystem.JAR_SEPARATOR;
-    jarFileSystem.setNoCopyJarForPath(path);
-    VirtualFile vFile = jarFileSystem.findFileByPath(path);
-    sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
+
+    Pattern jlinkPattern = Pattern.compile(".*JLink.jar");
+    List<File> jlinkFiles = FileUtil.findFilesByMask(jlinkPattern, new File(homePath));
+    for (File jlinkFile : jlinkFiles) {
+      jarFileSystem.setNoCopyJarForPath(jlinkFile.getAbsolutePath() + JarFileSystem.JAR_SEPARATOR);
+      VirtualFile vFile = jarFileSystem.findFileByPath(jlinkFile.getAbsolutePath() + JarFileSystem.JAR_SEPARATOR);
+      sdkModificator.addRoot(vFile, OrderRootType.CLASSES);
+    }
   }
 
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
-    File addOns = new File(homePath, "AddOns");
+    String addOnsPath = homePath + File.separatorChar + "AddOns";
+    File addOnsFile;
+    if (OS.contains("mac") && !Util.isAccessibleDir(addOnsPath)) {
+      addOnsFile = new File(homePath + File.separatorChar + "Contents/AddOns");
+    } else {
+      addOnsFile = new File(addOnsPath);
+    }
     Pattern initMPattern = Pattern.compile(".*init\\.m");
-    if (addOns.isDirectory()) {
-      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOns);
+    if (addOnsFile.isDirectory()) {
+      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOnsFile);
       for (File file : initFiles) {
         if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
           final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
@@ -98,15 +105,19 @@ public class MathematicaSdkType extends SdkType {
     }
   }
 
+
   @Nullable
   @Override
   public String suggestHomePath() {
-    final String property = System.getProperty("os.name");
     String path = "";
-    if (property.matches("Linux.*")) {
+    if (OS.contains("nux")) {
       path = "/usr/local/Wolfram";
+    } else if (OS.contains("win")) {
+      path = "C:";
+    } else if (OS.contains("mac")) {
+      path = "/Applications";
     }
-    if (new File(path).exists()) {
+    if (Util.isAccessibleDir(path)) {
       return path;
     }
     return null;
@@ -126,7 +137,18 @@ public class MathematicaSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(String path) {
-    return (new File(path + File.separatorChar + ".VersionID")).exists();
+    String kernelLocation = "";
+    if (OS.contains("win") || OS.contains("nux")) {
+      kernelLocation = path + File.separatorChar + "Executables" + File.separatorChar + "MathKernel";
+      if (OS.contains("win")) {
+        kernelLocation += ".exe";
+      }
+    } else if (OS.contains("mac")) {
+      kernelLocation = path + File.separatorChar + "Contents/MacOS/MathKernel";
+    }
+    File kernel = new File(kernelLocation);
+    return kernel.exists() && kernel.canExecute();
+
   }
 
   @Override
@@ -135,23 +157,25 @@ public class MathematicaSdkType extends SdkType {
   }
 
   @Override
-  public boolean isRootTypeApplicable(OrderRootType type) {
+  public boolean isRootTypeApplicable(@NotNull OrderRootType type) {
     return type.equals(OrderRootType.SOURCES) || type.equals(OrderRootType.DOCUMENTATION) || type.equals(OrderRootType.CLASSES);
   }
 
   @Nullable
   @Override
-  public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator) {
+  public AdditionalDataConfigurable createAdditionalDataConfigurable(@NotNull SdkModel sdkModel, @NotNull SdkModificator sdkModificator) {
     return null;
   }
 
+  @NotNull
   @Override
   public String getPresentableName() {
-    return "Mathematica Sdk";
+    return "Mathematica SDK";
   }
 
   @Override
   public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
+
   }
 
   @Override
@@ -159,13 +183,14 @@ public class MathematicaSdkType extends SdkType {
     return MathematicaIcons.FILE_ICON;
   }
 
+  @NotNull
   @Override
   public Icon getIconForAddAction() {
     return MathematicaIcons.FILE_ICON;
   }
 
   @Override
-  public boolean setupSdkPaths(Sdk sdk, SdkModel sdkModel) {
+  public boolean setupSdkPaths(@NotNull Sdk sdk, @NotNull SdkModel sdkModel) {
     final SdkModificator sdkModificator = sdk.getSdkModificator();
     final String homePath = sdk.getHomePath();
     sdkModificator.setVersionString(getMathematicaVersionString(homePath));

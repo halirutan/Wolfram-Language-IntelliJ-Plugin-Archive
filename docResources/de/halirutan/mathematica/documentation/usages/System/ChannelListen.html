@@ -1,0 +1,16 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ChannelListen.html">ChannelListen</a></h3>
+<ul>
+    <li>ChannelListen[<em>channel</em>] starts listening on the specified channel, executing the default handler
+        function for that channel whenever a message is received.
+    <li>ChannelListen[<em>channel</em>,<em>func</em>] applies <em>func</em> to the association corresponding to each
+        message received on the channel.
+    <li>ChannelListen[<em>channel</em>,None] stores each message received on the channel, without applying any function.
+    <li>ChannelListen[<em>url</em>] listens on the specified URL, storing messages received, without requiring an
+        explicit channel to exist on the channel broker.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

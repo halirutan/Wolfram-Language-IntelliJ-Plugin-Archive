@@ -1,0 +1,17 @@
+StringJoin["<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href=\"http://reference.wolfram.com/mathematica/ref/AskTemplateDisplay.html\">AskTemplateDisplay</a></h3>
+<ul>
+    <li>", StringReplace[StringReplace["AskTemplateDisplay[<em>fun</em>] is a construct for use inside AskFunction that
+        displays the result of applying <em>fun</em> to the association of the values of all keys encountered so far in
+        the evaluation of the AskFunction.
+    <li>"~~StringReplace[StringJoin[ErrorBox["RowBox[{\"AskTemplateDisplay\", \"[\", \"StyleBox[str, TI]StyleBox[\",
+        TI], \"]\"}]"]], "<>" -> "&lt;&gt;"]~~" applies \"<em>str</em>\" as a string template to the association of
+        values. ", {"" :> "", (IDEAPlugin`Private`a_)?(StringMatchQ[ToString[FullForm[#1]], "\"\\["~~__~~"]\""] & ) :>
+        StringReplace[ToString[IDEAPlugin`Private`a, MathMLForm], {WhitespaceCharacter :> ""}]}], {"<>" -> "&lt;&gt;", "&#62754;"
+        -> "&rarr;", "&#61715;" -> "&lt;&#x7c;", "&#61716;" -> "&#x7c;&gt;", "&#10740;" -> ":>", "&#10869;" -> "=="}], "
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>"]

@@ -1,0 +1,77 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Groupings.html">Groupings</a></h3>
+<ul>
+    <li>Groupings[<em>n</em>,<em>k</em>] gives a list of all possible groupings of 1,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>n</em> taken <em>k</em> at a time.
+    <li>Groupings[{<em>a</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>a</em><sub><em>n</em></sub>},<em>k</em>] gives all possible groupings of <em>a</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>a</em><sub><em>n</em></sub> taken <em>k</em> at a time.
+    <li>Groupings[{{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },{<em>b</em><sub>1</sub>,<em>b</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>k</em>] gives the combination of all possible groupings of each of the lists
+        <em>a</em><sub><em>i</em></sub>,<em>b</em><sub><em>i</em></sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        taken <em>k</em> at a time.
+    <li>Groupings[<em>aspec</em>,<em>f</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>k</em>] gives all possible groupings of <em>aspec</em> taken <em>k</em> at a time with the function
+        <em>f</em> applied at each level.
+    <li>Groupings[<em>aspec</em>,{<em>f</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>k</em><sub>1</sub>,<em>f</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>k</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives all possible groupings in which the function <em>f</em><sub><em>i</em></sub> is applied to
+        <em>k</em><sub><em>i</em></sub> elements.
+    <li>Groupings[<em>aspec</em>,{{<em>f</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>k</em><sub>1</sub>,<em>m</em><sub>1</sub>},{<em>f</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>k</em><sub>2</sub>,<em>m</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] allows at most <em>m</em><sub><em>i</em></sub> occurrences in a given grouping of
+        <em>f</em><sub><em>i</em></sub> applied to <em>k</em><sub><em>i</em></sub> elements.
+    <li>Groupings[<em>aspec</em>,<em>kspec</em>,<em>h</em>] wraps the function <em>h</em> around each grouping
+        generated.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

@@ -21,21 +21,21 @@
 
 package de.halirutan.mathematica.module;
 
-import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
-import com.intellij.ide.util.projectWizard.ModuleWizardStep;
-import com.intellij.ide.util.projectWizard.SettingsStep;
-import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.ide.util.projectWizard.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaFileTemplateProvider;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
+import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,17 +45,28 @@ import java.io.IOException;
 /**
  * @author patrick (4/8/13)
  */
-public class MathematicaModuleBuilder extends JavaModuleBuilder {
+class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   private final ProjectType myProjectType;
   /**
    * Additions by rsmenon (5/6/13) Will need some more reworking to implement checkboxes for Test/Documentation.
    */
 
-  private String myProjectName;
+  private String myProjectName = null;
+
+  public MathematicaLanguageLevel getLanguageLevel() {
+    return myLanguageLevel;
+  }
+
+  public void setLanguageLevel(MathematicaLanguageLevel myLanguageLevel) {
+    this.myLanguageLevel = myLanguageLevel;
+  }
+
+  private MathematicaLanguageLevel myLanguageLevel;
 
   public MathematicaModuleBuilder(ProjectType type) {
     myProjectType = type;
+    myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
   }
 
   public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
@@ -98,6 +109,13 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
     }
   }
+
+  @Override
+  public boolean isSuitableSdkType(SdkTypeId sdkType) {
+    return sdkType instanceof MathematicaSdkType;
+  }
+
+
 
   private void createKernelFiles(Project project, VirtualFile contentRoot) {
     try {
@@ -180,41 +198,6 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   }
 
-  public static class Test extends MathematicaModuleBuilder {
-    public Test() {
-      super(ProjectType.TEST);
-    }
-
-    @Override
-    public String getBuilderId() {
-      return "mathematica.test";
-    }
-
-    @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull ModulesProvider modulesProvider) {
-      return ModuleWizardStep.EMPTY_ARRAY;
-    }
-
-  }
-
-  public static class Documentation extends MathematicaModuleBuilder {
-    public Documentation() {
-      super(ProjectType.DOCUMENTATION);
-    }
-
-    @Override
-    public String getBuilderId() {
-      return "mathematica.documentation";
-    }
-
-    @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull ModulesProvider modulesProvider) {
-      return ModuleWizardStep.EMPTY_ARRAY;
-    }
-
-  }
 
   public static class Empty extends MathematicaModuleBuilder {
     public Empty() {

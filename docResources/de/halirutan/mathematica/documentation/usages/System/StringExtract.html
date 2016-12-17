@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/StringExtract.html">StringExtract</a></h3>
+<ul>
+    <li>StringExtract["string",<em>n</em>] extracts the <em>n</em><sup>th</sup> block of characters in <em>string</em>,
+        where blocks of characters are defined as delimited by whitespace.
+    <li>StringExtract["string",{<em>pos</em><sub>1</sub>,<em>pos</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] extracts blocks at several positions in <em>string</em>.
+    <li>StringExtract["string",<em>sep</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>pos</em>] takes blocks to be delimited by separators that match <em>sep</em>.
+    <li>StringExtract["string",<em>pos</em><sub>1</sub>,<em>pos</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] extracts blocks at positions <em>pos</em><sub><em>i</em></sub>, delimiting with whitespace for the lowest
+        level, newlines for the next level, and a successively increasing number of newlines thereafter.
+    <li>StringExtract["string",<em>sep</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>pos</em><sub>1</sub>,<em>sep</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>pos</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] gives a nested list of blocks, with the <em>sep</em><sub><em>i</em></sub> used as separators for successive
+        levels.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

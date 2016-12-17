@@ -11,7 +11,7 @@ For a very quick start just download and install the free [Community Edition of 
  (note that you don't have to provide a username. Just leave the field blank).
 ##![Docs][doc-image]Documentation
 
-There are two kinds of documentation: For **users** there is the [documentation page](http://wlplugin.halirutan.de/index.php/documentation) and a very detailed [blog post](http://wlplugin.halirutan.de/index.php/blog/7-how-to-use-idea-effectively-with-mathematica-code) on the official website. There, you will learn what features the plug-in provides and how you can use them.
+There are two kinds of documentation: For **users** there is the [GitHub Wiki page](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki) that I will update regularely and a very detailed [blog post](http://wlplugin.halirutan.de/index.php/blog/7-how-to-use-idea-effectively-with-mathematica-code) on the official website. There, you will learn what features the plug-in provides and how you can use them.
 
 For **developers**, the first action is to set up the build-environment to compile the code into an IDEA plug-in. There is a [very detailed how-to](http://wlplugin.halirutan.de/index.php/blog/5-plugin-development-how-to-start) on the official website that explains every step. Additionally, you will find a screen-cast there, where the procedure is shown step by step. The code itself contains java-documentation that is uploaded to [the repository's IO page](http://halirutan.github.io/Mathematica-IntelliJ-Plugin/).
 
@@ -21,7 +21,7 @@ Finally, there I have posted information on [stack exchange](http://mathematica.
 - the [first announcement](http://community.wolfram.com/groups/-/m/t/139047?p_p_auth=Lp2pA68y) on the Wolfram Community and a very detailed [new version post](http://community.wolfram.com/groups/-/m/t/353812?p_p_auth=Lp2pA68y)
 
 
-##![dev image][dev-image] Development  ![travis](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)
+##![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
 
 ### Code
 

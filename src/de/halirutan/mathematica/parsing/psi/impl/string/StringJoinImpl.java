@@ -22,13 +22,14 @@
 package de.halirutan.mathematica.parsing.psi.impl.string;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.parsing.psi.api.string.StringJoin;
 import de.halirutan.mathematica.parsing.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author patrick (4/14/13)
  */
-public class StringJoinImpl extends OperatorNameProviderImpl {
+public class StringJoinImpl extends OperatorNameProviderImpl implements StringJoin{
   public StringJoinImpl(@NotNull ASTNode node) {
     super(node);
   }

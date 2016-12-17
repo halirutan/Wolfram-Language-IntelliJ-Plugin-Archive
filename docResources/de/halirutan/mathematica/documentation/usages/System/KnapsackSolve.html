@@ -1,0 +1,47 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/KnapsackSolve.html">KnapsackSolve</a></h3>
+<ul>
+    <li>KnapsackSolve[{<em>cost</em><sub>1</sub>,<em>cost</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>maxtotalcost</em>] solves the knapsack problem of finding the maximum number of items associated with each
+        of the <em>cost</em><sub><em>i</em></sub>, subject to the constraint that the total cost is not larger than <em>maxtotalcost</em>.
+    <li>
+        KnapsackSolve[{{<em>payoff</em><sub>1</sub>,<em>cost</em><sub>1</sub>},{<em>payoff</em><sub>2</sub>,<em>cost</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>maxtotalcost</em>] finds a number of items that maximizes the total payoff, while satisfying the
+        constraint on the total cost.
+    <li>KnapsackSolve[{{<em>payoff</em><sub>1</sub>,<em>cost</em><sub>1</sub>,<em>maxcount</em><sub>1</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>maxtotalcost</em>] allows at most <em>maxcount</em><sub><em>i</em></sub> copies of item <em>i</em>.
+    <li>KnapsackSolve[<em>items</em>,{<em>maxtotalpayoff</em>,<em>maxtotalcost</em>}] finds a result that gives a total
+        payoff not larger than <em>maxtotalpayoff</em>.
+    <li>KnapsackSolve[<em>items</em>,{<em>maxtotalpayoff</em>,<em>maxtotalcost</em>,<em>maxtotalcount</em>}] adds the
+        constraint of having no more than <em>maxtotalcount</em> items in total.
+    <li>KnapsackSolve[
+        <math>
+            <ms>&lt;&#x7c;</ms>
+        </math>
+        <em>label</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>itemspec</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        <math>
+            <ms>&#x7c;&gt;</ms>
+        </math>
+        ,<em>maxtotals</em>] labels each type of item, and gives the result as an association.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

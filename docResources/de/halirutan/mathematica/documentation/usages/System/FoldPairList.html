@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FoldPairList.html">FoldPairList</a></h3>
+<ul>
+    <li>FoldPairList[<em>f</em>,<em>y</em><sub>0</sub>,{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the list of successive <em>x</em><sub><em>i</em></sub> obtained by applying <em>f</em> to pairs of the
+        form {<em>y</em><sub><em>i-1</em></sub>,<em>a</em><sub><em>i</em></sub>}, where at each step <em>f</em> returns
+        {<em>x</em><sub><em>i</em></sub>,<em>y</em><sub><em>i</em></sub>}.
+    <li>FoldPairList[<em>f</em>,<em>y</em><sub>0</sub>,<em>list</em>,<em>g</em>] gives the list of successive values of
+        <em>g</em>[{<em>x</em><sub><em>i</em></sub>,<em>y</em><sub><em>i</em></sub>}].
+    <li>FoldPairList[<em>f</em>,{<em>a</em><sub>0</sub>,<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] is equivalent to
+        FoldPairList[<em>f</em>,<em>a</em><sub>0</sub>,{<em>a</em><sub>1</sub>,<em>a</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }].
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

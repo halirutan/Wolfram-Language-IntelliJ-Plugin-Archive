@@ -1,0 +1,46 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FeatureExtraction.html">FeatureExtraction</a></h3>
+<ul>
+    <li>FeatureExtraction[{<em>example</em><sub>1</sub>,<em>example</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] generates a FeatureExtractorFunction[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] trained from the examples given.
+    <li>FeatureExtraction[<em>examples</em>,<em>extractor</em>] uses the specified feature extractor method.
+    <li>FeatureExtraction[<em>examples</em>,{<em>extractor</em><sub>1</sub>,<em>extractor</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] applies the <em>extractor</em><sub><em>i</em></sub> in sequence to generate a feature extractor.
+    <li>FeatureExtraction[<em>examples</em>,<em>spec</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>ext</em>] uses the extractor methods specified by <em>ext</em> on parts of <em>examples</em> specified by
+        <em>spec</em>.
+    <li>FeatureExtraction[<em>examples</em>,{<em>spec</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>ext</em><sub>1</sub>,<em>spec</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>ext</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] uses the extractor methods <em>ext</em><sub><em>i</em></sub> on parts of <em>examples</em> specified by the
+        <em>spec</em><sub><em>i</em></sub>.
+    <li>FeatureExtraction[<em>examples</em>,<em>extractor</em>,<em>props</em>] gives the feature extraction properties
+        specified by <em>props</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

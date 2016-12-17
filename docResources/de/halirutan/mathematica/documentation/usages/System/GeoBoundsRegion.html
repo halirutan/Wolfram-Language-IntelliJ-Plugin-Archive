@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/GeoBoundsRegion.html">GeoBoundsRegion</a></h3>
+<ul>
+    <li>
+        GeoBoundsRegion[{{<em>lat</em><sub><em>min</em></sub>,<em>lat</em><sub><em>max</em></sub>},{<em>lon</em><sub><em>min</em></sub>,<em>lon</em><sub><em>max</em></sub>}}]
+        is a two-dimensional GeoGraphics primitive that represents a geo region bounded by parallels
+        <em>lat</em><sub><em>min</em></sub>, <em>lat</em><sub><em>max</em></sub> and meridians
+        <em>lon</em><sub><em>min</em></sub>, <em>lon</em><sub><em>max</em></sub> on the surface of the Earth.
+    <li>GeoBoundsRegion[<em>g</em>] represents the latitude-longitude bounding box of the geo region <em>g</em>.
+    <li>GeoBoundsRegion[<em>g</em>,
+        <math>
+            <ms>&#948;</ms>
+        </math>
+        ] pads the ranges of latitudes and longitudes by
+        <math>
+            <ms>&#177;</ms>
+        </math>
+        <math>
+            <ms>&#948;</ms>
+        </math>
+        .
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

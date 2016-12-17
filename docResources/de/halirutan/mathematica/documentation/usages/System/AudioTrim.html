@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (c) 2013 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/AudioTrim.html">AudioTrim</a></h3>
+<ul>
+    <li>AudioTrim[<em>audio</em>] trims silence from the beginning and end of <em>audio</em>.
+    <li>AudioTrim[<em>audio</em>,<em>t</em>] returns the first <em>t</em> seconds of <em>audio</em>.
+    <li>AudioTrim[<em>audio</em>,-<em>t</em>] returns the last <em>t</em> seconds of <em>audio</em>.
+    <li>AudioTrim[<em>audio</em>,{<em>t</em><sub>1</sub>,<em>t</em><sub>2</sub>}] returns audio starting at time
+        <em>t</em><sub>1</sub> and ending at time <em>t</em><sub>2</sub> of <em>audio</em>.
+    <li>AudioTrim[<em>audio</em>,{{<em>t</em><sub>11</sub>,<em>t</em><sub>12</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] returns a list of audio for all given intervals {<em>t</em><sub><em>i1</em></sub>,<em>t</em><sub><em>i2</em></sub>}.
+</ul><p><b>Attributes:</b>Protected</p><p><b>Options: </b>Padding</p>

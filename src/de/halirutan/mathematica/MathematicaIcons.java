@@ -26,11 +26,20 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 /**
+ * Provides the files names for the icons used by the plugin. Moreover, and that is important, IDEA will look for additional
+ * icon files to give a better look in the Darcula scheme and on retina displays. This means, for each icon listed here
+ * there is additionally
+ * <ul>
+ *   <li>a file icon_dark.png for the Darcula theme</li>
+ *   <li>a file icon@2x.png for high-res retina displays</li>
+ *   <li>a file icon@2x_dark.png for high-res retina displays using the Darcula theme</li>
+ * </ul>
+ *
  * @author patrick (4/4/13)
  */
 public interface MathematicaIcons {
 
-  Icon FILE_ICON = IconLoader.getIcon("/icons/spikeyV10.png");
+  Icon FILE_ICON = IconLoader.getIcon("/icons/spikey.png");
   Icon SET_ICON = IconLoader.getIcon("/icons/Set.png");
   Icon SET_DELAYED_ICON = IconLoader.getIcon("/icons/SetDelayed.png");
   Icon TAGSET_ICON = IconLoader.getIcon("/icons/TagSet.png");
@@ -40,8 +49,8 @@ public interface MathematicaIcons {
   Icon OPTIONS_ICON = IconLoader.getIcon("/icons/Options.png");
   Icon ATTRIBUTES_ICON = IconLoader.getIcon("/icons/Attributes.png");
   Icon DEFAULT_VALUES_ICON = IconLoader.getIcon("/icons/Default.png");
-  Icon FORMAT_VALUES_ICON = IconLoader.getIcon("/icons/Format.png");
-  Icon MESSAGES_ICON = IconLoader.getIcon("/icons/Messages.png");
+  Icon FORMAT_VALUES_ICON = IconLoader.getIcon("/icons/FormatValues.png");
+  Icon MESSAGES_ICON = IconLoader.getIcon("/icons/Message.png");
   Icon N_VALUES_ICON = IconLoader.getIcon("/icons/NValues.png");
   Icon SYNTAX_INFORMATION_ICON = IconLoader.getIcon("/icons/SyntaxInformation.png");
   Icon GROUP_BY_NAME_ICON = IconLoader.getIcon("/icons/GroupByName.png");

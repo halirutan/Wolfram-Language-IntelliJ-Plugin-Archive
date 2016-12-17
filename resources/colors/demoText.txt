@@ -1,10 +1,13 @@
-<usg>VariationalD::usage</usg> = "VariationalD[f, u[x], x] or
-  VariationalD[f, u[x,y,...], {x,y,...}] returns the first variational
-  derivative of the functional defined by the integrand f";
+(* Mathematica Package *)
+(* <cs>:Title:</cs> Variational Methods Package *)
+(* <cs>:Context:</cs> VariationalMethods` *)
 
-(* Implementation of the package *)
-VariationalD[<pat>f_</pat>, (<pat>y_</pat>)[<pat>x_</pat>, <pat>r___</pat>], <pat>w</pat>:{<pat>x_</pat>, <pat>r___</pat>}]/;integrandQ[<pat>f</pat>] :=
-  Module[{<mod>Dfuncs</mod>, <mod>Dtimes</mod>, <mod>dummyfunc</mod>},
+VariationalD<usg>::usage</usg> = "VariationalD[f, u[x], x] or ...";
+VariationalD<msg>::args</msg> = "VariationalD takes a single integrand...";
+VariationalD<msg>::argx</msg> = "The second argument of VariationalD ...";
+
+VariationalD[<pat>f</pat>_, (<pat>y</pat>_)[<pat>x</pat>_, <pat>r</pat>___], <pat>w</pat>:{<pat>x</pat>_, <pat>r</pat>___}]/;integrandQ[<pat>f</pat>] :=
+  <k>Module</k>[{<mod>Dfuncs</mod>, <mod>Dtimes</mod>, <mod>dummyfunc</mod>},
     <mod>Dfuncs</mod> = <k>Union</k>[<k>Cases</k>[{<pat>f</pat>}, <k>Derivative</k>[__][<pat>y</pat>][__], <k>Infinity</k>]];
     <mod>Dtimes</mod> = (<k>Head</k>[<k>Head</k>[<slot>#1</slot>]] & ) /@ <mod>Dfuncs</mod> /. <k>Derivative</k> -> <k>List</k>;
     <k>Simplify</k>[<k>D</k>[<pat>f</pat>, <pat>y</pat>[<pat>x</pat>, <pat>r</pat>]] + (<k>ReleaseHold</k>[<k>Thread</k>[<mod>dummyfunc</mod>[(<k>D</k>[<pat>f</pat>,
@@ -13,7 +16,12 @@ VariationalD[<pat>f_</pat>, (<pat>y_</pat>)[<pat>x_</pat>, <pat>r___</pat>], <pa
               (<k>Thread</k>[{<pat>w</pat>, <slot>#1</slot>}] & ) /@ <mod>Dtimes</mod>]]] /. <mod>dummyfunc</mod> -> <k>D</k>) .
         <fn>((-1)^<slot>#1</slot> & ) /@ (<k>Apply</k>[<k>Plus</k>, <slot>#1</slot>] &</fn> ) /@ <mod>Dtimes</mod>] ]
 
-VariationalD[<pat>f_</pat>, <pat>v</pat>:{(<pat>y_</pat>)[<pat>x_</pat>, <pat>r___</pat>], <pat>___</pat>}, <pat>w</pat>:{<pat>x_</pat>, <pat>r___</pat>}] :=
+VariationalD[<pat>f</pat>_, <pat>v</pat>:{(<pat>y_</pat>)[<pat>x_</pat>, <pat>r___</pat>], <pat>___</pat>}, <pat>w</pat>:{<pat>x_</pat>, <pat>r___</pat>}] :=
   (VariationalD[<pat>f</pat>, <slot>#1</slot>, <pat>w</pat>] & ) /@ <pat>v</pat> /;
-   <k>If</k>[<k>Apply</k>[<k>And</k>, (<k>MatchQ</k>[<slot>#1</slot>, <pat>_</pat>[<k>Apply</k>[<k>Sequence</k>, <pat>w</pat>]]] & ) /@ <pat>v</pat>],
-   <k>True</k>, <k>Message</k>[<msg>VariationalD::argx</msg>, <pat>w</pat>]]
+     <k>If</k>[<k>Apply</k>[<k>And</k>, (<k>MatchQ</k>[<slot>#1</slot>, <pat>_</pat>[<k>Apply</k>[<k>Sequence</k>, <pat>w</pat>]]] & ) /@ <pat>v</pat>],
+       <k>True</k>, <k>Message</k>[VariationalD<msg>::argx</msg>, <pat>w</pat>]]
+
+EulerEquations[<pat>f</pat>_, <pat>funcs</pat>_, <pat>vars</pat>_]/;integrandQ[<pat>f</pat>] :=
+    <k>Block</k>[{<blk>result</blk>=iEulerEquations[<pat>f</pat>, <pat>funcs</pat>, <pat>vars</pat>]},
+	  <blk>result</blk> /; <blk>result</blk> =!= <k>$Failed</k>
+	]

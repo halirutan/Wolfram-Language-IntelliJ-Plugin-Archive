@@ -32,14 +32,14 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionResolveProcessor;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
 /**
- * Povides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
+ * Provides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
  * uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
  * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions are
  * done at file-scope. The class uses caching to speed up the resolve process. Once a definition for a symbol is found,
@@ -52,9 +52,11 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
   private final Symbol myVariable;
 
-  public SymbolPsiReference(Symbol element) {
+  SymbolPsiReference(Symbol element) {
     myVariable = element;
   }
+
+
 
   @Nullable
   @Override
@@ -64,7 +66,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 
     if (myVariable.cachedResolve()) {
       if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName()) ||
-          myVariable.getLocalizationConstruct().equals(LocalizationConstruct.ConstructType.ANONYMOUSFUNCTION)) {
+          myVariable.getLocalizationConstruct().equals(ConstructType.ANONYMOUSFUNCTION)) {
         return myVariable.getResolveElement();
       } else {
         myVariable.subtreeChanged();
@@ -86,7 +88,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition instanceof Symbol) {
-      myVariable.setReferringElement((Symbol) globalDefinition, LocalizationConstruct.ConstructType.NULL, null);
+      myVariable.setReferringElement((Symbol) globalDefinition, ConstructType.NULL, null);
       return globalDefinition;
     }
     return null;

@@ -30,27 +30,6 @@ import com.intellij.openapi.editor.colors.TextAttributesKey;
 
 public class MathematicaSyntaxHighlighterColors {
 
-//    //Define colors from built-ins based on color-scheme
-//    static final boolean isDark = UIManager.getLookAndFeel().getName().contains("Darcula");
-//
-//    private static Color getFG(TextAttributesKey id) {
-//        return id.getDefaultAttributes().getForegroundColor();
-//    }
-//
-//    private static Color getBG(TextAttributesKey id) {
-//        return id.getDefaultAttributes().getBackgroundColor();
-//    }
-
-//    static final Color BLUE = getFG(DefaultLanguageHighlighterColors.NUMBER);
-//    static final Color GRAY = getFG(DefaultLanguageHighlighterColors.LINE_COMMENT);
-//    static final Color GREEN = isDark ?
-//            getFG(DefaultLanguageHighlighterColors.DOC_COMMENT) :
-//            getFG(DefaultLanguageHighlighterColors.STRING);
-//    static final Color PINK = getFG(DefaultLanguageHighlighterColors.STATIC_FIELD);
-//    static final Color FOREGROUND = getFG(DefaultLanguageHighlighterColors.IDENTIFIER);
-//    static final Color BACKGROUND = getBG(DefaultLanguageHighlighterColors.IDENTIFIER);
-
-
   public final static TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT");
   public final static TextAttributesKey COMMENT_SPECIAL = TextAttributesKey.createTextAttributesKey("MMA.COMMENT_SPECIAL");
   public final static TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING");

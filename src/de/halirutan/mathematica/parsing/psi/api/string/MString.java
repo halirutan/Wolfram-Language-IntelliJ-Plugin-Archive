@@ -21,8 +21,10 @@
 
 package de.halirutan.mathematica.parsing.psi.api.string;
 
+import com.intellij.psi.PsiNamedElement;
+
 /**
  * @author patrick (4/14/13)
  */
-public interface MString {
+public interface MString extends PsiNamedElement{
 }
