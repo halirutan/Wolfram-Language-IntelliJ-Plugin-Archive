@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.index;
+package de.halirutan.mathematica.index.export;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -29,7 +29,7 @@ import com.intellij.util.indexing.FileBasedIndex.InputFilter;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.IOUtil;
 import com.intellij.util.io.KeyDescriptor;
-import de.halirutan.mathematica.index.MathematicaPackageExportIndex.Key;
+import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInput;
@@ -42,10 +42,10 @@ import java.util.Map;
 /**
  * @author patrick (01.11.16).
  */
-public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, List<PackageExportInfo>> {
+public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, List<PackageExportSymbol>> {
 
-  public static final ID<Key,List<PackageExportInfo>> INDEX_ID = ID.create("Mathematica.fileExports");
-  private static final int BASE_VERSION = 1;
+  public static final ID<Key,List<PackageExportSymbol>> INDEX_ID = ID.create("Mathematica.fileExports");
+  private static final int BASE_VERSION = 2;
 
   @NotNull
   @Override
@@ -65,23 +65,23 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
 
   @NotNull
   @Override
-  public ID<Key, List<PackageExportInfo>> getName() {
+  public ID<Key, List<PackageExportSymbol>> getName() {
     return INDEX_ID;
   }
 
   @NotNull
   @Override
-  public DataIndexer<Key, List<PackageExportInfo>, FileContent> getIndexer() {
-    return new DataIndexer<Key, List<PackageExportInfo>, FileContent>() {
+  public DataIndexer<Key, List<PackageExportSymbol>, FileContent> getIndexer() {
+    return new DataIndexer<Key, List<PackageExportSymbol>, FileContent>() {
       @NotNull
       @Override
-      public Map<Key, List<PackageExportInfo>> map(@NotNull FileContent inputData) {
-        final Map<Key, List<PackageExportInfo>> map = new HashMap<Key, List<PackageExportInfo>>();
+      public Map<Key, List<PackageExportSymbol>> map(@NotNull FileContent inputData) {
+        final Map<Key, List<PackageExportSymbol>> map = new HashMap<Key, List<PackageExportSymbol>>();
         if (!"m".equals(inputData.getFile().getExtension())) return map;
         final PsiFile psiFile = inputData.getPsiFile();
-        ExportSymbolVisitor visitor = new ExportSymbolVisitor();
+        PackageClassifier visitor = new PackageClassifier();
         psiFile.accept(visitor);
-        map.put(new FileKey(inputData.getFile()), visitor.getInfos());
+        map.put(new FileKey(inputData.getFile()), new ArrayList<PackageExportSymbol>(visitor.getListOfExportSymbols()));
         return map;
       }
     };
@@ -116,27 +116,8 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
 
   @NotNull
   @Override
-  public DataExternalizer<List<PackageExportInfo>> getValueExternalizer() {
-    return new DataExternalizer<List<PackageExportInfo>>() {
-      @Override
-      public void save(@NotNull DataOutput out, List<PackageExportInfo> value) throws IOException {
-        out.writeInt(value.size());
-        for (PackageExportInfo info : value) {
-          IOUtil.writeUTF(out, info.nameSpace);
-          IOUtil.writeUTF(out, info.symbol);
-        }
-      }
-
-      @Override
-      public List<PackageExportInfo> read(@NotNull DataInput in) throws IOException {
-        int size = in.readInt();
-        ArrayList<PackageExportInfo> infos = new ArrayList<PackageExportInfo>(size);
-        for (int i = 0; i < size; i++) {
-          infos.add(new PackageExportInfo(IOUtil.readUTF(in), IOUtil.readUTF(in)));
-        }
-        return infos;
-      }
-    };
+  public DataExternalizer<List<PackageExportSymbol>> getValueExternalizer() {
+    return new ListDataExternalizer();
   }
 
   @Override
@@ -150,6 +131,7 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
 
   public static class FileKey implements Key {
     private final int myFileId;
+    private String myFileName = "";
 
     private FileKey(int fileId) {
       myFileId = fileId;
@@ -157,9 +139,16 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
 
     private FileKey(VirtualFile file) {
       myFileId = FileBasedIndex.getFileId(file);
+      myFileName = file.getName();
     }
 
+    public String getFileName() {
+      return myFileName;
+    }
 
+    public int getFileId() {
+      return myFileId;
+    }
 
     @Override
     public void writeValue(DataOutput out) throws IOException {
@@ -174,6 +163,27 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
     @Override
     public boolean equals(Object obj) {
       return obj instanceof FileKey && ((FileKey)obj).myFileId == myFileId;
+    }
+  }
+
+  private static class ListDataExternalizer implements DataExternalizer<List<PackageExportSymbol>> {
+    @Override
+    public void save(@NotNull DataOutput out, List<PackageExportSymbol> value) throws IOException {
+      out.writeInt(value.size());
+      for (PackageExportSymbol info : value) {
+        IOUtil.writeUTF(out, info.nameSpace);
+        IOUtil.writeUTF(out, info.symbol);
+      }
+    }
+
+    @Override
+    public List<PackageExportSymbol> read(@NotNull DataInput in) throws IOException {
+      int size = in.readInt();
+      ArrayList<PackageExportSymbol> info = new ArrayList<PackageExportSymbol>(size);
+      for (int i = 0; i < size; i++) {
+        info.add(new PackageExportSymbol(IOUtil.readUTF(in), IOUtil.readUTF(in)));
+      }
+      return info;
     }
   }
 }

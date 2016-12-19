@@ -71,6 +71,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
 
     if (element instanceof Symbol) {
       String context = ((Symbol) element).getMathematicaContext();
+      context = "".equals(context) ? "System`" : context;
       String name = ((Symbol) element).getSymbolName();
       if (ALL_SLOT_PATTERN.matcher(name).matches()) {
         if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";

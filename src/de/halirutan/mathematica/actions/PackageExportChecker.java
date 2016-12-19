@@ -23,13 +23,16 @@ package de.halirutan.mathematica.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.indexing.ID;
-import de.halirutan.mathematica.index.MathematicaPackageExportIndex;
-import de.halirutan.mathematica.index.MathematicaPackageExportIndex.Key;
-import de.halirutan.mathematica.index.PackageExportInfo;
+import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex;
+import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.FileKey;
+import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.Key;
+import de.halirutan.mathematica.index.export.PackageExportSymbol;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,15 +49,19 @@ public class PackageExportChecker extends AnAction {
     if (project == null) {
       return;
     }
+
+    final VirtualFile currentFile = e.getDataContext().getData(DataKeys.VIRTUAL_FILE);
     final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
-    final ID<Key, List<PackageExportInfo>> indexId = MathematicaPackageExportIndex.INDEX_ID;
-    final Collection<Key> allKeys = fileBasedIndex.getAllKeys(indexId, project);
+    final ID<Key, List<PackageExportSymbol>> indexId = MathematicaPackageExportIndex.INDEX_ID;
+    final Collection<Key> allKeys = fileBasedIndex.getAllKeys(indexId,project);
 
     for (Key next : allKeys) {
-      final List<List<PackageExportInfo>> values = fileBasedIndex.getValues(indexId, next, GlobalSearchScope.allScope(project));
-      for (List<PackageExportInfo> list : values) {
-        for (PackageExportInfo info : list) {
-          System.out.println("Info: " + info.symbol + " " + info.nameSpace);
+      final VirtualFile file = fileBasedIndex.findFileById(project, ((FileKey) next).getFileId());
+      System.out.printf("\nFILE: " + file.getPresentableName() + "\n-----------------------------------------\n");
+      final List<List<PackageExportSymbol>> values = fileBasedIndex.getValues(indexId, next, GlobalSearchScope.allScope(project));
+      for (List<PackageExportSymbol> list : values) {
+        for (PackageExportSymbol info : list) {
+          System.out.println(info.symbol + " (" + info.nameSpace +")");
         }
       }
     }

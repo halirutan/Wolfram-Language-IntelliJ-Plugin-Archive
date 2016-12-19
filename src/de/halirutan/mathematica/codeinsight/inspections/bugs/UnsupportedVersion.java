@@ -211,7 +211,9 @@ public class UnsupportedVersion extends AbstractInspection {
         return;
       }
 
-      String nameWithContext = symbol.getMathematicaContext() + symbolName;
+      String context = symbol.getMathematicaContext();
+      context = "".equals(context) ? "System`" : context;
+      String nameWithContext = context + symbolName;
       if (mySymbolVersions.containsKey(nameWithContext)) {
         double version = mySymbolVersions.get(nameWithContext);
         if (version > myLanguageLevel.getVersionNumber()) {

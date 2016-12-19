@@ -169,7 +169,7 @@
     <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
     <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
                              <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
-    <fileBasedIndex implementation="de.halirutan.mathematica.index.MathematicaPackageExportIndex"/>
+    <fileBasedIndex implementation="de.halirutan.mathematica.index.export.MathematicaPackageExportIndex"/>
 
 
   </extensions>

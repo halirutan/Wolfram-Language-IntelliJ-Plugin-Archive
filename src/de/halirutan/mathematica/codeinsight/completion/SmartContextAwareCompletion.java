@@ -77,6 +77,7 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
       final Symbol head = (Symbol) ((FunctionCall) function).getHead();
       String functionName = head.getSymbolName();
       String functionContext = head.getMathematicaContext();
+      functionContext = "".equals(functionContext) ? "System`" : functionContext;
       final String key = functionContext + functionName;
       if (ourSymbolInformation.containsKey(key) && ourSymbolInformation.get(key).function) {
         final SymbolInformation functionInformation = ourSymbolInformation.get(key);

@@ -21,16 +21,30 @@
 
 package de.halirutan.mathematica.index;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
- * @author patrick (01.11.16).
+ * @author patrick (18.12.16).
  */
-public class PackageExportInfo {
+public class PackageUtil {
+  public static final Pattern contextPattern = Pattern.compile("`?(([a-zA-Z$]+[0-9]*)+`)+");
+  public static final Pattern relativeContextPattern = Pattern.compile("`(([a-zA-Z$]+[0-9]*)+`)+");
+  public static final Pattern absoluteContextPattern = Pattern.compile("(([a-zA-Z$]+[0-9]*)+`)+");
+  private PackageUtil(){}
 
-  public final String nameSpace;
-  public final String symbol;
-
-  public PackageExportInfo(String nameSpace, String symbol) {
-    this.nameSpace = nameSpace;
-    this.symbol = symbol;
+  public static String buildContext(List<String> contextStack) {
+    StringBuilder context = new StringBuilder("Global`");
+    for (String current : contextStack) {
+      final Matcher mRelative = relativeContextPattern.matcher(current);
+      final Matcher mAbsolute = absoluteContextPattern.matcher(current);
+      if (mRelative.matches()) {
+        context.append(current.substring(1));
+      } else if (mAbsolute.matches()) {
+        context = new StringBuilder(current);
+      }
+    }
+    return context.toString();
   }
 }

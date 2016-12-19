@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
@@ -48,6 +50,8 @@ import java.util.HashSet;
  * @author patrick (3/28/13)
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
+
+  private final Pattern mySymbolPattern = Pattern.compile("`?(([a-zA-Z$]+[0-9]*)+`?)+");
 
   private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
   private boolean myIsUpToDate;
@@ -83,9 +87,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public String getMathematicaContext() {
     String myName = getName();
-    String context = "System`";
+    String context = "";
     if (myName != null) {
-      if (myName.contains("`")) {
+      final Matcher matcher = mySymbolPattern.matcher(myName);
+      if (matcher.matches()) {
         context = myName.substring(0, myName.lastIndexOf('`') + 1);
       }
     }

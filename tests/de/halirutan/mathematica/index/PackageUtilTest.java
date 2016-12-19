@@ -21,41 +21,28 @@
 
 package de.halirutan.mathematica.index;
 
-import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
+import static org.junit.Assert.*;
 
 /**
- * @author patrick (01.11.16).
+ * @author patrick (18.12.16).
  */
-public class ExportSymbolVisitor extends MathematicaRecursiveVisitor {
+public class PackageUtilTest {
+  @Test
+  public void buildContext() throws Exception {
+    final String c1[] = {"Package`", "`Private`"};
+    final String c2[] = {"Package`", "New`"};
+    final String c3[] = {"Package`", "New`", "`Private`"};
+    final String c4[] = {"$Package`", "New01`", "`$Private`"};
 
-  private List<PackageExportInfo> myInfos;
+    assertEquals("Package`Private`", PackageUtil.buildContext(Arrays.asList(c1)));
+    assertEquals("New`", PackageUtil.buildContext(Arrays.asList(c2)));
+    assertEquals("New`Private`", PackageUtil.buildContext(Arrays.asList(c3)));
+    assertEquals("New01`$Private`", PackageUtil.buildContext(Arrays.asList(c4)));
 
-  public ExportSymbolVisitor() {
-    myInfos = new ArrayList<PackageExportInfo>();
   }
 
-  public List<PackageExportInfo> getInfos() {
-    return myInfos;
-  }
-
-  @Override
-  public void visitMessageName(MessageName messageName) {
-    final StringifiedSymbol tag = messageName.getTag();
-    if (tag == null) {
-      return;
-    }
-    if (tag.getText().equals("usage")) {
-      final Expression symbol = messageName.getSymbol();
-      if (symbol != null) {
-        myInfos.add(new PackageExportInfo("Global`", symbol.getName()));
-      }
-
-    }
-  }
 }
