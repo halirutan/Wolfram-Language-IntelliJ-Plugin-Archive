@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.index.export;
+package de.halirutan.mathematica.index.packageexport;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;

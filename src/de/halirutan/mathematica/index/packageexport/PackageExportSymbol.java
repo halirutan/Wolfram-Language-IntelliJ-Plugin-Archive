@@ -19,43 +19,18 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.index.export;
-
-import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
-
-import java.util.ArrayList;
-import java.util.List;
+package de.halirutan.mathematica.index.packageexport;
 
 /**
  * @author patrick (01.11.16).
  */
-public class ExportSymbolVisitor extends MathematicaRecursiveVisitor {
+public class PackageExportSymbol {
 
-  private List<PackageExportSymbol> myInfos;
+  public final String nameSpace;
+  public final String symbol;
 
-  public ExportSymbolVisitor() {
-    myInfos = new ArrayList<PackageExportSymbol>();
-  }
-
-  public List<PackageExportSymbol> getInfos() {
-    return myInfos;
-  }
-
-  @Override
-  public void visitMessageName(MessageName messageName) {
-    final StringifiedSymbol tag = messageName.getTag();
-    if (tag == null) {
-      return;
-    }
-    if (tag.getText().equals("usage")) {
-      final Expression symbol = messageName.getSymbol();
-      if (symbol != null) {
-        myInfos.add(new PackageExportSymbol("Global`", symbol.getName()));
-      }
-
-    }
+  public PackageExportSymbol(String nameSpace, String symbol) {
+    this.nameSpace = nameSpace;
+    this.symbol = symbol;
   }
 }

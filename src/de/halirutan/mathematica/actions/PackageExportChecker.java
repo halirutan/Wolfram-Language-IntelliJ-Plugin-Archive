@@ -29,10 +29,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.indexing.ID;
-import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex;
-import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.FileKey;
-import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.Key;
-import de.halirutan.mathematica.index.export.PackageExportSymbol;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex.FileKey;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex.Key;
+import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 
 import java.util.Collection;
 import java.util.List;

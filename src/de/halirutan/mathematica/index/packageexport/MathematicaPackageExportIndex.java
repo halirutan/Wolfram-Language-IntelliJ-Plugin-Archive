@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.index.export;
+package de.halirutan.mathematica.index.packageexport;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -29,7 +29,7 @@ import com.intellij.util.indexing.FileBasedIndex.InputFilter;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.IOUtil;
 import com.intellij.util.io.KeyDescriptor;
-import de.halirutan.mathematica.index.export.MathematicaPackageExportIndex.Key;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInput;
@@ -45,7 +45,7 @@ import java.util.Map;
 public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, List<PackageExportSymbol>> {
 
   public static final ID<Key,List<PackageExportSymbol>> INDEX_ID = ID.create("Mathematica.fileExports");
-  private static final int BASE_VERSION = 2;
+  private static final int BASE_VERSION = 4;
 
   @NotNull
   @Override
@@ -56,6 +56,11 @@ public class MathematicaPackageExportIndex extends FileBasedIndexExtension<Key, 
         return "m".equals(file.getExtension());
       }
     };
+  }
+
+  @Override
+  public boolean indexDirectories() {
+    return false;
   }
 
   @Override

@@ -30,12 +30,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
+import com.intellij.util.indexing.FileBasedIndex;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex.Key;
+import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -69,6 +75,21 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
       for (String name : visitor.getFunctionsNames()) {
         if (!NAMES.contains(name)) {
           result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
+        }
+      }
+
+      ImportedContextVisitor importVisitor = new ImportedContextVisitor();
+      callingSymbol.getContainingFile().accept(importVisitor);
+      final java.util.HashSet<String> importedContexts = importVisitor.getImportedContexts();
+      final FileBasedIndex index = FileBasedIndex.getInstance();
+      final Collection<Key> allKeys = index.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, callingSymbol.getProject());
+      for (Key key : allKeys) {
+        final List<List<PackageExportSymbol>> values = index.getValues(MathematicaPackageExportIndex.INDEX_ID, key, GlobalSearchScope.allScope(callingSymbol.getProject()));
+        for (List<PackageExportSymbol> value : values) {
+          for (PackageExportSymbol packageExportSymbol : value) {
+            //TODO: Implement adding completions
+//            if(packageExportSymbol.nameSpace.equals())
+          }
         }
       }
 
