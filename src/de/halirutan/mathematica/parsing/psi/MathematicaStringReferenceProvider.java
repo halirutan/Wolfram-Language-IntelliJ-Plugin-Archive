@@ -69,14 +69,14 @@ class MathematicaStringReferenceProvider extends PsiReferenceProvider {
           final Expression symbol = ((MessageName) messageElement).getSymbol();
           if (symbol instanceof Symbol) {
             String usageText = element.getText();
-            final String symbolName = ((Symbol) symbol).getSymbolName();
+            final String symbolName = Matcher.quoteReplacement(((Symbol) symbol).getSymbolName());
             Pattern symbolNamePattern = StringUsageReference.getSymbolPattern(symbolName);
             final Matcher matcher = symbolNamePattern.matcher(usageText);
             while (matcher.find()) {
               final int start = matcher.start(2);
               final int end = matcher.end(2);
               result.add(
-                  new StringUsageReference((MString) element, TextRange.create(start, end), symbolName, (Symbol) symbol)
+                  new StringUsageReference((MString) element, TextRange.create(start, end), symbolName, (Symbol) symbol.getReference().resolve())
               );
             }
           }

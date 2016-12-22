@@ -65,7 +65,7 @@ public class StringUsageReference extends PsiReferenceBase<MString> {
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     final String text = myElement1.getText();
     Matcher matcher = getSymbolPattern(mySymbolNameInside).matcher(text);
-    String newContent = matcher.replaceAll("$1" + newElementName + "$3");
+    String newContent = matcher.replaceAll("$1" + Matcher.quoteReplacement(newElementName) + "$3");
     myElement1 = (MString) myElement1.setName(newContent);
     return myElement1;
   }

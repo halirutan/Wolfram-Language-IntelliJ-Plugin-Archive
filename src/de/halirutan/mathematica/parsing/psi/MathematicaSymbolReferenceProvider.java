@@ -21,27 +21,42 @@
 
 package de.halirutan.mathematica.parsing.psi;
 
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiReferenceContributor;
-import com.intellij.psi.PsiReferenceRegistrar;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.string.MString;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author patrick (29.11.16).
- */
-public class MathematicaReferenceContributor extends PsiReferenceContributor {
+import java.util.ArrayList;
 
-  /**
-   * Gives registrar the chance to do registrar
-   * @param registrar will work as registrar
-   */
+/**
+ * @author patrick (21.12.16).
+ */
+public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
+  @NotNull
   @Override
-  public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
-        new MathematicaStringReferenceProvider());
-//    registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
-//        new MathematicaSymbolReferenceProvider());
+  public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+    if (!(element instanceof Symbol)) {
+      return new PsiReference[0];
+    }
+    ArrayList<PsiReference> result = new ArrayList<PsiReference>();
+
+    Symbol symbol = (Symbol) element;
+    final SymbolPsiReference reference = (SymbolPsiReference) symbol.getReference();
+    final PsiElement resolve;
+    if (reference != null) {
+      result.add(reference);
+      resolve = reference.resolve();
+      if (resolve instanceof Symbol) {
+        final PsiElement[] elemsReferencingToMe = ((Symbol) resolve).getElementsReferencingToMe();
+        for (PsiElement psiElement : elemsReferencingToMe) {
+          result.add(psiElement.getReference());
+        }
+      }
+    }
+    return result.toArray(new PsiReference[result.size()]);
   }
 }

@@ -167,6 +167,11 @@
 
     <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
 
+    <lang.findUsagesProvider language="Mathematica"
+                             implementationClass="de.halirutan.mathematica.find.MathematicaFindUsageProvider"/>
+
+
+
     <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
     <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
                              <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
@@ -205,6 +210,8 @@
               description="Collapse all named characters into their utf8 counterpart.">
       </action>
 
+      <action id="Mathematica.RenameReferenenceResolve" class="de.halirutan.mathematica.actions.RenameReferenceResolve"
+              text="Rename Referenence Resolve"/>
       <!--<separator/>-->
 
       <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
@@ -214,5 +221,6 @@
 
       <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
     </group>
+
   </actions>
 </idea-plugin>

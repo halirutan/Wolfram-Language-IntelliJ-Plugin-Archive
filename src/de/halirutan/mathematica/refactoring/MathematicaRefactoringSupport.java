@@ -45,7 +45,7 @@ public class MathematicaRefactoringSupport extends RefactoringSupportProvider {
 
   @Override
   public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
-    return true;
+    return false;
   }
 
   @Nullable

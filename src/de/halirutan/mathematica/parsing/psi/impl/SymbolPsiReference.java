@@ -53,6 +53,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   private final Symbol myVariable;
 
   SymbolPsiReference(Symbol element) {
+    super();
     myVariable = element;
   }
 
@@ -108,7 +109,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myVariable.getMathematicaContext() + "`" + myVariable.getSymbolName();
+    return myVariable.getMathematicaContext() + myVariable.getSymbolName();
   }
 
   @Override

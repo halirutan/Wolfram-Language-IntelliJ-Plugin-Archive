@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 
 /**
@@ -82,6 +83,8 @@ public interface Symbol extends PsiNameIdentifierOwner {
   void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement);
 
   void addElementReferencingToMe(Symbol reference);
+
+  PsiElement[] getElementsReferencingToMe();
 
   public void subtreeChanged();
 }
