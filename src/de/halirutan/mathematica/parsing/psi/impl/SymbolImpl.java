@@ -29,7 +29,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.MathematicaSymbolReferenceProvider;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
@@ -179,8 +178,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @NotNull
   @Override
   public PsiReference[] getReferences() {
-    return super.getReferences();
-//    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
+    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
   }
 
 }
