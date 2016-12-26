@@ -56,4 +56,5 @@ public class MathematicaPsiRenameProcessor extends RenamePsiElementProcessor {
     }
     return references;
   }
+
 }
