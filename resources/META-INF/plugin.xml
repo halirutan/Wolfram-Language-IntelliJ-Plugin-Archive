@@ -171,6 +171,9 @@
     <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
     <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
                              <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
+    <intentionAction>
+      <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
+    </intentionAction>
   </extensions>
 
   <actions>
