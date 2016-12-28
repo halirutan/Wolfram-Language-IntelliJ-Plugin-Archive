@@ -44,10 +44,10 @@ import static de.halirutan.mathematica.parsing.psi.SymbolAssignmentType.*;
  */
 public class GlobalDefinitionCollector {
 
-  private Map<String, HashSet<AssignmentProperty>> myAssignments;
+  private final Map<String, HashSet<AssignmentProperty>> myAssignments;
 
   public GlobalDefinitionCollector(PsiFile startElement) {
-    myAssignments = new HashMap<String, HashSet<AssignmentProperty>>();
+    myAssignments = new HashMap<>();
     final CollectorVisitor myVisitor = new CollectorVisitor();
     startElement.accept(myVisitor);
   }
@@ -64,7 +64,7 @@ public class GlobalDefinitionCollector {
     if (myAssignments.containsKey(key)) {
       assignment = myAssignments.get(key);
     } else {
-      assignment = new HashSet<AssignmentProperty>(1);
+      assignment = new HashSet<>(1);
       myAssignments.put(key, assignment);
     }
     assignment.add(new AssignmentProperty(symbol, lhs, type));
@@ -92,7 +92,8 @@ public class GlobalDefinitionCollector {
       for (Symbol symbol : unboundSymbols) {
         PsiElement context = lhs;
         if (visitor.getAssignmentType() == ATTRIBUTES_ASSIGNMENT || visitor.getAssignmentType() == OPTIONS_ASSIGNMENT) {
-          context = set.getLastChild();
+//          context = set.getLastChild();
+          context = set.getFirstChild();
         }
         addAssignment(symbol, context, visitor.getAssignmentType());
       }
