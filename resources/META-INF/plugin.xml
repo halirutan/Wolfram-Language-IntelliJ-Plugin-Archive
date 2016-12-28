@@ -166,7 +166,7 @@
         implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
     <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
-    <!--<renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>-->
+    <renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>
 
 
     <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
