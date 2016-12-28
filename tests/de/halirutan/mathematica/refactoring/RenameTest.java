@@ -68,15 +68,20 @@ public class RenameTest extends LightCodeInsightFixtureTestCase{
     myFixture.checkResult("newFunc::usage = \"newFunc is a function called like newFunc[]\";");
   }
 
-  // This test fails du to a bug in idea
-//  @Test
-//  public void testDollarVariables() throws Exception {
-//    myFixture.configureByText(MathematicaFileType.INSTANCE,
-//        "var$ = 1;\n" +
-//            "var$<caret> + var$");
-//    myFixture.renameElementAtCaret("$var$");
-//    myFixture.checkResult("$var$ = 1;\n" +
-//        "$var$ + $var$");
-//  }
+  public void testUsage2() throws Exception {
+    myFixture.configureByText(MathematicaFileType.INSTANCE,
+        "func<caret>::usage = \"func is a function called like func[]\";");
+    myFixture.renameElementAtCaret("newFunc");
+    myFixture.checkResult("newFunc::usage = \"newFunc is a function called like newFunc[]\";");
+  }
+
+  public void testDollarVariables() throws Exception {
+    myFixture.configureByText(MathematicaFileType.INSTANCE,
+        "var$ = 1;\n" +
+            "var$<caret> + var$");
+    myFixture.renameElementAtCaret("$var$");
+    myFixture.checkResult("$var$ = 1;\n" +
+        "$var$ + $var$");
+  }
 
 }

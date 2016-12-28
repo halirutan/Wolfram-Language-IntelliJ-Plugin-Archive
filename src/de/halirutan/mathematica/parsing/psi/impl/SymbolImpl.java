@@ -104,6 +104,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     }
   }
 
+  @Override
+  public String getFullSymbolName() {
+    return getName();
+  }
+
   @Nullable
   @Override
   public PsiElement getNameIdentifier() {
