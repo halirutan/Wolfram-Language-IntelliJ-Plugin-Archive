@@ -63,10 +63,10 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public PsiElement resolveInner() {
 
-    if (NAMES.contains(myVariable.getSymbolName())) return myVariable;
+    if (isBuiltInSymbol(myVariable)) return myVariable;
 
     if (myVariable.cachedResolve()) {
-      if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName()) ||
+      if (myVariable.getFullSymbolName().equals(myVariable.getResolveElement().getFullSymbolName()) ||
           myVariable.getLocalizationConstruct().equals(ConstructType.ANONYMOUSFUNCTION)) {
         return myVariable.getResolveElement();
       } else {
@@ -109,7 +109,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myVariable.getMathematicaContext() + myVariable.getSymbolName();
+    return myVariable.getFullSymbolName();
   }
 
   @Override
@@ -126,17 +126,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   }
 
   @Override
-  public boolean isReferenceTo(PsiElement element) {
-    if (NAMES.contains(myVariable.getSymbolName())) {
-      return false;
-    }
-    if (element instanceof Symbol && ((Symbol) element).getSymbolName().equals(myVariable.getSymbolName())) {
-      return super.isReferenceTo(element);
-    }
-    return false;
-  }
-
-  @Override
   public boolean isSoft() {
     return super.isSoft();
   }
@@ -145,6 +134,16 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public Object[] getVariants() {
     return new Object[0];
+  }
+
+  public static boolean isBuiltInSymbol(PsiElement element) {
+    if(element instanceof Symbol) {
+      Symbol symbol = (Symbol) element;
+      final String name = symbol.getMathematicaContext().equals("") ?
+          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+      return NAMES.contains(name);
+    }
+    return false;
   }
 
 }

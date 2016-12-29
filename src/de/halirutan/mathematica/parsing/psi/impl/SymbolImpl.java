@@ -50,7 +50,7 @@ import java.util.HashSet;
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-  private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
+  private final HashSet<Symbol> myReferringElements = new HashSet<>();
   private boolean myIsUpToDate;
   private ConstructType myLocalization;
   private Symbol myDefinitionElement;
@@ -84,7 +84,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public String getMathematicaContext() {
     String myName = getName();
-    String context = "System`";
+    String context = "";
     if (myName != null) {
       if (myName.contains("`")) {
         context = myName.substring(0, myName.lastIndexOf('`') + 1);

@@ -37,12 +37,12 @@ import java.util.Set;
 /**
  * @author patrick (9/27/13)
  */
-public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
+class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
 
   private final Set<String> myCollectedFunctionNames;
 
   public GlobalDefinitionCompletionProvider() {
-    myCollectedFunctionNames = new HashSet<String>();
+    myCollectedFunctionNames = new HashSet<>();
   }
 
   public void visitFile(PsiFile file) {
@@ -64,14 +64,14 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
   public void visitTagSet(TagSet tagSet) {
     final PsiElement tag = tagSet.getFirstChild();
     if (tag instanceof Symbol) {
-      myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
+      myCollectedFunctionNames.add(((Symbol) tag).getFullSymbolName());
     }
   }
 
   public void visitTagSetDelayed(TagSetDelayed tagSetDelayed) {
     final PsiElement tag = tagSetDelayed.getFirstChild();
     if (tag instanceof Symbol) {
-      myCollectedFunctionNames.add(((Symbol) tag).getSymbolName());
+      myCollectedFunctionNames.add(((Symbol) tag).getFullSymbolName());
     }
   }
 
@@ -98,7 +98,7 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
     } else if (head.matches("TagSet|TagSetDelayed|SetAttributes|SetOptions")) {
       final PsiElement arg1 = functionCall.getArgument(1);
       if (arg1 instanceof Symbol) {
-        myCollectedFunctionNames.add(((Symbol) arg1).getSymbolName());
+        myCollectedFunctionNames.add(((Symbol) arg1).getFullSymbolName());
       }
     }
   }
@@ -124,7 +124,7 @@ public class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
   private void cacheAssignedSymbols(Set<Symbol> symbolSet) {
     if (symbolSet != null) {
       for (Symbol symbol : symbolSet) {
-        myCollectedFunctionNames.add(symbol.getSymbolName());
+        myCollectedFunctionNames.add(symbol.getFullSymbolName());
       }
     }
   }

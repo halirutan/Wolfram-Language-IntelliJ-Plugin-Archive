@@ -86,7 +86,9 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    if (NAMES.contains(symbol.getMathematicaContext()+symbol.getSymbolName())) {
+    String possibleGlobalSymbol = symbol.getMathematicaContext().equals("") ?
+        "System`"+symbol.getSymbolName() : symbol.getFullSymbolName();
+    if (NAMES.contains(possibleGlobalSymbol)) {
       setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
       return;
     }

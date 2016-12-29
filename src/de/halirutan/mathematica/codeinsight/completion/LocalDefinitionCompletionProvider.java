@@ -34,6 +34,7 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaPatternVisitor;
 import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
@@ -49,18 +50,18 @@ import java.util.regex.Pattern;
  *
  * @author patrick (5/22/13)
  */
-public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
+class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
 
   private final List<Symbol> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
 
-  public LocalDefinitionCompletionProvider(Symbol myStartElement) {
+  public LocalDefinitionCompletionProvider(Symbol startElement) {
     super();
-    this.myStartElement = myStartElement;
+    this.myStartElement = startElement;
   }
 
   @Override
-  public boolean execute(@NotNull PsiElement element, ResolveState state) {
+  public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
     if (element instanceof Set || element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof TagSet) {
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
@@ -70,7 +71,7 @@ public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
       final FunctionCall functionCall = (FunctionCall) element;
       if (functionCall.isScopingConstruct()) {
         List<Symbol> vars = Lists.newArrayList();
-        final LocalizationConstruct.ConstructType scopingConstruct = functionCall.getScopingConstruct();
+        final ConstructType scopingConstruct = functionCall.getScopingConstruct();
 
         if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
           vars = MathematicaPsiUtilities.getLocalFunctionVariables(functionCall);
@@ -116,13 +117,13 @@ public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
    */
   public List<Symbol> getSymbols() {
 
-    Collections.sort(mySymbols, new SymbolComparator());
-    Pattern pattern = Pattern.compile(myStartElement.getSymbolName().substring(0, 1) + ".*");
+    mySymbols.sort(new SymbolComparator());
+    Pattern pattern = Pattern.compile(myStartElement.getFullSymbolName().substring(0, 1) + ".*");
     Symbol tmp = null;
     for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
       Symbol next = symbolIterator.next();
 
-      if (!pattern.matcher(next.getSymbolName()).matches()) {
+      if (!pattern.matcher(next.getFullSymbolName()).matches()) {
         symbolIterator.remove();
         continue;
       }
@@ -132,7 +133,7 @@ public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
         continue;
       }
 
-      if (tmp.getSymbolName().equals(next.getSymbolName())) {
+      if (tmp.getFullSymbolName().equals(next.getFullSymbolName())) {
         symbolIterator.remove();
       } else {
         tmp = next;
@@ -148,7 +149,7 @@ public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
 
     @Override
     public int compare(Symbol o1, Symbol o2) {
-      return (o1.getSymbolName().compareTo(o2.getSymbolName()));
+      return (o1.getFullSymbolName().compareTo(o2.getFullSymbolName()));
     }
 
   }

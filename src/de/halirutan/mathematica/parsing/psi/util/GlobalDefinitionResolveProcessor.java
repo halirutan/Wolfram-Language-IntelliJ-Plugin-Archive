@@ -80,7 +80,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
    * @return true if the names are equal
    */
   private boolean visitSymbol(final Symbol symbol) {
-    if (myStartElement.getSymbolName().equals(symbol.getSymbolName())) {
+    if (myStartElement.getFullSymbolName().equals(symbol.getFullSymbolName())) {
       myReferringSymbol = symbol;
       return false;
     }
@@ -94,7 +94,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
       lhs.accept(definitionVisitor);
       final java.util.Set<Symbol> definitionSymbols = definitionVisitor.getUnboundSymbols();
       for (Symbol next : definitionSymbols) {
-        if (next.getSymbolName().equals(myStartElement.getSymbolName())) {
+        if (next.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
           myReferringSymbol = next;
           return false;
         }
@@ -107,7 +107,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
    * TagSet should be trivial. In f /: g[a,b,..,f,..] = .., f is always expected to be a symbol.
    */
   private boolean visitTagSetDefinition(final PsiElement defSymbol) {
-    if (defSymbol instanceof Symbol && ((Symbol) defSymbol).getSymbolName().matches(myStartElement.getSymbolName())) {
+    if (defSymbol instanceof Symbol && ((Symbol) defSymbol).getFullSymbolName().matches(myStartElement.getFullSymbolName())) {
       myReferringSymbol = defSymbol;
       return false;
     }
@@ -120,7 +120,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
       lhs.accept(definitionVisitor);
       final java.util.Set<Symbol> definitionSymbols = definitionVisitor.getUnboundSymbols();
       for (Symbol next : definitionSymbols) {
-        if (next.getSymbolName().equals(myStartElement.getSymbolName())) {
+        if (next.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
           myReferringSymbol = next;
           return false;
         }
