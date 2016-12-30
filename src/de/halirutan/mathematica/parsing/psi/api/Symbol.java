@@ -48,6 +48,11 @@ public interface Symbol extends PsiNameIdentifierOwner {
   String getSymbolName();
 
   /**
+   * Returns the full name of the symbol with context.
+   * @return Symbol name with context
+   */
+  String getFullSymbolName();
+  /**
    * Returns true if the <em>definition element</em> of this symbol was already resolved and is up to date. If this
    * returns true then you can call {@link #getResolveElement()} to get the place of definition or {@link
    * #getLocalizationConstruct()} to get the type of the localization construct which is used.

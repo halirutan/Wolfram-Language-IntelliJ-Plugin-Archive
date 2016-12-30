@@ -2,8 +2,8 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.0.13</version>
-  <idea-version since-build="163.7743.44"/>
+  <version>2.0.16</version>
+  <idea-version since-build="163"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
   <description><![CDATA[
@@ -37,6 +37,7 @@
       <li>Inspections for version mismatch of symbols, possible errors through multiplicaton at linebreak, and missing commas and semicolons
       <li>Autocompletion suggestions sorted by importance</li>
       <li>Highlighting and smart inserting of braces, brackets and parenthesis</li>
+      <li>Quick navigation between symbol usages with Navigate - Related Symbol</li>
     </ul>
       ]]></description>
 
@@ -171,6 +172,9 @@
     <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
     <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
                              <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
+    <gotoRelatedProvider
+        implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
+
     <intentionAction>
       <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
     </intentionAction>

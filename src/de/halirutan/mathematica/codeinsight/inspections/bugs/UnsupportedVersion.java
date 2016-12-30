@@ -83,7 +83,7 @@ public class UnsupportedVersion extends AbstractInspection {
     final JCheckBox useSDKCheckbox = new JCheckBox("Use Project SDK Language Level");
     final JLabel infoLabel = new JLabel();
     //noinspection Since15
-    final ComboBox<MathematicaLanguageLevel> versionComboBox = new ComboBox<MathematicaLanguageLevel>();
+    final ComboBox<MathematicaLanguageLevel> versionComboBox = new ComboBox<>();
 
     for (MathematicaLanguageLevel level : MathematicaLanguageLevel.values()) {
       //noinspection unchecked
@@ -92,28 +92,22 @@ public class UnsupportedVersion extends AbstractInspection {
     versionComboBox.setSelectedItem(languageLevel);
     versionComboBox.setEditable(false);
     //noinspection unchecked
-    versionComboBox.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        final MathematicaLanguageLevel selectedItem = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
-        if (selectedItem != null) {
-          languageLevel = selectedItem;
-          setLabelTextToVersion(infoLabel);
-        }
+    versionComboBox.addActionListener(e -> {
+      final MathematicaLanguageLevel selectedItem = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
+      if (selectedItem != null) {
+        languageLevel = selectedItem;
+        setLabelTextToVersion(infoLabel);
       }
     });
 
     useSDKCheckbox.setSelected(useSDKLanguageLevelOrHighest);
-    useSDKCheckbox.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        useSDKLanguageLevelOrHighest = useSDKCheckbox.isSelected();
-        versionComboBox.setVisible(!useSDKLanguageLevelOrHighest);
-        if (!useSDKLanguageLevelOrHighest) {
-          languageLevel = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
-        }
-        setLabelTextToVersion(infoLabel);
+    useSDKCheckbox.addActionListener(e -> {
+      useSDKLanguageLevelOrHighest = useSDKCheckbox.isSelected();
+      versionComboBox.setVisible(!useSDKLanguageLevelOrHighest);
+      if (!useSDKLanguageLevelOrHighest) {
+        languageLevel = (MathematicaLanguageLevel) versionComboBox.getSelectedItem();
       }
+      setLabelTextToVersion(infoLabel);
     });
 
     setLabelTextToVersion(infoLabel);
@@ -211,7 +205,9 @@ public class UnsupportedVersion extends AbstractInspection {
         return;
       }
 
-      String nameWithContext = symbol.getMathematicaContext() + symbolName;
+      String nameWithContext = symbol.getMathematicaContext().equals("") ?
+          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+
       if (mySymbolVersions.containsKey(nameWithContext)) {
         double version = mySymbolVersions.get(nameWithContext);
         if (version > myLanguageLevel.getVersionNumber()) {

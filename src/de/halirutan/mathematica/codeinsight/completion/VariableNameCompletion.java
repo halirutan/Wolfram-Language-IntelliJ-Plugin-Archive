@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
@@ -34,6 +34,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -51,14 +52,14 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
 
   @Override
   void addTo(CompletionContributor contributor) {
-    final PsiElementPattern.Capture<PsiElement> symbolPattern = PlatformPatterns.psiElement().withParent(Symbol.class);
+    final Capture<PsiElement> symbolPattern = PlatformPatterns.psiElement().withParent(Symbol.class);
     contributor.extend(CompletionType.BASIC, symbolPattern, this);
   }
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
     final Symbol callingSymbol = (Symbol) parameters.getPosition().getParent();
-    final String callingSymbolName = callingSymbol.getSymbolName();
+    final String callingSymbolName = callingSymbol.getFullSymbolName();
 
     if (!parameters.isExtendedCompletion()) {
       final PsiFile containingFile = parameters.getOriginalFile();
@@ -67,7 +68,8 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
       GlobalDefinitionCompletionProvider visitor = new GlobalDefinitionCompletionProvider();
       containingFile.accept(visitor);
       for (String name : visitor.getFunctionsNames()) {
-        if (!NAMES.contains(name)) {
+        String possibleBuiltIn = name.contains("`") ? name : "Symbol`" + name;
+        if (!NAMES.contains(possibleBuiltIn)) {
           result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
         }
       }
@@ -80,17 +82,17 @@ public class VariableNameCompletion extends MathematicaCompletionProvider {
 
 
       for (Symbol currentSymbol : variants) {
-        if (!NAMES.contains(currentSymbol.getSymbolName())) {
+        if (!SymbolPsiReference.isBuiltInSymbol(currentSymbol)) {
           result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), LOCAL_VARIABLE_PRIORITY));
         }
       }
     } else {
-      final Set<String> allSymbols = new HashSet<String>();
+      final Set<String> allSymbols = new HashSet<>();
       PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
         @Override
         public void visitElement(PsiElement element) {
-          if (element instanceof Symbol && !callingSymbolName.equals(((Symbol) element).getSymbolName() + "ZZZ")) {
-            allSymbols.add(((Symbol) element).getSymbolName());
+          if (element instanceof Symbol && !callingSymbolName.equals(((Symbol) element).getFullSymbolName() + "ZZZ")) {
+            allSymbols.add(((Symbol) element).getFullSymbolName());
           }
           element.acceptChildren(this);
         }
