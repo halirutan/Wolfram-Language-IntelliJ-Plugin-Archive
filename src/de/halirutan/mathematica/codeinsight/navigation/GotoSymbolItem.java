@@ -27,13 +27,34 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Provides a {@link GotoRelatedItem} that is useful to give information about the usage of a Mathematica symbol
+ *
  * @author patrick (28.12.16).
  */
 public class GotoSymbolItem extends GotoRelatedItem {
+
   private final String myDescription;
-  GotoSymbolItem(@NotNull PsiElement element, final String description) {
+  private final String myContext;
+  private final int myLineNumber;
+
+  /**
+   * Create an entry with description text
+   * @param element {@link PsiElement} to navigate to
+   * @param description descriptive text that appears in the info box
+   * @param contextInfo additional information like line number and context
+   * @param lineNumber used for sorting the entries
+   */
+  GotoSymbolItem(@NotNull PsiElement element, @NotNull final String description, @NotNull final String contextInfo, final int lineNumber) {
     super(element);
     myDescription = description;
+    myContext = contextInfo;
+    myLineNumber = lineNumber;
+  }
+
+  @Nullable
+  @Override
+  public String getCustomContainerName() {
+    return myContext;
   }
 
   @Nullable
@@ -41,4 +62,9 @@ public class GotoSymbolItem extends GotoRelatedItem {
   public String getCustomName() {
     return myDescription;
   }
+
+  int getLineNumber() {
+    return myLineNumber;
+  }
+
 }
