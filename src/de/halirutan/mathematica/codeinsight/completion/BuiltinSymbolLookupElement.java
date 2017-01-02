@@ -25,24 +25,32 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.template.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
+import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.settings.MathematicaSettings;
+import de.halirutan.mathematica.settings.MathematicaSettings.SmartEnterResult;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (30.11.16).
  */
+@SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
 public class BuiltinSymbolLookupElement extends LookupElement {
 
   private final SymbolInformation myInfo;
   private static final char OPEN_BRACKET = '[';
   private static final char CLOSING_BRACKET = ']';
 
-  public BuiltinSymbolLookupElement(SymbolInformation info) {
+  BuiltinSymbolLookupElement(SymbolInformation info) {
     myInfo = info;
   }
 
@@ -70,15 +78,21 @@ public class BuiltinSymbolLookupElement extends LookupElement {
 
   @Override
   public void handleInsert(InsertionContext context) {
-      Editor editor = context.getEditor();
-      Document document = editor.getDocument();
-      context.commitDocument();
+    final SmartEnterResult smartEnterSetting = MathematicaSettings.getInstance().getSmartEnterResult();
+    Editor editor = context.getEditor();
+    Document document = editor.getDocument();
+    context.commitDocument();
 
-      char completionChar = context.getCompletionChar();
-      context.setAddCompletionChar(false);
+    char completionChar = context.getCompletionChar();
+    context.setAddCompletionChar(false);
 
-      if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
-        if (myInfo.function) {
+    if (completionChar == Lookup.COMPLETE_STATEMENT_SELECT_CHAR) {
+      if (myInfo.function) {
+        if (smartEnterSetting.equals(SmartEnterResult.INSERT_BRACES)) {
+          document.insertString(context.getTailOffset(), "[]");
+          final int currentPosition = context.getTailOffset();
+          editor.getCaretModel().moveToOffset(currentPosition - 1);
+        } else if (smartEnterSetting.equals(SmartEnterResult.INSERT_CODE) || smartEnterSetting.equals(SmartEnterResult.INSERT_TEMPLATE)) {
           document.insertString(context.getTailOffset(), Character.toString(OPEN_BRACKET));
           final int currentPosition = context.getTailOffset();
           document.insertString(currentPosition, myInfo.getCallPattern());
@@ -86,16 +100,55 @@ public class BuiltinSymbolLookupElement extends LookupElement {
           final int endOffset = getFirstArgumentRange(myInfo).getEndOffset() + currentPosition;
           editor.getSelectionModel().setSelection(currentPosition, endOffset);
           editor.getCaretModel().moveToOffset(endOffset);
-        } else {
-          document.insertString(context.getTailOffset(), " ");
-          editor.getCaretModel().moveToOffset(context.getTailOffset());
+
+          if (smartEnterSetting.equals(SmartEnterResult.INSERT_TEMPLATE)) {
+
+            PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getDocument());
+            final PsiElement headOfFunction = PsiTreeUtil.findElementOfClassAtRange(context.getFile(), context.getStartOffset(), context.getTailOffset(), PsiElement.class);
+            final TemplateBuilderFactory factory = TemplateBuilderFactoryImpl.getInstance();
+            final TemplateBuilderImpl builder = (TemplateBuilderImpl) factory.createTemplateBuilder(headOfFunction);
+            if (headOfFunction instanceof FunctionCall) {
+              final PsiElement[] children = headOfFunction.getChildren();
+              for (int i = 1; i < children.length; i++) {
+                final PsiElement child = children[i];
+
+                builder.replaceElement(child, new Expression() {
+                  @Nullable
+                  @Override
+                  public Result calculateResult(ExpressionContext context) {
+                    return new TextResult(child.getText());
+                  }
+
+                  @Nullable
+                  @Override
+                  public Result calculateQuickResult(ExpressionContext context) {
+                    return new TextResult(child.getText());
+                  }
+
+                  @Nullable
+                  @Override
+                  public LookupElement[] calculateLookupItems(ExpressionContext context) {
+                    return LookupElement.EMPTY_ARRAY;
+                  }
+                });
+              }
+              Template template = builder.buildInlineTemplate();
+              TemplateManager.getInstance(context.getProject()).startTemplate(context.getEditor(), template);
+
+            }
+
+          }
         }
-
+      } else {
+        document.insertString(context.getTailOffset(), " ");
+        editor.getCaretModel().moveToOffset(context.getTailOffset());
       }
 
-      if (completionChar == ' ') {
-        context.setAddCompletionChar(true);
-      }
+    }
+
+    if (completionChar == ' ') {
+      context.setAddCompletionChar(true);
+    }
 
     final Project project = context.getProject();
     PsiDocumentManager.getInstance(project).commitDocument(document);

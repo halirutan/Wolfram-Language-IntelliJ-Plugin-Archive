@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,66 +19,63 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;
+package de.halirutan.mathematica.settings;
 
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.Configurable.NoScroll;
+import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SearchableConfigurable;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 /**
- * @author patrick (01.12.16).
+ * @author patrick (01.01.17).
  */
-public class MathematicaSettingsConfigurable implements SearchableConfigurable, NoScroll{
-  private JPanel myWholePanel;
-  private JCheckBox mySortEntries;
-  private JComboBox mySmartEnterMethod;
+public class MathematicaSettingsConfigurable extends BaseConfigurable {
 
-  @NotNull
-  @Override
-  public String getId() {
-    return null;
-  }
+  private SettingsUI settingsUI;
 
   @Nls
   @Override
   public String getDisplayName() {
-    return null;
+    return "Mathematica";
   }
 
   @Nullable
   @Override
   public String getHelpTopic() {
-    return null;
+    return "xpath.settings";
   }
 
   @Nullable
   @Override
   public JComponent createComponent() {
-    return null;
-  }
-
-  @Override
-  public boolean isModified() {
-    return false;
+    settingsUI = new SettingsUI();
+    settingsUI.setSettings(MathematicaSettings.getInstance());
+    return settingsUI;
   }
 
   @Override
   public void apply() throws ConfigurationException {
+    if (settingsUI != null) {
+      final MathematicaSettings instance = MathematicaSettings.getInstance();
+      instance.loadState(settingsUI.getSettings());
+    }
 
   }
 
   @Override
   public void reset() {
-
+    if (settingsUI != null) {
+      settingsUI.setSettings(MathematicaSettings.getInstance());
+    }
   }
 
-  private void createUIComponents() {
-    // TODO: place custom component creation code here
+  @Override
+  public boolean isModified() {
+    if (settingsUI != null) {
+      return !settingsUI.getSettings().equals(MathematicaSettings.getInstance());
+    }
+    return false;
   }
 }

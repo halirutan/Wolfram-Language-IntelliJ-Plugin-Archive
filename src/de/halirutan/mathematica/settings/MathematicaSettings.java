@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica;/*
+package de.halirutan.mathematica.settings;/*
  * Copyright (c) 2016 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,16 +50,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (01.12.16).
  */
+@SuppressWarnings({"InstanceVariableNamingConvention", "WeakerAccess", "InstanceMethodNamingConvention"})
 @State(name = "MathematicaSettings", storages = @Storage("other.xml"))
 public class MathematicaSettings implements PersistentStateComponent<MathematicaSettings> {
 
   public enum SmartEnterResult {
     INSERT_BRACES,
-    INSERT_CALL_PATTERN
+    INSERT_CODE,
+    INSERT_TEMPLATE
   }
 
-  public SmartEnterResult mySmartEnterResult = SmartEnterResult.INSERT_CALL_PATTERN;
-  public boolean mySortEntriesLexicographically = false;
+  public SmartEnterResult smartEnterResult = SmartEnterResult.INSERT_TEMPLATE;
+  public boolean sortCompletionEntriesLexicographically = false;
 
   public static MathematicaSettings getInstance() {
     return ServiceManager.getService(MathematicaSettings.class);
@@ -74,5 +76,42 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
   @Override
   public void loadState(MathematicaSettings state) {
     XmlSerializerUtil.copyBean(state, this);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+
+    final MathematicaSettings settings = (MathematicaSettings) obj;
+    if(smartEnterResult != settings.smartEnterResult) return false;
+    return sortCompletionEntriesLexicographically == settings.sortCompletionEntriesLexicographically;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = (smartEnterResult.ordinal());
+    result = 29 * result + (sortCompletionEntriesLexicographically ? 1 : 0);
+    return result;
+  }
+
+  public SmartEnterResult getSmartEnterResult() {
+    return smartEnterResult;
+  }
+
+  public void setSmartEnterResult(SmartEnterResult result) {
+    this.smartEnterResult = result;
+  }
+
+  public boolean isSortCompletionEntriesLexicographically() {
+    return sortCompletionEntriesLexicographically;
+  }
+
+  public void setSortCompletionEntriesLexicographically(boolean shouldSort) {
+    this.sortCompletionEntriesLexicographically = shouldSort;
   }
 }

@@ -169,9 +169,9 @@
     <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
     <renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>
 
-    <!--<applicationService serviceInterface="de.halirutan.mathematica.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.MathematicaSettings"/>-->
-    <!--<applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"-->
-                             <!--instance="de.halirutan.mathematica.MathematicaSettingsConfigurable"/>-->
+    <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>
+    <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"
+                             instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
     <gotoRelatedProvider
         implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
 
