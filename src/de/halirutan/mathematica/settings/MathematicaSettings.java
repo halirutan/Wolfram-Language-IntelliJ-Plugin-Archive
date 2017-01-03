@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -60,8 +60,7 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
     INSERT_TEMPLATE
   }
 
-  public SmartEnterResult smartEnterResult = SmartEnterResult.INSERT_TEMPLATE;
-  public boolean sortCompletionEntriesLexicographically = false;
+  public SmartEnterResult smartEnterResult = SmartEnterResult.INSERT_BRACES;
 
   public static MathematicaSettings getInstance() {
     return ServiceManager.getService(MathematicaSettings.class);
@@ -88,15 +87,12 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
     }
 
     final MathematicaSettings settings = (MathematicaSettings) obj;
-    if(smartEnterResult != settings.smartEnterResult) return false;
-    return sortCompletionEntriesLexicographically == settings.sortCompletionEntriesLexicographically;
+    return smartEnterResult == settings.smartEnterResult;
   }
 
   @Override
   public int hashCode() {
-    int result = (smartEnterResult.ordinal());
-    result = 29 * result + (sortCompletionEntriesLexicographically ? 1 : 0);
-    return result;
+    return (smartEnterResult.ordinal());
   }
 
   public SmartEnterResult getSmartEnterResult() {
@@ -107,11 +103,4 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
     this.smartEnterResult = result;
   }
 
-  public boolean isSortCompletionEntriesLexicographically() {
-    return sortCompletionEntriesLexicographically;
-  }
-
-  public void setSortCompletionEntriesLexicographically(boolean shouldSort) {
-    this.sortCompletionEntriesLexicographically = shouldSort;
-  }
 }

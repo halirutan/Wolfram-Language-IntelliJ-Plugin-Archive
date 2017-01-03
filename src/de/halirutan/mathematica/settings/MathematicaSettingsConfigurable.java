@@ -33,7 +33,7 @@ import javax.swing.*;
  */
 public class MathematicaSettingsConfigurable extends BaseConfigurable {
 
-  private SettingsUI settingsUI;
+  private SettingsUI mySettingsUI = null;
 
   @Nls
   @Override
@@ -44,37 +44,37 @@ public class MathematicaSettingsConfigurable extends BaseConfigurable {
   @Nullable
   @Override
   public String getHelpTopic() {
-    return "xpath.settings";
+    return null;
   }
 
   @Nullable
   @Override
   public JComponent createComponent() {
-    settingsUI = new SettingsUI();
-    settingsUI.setSettings(MathematicaSettings.getInstance());
-    return settingsUI;
+    mySettingsUI = new SettingsUI();
+    mySettingsUI.setSettings(MathematicaSettings.getInstance());
+    return mySettingsUI;
   }
 
   @Override
   public void apply() throws ConfigurationException {
-    if (settingsUI != null) {
+    if (mySettingsUI != null) {
       final MathematicaSettings instance = MathematicaSettings.getInstance();
-      instance.loadState(settingsUI.getSettings());
+      instance.loadState(mySettingsUI.getSettings());
     }
 
   }
 
   @Override
   public void reset() {
-    if (settingsUI != null) {
-      settingsUI.setSettings(MathematicaSettings.getInstance());
+    if (mySettingsUI != null) {
+      mySettingsUI.setSettings(MathematicaSettings.getInstance());
     }
   }
 
   @Override
   public boolean isModified() {
-    if (settingsUI != null) {
-      return !settingsUI.getSettings().equals(MathematicaSettings.getInstance());
+    if (mySettingsUI != null) {
+      return !mySettingsUI.getSettings().equals(MathematicaSettings.getInstance());
     }
     return false;
   }

@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.settings;
 
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.ui.IdeBorderFactory;
 import de.halirutan.mathematica.settings.MathematicaSettings.SmartEnterResult;
 
@@ -29,19 +28,29 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * The UI that is shown under Settings -> Languages -> Mathematica
  * @author patrick (01.12.16).
  */
 @SuppressWarnings("InstanceVariableNamingConvention")
-public class SettingsUI extends JPanel{
-  private MathematicaSettings mySettings;
+public class SettingsUI extends JPanel {
   private JCheckBox insertTemplate;
   private JCheckBox insertAsCode;
   private JCheckBox insertBraces;
-  private JCheckBox sortByImportance;
-  private JCheckBox sortByName;
 
-  public SettingsUI() {
+  SettingsUI() {
     init();
+  }
+
+  public static void main(String[] args) {
+    JFrame frame = new JFrame("Settings Test");
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    JPanel panel = new JPanel();
+    SettingsUI ui = new SettingsUI();
+    ui.setSettings(new MathematicaSettings());
+    panel.add(ui, BorderLayout.CENTER);
+    frame.getContentPane().add(panel);
+    frame.setSize(450, 450);
+    frame.setVisible(true);
   }
 
   private void init() {
@@ -69,55 +78,6 @@ public class SettingsUI extends JPanel{
     insertPanel.add(insertAsCode, BorderLayout.NORTH);
     insertPanel.add(insertPanel = new JPanel(new BorderLayout()), BorderLayout.SOUTH);
     insertPanel.add(insertBraces);
-
-    sortByImportance = new JCheckBox("Sort by importance");
-    sortByImportance.setMnemonic('I');
-    sortByName = new JCheckBox("Sort by name");
-    sortByName.setMnemonic('N');
-
-    ButtonGroup g2 = new ButtonGroup();
-    g2.add(sortByImportance);
-    g2.add(sortByName);
-
-    JPanel sortPanel = new JPanel(new BorderLayout());
-    sortPanel.setBorder(IdeBorderFactory.createTitledBorder("Sorting of completion entries"));
-    panel.add(panel = new JPanel(new BorderLayout()), BorderLayout.SOUTH);
-    panel.add(sortPanel, BorderLayout.SOUTH);
-
-    sortPanel.add(sortByImportance, BorderLayout.NORTH);
-    sortPanel.add(sortByName, BorderLayout.SOUTH);
-
-  }
-
-  public void apply() {
-    mySettings.setSortCompletionEntriesLexicographically(sortByName.isSelected());
-    mySettings.setSmartEnterResult(
-        insertBraces.isSelected() ? SmartEnterResult.INSERT_BRACES :
-            insertAsCode.isSelected() ? SmartEnterResult.INSERT_CODE :
-                SmartEnterResult.INSERT_TEMPLATE
-    );
-  }
-
-//  private void updateUI() {
-//    insertBraces.setSelected(
-//        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_BRACES));
-//    insertAsCode.setSelected(
-//        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_CODE)
-//    );
-//    insertTemplate.setSelected(
-//        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_TEMPLATE)
-//    );
-//    sortByName.setSelected(
-//        mySettings.isSortCompletionEntriesLexicographically()
-//    );
-//    sortByImportance.setSelected(
-//        !mySettings.isSortCompletionEntriesLexicographically()
-//    );
-//  }
-
-  public void reset() {
-    mySettings = MathematicaSettings.getInstance();
-    updateUI();
   }
 
   public MathematicaSettings getSettings() {
@@ -126,43 +86,20 @@ public class SettingsUI extends JPanel{
       settings.setSmartEnterResult(SmartEnterResult.INSERT_CODE);
     } else if (insertBraces.isSelected()) {
       settings.setSmartEnterResult(SmartEnterResult.INSERT_BRACES);
-    } else if (insertTemplate.isSelected()){
+    } else if (insertTemplate.isSelected()) {
       settings.setSmartEnterResult(SmartEnterResult.INSERT_TEMPLATE);
     }
-    settings.setSortCompletionEntriesLexicographically(sortByName.isSelected());
     return settings;
   }
 
   public void setSettings(MathematicaSettings settings) {
-    mySettings = settings;
     insertBraces.setSelected(
-        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_BRACES));
+        settings.getSmartEnterResult().equals(SmartEnterResult.INSERT_BRACES));
     insertAsCode.setSelected(
-        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_CODE)
+        settings.getSmartEnterResult().equals(SmartEnterResult.INSERT_CODE)
     );
     insertTemplate.setSelected(
-        mySettings.getSmartEnterResult().equals(SmartEnterResult.INSERT_TEMPLATE)
-    );
-    sortByName.setSelected(
-        mySettings.isSortCompletionEntriesLexicographically()
-    );
-    sortByImportance.setSelected(
-        !mySettings.isSortCompletionEntriesLexicographically()
+        settings.getSmartEnterResult().equals(SmartEnterResult.INSERT_TEMPLATE)
     );
   }
-
-
-  public static void main(String[] args) {
-    JFrame  frame = new JFrame("Settings Test");
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    JPanel panel = new JPanel();
-    SettingsUI ui = new SettingsUI();
-    ui.setSettings(new MathematicaSettings());
-    panel.add(ui, BorderLayout.CENTER);
-    frame.getContentPane().add(panel);
-    frame.setSize(450,450);
-    frame.setVisible(true);
-  }
-
-
 }
