@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -41,6 +41,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * One particular lookup element of a built-in function or symbol. It handles the insert and lets users inserts
+ * completions ins various ways.
  * @author patrick (30.11.16).
  */
 @SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
@@ -132,8 +134,7 @@ public class BuiltinSymbolLookupElement extends LookupElement {
                   }
                 });
               }
-              Template template = builder.buildInlineTemplate();
-              TemplateManager.getInstance(context.getProject()).startTemplate(context.getEditor(), template);
+              builder.run(context.getEditor(), true);
 
             }
 

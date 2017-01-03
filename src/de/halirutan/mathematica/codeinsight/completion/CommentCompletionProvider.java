@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,19 +24,13 @@ package de.halirutan.mathematica.codeinsight.completion;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 import static com.intellij.patterns.PlatformPatterns.psiComment;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 /**
  * @author patrick (4/2/13)

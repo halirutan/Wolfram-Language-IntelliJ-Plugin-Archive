@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,9 +21,12 @@
 
 package de.halirutan.mathematica.codeinsight.completion;
 
-import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.impl.BetterPrefixMatcher;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
@@ -57,13 +60,12 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
     }
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
-
+    BetterPrefixMatcher matcher = new BetterPrefixMatcher(new CamelHumpMatcher(prefix, true), 200);
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
 
     for (SymbolInformation info : symbols.values()) {
       BuiltinSymbolLookupElement lookup = new BuiltinSymbolLookupElement(info);
-      result2.addElement(PrioritizedLookupElement.withPriority(lookup, info.importance));
+      result2.addElement(lookup);
     }
   }
 }
