@@ -138,11 +138,10 @@ public class MathematicaSdkType extends SdkType {
   @Override
   public boolean isValidSdkHome(String path) {
     String kernelLocation = "";
-    if (OS.contains("win") || OS.contains("nux")) {
+    if (OS.contains("win")) {
+      kernelLocation = path + File.separatorChar + "MathKernel.exe";
+    } else if (OS.contains("nux")) {
       kernelLocation = path + File.separatorChar + "Executables" + File.separatorChar + "MathKernel";
-      if (OS.contains("win")) {
-        kernelLocation += ".exe";
-      }
     } else if (OS.contains("mac")) {
       kernelLocation = path + File.separatorChar + "Contents/MacOS/MathKernel";
     }
