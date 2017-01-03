@@ -195,6 +195,10 @@
                              instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
     <gotoRelatedProvider
         implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
+
+    <intentionAction>
+      <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
+    </intentionAction>
   </extensions>
 
   <actions>
