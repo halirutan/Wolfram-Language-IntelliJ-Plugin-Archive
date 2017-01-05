@@ -25,7 +25,6 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.completion.impl.BetterPrefixMatcher;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
@@ -60,7 +59,8 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
     }
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    BetterPrefixMatcher matcher = new BetterPrefixMatcher(new CamelHumpMatcher(prefix, true), 200);
+//    BetterPrefixMatcher matcher = new BetterPrefixMatcher(new CamelHumpMatcher(prefix, true), -1);
+    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
 
     for (SymbolInformation info : symbols.values()) {
