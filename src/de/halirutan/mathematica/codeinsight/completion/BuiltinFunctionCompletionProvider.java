@@ -21,16 +21,14 @@
 
 package de.halirutan.mathematica.codeinsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.settings.MathematicaSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -59,13 +57,18 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
     }
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-//    BetterPrefixMatcher matcher = new BetterPrefixMatcher(new CamelHumpMatcher(prefix, true), -1);
-    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
+    final CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
+
+    final boolean sortByImportance = !MathematicaSettings.getInstance().isSortCompletionEntriesLexicographically();
 
     for (SymbolInformation info : symbols.values()) {
       BuiltinSymbolLookupElement lookup = new BuiltinSymbolLookupElement(info);
-      result2.addElement(lookup);
+      if (sortByImportance) {
+        result2.addElement(PrioritizedLookupElement.withPriority(lookup, info.importance));
+      } else {
+        result2.addElement(lookup);
+      }
     }
   }
 }

@@ -61,6 +61,7 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
   }
 
   public SmartEnterResult smartEnterResult = SmartEnterResult.INSERT_BRACES;
+  public boolean sortCompletionEntriesLexicographically = false;
 
   public static MathematicaSettings getInstance() {
     return ServiceManager.getService(MathematicaSettings.class);
@@ -87,12 +88,15 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
     }
 
     final MathematicaSettings settings = (MathematicaSettings) obj;
-    return smartEnterResult == settings.smartEnterResult;
+    if (smartEnterResult != settings.smartEnterResult) return false;
+    return sortCompletionEntriesLexicographically == settings.sortCompletionEntriesLexicographically;
   }
 
   @Override
   public int hashCode() {
-    return (smartEnterResult.ordinal());
+    int result = (smartEnterResult.ordinal());
+    result = 29 * result + (sortCompletionEntriesLexicographically ? 1 : 0);
+    return result;
   }
 
   public SmartEnterResult getSmartEnterResult() {
@@ -103,4 +107,11 @@ public class MathematicaSettings implements PersistentStateComponent<Mathematica
     this.smartEnterResult = result;
   }
 
+  public boolean isSortCompletionEntriesLexicographically() {
+    return sortCompletionEntriesLexicographically;
+  }
+
+  public void setSortCompletionEntriesLexicographically(boolean shouldSort) {
+    this.sortCompletionEntriesLexicographically = shouldSort;
+  }
 }

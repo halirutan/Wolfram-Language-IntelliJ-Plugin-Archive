@@ -36,6 +36,8 @@ public class SettingsUI extends JPanel {
   private JCheckBox insertTemplate;
   private JCheckBox insertAsCode;
   private JCheckBox insertBraces;
+  private JCheckBox sortByImportance;
+  private JCheckBox sortByName;
 
   SettingsUI() {
     init();
@@ -78,6 +80,23 @@ public class SettingsUI extends JPanel {
     insertPanel.add(insertAsCode, BorderLayout.NORTH);
     insertPanel.add(insertPanel = new JPanel(new BorderLayout()), BorderLayout.SOUTH);
     insertPanel.add(insertBraces);
+
+    sortByImportance = new JCheckBox("Sort by importance");
+    sortByImportance.setMnemonic('I');
+    sortByName = new JCheckBox("Sort by name");
+    sortByName.setMnemonic('N');
+
+    ButtonGroup g2 = new ButtonGroup();
+    g2.add(sortByImportance);
+    g2.add(sortByName);
+
+    JPanel sortPanel = new JPanel(new BorderLayout());
+    sortPanel.setBorder(IdeBorderFactory.createTitledBorder("Sorting of completion entries"));
+    panel.add(panel = new JPanel(new BorderLayout()), BorderLayout.SOUTH);
+    panel.add(sortPanel, BorderLayout.SOUTH);
+
+    sortPanel.add(sortByImportance, BorderLayout.NORTH);
+    sortPanel.add(sortByName, BorderLayout.SOUTH);
   }
 
   public MathematicaSettings getSettings() {
@@ -89,6 +108,7 @@ public class SettingsUI extends JPanel {
     } else if (insertTemplate.isSelected()) {
       settings.setSmartEnterResult(SmartEnterResult.INSERT_TEMPLATE);
     }
+    settings.setSortCompletionEntriesLexicographically(sortByName.isSelected());
     return settings;
   }
 
@@ -100,6 +120,12 @@ public class SettingsUI extends JPanel {
     );
     insertTemplate.setSelected(
         settings.getSmartEnterResult().equals(SmartEnterResult.INSERT_TEMPLATE)
+    );
+    sortByName.setSelected(
+        settings.isSortCompletionEntriesLexicographically()
+    );
+    sortByImportance.setSelected(
+        !settings.isSortCompletionEntriesLexicographically()
     );
   }
 }
