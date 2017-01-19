@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -57,7 +57,7 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
 
   private static final HashMap<String, SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-  private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<String>(Arrays.asList(new String[]{
+  private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<>(Arrays.asList(new String[]{
       "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
       "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"
   }));
@@ -77,6 +77,9 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
       final Symbol head = (Symbol) ((FunctionCall) function).getHead();
       String functionName = head.getSymbolName();
       String functionContext = head.getMathematicaContext();
+      if (functionContext.equals("") && ourSymbolInformation.containsKey("System`" + functionName)) {
+        functionContext = "System`";
+      }
       final String key = functionContext + functionName;
       if (ourSymbolInformation.containsKey(key) && ourSymbolInformation.get(key).function) {
         final SymbolInformation functionInformation = ourSymbolInformation.get(key);
@@ -90,7 +93,7 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
       }
 
       if (functionName.equals("Message")) {
-        final Set<LookupElement> usages = new com.intellij.util.containers.hash.HashSet<LookupElement>();
+        final Set<LookupElement> usages = new com.intellij.util.containers.hash.HashSet<>();
 
         MathematicaRecursiveVisitor visitor = new MathematicaRecursiveVisitor() {
 

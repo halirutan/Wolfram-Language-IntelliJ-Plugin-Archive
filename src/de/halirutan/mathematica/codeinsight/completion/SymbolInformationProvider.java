@@ -32,7 +32,8 @@ import java.util.ResourceBundle;
  */
 public class SymbolInformationProvider {
 
-  private final static String ourSymbolInformationFile = "/de/halirutan/mathematica/codeinsight/completion/symbolInformationV11_0_1";
+  private final static String ourSymbolInformationFile = "de.halirutan.mathematica.codeinsight.completion.symbolInformationV11_0_1";
+//  private final static String ourSymbolInformationFile = "symbolInformationV11_0_1";
   private final static HashMap<String, SymbolInformation> ourSymbols;
 
   private SymbolInformationProvider() {}
@@ -104,7 +105,7 @@ public class SymbolInformationProvider {
     public String context;
     public String nameWithoutContext;
 
-    public SymbolInformation(String nameIn, String nameWithoutContextIn, String contextIn, int importanceIn, String callPatternIn, boolean functionIn, String[] attributesIn, String[] optionsIn) {
+    SymbolInformation(String nameIn, String nameWithoutContextIn, String contextIn, int importanceIn, String callPatternIn, boolean functionIn, String[] attributesIn, String[] optionsIn) {
       this.name = nameIn;
       this.nameWithoutContext = nameWithoutContextIn;
       this.context = contextIn;
@@ -113,6 +114,17 @@ public class SymbolInformationProvider {
       this.function = functionIn;
       this.attributes = attributesIn;
       this.options = optionsIn;
+    }
+
+    /**
+     * Removes the braces around the call patter
+     * @return call pattern without braces
+     */
+    String getCallPattern() {
+      if (callPattern.length() > 2 && callPattern.matches("\\{.*}")) {
+        return callPattern.substring(1, callPattern.length() - 1);
+      }
+      return "";
     }
 
   }

@@ -26,6 +26,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
@@ -49,7 +50,7 @@ import java.util.HashSet;
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-  private final HashSet<Symbol> myReferringElements = new HashSet<Symbol>();
+  private final HashSet<Symbol> myReferringElements = new HashSet<>();
   private boolean myIsUpToDate;
   private ConstructType myLocalization;
   private Symbol myDefinitionElement;
@@ -83,7 +84,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public String getMathematicaContext() {
     String myName = getName();
-    String context = "System`";
+    String context = "";
     if (myName != null) {
       if (myName.contains("`")) {
         context = myName.substring(0, myName.lastIndexOf('`') + 1);
@@ -101,6 +102,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     } else {
       return myName.substring(myName.lastIndexOf('`') + 1, myName.length());
     }
+  }
+
+  @Override
+  public String getFullSymbolName() {
+    return getName();
   }
 
   @Nullable
@@ -161,6 +167,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   }
 
   @Override
+  public PsiElement[] getElementsReferencingToMe() {
+    return myReferringElements.toArray(new Symbol[myReferringElements.size()]);
+  }
+
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof MathematicaVisitor) {
       ((MathematicaVisitor) visitor).visitSymbol(this);
@@ -168,4 +179,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
       super.accept(visitor);
     }
   }
+
+  @NotNull
+  @Override
+  public PsiReference[] getReferences() {
+    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
+  }
+
 }

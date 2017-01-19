@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
 
 /**
@@ -46,6 +47,11 @@ public interface Symbol extends PsiNameIdentifierOwner {
    */
   String getSymbolName();
 
+  /**
+   * Returns the full name of the symbol with context.
+   * @return Symbol name with context
+   */
+  String getFullSymbolName();
   /**
    * Returns true if the <em>definition element</em> of this symbol was already resolved and is up to date. If this
    * returns true then you can call {@link #getResolveElement()} to get the place of definition or {@link
@@ -82,6 +88,8 @@ public interface Symbol extends PsiNameIdentifierOwner {
   void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement);
 
   void addElementReferencingToMe(Symbol reference);
+
+  PsiElement[] getElementsReferencingToMe();
 
   public void subtreeChanged();
 }

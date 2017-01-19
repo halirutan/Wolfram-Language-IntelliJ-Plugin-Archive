@@ -32,14 +32,14 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionResolveProcessor;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
 /**
- * Povides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
+ * Provides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
  * uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
  * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions are
  * done at file-scope. The class uses caching to speed up the resolve process. Once a definition for a symbol is found,
@@ -52,19 +52,22 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
   private final Symbol myVariable;
 
-  public SymbolPsiReference(Symbol element) {
+  SymbolPsiReference(Symbol element) {
+    super();
     myVariable = element;
   }
+
+
 
   @Nullable
   @Override
   public PsiElement resolveInner() {
 
-    if (NAMES.contains(myVariable.getSymbolName())) return myVariable;
+    if (isBuiltInSymbol(myVariable)) return myVariable;
 
     if (myVariable.cachedResolve()) {
-      if (myVariable.getSymbolName().equals(myVariable.getResolveElement().getSymbolName()) ||
-          myVariable.getLocalizationConstruct().equals(LocalizationConstruct.ConstructType.ANONYMOUSFUNCTION)) {
+      if (myVariable.getFullSymbolName().equals(myVariable.getResolveElement().getFullSymbolName()) ||
+          myVariable.getLocalizationConstruct().equals(ConstructType.ANONYMOUSFUNCTION)) {
         return myVariable.getResolveElement();
       } else {
         myVariable.subtreeChanged();
@@ -86,7 +89,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
 
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition instanceof Symbol) {
-      myVariable.setReferringElement((Symbol) globalDefinition, LocalizationConstruct.ConstructType.NULL, null);
+      myVariable.setReferringElement((Symbol) globalDefinition, ConstructType.NULL, null);
       return globalDefinition;
     }
     return null;
@@ -106,7 +109,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myVariable.getMathematicaContext() + "`" + myVariable.getSymbolName();
+    return myVariable.getFullSymbolName();
   }
 
   @Override
@@ -123,17 +126,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   }
 
   @Override
-  public boolean isReferenceTo(PsiElement element) {
-    if (NAMES.contains(myVariable.getSymbolName())) {
-      return false;
-    }
-    if (element instanceof Symbol && ((Symbol) element).getSymbolName().equals(myVariable.getSymbolName())) {
-      return super.isReferenceTo(element);
-    }
-    return false;
-  }
-
-  @Override
   public boolean isSoft() {
     return super.isSoft();
   }
@@ -142,6 +134,16 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public Object[] getVariants() {
     return new Object[0];
+  }
+
+  public static boolean isBuiltInSymbol(PsiElement element) {
+    if(element instanceof Symbol) {
+      Symbol symbol = (Symbol) element;
+      final String name = symbol.getMathematicaContext().equals("") ?
+          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+      return NAMES.contains(name);
+    }
+    return false;
   }
 
 }

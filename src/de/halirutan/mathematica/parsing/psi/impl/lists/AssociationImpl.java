@@ -22,15 +22,27 @@
 package de.halirutan.mathematica.parsing.psi.impl.lists;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.lists.Association;
 import de.halirutan.mathematica.parsing.psi.impl.ExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * Implementation of Association
  * Created by rsmenon on 3/28/14.
  */
 public class AssociationImpl extends ExpressionImpl implements Association {
   public AssociationImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitAssociation(this);
+    } else {
+      super.accept(visitor);
+    }
   }
 }

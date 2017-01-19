@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,12 +23,12 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.settings.MathematicaSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -57,17 +57,18 @@ public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProv
     }
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
-
+    final CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
-    for (String name : symbols.keySet()) {
-      SymbolInformation symbol = symbols.get(name);
-      LookupElementBuilder elm = LookupElementBuilder
-          .create(symbol.context.compareTo("System`") == 0 ? symbol.nameWithoutContext : symbol.name)
-          .withInsertHandler(MathematicaBracketInsertHandler.getInstance())
-          .withTypeText(symbol.context)
-          .withPresentableText(symbol.nameWithoutContext);
-      result2.addElement(PrioritizedLookupElement.withPriority(elm, symbol.importance));
+
+    final boolean sortByImportance = !MathematicaSettings.getInstance().isSortCompletionEntriesLexicographically();
+
+    for (SymbolInformation info : symbols.values()) {
+      BuiltinSymbolLookupElement lookup = new BuiltinSymbolLookupElement(info);
+      if (sortByImportance) {
+        result2.addElement(PrioritizedLookupElement.withPriority(lookup, info.importance));
+      } else {
+        result2.addElement(lookup);
+      }
     }
   }
 }

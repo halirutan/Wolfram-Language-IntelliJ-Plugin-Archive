@@ -115,6 +115,9 @@ createInformation[name_String] := Module[{importance, info, context},
 
 CreateCompletionInformation[] := createInformation /@ names;
 
-End[] (* End Private Context *)
+End[];
+(* End Private Context *)
 
-EndPackage[]
+EndPackage[];
+
+

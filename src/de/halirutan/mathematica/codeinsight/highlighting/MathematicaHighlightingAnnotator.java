@@ -86,7 +86,9 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    if (NAMES.contains(symbol.getMathematicaContext()+symbol.getSymbolName())) {
+    String possibleGlobalSymbol = symbol.getMathematicaContext().equals("") ?
+        "System`"+symbol.getSymbolName() : symbol.getFullSymbolName();
+    if (NAMES.contains(possibleGlobalSymbol)) {
       setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
       return;
     }
@@ -148,9 +150,14 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitMessageName(final MessageName messageName) {
+    final StringifiedSymbol tag = messageName.getTag();
+    TextAttributesKey color = MathematicaSyntaxHighlighterColors.MESSAGE;
+    if (tag != null && "usage".equals(tag.getText())) {
+      color = MathematicaSyntaxHighlighterColors.USAGE_MESSAGE;
+    }
     final ASTNode[] children = messageName.getNode().getChildren(null);
     for (int i = 1; i < children.length; i++) {
-      setHighlightingStrict(children[i].getPsi(), myHolder, MathematicaSyntaxHighlighterColors.MESSAGE);
+      setHighlightingStrict(children[i].getPsi(), myHolder, color);
     }
   }
 

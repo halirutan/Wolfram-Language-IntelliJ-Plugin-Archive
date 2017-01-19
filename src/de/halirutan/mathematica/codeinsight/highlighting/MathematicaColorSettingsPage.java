@@ -55,7 +55,10 @@ public class MathematicaColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("Parenthesis", BRACE),
         new AttributesDescriptor("String", STRING),
         new AttributesDescriptor("Comment", COMMENT),
-        new AttributesDescriptor("Patterns and arguments", PATTERN),
+        new AttributesDescriptor("Comment Special", COMMENT_SPECIAL),
+        new AttributesDescriptor("Module Variables", MODULE_LOCALIZED),
+        new AttributesDescriptor("Block Variables", BLOCK_LOCALIZED),
+        new AttributesDescriptor("Patterns and Arguments", PATTERN),
         new AttributesDescriptor("Anonymous functions", ANONYMOUS_FUNCTION),
         new AttributesDescriptor("Slots", SLOT),
         new AttributesDescriptor("Usage message", USAGE_MESSAGE),
@@ -99,10 +102,12 @@ public class MathematicaColorSettingsPage implements ColorSettingsPage {
     map.put("usg", USAGE_MESSAGE);
     map.put("msg", MESSAGE);
     map.put("mod", MODULE_LOCALIZED);
+    map.put("blk", BLOCK_LOCALIZED);
     map.put("fn", ANONYMOUS_FUNCTION);
     map.put("slot", SLOT);
     map.put("s", STRING);
     map.put("c", COMMENT);
+    map.put("cs", COMMENT_SPECIAL);
     map.put("o", OPERATORS);
     map.put("b", BRACE);
     map.put("l", LITERAL);

@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.psi.api.lists;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 
 /**
+ * Interface for Association
  * Created by rsmenon on 3/28/14.
  */
 public interface Association extends Expression {

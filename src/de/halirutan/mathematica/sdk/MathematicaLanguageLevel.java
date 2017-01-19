@@ -18,20 +18,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.halirutan.mathematica.module;
+
+package de.halirutan.mathematica.sdk;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.LanguageLevelModuleExtension;
-import com.intellij.openapi.roots.LanguageLevelProjectExtension;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author dsl
- * @see LanguageLevelProjectExtension
- * @see LanguageLevelModuleExtension
+ * Provides a way to represent the different versions of a Mathematica SDK. We will not use all possible different builds
+ * of Mathematica, but only represent Major and Minor version jumps.
+ * @author patrick (11/22/2016)
  */
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "WeakerAccess"})
 public enum MathematicaLanguageLevel {
@@ -56,6 +54,20 @@ public enum MathematicaLanguageLevel {
     myVersionNumber = Double.parseDouble(name);
   }
 
+  /**
+   * The parsed version string from an Sdk of type {@link MathematicaSdkType} will look like this: </br>
+   * <ul>
+   *   <li>10.0.2.5206630</li>
+   *   <li>11.0.1.5597743</li>
+   *   <li>9.0.1.4055646</li>
+   * </ul>
+   *
+   * The last long number seems to be some built-number, while the part in the front is the version number the user
+   * usually sees.
+   *
+   * @param sdk an Sdk of type {@link MathematicaSdkType}
+   * @return the extracted language version
+   */
   public static MathematicaLanguageLevel createFromSdk(@NotNull Sdk sdk) {
     if (sdk.getSdkType() instanceof MathematicaSdkType) {
       final String version = sdk.getVersionString();
@@ -65,6 +77,7 @@ public enum MathematicaLanguageLevel {
         if (version.matches("10\\.3.*")) return M_10_3;
         if (version.matches("10\\.2.*")) return M_10_2;
         if (version.matches("10\\.1.*")) return M_10_1;
+        if (version.matches("10\\.0.*")) return M_10;
         if (version.matches("9.*")) return M_9;
         if (version.matches("8.*")) return M_8;
       }
@@ -88,11 +101,11 @@ public enum MathematicaLanguageLevel {
   }
 
   public boolean isAtLeast(@NotNull MathematicaLanguageLevel level) {
-    return compareTo(level) >= 0;
+    return compareTo(level) <= 0;
   }
 
   public boolean isLessThan(@NotNull MathematicaLanguageLevel level) {
-    return compareTo(level) < 0;
+    return compareTo(level) > 0;
   }
 
 

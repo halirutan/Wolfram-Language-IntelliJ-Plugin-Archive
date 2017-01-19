@@ -51,7 +51,7 @@
     </value>
   </option>
 
-  <option name="MMA.OPERATOR">
+  <option name="MMA.OPERATORS">
     <value>
       <option name="FOREGROUND" value="000000"/>
     </value>

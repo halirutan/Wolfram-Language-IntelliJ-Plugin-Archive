@@ -42,6 +42,7 @@ public class MathematicaBundle {
     return CommonBundle.message(getBundle(), key, params);
   }
 
+
   private static ResourceBundle getBundle() {
     ResourceBundle bundle = null;
     if (ourBundle != null) bundle = ourBundle.get();

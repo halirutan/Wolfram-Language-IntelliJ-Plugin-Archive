@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2016 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,33 +19,37 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.findusage;
+package de.halirutan.mathematica.intentions;
 
-import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesHandlerFactory;
-import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.CommonBundle;
+import org.jetbrains.annotations.PropertyKey;
 
-import java.util.HashMap;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.ResourceBundle;
 
 /**
- * @author patrick (7/7/14)
+ * @author patrick (7/8/14)
  */
-public class MathematicaFindUsageHandlerFactory extends FindUsagesHandlerFactory {
+public class IntentionBundle {
+  private static final String BUNDLE = "de.halirutan.mathematica.intentions.IntentionBundle";
+  private static Reference<ResourceBundle> ourBundle = null;
 
-  private static HashMap<String, SymbolInformationProvider.SymbolInformation> ourBuiltInFunctions = SymbolInformationProvider.getSymbolNames();
-
-  @Override
-  public boolean canFindUsages(@NotNull final PsiElement element) {
-    return (element instanceof Symbol);
+  private IntentionBundle() {
   }
 
-  @Nullable
-  @Override
-  public FindUsagesHandler createFindUsagesHandler(@NotNull final PsiElement element, final boolean forHighlightUsages) {
-    return new MathematicaFindUsageHandler(element);
+  public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+    return CommonBundle.message(getBundle(), key, params);
+  }
+
+
+  private static ResourceBundle getBundle() {
+    ResourceBundle bundle = null;
+    if (ourBundle != null) bundle = ourBundle.get();
+    if (bundle == null) {
+      bundle = ResourceBundle.getBundle(BUNDLE);
+      ourBundle = new SoftReference<ResourceBundle>(bundle);
+    }
+    return bundle;
   }
 }

@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.parsing.psi.impl;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -29,11 +30,17 @@ import de.halirutan.mathematica.parsing.psi.api.Symbol;
 /**
  * @author patrick (5/21/13)
  */
-public class MathematicaSymbolFactory {
+class MathematicaSymbolFactory {
   public static Symbol createSymbol(Project project, String name) {
     final MathematicaPsiFileImpl file = createFile(project, name);
     return (Symbol) file.getFirstChild();
   }
+
+  public static PsiElement createExpression(Project project, String name) {
+    final MathematicaPsiFileImpl file = createFile(project, name);
+    return file.getFirstChild();
+  }
+
 
   private static MathematicaPsiFileImpl createFile(Project project, String symbolName) {
     String fileName = "dummy.m";

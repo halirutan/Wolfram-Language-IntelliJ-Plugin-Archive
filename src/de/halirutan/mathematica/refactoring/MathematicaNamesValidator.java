@@ -25,6 +25,9 @@ import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * For Mathematica syntax, we need special identifier rules because a variable in Mathematica can contain context
  * back-ticks. Therefore, this is a valid variable C`B`a.
@@ -36,61 +39,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MathematicaNamesValidator implements NamesValidator {
 
+  private Pattern mySymbolPattern;
+
+  @SuppressWarnings("WeakerAccess")
+  public MathematicaNamesValidator() {
+    final String nc = "\\\\\\[[a-zA-Z]+\\]";
+    final String symbol = "([$a-zA-Z]|" + nc + ")([$a-zA-Z0-9]|" + nc + ")*";
+    final String withContext = "`?(" + symbol + "`)*" + symbol;
+    mySymbolPattern = Pattern.compile(withContext);
+
+  }
+
   @Override
   public boolean isKeyword(@NotNull final String name, final Project project) {
     return false;
   }
 
-  private enum VariableState {
-    PREFIX_BACK_TICK,
-    SYMBOL_START,
-    SYMBOL_INNER
-  }
-
   /**
    * Makes it possible that a variable can contain back-ticks.
    *
-   * @param name
-   *     name of the variable you like to check
-   * @param project
-   *     project where the call comes from
+   * @param name    name of the variable you like to check
+   * @param project project where the call comes from
    * @return true if name is a valid Mathematica identifier
    */
   @Override
   public boolean isIdentifier(@NotNull final String name, final Project project) {
-    final int len = name.length();
-    if (len == 0) return false;
-
-    VariableState state = VariableState.PREFIX_BACK_TICK;
-
-    for (int i = 1; i < len; i++) {
-      final char ch = name.charAt(i);
-      switch (state) {
-        case PREFIX_BACK_TICK:
-          if (!(Character.isLetter(ch) || ch == '$' || ch == '`')) return false;
-          else state = VariableState.SYMBOL_START;
-          break;
-        case SYMBOL_START:
-          if (!(Character.isLetter(ch) || ch == '$')) return false;
-          else state = VariableState.SYMBOL_INNER;
-          break;
-        case SYMBOL_INNER:
-          if (!(Character.isLetterOrDigit(ch) || ch == '$')) {
-            // several context parts of a variable are separated by a back-tick, but a back-tick cannot be the
-            // last part, because then it wouldn't be a valid identifier
-            if (ch == '`' && i != len - 1) {
-              state = VariableState.SYMBOL_START;
-              break;
-            } else {
-              return false;
-            }
-          }
-          break;
-        default:
-          return false;
-      }
-    }
-    return true;
+    Matcher matcher = mySymbolPattern.matcher(name);
+    return matcher.matches();
   }
 
 }
