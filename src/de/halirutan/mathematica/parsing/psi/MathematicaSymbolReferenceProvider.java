@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,7 +26,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.string.MString;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +41,7 @@ public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
     if (!(element instanceof Symbol)) {
       return new PsiReference[0];
     }
-    ArrayList<PsiReference> result = new ArrayList<PsiReference>();
+    ArrayList<PsiReference> result = new ArrayList<>();
 
     Symbol symbol = (Symbol) element;
     final SymbolPsiReference reference = (SymbolPsiReference) symbol.getReference();
@@ -52,8 +51,10 @@ public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
       resolve = reference.resolve();
       if (resolve instanceof Symbol) {
         final PsiElement[] elemsReferencingToMe = ((Symbol) resolve).getElementsReferencingToMe();
-        for (PsiElement psiElement : elemsReferencingToMe) {
-          result.add(psiElement.getReference());
+        if (elemsReferencingToMe != null) {
+          for (PsiElement psiElement : elemsReferencingToMe) {
+            result.add(psiElement.getReference());
+          }
         }
       }
     }

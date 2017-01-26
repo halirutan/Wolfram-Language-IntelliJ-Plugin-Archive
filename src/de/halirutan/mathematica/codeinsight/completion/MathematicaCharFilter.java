@@ -38,6 +38,7 @@ public class MathematicaCharFilter extends CharFilter {
   @Nullable
   @Override
   public Result acceptChar(final char c, final int prefixLength, final Lookup lookup) {
+    if (!lookup.isCompletion()) return null;
     final PsiFile psiFile = lookup.getPsiFile();
     if (psiFile == null || !(psiFile.getFileType() instanceof MathematicaFileType)) {
       return null;
