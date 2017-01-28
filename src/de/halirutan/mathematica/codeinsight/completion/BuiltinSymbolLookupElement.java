@@ -147,7 +147,7 @@ public class BuiltinSymbolLookupElement extends LookupElement {
 
     }
 
-    if (completionChar == ' ') {
+    if (completionChar == ' ' || completionChar == '[') {
       context.setAddCompletionChar(true);
     }
 

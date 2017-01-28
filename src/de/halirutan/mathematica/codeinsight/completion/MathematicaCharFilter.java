@@ -23,14 +23,13 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.codeInsight.lookup.CharFilter;
 import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * This changes the behaviour of what happens with the completion pop-up when you press several chars.
- * In Mathematica we want to insert completions with various braces (more than in Java) and additionally,
+ * In Mathematica we want to insert completions with brackets and additionally,
  * we want the pop-up to stay open when we insert ` as it is a valid variable name part.
  * @author patrick (7/7/14)
  */
@@ -46,9 +45,6 @@ public class MathematicaCharFilter extends CharFilter {
 
     switch (c) {
       case '[':
-      case '(':
-      case '{':
-        ((LookupImpl) lookup).finishLookup('\n');
         return Result.SELECT_ITEM_AND_FINISH_LOOKUP;
       case '`':
         return Result.ADD_TO_PREFIX;
