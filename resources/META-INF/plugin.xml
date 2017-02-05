@@ -67,6 +67,7 @@
       <i>New features and bug-fixes:</i>
       <br/>
       <ul>
+      <li>Fixed null exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-91</a>)</li>
       <li>Added guard to fix exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-88</a>)</li>
       </ul>
     ]]>
