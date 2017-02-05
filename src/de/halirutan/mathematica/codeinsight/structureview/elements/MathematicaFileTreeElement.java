@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,10 +24,9 @@ package de.halirutan.mathematica.codeinsight.structureview.elements;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.impl.file.PsiFileImplUtil;
 import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,19 +100,19 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
 
 
     GlobalDefinitionCollector collector = new GlobalDefinitionCollector(myElement.getContainingFile());
-    final Map<String, HashSet<GlobalDefinitionCollector.AssignmentProperty>> assignments = collector.getAssignments();
-    final Collection<StructureViewTreeElement> children = new HashSet<StructureViewTreeElement>(assignments.size());
+    final Map<String, HashSet<AssignmentProperty>> assignments = collector.getAssignments();
+    final Collection<StructureViewTreeElement> children = new HashSet<>(assignments.size());
 
     for (String key : assignments.keySet()) {
-      final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignmentProperties = assignments.get(key);
-      for (GlobalDefinitionCollector.AssignmentProperty assignmentProperty : assignmentProperties) {
+      final HashSet<AssignmentProperty> assignmentProperties = assignments.get(key);
+      for (AssignmentProperty assignmentProperty : assignmentProperties) {
         children.add(new AssignmentLeafViewTreeElement(assignmentProperty));
       }
     }
 
     SimpleStringTreeElement root = new SimpleStringTreeElement(myElement.getName(), children);
 
-    Collection<StructureViewTreeElement> result = new HashSet<StructureViewTreeElement>();
+    Collection<StructureViewTreeElement> result = new HashSet<>();
     result.add(root);
 
     return result;

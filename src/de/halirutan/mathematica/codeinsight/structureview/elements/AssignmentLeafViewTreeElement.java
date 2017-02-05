@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,12 +26,11 @@ import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.pom.Navigatable;
-import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
 import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
-import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,9 +43,9 @@ import java.util.Collections;
  */
 public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement> implements SortableTreeElement, CodePlaceProvider {
 
-  private final GlobalDefinitionCollector.AssignmentProperty myAssignment;
+  private final AssignmentProperty myAssignment;
 
-  protected AssignmentLeafViewTreeElement(final GlobalDefinitionCollector.AssignmentProperty assignment) {
+  AssignmentLeafViewTreeElement(final AssignmentProperty assignment) {
     super(assignment.myAssignmentSymbol);
     myAssignment = assignment;
   }
@@ -177,7 +176,7 @@ public class AssignmentLeafViewTreeElement extends PsiTreeElementBase<PsiElement
   @Nullable
   @Override
   public String getPresentableText() {
-    return null;
+    return "Assignment";
   }
 
   @Override
