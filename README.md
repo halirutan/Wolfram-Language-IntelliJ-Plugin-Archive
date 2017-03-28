@@ -1,4 +1,4 @@
-#Mathematica (Wolfram Language) support for IntelliJ IDEA
+# Mathematica (Wolfram Language) support for IntelliJ IDEA
 
 ![teaser](http://i.stack.imgur.com/N5KVt.gif)
 
@@ -9,7 +9,7 @@ For a very quick start just download and install the free [Community Edition of 
 
 **If you use the plug-in**, please leave a comment and rating at the [IntelliJ IDEA Plugins page](https://plugins.jetbrains.com/plugin/writeComment?pr=idea&pluginId=7232)
  (note that you don't have to provide a username. Just leave the field blank).
-##![Docs][doc-image]Documentation
+## ![Docs][doc-image]Documentation
 
 There are two kinds of documentation: For **users** there is the [GitHub Wiki page](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki) that I will update regularely and a very detailed [blog post](http://wlplugin.halirutan.de/index.php/blog/7-how-to-use-idea-effectively-with-mathematica-code) on the official website. There, you will learn what features the plug-in provides and how you can use them.
 
@@ -21,20 +21,20 @@ Finally, there I have posted information on [stack exchange](http://mathematica.
 - the [first announcement](http://community.wolfram.com/groups/-/m/t/139047?p_p_auth=Lp2pA68y) on the Wolfram Community and a very detailed [new version post](http://community.wolfram.com/groups/-/m/t/353812?p_p_auth=Lp2pA68y)
 
 
-##![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
+## ![dev image][dev-image] Development  [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
 
 ### Code
 
 When you want to crawl through the code, you should know that the [master branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/tree/master) only contains the latest stable release. The current development will (almost) always take place in feature or bugfix branches that derive from the [develop branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin). This kind of follows the [GitFlow branching model](http://nvie.com/posts/a-successful-git-branching-model/).
 
-###Testing and Continuous Integration
+### Testing and Continuous Integration
 
 Testing the plugin is not as simple as writing unit test since most features need the [environment of the IDE](https://confluence.jetbrains.com/display/IDEADEV/Testing+IntelliJ+IDEA+Plugins). Currently, I'm still working on including tests in a [separate branch](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/tree/code_testing) that will soon be merged into the main develop line.
 
 On each push the code is compiled and checked for errors by [Travis CI](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin).
 When a feature is finished or a bugfix ready, I will tag this commit and Travis CI will automatically create a [release from this](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/releases) which can be installed and tested by everyone.
 
-###You want to help but don't know Java?
+### You want to help but don't know Java?
 
 No problem. If you like to contribute something, then there are a lot more ways than just with code! Here is a small list:
 
@@ -43,7 +43,7 @@ No problem. If you like to contribute something, then there are a lot more ways 
 - Are you a work-flow optimizer with a good feeling for how features should work to make them as intuitive as possible? Drop by and explain how we can make the plug-in even more awesome.
 
 
-##![bug image][issues-image] Reporting issues
+## ![bug image][issues-image] Reporting issues
 
 For issue- and bug-tracking [GitHub Issues](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues) is used.
 If you find bugs, experience weird behavior or have feature suggestions please [create a new issue](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/new). 
@@ -51,8 +51,8 @@ If you find bugs, experience weird behavior or have feature suggestions please [
 Note that the plug-in itself contains a bug-reporter. When an unhandled exception is thrown, you are notified by IDEA and
 you can give as much details as possibles which are then automatically turned into a new issue in the bug-tracker.
 
-##![contact image][contact-image] Credits, Contact and Licensing
-###Credits
+## ![contact image][contact-image] Credits, Contact and Licensing
+### Credits
 A lot of people helped to bring this project to life. Without them, it would probably have died a long time ago. Especially 4 people supported the plug-in from its very buggy first version. They were never tired of discussing feature details, testing new stuff, reporting bugs and suggesting future improvements:
 
 - [rsmenon:](https://github.com/rsmenon) Provided parts of the Module and Color Scheme implementations, testing. Improvements of the parsing for *Mathematica* version 10.
@@ -65,7 +65,7 @@ A lot of people helped to bring this project to life. Without them, it would pro
 
 In addition to that, a special thanks goes to [Aliaksandr Dubrouski](https://github.com/dubrousky) and [Jakub Kuczmarski](https://github.com/jkuczm). The first on pointed me to Travis CI and explained how I can add support for it. The second one discussed details of the ``MUnit` `` support in Wolfram Workbench.
 
-###Contact
+### Contact
 
 The easiest way to make contact is to write in the the [dedicated stackexchange chat](http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica). There, you should ping me (@halirutan) so that I get notified. If you don't have enough reputation to talk there, feel free to write me an email. My address can be seen by evaluating this in *Mathematica*
 
@@ -73,7 +73,7 @@ The easiest way to make contact is to write in the the [dedicated stackexchange 
 
 If you have specific feature questions, please don't hesitate to [open a new issue](http://halirutan.myjetbrains.com/youtrack/newissue) in YouTrack.
 
-###Licensing
+### Licensing
 
 The general license for the IntelliJ IDEA Plugin is the [MIT License](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/blob/develop/LICENSE). Users should note that *Wolfram Research Inc.* (WRI) has generously granted this project the right to use the internal documentation of *Mathematica* and make it available as part of the plugin. The only requirement was to put the legal information in a place where end-users find it. Therefore, please note that..
 
