@@ -35,7 +35,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <idea.ic.source>ideaIC-2016.3.3.tar.gz</idea.ic.source>
+      <idea.ic.source>ideaIC-2017.1.2.tar.gz</idea.ic.source>
         <idea.ic.dir>${project.build.directory}/idea-IC</idea.ic.dir>
         <ij.plugin>true</ij.plugin>
     </properties>
