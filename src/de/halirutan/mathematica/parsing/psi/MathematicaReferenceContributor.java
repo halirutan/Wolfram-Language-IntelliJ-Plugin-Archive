@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -39,9 +39,9 @@ public class MathematicaReferenceContributor extends PsiReferenceContributor {
    */
   @Override
   public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
-        new MathematicaStringReferenceProvider());
     registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
         new MathematicaSymbolReferenceProvider());
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
+        new MathematicaStringReferenceProvider());
   }
 }

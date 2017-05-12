@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.parsing.psi;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
@@ -35,6 +36,9 @@ import java.util.ArrayList;
  * @author patrick (21.12.16).
  */
 public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
+
+  private static final Logger log = Logger.getInstance(MathematicaSymbolReferenceProvider.class);
+
   @NotNull
   @Override
   public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
@@ -42,7 +46,6 @@ public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
       return new PsiReference[0];
     }
     ArrayList<PsiReference> result = new ArrayList<>();
-
     Symbol symbol = (Symbol) element;
     final SymbolPsiReference reference = (SymbolPsiReference) symbol.getReference();
     final PsiElement resolve;
@@ -53,7 +56,12 @@ public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
         final PsiElement[] elemsReferencingToMe = ((Symbol) resolve).getElementsReferencingToMe();
         if (elemsReferencingToMe != null) {
           for (PsiElement psiElement : elemsReferencingToMe) {
-            result.add(psiElement.getReference());
+            final PsiReference ref = psiElement.getReference();
+            if (ref == null) {
+              log.error("Reference should not be null: " + psiElement.getText());
+            } else {
+              result.add(ref);
+            }
           }
         }
       }
