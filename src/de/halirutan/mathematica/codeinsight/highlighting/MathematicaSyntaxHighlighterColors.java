@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -32,6 +32,7 @@ public class MathematicaSyntaxHighlighterColors {
 
   public final static TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT");
   public final static TextAttributesKey COMMENT_SPECIAL = TextAttributesKey.createTextAttributesKey("MMA.COMMENT_SPECIAL");
+  public final static TextAttributesKey COMMENT_SECTION = TextAttributesKey.createTextAttributesKey("MMA.COMMENT_SECTION");
   public final static TextAttributesKey STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING");
   public final static TextAttributesKey OPERATORS = TextAttributesKey.createTextAttributesKey("MMA.OPERATORS");
   public final static TextAttributesKey LITERAL = TextAttributesKey.createTextAttributesKey("MMA.LITERAL");

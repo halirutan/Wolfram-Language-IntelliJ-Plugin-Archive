@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,114 +24,99 @@ package de.halirutan.mathematica.codeinsight.highlighting;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors;
+import de.halirutan.mathematica.codeinsight.completion.CommentCompletionProvider;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
  * @author patrick (03.03.15)
  */
 public class CommentAnnotator implements Annotator {
+
+  private static Pattern ourTagPattern;
+
+  static {
+    List<String> commentTags = new ArrayList<>(CommentCompletionProvider.COMMENT_TAGS.length);
+    for (String tag : CommentCompletionProvider.COMMENT_TAGS) {
+      commentTags.add(":" + tag + ":");
+    }
+    ourTagPattern = Pattern.compile(StringUtils.join(commentTags, "|"));
+  }
+
+
   @Override
-  public void annotate(@NotNull final PsiElement element, final AnnotationHolder holder) {
-    if (element instanceof PsiComment &&
-        (((PsiComment) element).getTokenType() == COMMENT_ANNOTATION || ((PsiComment) element).getTokenType() == COMMENT_SECTION)) {
-      final Annotation commentSpecial = holder.createInfoAnnotation(element, null);
-      commentSpecial.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
-    }
-
-  }
-
-  private List<PsiComment> findComment(final PsiComment start, final AnnotationHolder holder) {
-    PsiElement opening = start;
-    while (opening instanceof PsiComment) {
-      if (((PsiComment) opening).getTokenType() == COMMENT_START) {
-        final PsiElement prevSibling = opening.getPrevSibling();
-        // Check whether we have a nested comment
-        if (prevSibling instanceof PsiComment && ((PsiComment) prevSibling).getTokenType() != COMMENT_END) {
-          opening = prevSibling;
-          continue;
-        }
-        break;
-      }
-      opening = opening.getPrevSibling();
-    }
-
-    if (!(opening instanceof PsiComment) || ((PsiComment) opening).getTokenType() != COMMENT_START) {
-      holder.createErrorAnnotation(opening, "Expecting (*");
-      return Collections.emptyList();
-    }
-
-    List<PsiComment> result = new ArrayList<PsiComment>();
-    result.add((PsiComment) opening);
-    int nested = 0;
-    PsiElement end = opening.getNextSibling();
-    while (end instanceof PsiComment) {
-      result.add((PsiComment) end);
-      if (((PsiComment) end).getTokenType() == COMMENT_START) {
-        nested++;
-      }
-      if (((PsiComment) end).getTokenType() == COMMENT_END) {
-        if (nested == 0) {
-          break;
-        }
-        nested--;
-      }
-      end = end.getNextSibling();
-    }
-    if (!(end instanceof PsiComment)) {
-      TextRange eof = TextRange.from(start.getContainingFile().getTextLength()-2, 1);
-      holder.createErrorAnnotation(eof, "Expecting *)");
-      return Collections.emptyList();
-    }
-    return result;
-  }
-
-  private void annotateSection(final List<PsiComment> comments, final AnnotationHolder holder) {
-    final PsiComment last = comments.get(comments.size() - 1);
-    TextRange all = new TextRange(
-        comments.get(0).getTextOffset(),
-        last.getTextOffset() + last.getTextLength()
-    );
-
-    holder.createInfoAnnotation(all,null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
-
-    // A well-formed section annotation like (* ::Section:: *)
-    if (comments.size() == 5 &&
-        comments.get(0).getTokenType() == COMMENT_START &&
-        comments.get(1).getText().contentEquals(" ") &&
-        comments.get(2).getTokenType() == COMMENT_SECTION &&
-        comments.get(3).getText().contentEquals(" ") &&
-        comments.get(4).getTokenType() == COMMENT_END) {
-      final PsiComment end = comments.get(4);
-      final Annotation annotation = holder.createInfoAnnotation(
-          new TextRange(comments.get(0).getTextOffset(), end.getTextOffset() + end.getTextLength()),
-          null
-      );
-      annotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
-      return;
-    }
-
-    for (PsiComment commentPart : comments) {
-      if (commentPart.getTokenType() == COMMENT_SECTION) {
-        final Annotation warningAnnotation = holder.createWarningAnnotation(commentPart, "Comment sections must have the form (* ::Section:: *) with exactly one space around the keyword.");
-        warningAnnotation.setTooltip("Test");
-
+  public void annotate(@NotNull final PsiElement element, @NotNull final AnnotationHolder holder) {
+    if (element instanceof PsiComment) {
+      final Annotation commentAnnotation = holder.createInfoAnnotation(element, null);
+      if (isCorrectSectionComment(element)) {
+        commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SECTION);
         return;
       }
+      annotateCommentTags(element, holder);
     }
+  }
 
+  private void annotateCommentTags(@NotNull final PsiElement comment, @NotNull final AnnotationHolder holder) {
+    final String text = comment.getText();
+    final Matcher matcher = ourTagPattern.matcher(text);
+    final int commentStart = comment.getTextOffset();
+    while (matcher.find()) {
+      int start = matcher.start();
+      int end = matcher.end();
+      final Annotation tagAnnotation = holder.createInfoAnnotation(TextRange.create(commentStart + start, commentStart + end), "");
+      tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SECTION);
+    }
+  }
+
+  /**
+   * Tests if a comment is a valid Section, Subsection, ... comment. AFAIK these comments can only contain the section
+   * specifier and nothing else (whitespace should be OK). Therefore, I match comments that look like this
+   * <p>
+   * <code>(* ::Section:: *)</code>
+   * <p>
+   * Please see {@link CommentCompletionProvider#COMMENT_SECTIONS}.
+   *
+   * @param comment the comment PsiElement
+   * @return true if the comment is a valid title, section, ... comment
+   */
+  private boolean isCorrectSectionComment(@NotNull final PsiElement comment) {
+    final String text = comment.getText();
+    final String name = text.replace("(*", "").replace("*)", "").trim();
+    if (name.length() > 0 && name.matches("::.*::")) {
+      final String sectionName = name.replace(":", "");
+      for (String commentSection : CommentCompletionProvider.COMMENT_SECTIONS) {
+        if (commentSection.equals(sectionName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * This is not as strict as {@link CommentAnnotator#isCorrectSectionComment(PsiElement)} and it does only check
+   * if there is a section tag (::Section::, ::Subsection::, ...) inside the comment.
+   *
+   * @param comment Comment to check
+   * @return true if a section tag could be found inside the comment
+   */
+  private boolean containsSectionTag(@NotNull final PsiElement comment) {
+    final String text = comment.getText();
+    for (String commentSection : CommentCompletionProvider.COMMENT_SECTIONS) {
+      if (text.contains("::" + commentSection + "::")) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

@@ -22,56 +22,104 @@
 package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.text.StringTokenizer;
 import de.halirutan.mathematica.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.regex.Pattern;
 
 import static com.intellij.patterns.PlatformPatterns.psiComment;
 
 /**
+ * This smart completion provider helps the developer to expand commonly used words and tags into a comment.
+ *
  * @author patrick (4/2/13)
  */
 public class CommentCompletionProvider extends MathematicaCompletionProvider {
 
-  static final private String[] ourSections = {
-      "Section","Subsection","Subsubsection", "Text", "Package", "Title", "Subtitle","Subsubtitle","Chapter","Subchapter","Subsubsubsection","Subsubsubsubsubsection",
+  static final public String[] COMMENT_SECTIONS = {
+      "Section", "Subsection", "Subsubsection", "Text", "Package", "Title", "Subtitle", "Subsubtitle", "Chapter", "Subchapter", "Subsubsubsection", "Subsubsubsubsubsection",
   };
 
-  static final private String[] ourTags = {
-      "Name", "Title", "Author", "Summary", "Context",
-          "Package Version", "Copyright", "Keywords", "Source",
-          "Mathematica Version", "Limitation", "Discussion"};
+  static final public String[] COMMENT_TAGS = {
+      "Name", "Title", "Author", "Date", "Summary", "Context",
+      "Package Version", "Copyright", "Keywords", "Source",
+      "Mathematica Version", "Limitation", "Discussion"};
+  static private final Pattern EMPTY_COMMENT = Pattern.compile("\\(\\*\\s\\*\\)");
 
-  
   @Override
   void addTo(CompletionContributor contributor) {
     final Capture<PsiComment> psiCommentCapture = psiComment().withLanguage(MathematicaLanguage.INSTANCE);
-    contributor.extend(CompletionType.SMART, psiCommentCapture, this);
+    contributor.extend(CompletionType.BASIC, psiCommentCapture, this);
   }
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    final String prefix = findCurrentText(parameters, parameters.getPosition());
-    if ( prefix.matches("") ) {
-      CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, false);
-      final CompletionResultSet completionResultSet = result.withPrefixMatcher(matcher);
-      int priority = 100;
-      for (String section : ourSections) {
-        priority--;
+    if (parameters.getInvocationCount() > 0) {
+      final String prefix = findCommentPrefix(parameters);
 
-        final LookupElementBuilder elm = LookupElementBuilder.create(" ::" + section + ":: ")
-            .withPresentableText("::" + section + "::");
-        completionResultSet.addElement(PrioritizedLookupElement.withPriority(elm, priority));
+      if (isEmptyCommennt(parameters)) {
+        int priority = 100;
+        for (String section : COMMENT_SECTIONS) {
+          priority--;
+
+          final LookupElementBuilder elm = LookupElementBuilder.create(" ::" + section + ":: ")
+              .withPresentableText("::" + section + "::");
+          result.addElement(PrioritizedLookupElement.withPriority(elm, priority));
+        }
       }
-    } else {
-      for (String tags : ourTags) {
-        result.addElement(LookupElementBuilder.create(":" + tags + ": "));
+
+      final CompletionResultSet resultWithPrefix = result.withPrefixMatcher(prefix);
+
+      for (String tag : COMMENT_TAGS) {
+        resultWithPrefix.addElement(LookupElementBuilder.create(":" + tag + ":"));
+      }
+
+      final PsiFile file = parameters.getOriginalFile();
+      GlobalDefinitionCompletionProvider provider = new GlobalDefinitionCompletionProvider();
+      file.accept(provider);
+      for (String functionName : provider.getFunctionsNames()) {
+        resultWithPrefix.addElement(LookupElementBuilder.create(functionName));
       }
     }
-
   }
+
+  private boolean isEmptyCommennt(CompletionParameters parameters) {
+    final int posOffset = parameters.getOffset();
+    final PsiElement commentElement = parameters.getPosition();
+    if (commentElement instanceof PsiComment) {
+      final int elementStart = commentElement.getTextOffset();
+      final String commentText = commentElement.getText();
+      return commentText.matches("\\(\\*\\s*ZZZ\\s*\\*\\)") || EMPTY_COMMENT.matcher(commentText).matches();
+    }
+    return false;
+  }
+
+  private String findCommentPrefix(CompletionParameters parameters) {
+    final int posOffset = parameters.getOffset();
+    final PsiElement commentElement = parameters.getPosition();
+
+    if (commentElement instanceof PsiComment) {
+      final int elementStart = commentElement.getTextOffset();
+      final String commentText = commentElement.getText().substring(0, posOffset - elementStart);
+      if (commentText.length() == 0 || commentText.matches(".*[ \t\n\f]")) {
+        return "";
+      }
+
+      StringTokenizer tokenizer = new StringTokenizer(commentText);
+      String prefix = "";
+      while (tokenizer.hasMoreElements()) {
+        prefix = tokenizer.nextToken();
+      }
+      return prefix;
+    }
+    return "";
+  }
+
 }
