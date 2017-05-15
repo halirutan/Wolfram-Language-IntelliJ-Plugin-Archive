@@ -151,6 +151,9 @@
     <enterHandlerDelegate
         implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
 
+    <enterHandlerDelegate
+        implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideCommentHandler"/>
+
     <!-- Code-style and colors-->
     <colorSettingsPage
         implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
