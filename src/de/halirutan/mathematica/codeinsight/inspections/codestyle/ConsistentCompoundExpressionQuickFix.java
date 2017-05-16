@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author patrick (10.07.15)
  */
-public class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase implements HighPriorityAction {
+class ConsistentCompoundExpressionQuickFix extends LocalQuickFixBase implements HighPriorityAction {
 
   private static final Logger LOG = Logger.getInstance("#de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionQuickFix");
 

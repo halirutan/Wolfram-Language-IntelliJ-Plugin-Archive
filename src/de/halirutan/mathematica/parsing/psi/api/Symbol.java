@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,8 +23,7 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.PsiReference;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
@@ -75,7 +74,7 @@ public interface Symbol extends PsiNameIdentifierOwner {
    *
    * @return type of localization
    */
-  LocalizationConstruct.ConstructType getLocalizationConstruct();
+  ConstructType getLocalizationConstruct();
 
   /**
    * Caches the resolved referring symbol for later use.
@@ -85,7 +84,7 @@ public interface Symbol extends PsiNameIdentifierOwner {
    *     x+x]</code> the <code>x</code> in the braces is the definition for both <code>x</code> in the
    *     <code>Module</code> body.
    */
-  void setReferringElement(Symbol referringSymbol, LocalizationConstruct.ConstructType type, PsiElement localizationElement);
+  void setReferringElement(Symbol referringSymbol, ConstructType type, PsiElement localizationElement);
 
   void addElementReferencingToMe(Symbol reference);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,10 +21,11 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SPAN;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SPAN_EXPRESSION;
@@ -46,8 +47,8 @@ public class SpanParselet implements InfixParselet {
 
   // Parses things like expr1;;expr2, expr0;; ;;expr1 or expr0;;expr1;;expr2.
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-    PsiBuilder.Marker spanMark = left.getMark().precede();
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
+    Marker spanMark = left.getMark().precede();
     boolean skipped = false;
 
     if (parser.matchesToken(SPAN)) {
@@ -76,7 +77,7 @@ public class SpanParselet implements InfixParselet {
       return MathematicaParser.result(spanMark, SPAN_EXPRESSION, left.isParsed() && !skipped);
     }
 
-    MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
+    Result expr1 = parser.parseExpression(myPrecedence);
 
     // if we had expr0;;;;expr1
     if (skipped) {
@@ -86,7 +87,7 @@ public class SpanParselet implements InfixParselet {
 
     if (parser.matchesToken(SPAN)) {
       parser.advanceLexer();
-      MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
+      Result expr2 = parser.parseExpression(myPrecedence);
       if (expr2.isParsed()) {
         spanMark.done(SPAN_EXPRESSION);
       } else

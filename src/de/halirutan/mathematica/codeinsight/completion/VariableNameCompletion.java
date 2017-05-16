@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -44,7 +44,7 @@ import java.util.Set;
 /**
  * @author patrick (4/2/13)
  */
-public class VariableNameCompletion extends MathematicaCompletionProvider {
+class VariableNameCompletion extends MathematicaCompletionProvider {
 
   private static final double LOCAL_VARIABLE_PRIORITY = 3000;
   private static final double GLOBAL_VARIABLE_PRIORITY = 2500;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,9 +21,10 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.DEFAULT_EXPRESSION;
 
@@ -40,8 +41,8 @@ public class PrefixDefaultParselet implements PrefixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    PsiBuilder.Marker mark = parser.mark();
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
+    Marker mark = parser.mark();
     parser.advanceLexer();
     mark.done(DEFAULT_EXPRESSION);
     return MathematicaParser.result(mark, DEFAULT_EXPRESSION, true);

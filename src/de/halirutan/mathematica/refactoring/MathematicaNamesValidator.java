@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -37,13 +37,13 @@ import java.util.regex.Pattern;
  *
  * @author patrick (28.10.15)
  */
-public class MathematicaNamesValidator implements NamesValidator {
+class MathematicaNamesValidator implements NamesValidator {
 
-  private Pattern mySymbolPattern;
+  private final Pattern mySymbolPattern;
 
   @SuppressWarnings("WeakerAccess")
   public MathematicaNamesValidator() {
-    final String nc = "\\\\\\[[a-zA-Z]+\\]";
+    final String nc = "\\\\\\[[a-zA-Z]+]";
     final String symbol = "([$a-zA-Z]|" + nc + ")([$a-zA-Z0-9]|" + nc + ")*";
     final String withContext = "`?(" + symbol + "`)*" + symbol;
     mySymbolPattern = Pattern.compile(withContext);

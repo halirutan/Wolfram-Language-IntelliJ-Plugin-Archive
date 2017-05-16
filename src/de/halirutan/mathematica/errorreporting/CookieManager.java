@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -45,7 +45,7 @@ import java.util.*;
  * @author <a href="mailto:spam@hccp.org">Ian Brown</a>
  */
 
-public class CookieManager {
+class CookieManager {
 
   private static final String SET_COOKIE = "Set-Cookie";
   private static final String COOKIE_VALUE_DELIMITER = ";";
@@ -56,12 +56,12 @@ public class CookieManager {
   private static final String COOKIE = "Cookie";
   private static final char NAME_VALUE_SEPARATOR = '=';
   private static final char DOT = '.';
-  private HashMap<String, HashMap<String, HashMap<String, String>>> myStore;
-  private DateFormat myDateFormat;
+  private final HashMap<String, HashMap<String, HashMap<String, String>>> myStore;
+  private final DateFormat myDateFormat;
 
   public CookieManager() {
 
-    myStore = new HashMap<String, HashMap<String, HashMap<String, String>>>();
+    myStore = new HashMap<>();
     myDateFormat = new SimpleDateFormat(DATE_FORMAT);
   }
 
@@ -90,7 +90,7 @@ public class CookieManager {
       domainStore = myStore.get(domain);
     } else {
       // we don't, so let's create it and put it in the myStore
-      domainStore = new HashMap<String, HashMap<String, String>>();
+      domainStore = new HashMap<>();
       myStore.put(domain, domainStore);
     }
 
@@ -100,7 +100,7 @@ public class CookieManager {
     String headerName;
     for (int i = 1; (headerName = conn.getHeaderFieldKey(i)) != null; i++) {
       if (headerName.equalsIgnoreCase(SET_COOKIE)) {
-        HashMap<String, String> cookie = new HashMap<String, String>();
+        HashMap<String, String> cookie = new HashMap<>();
         StringTokenizer st = new StringTokenizer(conn.getHeaderField(i), COOKIE_VALUE_DELIMITER);
 
 // the specification dictates that the first name/value pair

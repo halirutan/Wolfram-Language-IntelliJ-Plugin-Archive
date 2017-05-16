@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,7 +23,6 @@ package de.halirutan.mathematica.refactoring;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 
 /**
  * This class shouldn't be necessary since usually Idea does a great job of renaming if you have
@@ -68,8 +66,8 @@ public class MathematicaPsiRenameProcessor extends RenamePsiElementProcessor {
   }
 
   private class SymbolCollector extends MathematicaRecursiveVisitor {
-    Collection<PsiReference> myReferences;
-    Symbol myDefinitionElement;
+    final Collection<PsiReference> myReferences;
+    final Symbol myDefinitionElement;
 
     SymbolCollector(Symbol definitionElement) {
       this.myDefinitionElement = definitionElement;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,11 +21,12 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * This parselet is special, because it is <em>not</em> bound to a special operator. Basically, this is called when
@@ -39,13 +40,13 @@ public class ImplicitMultiplicationParselet implements InfixParselet {
   private static final int PRECEDENCE = 42;
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
     if (!left.isValid()) return MathematicaParser.notParsed();
 
-    PsiBuilder.Marker timesMarker = left.getMark().precede();
+    Marker timesMarker = left.getMark().precede();
 
 
-    MathematicaParser.Result result = parser.parseExpression(PRECEDENCE);
+    Result result = parser.parseExpression(PRECEDENCE);
     if (result.isParsed()) {
       timesMarker.done(MathematicaElementTypes.TIMES_EXPRESSION);
       result = MathematicaParser.result(timesMarker, MathematicaElementTypes.TIMES_EXPRESSION, true);

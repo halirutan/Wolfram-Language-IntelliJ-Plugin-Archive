@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -33,10 +33,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class MathematicaNamesValidatorTest {
 
-  private ResourceBundle myNamedCharacters = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.namedCharacters");
-  private ResourceBundle mySymbols = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.symbolInformationV11_0_1");
+  private final ResourceBundle myNamedCharacters = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.namedCharacters");
+  private final ResourceBundle mySymbols = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.symbolInformationV11_0_1");
 
-  private String myCounterExamples[] = {
+  private final String[] myCounterExamples = {
       "Internal`",
       "0Symbol",
       "Internal`3",

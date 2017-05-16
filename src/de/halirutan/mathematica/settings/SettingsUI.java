@@ -32,7 +32,7 @@ import java.awt.*;
  * @author patrick (01.12.16).
  */
 @SuppressWarnings("InstanceVariableNamingConvention")
-public class SettingsUI extends JPanel {
+class SettingsUI extends JPanel {
   private JCheckBox insertTemplate;
   private JCheckBox insertAsCode;
   private JCheckBox insertBraces;

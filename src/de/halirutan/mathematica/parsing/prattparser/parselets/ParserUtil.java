@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,13 +26,14 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Utility class for parsing.
  *
  * @author patrick (3/30/13)
  */
-public final class ParserUtil {
+final class ParserUtil {
 
   private ParserUtil() {
   }
@@ -50,9 +51,9 @@ public final class ParserUtil {
    * @return The parsing result which is true iff all sub-expressions were successfully parsed.
    * @throws CriticalParserError
    */
-  static MathematicaParser.Result parseSequence(MathematicaParser parser, IElementType rightDel) throws CriticalParserError {
+  static Result parseSequence(MathematicaParser parser, IElementType rightDel) throws CriticalParserError {
 
-    MathematicaParser.Result result = MathematicaParser.notParsed();
+    Result result = MathematicaParser.notParsed();
     boolean sequenceParsed = true;
 
     // The following is not correct regarding the syntax of the Mathematica language because f[a,,b] is equivalent to

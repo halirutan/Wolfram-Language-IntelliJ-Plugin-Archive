@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -48,7 +48,7 @@ public class MathematicaSdkType extends SdkType {
   private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
   private static final String OS = System.getProperty("os.name").toLowerCase();
 
-  public MathematicaSdkType() {
+  private MathematicaSdkType() {
     super("Mathematica SDK");
   }
 

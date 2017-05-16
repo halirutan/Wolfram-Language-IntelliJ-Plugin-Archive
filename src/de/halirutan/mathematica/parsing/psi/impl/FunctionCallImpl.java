@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -31,6 +31,7 @@ import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
@@ -110,15 +111,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    LocalizationConstruct.ConstructType type = (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
-    return type != null && !type.equals(LocalizationConstruct.ConstructType.NULL);
+    ConstructType type = (ConstructType) getUserData(myScopeKey);
+    return type != null && !type.equals(ConstructType.NULL);
   }
 
-  public LocalizationConstruct.ConstructType getScopingConstruct() {
+  public ConstructType getScopingConstruct() {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    return (LocalizationConstruct.ConstructType) getUserData(myScopeKey);
+    return (ConstructType) getUserData(myScopeKey);
   }
 
   private void cacheScopingConstruct() {
@@ -127,7 +128,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (head instanceof Symbol) {
       cacheScopingConstruct(((Symbol) head).getSymbolName());
     } else {
-      putUserData(myScopeKey, LocalizationConstruct.ConstructType.NULL);
+      putUserData(myScopeKey, ConstructType.NULL);
     }
     myIsUpToDate = true;
   }

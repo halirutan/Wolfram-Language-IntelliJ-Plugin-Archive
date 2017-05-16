@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/12/14)
  */
-public abstract class AbstractSurrounder implements Surrounder {
+abstract class AbstractSurrounder implements Surrounder {
 
   @Override
   abstract public String getTemplateDescription();
@@ -45,8 +45,9 @@ public abstract class AbstractSurrounder implements Surrounder {
     return true;
   }
 
-  abstract public String getOpening();
-  abstract public String getClosing();
+  protected abstract String getOpening();
+
+  protected abstract String getClosing();
 
   @Nullable
   @Override
@@ -65,7 +66,7 @@ public abstract class AbstractSurrounder implements Surrounder {
     return null;
   }
 
-  public void modifySelection(TextRange textRange, SelectionModel model) {
+  void modifySelection(TextRange textRange, SelectionModel model) {
     model.removeSelection();
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,10 +21,11 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SPAN;
 import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SPAN_EXPRESSION;
@@ -44,8 +45,8 @@ public class PrefixSpanParselet implements PrefixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
-    final PsiBuilder.Marker spanMark = parser.mark();
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
+    final Marker spanMark = parser.mark();
     boolean skipped = false;
 
     if (parser.matchesToken(SPAN)) {
@@ -71,7 +72,7 @@ public class PrefixSpanParselet implements PrefixParselet {
       return MathematicaParser.result(spanMark, SPAN_EXPRESSION, !skipped);
     }
 
-    MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
+    Result expr1 = parser.parseExpression(myPrecedence);
 
     // if we had ;;;;expr1
     if (skipped) {
@@ -81,7 +82,7 @@ public class PrefixSpanParselet implements PrefixParselet {
 
     if (parser.matchesToken(SPAN)) {
       parser.advanceLexer();
-      MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
+      Result expr2 = parser.parseExpression(myPrecedence);
       if (expr2.isParsed()) {
         spanMark.done(SPAN_EXPRESSION);
       } else

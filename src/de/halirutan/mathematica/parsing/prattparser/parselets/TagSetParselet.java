@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,12 +21,13 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Parselet for all <em>tag setting operations</em> like a /: b = c or a /: b =.
@@ -42,8 +43,8 @@ public class TagSetParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-    PsiBuilder.Marker tagSetMark = left.getMark().precede();
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
+    Marker tagSetMark = left.getMark().precede();
     if (parser.matchesToken(MathematicaElementTypes.TAG_SET)) {
       parser.advanceLexer();
     } else {
@@ -53,7 +54,7 @@ public class TagSetParselet implements InfixParselet {
     // In the next line we parse expr1 of expr0/:expr1 and we reduce the precedence by one because it is
     // right associative. Using SetDelayed (:=) which has the same precedence the following expression:
     // a /: b := c := d is then correctly parsed as a /: b := (c := d)
-    MathematicaParser.Result expr1 = parser.parseExpression(myPrecedence);
+    Result expr1 = parser.parseExpression(myPrecedence);
 
     if (!expr1.isValid()) {
       parser.error(ParserBundle.message("TagSet.missing.pattern"));
@@ -80,7 +81,7 @@ public class TagSetParselet implements InfixParselet {
     // Form expr0 /: expr1 := expr2 or expr0 /: expr1 = expr2 where we need to parse expr2
     if ((tokenType.equals(MathematicaElementTypes.SET)) || (tokenType.equals(MathematicaElementTypes.SET_DELAYED))) {
       parser.advanceLexer();
-      MathematicaParser.Result expr2 = parser.parseExpression(myPrecedence);
+      Result expr2 = parser.parseExpression(myPrecedence);
       IElementType endType = tokenType.equals(MathematicaElementTypes.SET) ? MathematicaElementTypes.TAG_SET_EXPRESSION : MathematicaElementTypes.TAG_SET_DELAYED_EXPRESSION;
       if (!expr2.isValid()) {
         parser.error(ParserBundle.message("General.expr.expected"));

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -44,7 +44,7 @@ public class MathematicaListSelectioner extends BasicSelectioner {
     int start;
     int end;
 
-    List<TextRange> result = new ArrayList<TextRange>();
+    List<TextRange> result = new ArrayList<>();
     start = e.getTextOffset() + 1;
     end = e.getTextOffset() + e.getTextLength() - 1;
     if (start < end && start > 0)

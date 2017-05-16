@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -27,6 +27,8 @@ import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.module.MathematicaModuleBuilder.Application;
+import de.halirutan.mathematica.module.MathematicaModuleBuilder.Basic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,8 +40,8 @@ import javax.swing.*;
 public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory {
 
   public static final String MATHEMATICA = MathematicaBundle.message("project.template.mathematica");
-  public static final String BASIC_MODULE = MathematicaBundle.message("project.template.basic");
-  public static final String APPLICATION_MODULE = MathematicaBundle.message("project.template.application");
+  private static final String BASIC_MODULE = MathematicaBundle.message("project.template.basic");
+  private static final String APPLICATION_MODULE = MathematicaBundle.message("project.template.application");
   public static final String TEST_MODULE = MathematicaBundle.message("project.template.test");
   public static final String DOCUMENTATION_MODULE = MathematicaBundle.message("project.template.documentation");
 
@@ -62,11 +64,11 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
         new MathematicaProjectTemplate(BASIC_MODULE,
             MathematicaBundle.message("project.template.basic.description"),
             // The descriptions should be reworked when the plugin is more mature
-            new MathematicaModuleBuilder.Basic()),
+            new Basic()),
 
         new MathematicaProjectTemplate(APPLICATION_MODULE,
             MathematicaBundle.message("project.template.application.description"),
-            new MathematicaModuleBuilder.Application())
+            new Application())
     };
     return projectTemplates;
 //    if (context.getProject() == null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  *
  * @author <a href="mailto:intellij@studer.nu">Etienne Studer</a>, Jun 13, 2006
  */
-public class PluginErrorReportSubmitterBundle {
+class PluginErrorReportSubmitterBundle {
   private static final ResourceBundle OUR_BUNDLE = ResourceBundle.getBundle("com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle");
 
   private PluginErrorReportSubmitterBundle() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,12 +21,13 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
@@ -36,20 +37,20 @@ import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
  */
 public class GroupParselet implements PrefixParselet {
 
-  final int myPrecedence;
+  private final int myPrecedence;
 
   public GroupParselet(int precedence) {
     this.myPrecedence = precedence;
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
     // should never happen
     if (!parser.getTokenType().equals(MathematicaElementTypes.LEFT_PAR)) {
       return MathematicaParser.notParsed();
     }
     IElementType token = ParseletProvider.getPrefixPsiElement(this);
-    PsiBuilder.Marker groupMark = parser.mark();
+    Marker groupMark = parser.mark();
     parser.advanceLexer();
 
     if (parser.eof()) {
@@ -58,7 +59,7 @@ public class GroupParselet implements PrefixParselet {
       return MathematicaParser.notParsed();
     }
 
-    MathematicaParser.Result result = parser.parseExpression();
+    Result result = parser.parseExpression();
     if (parser.matchesToken(MathematicaElementTypes.RIGHT_PAR)) {
       parser.advanceLexer();
       groupMark.done(token);

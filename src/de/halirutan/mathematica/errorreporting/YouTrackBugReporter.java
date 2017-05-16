@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -28,7 +28,6 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
-import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -47,7 +46,6 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,7 +65,7 @@ import static com.intellij.openapi.util.text.StringUtil.isEmpty;
  * Created by IntelliJ IDEA. User: Jon S Akhtar Date: Oct 19, 2010 Time: 11:35:35 AM
  */
 public class YouTrackBugReporter extends ErrorReportSubmitter {
-  protected static final Logger log = Logger.getInstance(YouTrackBugReporter.class.getName());
+  private static final Logger log = Logger.getInstance(YouTrackBugReporter.class.getName());
   private static final String DESCRIPTION = "Description";
   private static final String PROJECT = "Project";
   private static final String AREA = "Area";
@@ -372,39 +370,33 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
 
   private void popupResultInfo(final SubmittedReportInfo reportInfo, final Project project) {
     //noinspection OverlyComplexAnonymousInnerClass
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        StringBuilder text = new StringBuilder("<html>");
+    ApplicationManager.getApplication().invokeLater(() -> {
+      StringBuilder text = new StringBuilder("<html>");
 
-        final String url = reportInfo.getURL();
-        IdeErrorsDialog.appendSubmissionInformation(reportInfo, text);
-        text.append(".");
-        final SubmissionStatus status = reportInfo.getStatus();
-        if (status == NEW_ISSUE) {
-          text.append("<br/>").append(DiagnosticBundle.message("error.report.gratitude"));
-        } else if (status == DUPLICATE) {
-          text.append("<br/>Possible duplicate report");
-        }
-        text.append("</html>");
-        NotificationType type;
-        if (status == FAILED) {
-          type = NotificationType.ERROR;
-        } else if (status == DUPLICATE) {
-          type = NotificationType.WARNING;
-        } else {
-          type = NotificationType.INFORMATION;
-        }
-        NotificationListener listener = url != null ? new NotificationListener() {
-          @Override
-          public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
-            BrowserUtil.browse(url);
-            notification.expire();
-          }
-        } : null;
-        ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT, text.toString(), type,
-            listener).notify(project);
+      final String url = reportInfo.getURL();
+      IdeErrorsDialog.appendSubmissionInformation(reportInfo, text);
+      text.append(".");
+      final SubmissionStatus status = reportInfo.getStatus();
+      if (status == NEW_ISSUE) {
+        text.append("<br/>").append(DiagnosticBundle.message("error.report.gratitude"));
+      } else if (status == DUPLICATE) {
+        text.append("<br/>Possible duplicate report");
       }
+      text.append("</html>");
+      NotificationType type;
+      if (status == FAILED) {
+        type = NotificationType.ERROR;
+      } else if (status == DUPLICATE) {
+        type = NotificationType.WARNING;
+      } else {
+        type = NotificationType.INFORMATION;
+      }
+      NotificationListener listener = url != null ? (notification, event) -> {
+        BrowserUtil.browse(url);
+        notification.expire();
+      } : null;
+      ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT, text.toString(), type,
+          listener).notify(project);
     });
   }
 }

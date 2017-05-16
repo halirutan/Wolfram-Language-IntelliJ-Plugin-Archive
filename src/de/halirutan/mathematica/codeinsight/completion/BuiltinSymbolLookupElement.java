@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
  * @author patrick (30.11.16).
  */
 @SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
-public class BuiltinSymbolLookupElement extends LookupElement {
+class BuiltinSymbolLookupElement extends LookupElement {
 
   private final SymbolInformation myInfo;
   private static final char OPEN_BRACKET = '[';
@@ -115,13 +115,13 @@ public class BuiltinSymbolLookupElement extends LookupElement {
                 final PsiElement child = children[i];
 
                 builder.replaceElement(child, new Expression() {
-                  @Nullable
+                  @NotNull
                   @Override
                   public Result calculateResult(ExpressionContext context) {
                     return new TextResult(child.getText());
                   }
 
-                  @Nullable
+                  @NotNull
                   @Override
                   public Result calculateQuickResult(ExpressionContext context) {
                     return new TextResult(child.getText());

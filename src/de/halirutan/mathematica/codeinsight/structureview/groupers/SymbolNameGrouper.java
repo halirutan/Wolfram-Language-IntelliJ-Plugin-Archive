@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -49,7 +49,7 @@ public class SymbolNameGrouper implements Grouper, Sorter {
       return Collections.emptySet();
     }
 
-    final HashMap<String, Collection<TreeElement>> groupedElements = new HashMap<String, Collection<TreeElement>>(children.size());
+    final HashMap<String, Collection<TreeElement>> groupedElements = new HashMap<>(children.size());
 
     for (TreeElement definition : children) {
       if (definition instanceof AssignmentLeafViewTreeElement) {
@@ -59,14 +59,14 @@ public class SymbolNameGrouper implements Grouper, Sorter {
           if (groupedElements.containsKey(symbolName)) {
             groupedElements.get(symbolName).add(definition);
           } else {
-            groupedElements.put(symbolName, new HashSet<TreeElement>());
+            groupedElements.put(symbolName, new HashSet<>());
             groupedElements.get(symbolName).add(definition);
           }
         }
       }
     }
 
-    Collection<Group> result = new HashSet<Group>(groupedElements.size());
+    Collection<Group> result = new HashSet<>(groupedElements.size());
     for (final String key : groupedElements.keySet()) {
       result.add(new SymbolNameGroup(key, groupedElements.get(key)));
     }

@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPsiFile> implements ItemPresentation {
 
-  private MathematicaPsiFile myElement;
+  private final MathematicaPsiFile myElement;
 
   public MathematicaFileTreeElement(final MathematicaPsiFile psiElement) {
     super(psiElement);

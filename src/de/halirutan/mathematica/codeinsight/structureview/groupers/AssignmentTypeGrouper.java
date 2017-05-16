@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -52,7 +52,7 @@ public class AssignmentTypeGrouper implements Grouper {
 
     if (!(parent.getValue() instanceof SimpleStringTreeElement)) return Collections.emptySet();
 
-    final HashMap<SymbolAssignmentType, Collection<TreeElement>> groupedElements = new HashMap<SymbolAssignmentType, Collection<TreeElement>>(children.size());
+    final HashMap<SymbolAssignmentType, Collection<TreeElement>> groupedElements = new HashMap<>(children.size());
 
     for (TreeElement definition : children) {
       if (definition instanceof AssignmentLeafViewTreeElement) {
@@ -60,13 +60,13 @@ public class AssignmentTypeGrouper implements Grouper {
         if (groupedElements.containsKey(type)) {
           groupedElements.get(type).add(definition);
         } else {
-          groupedElements.put(type, new HashSet<TreeElement>());
+          groupedElements.put(type, new HashSet<>());
           groupedElements.get(type).add(definition);
         }
       }
     }
 
-    Collection<Group> result = new TreeSet<Group>(new AssignmentTypeGroupComparator());
+    Collection<Group> result = new TreeSet<>(new AssignmentTypeGroupComparator());
     for (final SymbolAssignmentType key : groupedElements.keySet()) {
       result.add(new AssignmentTypeGroup(key, groupedElements.get(key)));
     }

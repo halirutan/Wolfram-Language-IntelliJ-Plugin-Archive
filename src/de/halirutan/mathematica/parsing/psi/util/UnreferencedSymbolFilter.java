@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -33,8 +33,8 @@ import java.util.List;
 /**
  * @author patrick (1/6/14)
  */
-public class UnreferencedSymbolFilter implements PsiElementFilter {
-  public static final int MAX_UPWARD_STEPS = 3;
+class UnreferencedSymbolFilter implements PsiElementFilter {
+  private static final int MAX_UPWARD_STEPS = 3;
 
   @Override
   public boolean isAccepted(PsiElement element) {

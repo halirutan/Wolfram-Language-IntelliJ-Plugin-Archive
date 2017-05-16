@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -30,12 +30,12 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 @SuppressWarnings({"StaticVariableNamingConvention", "NonConstantFieldWithUpperCaseName"})
 public class MathematicaCodeStyleSettings extends CustomCodeStyleSettings {
 
-  public static boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
-  public static boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
-  public static boolean SPACE_AROUND_RULE_OPERATIONS = true;
-  public static boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
-  public static boolean SPACE_AROUND_OTHER_OPERATIONS = true;
-  public static boolean SPACE_AROUND_RELATION_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_ARITHMETIC_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_ASSIGNMENT_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_RULE_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_FUNCTIONAL_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_OTHER_OPERATIONS = true;
+  public static final boolean SPACE_AROUND_RELATION_OPERATIONS = true;
 
   public MathematicaCodeStyleSettings(CodeStyleSettings container) {
     super("MathematicaCodeStyleSettings", container);

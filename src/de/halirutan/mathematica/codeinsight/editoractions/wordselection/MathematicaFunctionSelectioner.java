@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -47,7 +47,7 @@ public class MathematicaFunctionSelectioner extends BasicSelectioner {
 
     if (psiElement instanceof FunctionCall) {
       final FunctionCall funcCall = (FunctionCall) psiElement;
-      List<TextRange> result = new ArrayList<TextRange>();
+      List<TextRange> result = new ArrayList<>();
       start = funcCall.getTextOffset() + funcCall.getHead().getTextLength() + 1;
       end = funcCall.getTextOffset() + funcCall.getTextLength() - 1;
       if (start < end && start != 0)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Interface for all parselets that implement an infix operation.
@@ -44,7 +45,7 @@ public interface InfixParselet {
    *     The left operand of the infix operation. This needs to be passed because it is parsed earlier in the process.
    * @return Information about the success of the parsing as well as the element types which was parsed.
    */
-  MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError;
+  Result parse(MathematicaParser parser, Result left) throws CriticalParserError;
 
   int getMyPrecedence();
 }

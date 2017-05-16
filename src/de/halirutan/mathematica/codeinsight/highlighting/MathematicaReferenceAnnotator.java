@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -39,7 +39,7 @@ import de.halirutan.mathematica.parsing.psi.api.MessageName;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
 import de.halirutan.mathematica.parsing.psi.api.function.Function;
 import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -54,7 +54,7 @@ import java.util.Set;
  */
 public class MathematicaReferenceAnnotator extends MathematicaVisitor implements Annotator {
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
-  private AnnotationHolder myHolder = null;
+  private final AnnotationHolder myHolder = null;
 
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     final Annotation annotation = holder.createInfoAnnotation(element, null);
@@ -88,7 +88,7 @@ public class MathematicaReferenceAnnotator extends MathematicaVisitor implements
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
     PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
 
-    final LocalizationConstruct.ConstructType scope = processor.getMyLocalization();
+    final ConstructType scope = processor.getMyLocalization();
     switch (scope) {
       case NULL:
         break;

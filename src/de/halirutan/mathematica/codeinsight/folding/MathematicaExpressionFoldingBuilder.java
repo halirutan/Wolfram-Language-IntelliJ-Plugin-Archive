@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,7 +26,6 @@ import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.lang.folding.NamedFoldingDescriptor;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.FoldingGroup;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
@@ -52,11 +51,11 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
 
   private static final ResourceBundle ourCharactersResourceBundle;
   private static final HashMap<String, String> ourNamedCharacters;
-  private static final Pattern namedCharacterPattern = Pattern.compile("\\\\\\[[A-Z][a-zA-Z]+\\]");
+  private static final Pattern namedCharacterPattern = Pattern.compile("\\\\\\[[A-Z][a-zA-Z]+]");
 
   static {
     ourCharactersResourceBundle = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/folding/namedCharacters");
-    ourNamedCharacters = new HashMap<String, String>(ourCharactersResourceBundle.keySet().size());
+    ourNamedCharacters = new HashMap<>(ourCharactersResourceBundle.keySet().size());
     for (String key : ourCharactersResourceBundle.keySet()) {
       try {
         ourNamedCharacters.put(key, new String(ourCharactersResourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8"));
@@ -69,7 +68,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
   @Override
   public FoldingDescriptor[] buildFoldRegions(@NotNull final ASTNode node, @NotNull final Document document) {
 
-    List<FoldingDescriptor> descriptors = new ArrayList<FoldingDescriptor>();
+    List<FoldingDescriptor> descriptors = new ArrayList<>();
     collectRegionsRecursively(node, document, descriptors);
     return descriptors.toArray(new FoldingDescriptor[descriptors.size()]);
   }

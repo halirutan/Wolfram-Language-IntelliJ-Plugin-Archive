@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,14 +21,14 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.elements;
 
-import com.intellij.ide.structureView.StructureViewModel;
+import com.intellij.ide.structureView.StructureViewModel.ExpandInfoProvider;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.Grouper;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,16 +41,16 @@ import java.util.*;
  * @author patrick (7/20/14)
  */
 @SuppressWarnings("UnusedDeclaration")
-public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement, StructureViewModel.ExpandInfoProvider {
+public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement, ExpandInfoProvider {
 
   private final String mySymbolName;
   private final PsiElement myNavigationElement;
-  private final TreeSet<GlobalDefinitionCollector.AssignmentProperty> myAssignments;
+  private final TreeSet<AssignmentProperty> myAssignments;
 
 
-  public AssignmentSymbolNodeViewTreeElement(final String symbolName, final HashSet<GlobalDefinitionCollector.AssignmentProperty> assignments) {
+  public AssignmentSymbolNodeViewTreeElement(final String symbolName, final HashSet<AssignmentProperty> assignments) {
     mySymbolName = symbolName;
-    myAssignments = new TreeSet<GlobalDefinitionCollector.AssignmentProperty>(new CodePositionAssignmentPropertyComparator());
+    myAssignments = new TreeSet<>(new CodePositionAssignmentPropertyComparator());
     myAssignments.addAll(assignments);
     myNavigationElement = myAssignments.first().myAssignmentSymbol;
   }
@@ -115,16 +115,16 @@ public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeEle
   @NotNull
   @Override
   public TreeElement[] getChildren() {
-    List<AssignmentLeafViewTreeElement> result = new LinkedList<AssignmentLeafViewTreeElement>();
-    for (GlobalDefinitionCollector.AssignmentProperty assignment : myAssignments) {
+    List<AssignmentLeafViewTreeElement> result = new LinkedList<>();
+    for (AssignmentProperty assignment : myAssignments) {
       result.add(new AssignmentLeafViewTreeElement(assignment));
     }
     return result.toArray(new AssignmentLeafViewTreeElement[result.size()]);
   }
 
-  private class CodePositionAssignmentPropertyComparator implements Comparator<GlobalDefinitionCollector.AssignmentProperty> {
+  private class CodePositionAssignmentPropertyComparator implements Comparator<AssignmentProperty> {
     @Override
-    public int compare(final GlobalDefinitionCollector.AssignmentProperty o1, final GlobalDefinitionCollector.AssignmentProperty o2) {
+    public int compare(final AssignmentProperty o1, final AssignmentProperty o2) {
       return o1.myAssignmentSymbol.getTextOffset() - o2.myAssignmentSymbol.getTextOffset();
     }
 

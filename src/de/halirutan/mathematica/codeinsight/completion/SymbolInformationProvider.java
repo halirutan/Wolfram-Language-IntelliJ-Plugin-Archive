@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -41,7 +41,7 @@ public class SymbolInformationProvider {
   static {
 
     ResourceBundle info = ResourceBundle.getBundle(ourSymbolInformationFile);
-    ourSymbols = new HashMap<String, SymbolInformation>(6000);
+    ourSymbols = new HashMap<>(6000);
 
     Enumeration<String> names = info.getKeys();
     while (names.hasMoreElements()) {
@@ -102,8 +102,8 @@ public class SymbolInformationProvider {
     public final boolean function;
     public final String attributes[];
     public final String options[];
-    public String context;
-    public String nameWithoutContext;
+    public final String context;
+    public final String nameWithoutContext;
 
     SymbolInformation(String nameIn, String nameWithoutContextIn, String contextIn, int importanceIn, String callPatternIn, boolean functionIn, String[] attributesIn, String[] optionsIn) {
       this.name = nameIn;

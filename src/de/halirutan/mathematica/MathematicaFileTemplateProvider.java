@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -55,11 +55,11 @@ public class MathematicaFileTemplateProvider {
   public static final String INIT = "init.m";
 
   @Nullable
-  public static PsiElement createFromTemplate(@NotNull Project project,
-                                              @NotNull VirtualFile rootDir,
-                                              @NotNull String templateName,
-                                              @NotNull String fileName,
-                                              @NotNull Properties properties) throws Exception {
+  private static PsiElement createFromTemplate(@NotNull Project project,
+                                               @NotNull VirtualFile rootDir,
+                                               @NotNull String templateName,
+                                               @NotNull String fileName,
+                                               @NotNull Properties properties) throws Exception {
     rootDir.refresh(false, false);
     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(rootDir);
     if (directory != null) {
@@ -76,7 +76,7 @@ public class MathematicaFileTemplateProvider {
     return createFromTemplate(project, rootDir, templateName, fileName, FileTemplateManager.getInstance(project).getDefaultProperties());
   }
 
-  public static PsiElement createFromTemplate(final Project project, String templateName, String fileName, @NotNull PsiDirectory directory, Properties properties)
+  private static PsiElement createFromTemplate(final Project project, String templateName, String fileName, @NotNull PsiDirectory directory, Properties properties)
       throws Exception {
     FileTemplateManager manager = FileTemplateManager.getInstance(project);
     FileTemplate template = manager.getInternalTemplate(templateName);

@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  */
 public class CommentAnnotator implements Annotator {
 
-  private static Pattern ourTagPattern;
+  private static final Pattern ourTagPattern;
 
   static {
     List<String> commentTags = new ArrayList<>(CommentCompletionProvider.COMMENT_TAGS.length);

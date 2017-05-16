@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.actions;
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
-import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog.Builder;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
@@ -53,7 +52,7 @@ public class CreateMathematicaFile extends CreateFileFromTemplateAction implemen
    *     filename with possible extension
    * @return filename without extension
    */
-  public static String removeExtension(String s) {
+  private static String removeExtension(String s) {
 
     String separator = File.separator;
     String filename;

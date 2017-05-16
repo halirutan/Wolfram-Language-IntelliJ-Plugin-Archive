@@ -35,7 +35,7 @@ import java.util.ArrayList;
 /**
  * @author patrick (21.12.16).
  */
-public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
+class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
 
   private static final Logger log = Logger.getInstance(MathematicaSymbolReferenceProvider.class);
 
