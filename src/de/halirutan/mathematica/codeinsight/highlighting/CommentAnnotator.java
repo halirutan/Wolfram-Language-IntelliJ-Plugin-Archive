@@ -58,7 +58,7 @@ public class CommentAnnotator implements Annotator {
     if (element instanceof PsiComment) {
       final Annotation commentAnnotation = holder.createInfoAnnotation(element, null);
       if (isCorrectSectionComment(element)) {
-        commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SECTION);
+        commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
         return;
       }
       annotateCommentTags(element, holder);
@@ -73,7 +73,7 @@ public class CommentAnnotator implements Annotator {
       int start = matcher.start();
       int end = matcher.end();
       final Annotation tagAnnotation = holder.createInfoAnnotation(TextRange.create(commentStart + start, commentStart + end), "");
-      tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SECTION);
+      tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
     }
   }
 

@@ -63,16 +63,9 @@
     </value>
   </option>
 
-  <option name="MMA.COMMENT_SECTION">
-    <value>
-      <option name="FOREGROUND" value="a0a0a0"/>
-      <option name="FONT_TYPE" value="1"/>
-    </value>
-  </option>
-
   <option name="MMA.COMMENT_SPECIAL">
     <value>
-      <option name="FOREGROUND" value="808080"/>
+      <option name="FOREGROUND" value="a0a0a0"/>
       <option name="FONT_TYPE" value="1"/>
     </value>
   </option>

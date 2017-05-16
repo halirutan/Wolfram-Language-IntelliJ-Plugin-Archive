@@ -19,7 +19,7 @@
   ~ THE SOFTWARE.
   -->
 
-<idea-plugin url="http://mathematicaplugin.halirutan.de" version="2">
+<idea-plugin url="http://mathematicaplugin.halirutan.de">
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
@@ -227,9 +227,9 @@
               <!--text="Rename Reference Resolve"/>-->
       <!--<separator/>-->
 
-      <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
-      <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
-      <!--</action>-->
+      <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
+              text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
+      </action>
 
 
       <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
