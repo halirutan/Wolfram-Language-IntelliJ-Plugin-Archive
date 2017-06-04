@@ -52,16 +52,22 @@ abstract class AbstractSurrounder implements Surrounder {
   @Nullable
   @Override
   public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements) throws IncorrectOperationException {
+    int selectionStart;
+    int selectionEnd;
     final SelectionModel selectionModel = editor.getSelectionModel();
-    if (selectionModel.hasSelection()) {
-      final Document document = editor.getDocument();
-      if (document.isWritable()) {
-        final int selectionStart = selectionModel.getSelectionStart();
-        final int selectionEnd = selectionModel.getSelectionEnd();
-        final String expr = document.getText(TextRange.create(selectionStart, selectionEnd));
-        document.replaceString(selectionStart, selectionEnd, getOpening() + expr + getClosing());
-        modifySelection(TextRange.create(selectionStart,selectionEnd), selectionModel);
-      }
+
+    if (elements.length > 0) {
+      selectionStart = elements[0].getTextOffset();
+      selectionEnd = elements[elements.length - 1].getTextRange().getEndOffset();
+    } else {
+      return null;
+    }
+
+    final Document document = editor.getDocument();
+    if (document.isWritable()) {
+      final String expr = document.getText(TextRange.create(selectionStart, selectionEnd));
+      document.replaceString(selectionStart, selectionEnd, getOpening() + expr + getClosing());
+      modifySelection(TextRange.create(selectionStart, selectionEnd), selectionModel);
     }
     return null;
   }

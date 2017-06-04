@@ -71,8 +71,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
     final int offset = caretOffset.get();
     final int lineNumber = document.getLineNumber(offset);
     final int lineStartOffset1 = document.getLineStartOffset(lineNumber);
-    final int lineStartOffset = lineStartOffset1;
-    final int prevLineStartOffset = lineNumber > 0 ? document.getLineStartOffset(lineNumber - 1) : lineStartOffset;
+    final int prevLineStartOffset = lineNumber > 0 ? document.getLineStartOffset(lineNumber - 1) : lineStartOffset1;
 
     if (project == null || offset <= 0) {
       return Result.Continue;
@@ -80,7 +79,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
 
     final EditorHighlighter highlighter = ((EditorEx)editor).getHighlighter();
     final HighlighterIterator iterator = highlighter.createIterator(caretOffset.get() - 1);
-    final IElementType type = getNonWhitespaceElementType(iterator, lineStartOffset, prevLineStartOffset);
+    final IElementType type = getNonWhitespaceElementType(iterator, lineStartOffset1, prevLineStartOffset);
 
     if (MathematicaElementTypes.INDENTABLE_OPERATORS.contains(type)) {
       final CodeStyleSettings currentSettings = CodeStyleSettingsManager.getInstance(project).getCurrentSettings();

@@ -104,7 +104,6 @@ public class MathematicaEnterInsideCommentHandler extends EnterHandlerDelegateAd
                                 @NotNull final Ref<Integer> caretAdvance,
                                 @NotNull final DataContext dataContext,
                                 final EditorActionHandler originalHandler) {
-
     final Result result = skipWithResultQ(file, editor, dataContext);
     if (result != null) {
       return result;
