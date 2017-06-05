@@ -23,73 +23,85 @@ package de.halirutan.mathematica.codeinsight.editoractions.smartenter;
 
 import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.text.CharArrayUtil;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
 import de.halirutan.mathematica.parsing.psi.api.lists.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
-
 /**
  * @author patrick (10/21/13)
  */
 public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
 
-  private static final int MAX_UPWALK = 10;
-
   @SuppressWarnings("unchecked")
   public MathematicaSmartEnter() {
-    final Fixer[] fixers = {new FunctionCallFixer(), new CompoundExpressionFixer()};
+    final Fixer[] fixers = {new FunctionCallFixer(), new CompoundExpressionFixer(), new CommentFixer()};
     addFixers(fixers);
     addEnterProcessors(new FunctionCallEnterProcessor());
   }
 
-  private static PsiElement findNextElement(Editor editor, PsiFile psiFile) {
-    int caret = editor.getCaretModel().getOffset();
-
-    final Document doc = editor.getDocument();
-    CharSequence chars = doc.getCharsSequence();
-    int offset = caret == 0 ? 0 : CharArrayUtil.shiftBackward(chars, caret - 1, " \t");
-    if (doc.getLineNumber(offset) < doc.getLineNumber(caret)) {
-      offset = CharArrayUtil.shiftForward(chars, caret, " \t");
-    }
-
-    PsiElement current = psiFile.findElementAt(offset);
-    PsiElement saveOriginal = current;
-    int steps = 0;
-     while (current != null && steps++ < MAX_UPWALK) {
-      if (current instanceof List ||
-          current instanceof CompoundExpression ||
-          current instanceof FunctionCall ||
-          current instanceof PsiFile) {
-
-        if (current instanceof List && saveOriginal.getNode().getElementType() == RIGHT_BRACE ||
-            current instanceof FunctionCall && saveOriginal.getNode().getElementType() == RIGHT_BRACKET ||
-            current instanceof CompoundExpression && saveOriginal.getNode().getElementType() == SEMICOLON) {
-          offset += 1;
-          current = psiFile.findElementAt(offset);
-          saveOriginal = current;
-          steps = 0;
-          continue;
-        }
-        return current;
-      }
-      current = current.getParent();
-    }
-    return null;
-  }
-
+  @SuppressWarnings("UnnecessaryLocalVariable")
   @Nullable
   @Override
   protected PsiElement getStatementAtCaret(Editor editor, PsiFile psiFile) {
-    return findNextElement(editor, psiFile);
+    PsiElement atCaret = super.getStatementAtCaret(editor, psiFile);
+
+    if (atCaret instanceof PsiWhiteSpace) {
+      atCaret = PsiTreeUtil.skipSiblingsBackward(atCaret, PsiWhiteSpace.class);
+    }
+
+    if (atCaret instanceof PsiComment) {
+      return atCaret;
+    }
+
+    final PsiElement expressionAtCaret = PsiTreeUtil.getParentOfType(atCaret,
+        FunctionCall.class,
+        CompoundExpression.class,
+        List.class
+    );
+
+    if (expressionAtCaret != null && PsiTreeUtil.hasErrorElements(expressionAtCaret)) {
+      final PsiErrorElement[] errors = PsiTreeUtil.getChildrenOfType(expressionAtCaret, PsiErrorElement.class);
+      if (errors != null && errors.length > 0) {
+        final int errorOffset = errors[0].getTextOffset();
+        final PsiElement errorElement = psiFile.findElementAt(errorOffset);
+        if (errorElement != null) {
+          registerUnresolvedError(errorElement.getTextOffset() + errorElement.getTextLength());
+        } else {
+          registerUnresolvedError(errorOffset);
+        }
+      }
+    }
+
+    if (expressionAtCaret instanceof List) {
+      if (atCaret.getText().equals("}") || !PsiTreeUtil.hasErrorElements(expressionAtCaret))
+        return expressionAtCaret.getParent();
+    }
+
+    if (expressionAtCaret instanceof FunctionCall) {
+      if (atCaret.getText().equals("]")) {
+        PsiElement parent = PsiTreeUtil.getParentOfType(atCaret.getParent(),
+            FunctionCall.class,
+            CompoundExpression.class,
+            List.class
+        );
+        return parent;
+      }
+
+    }
+
+    return expressionAtCaret;
+//    return findNextElement(editor, psiFile);
+  }
+
+  @Override
+  protected boolean collectChildrenRecursively(@NotNull PsiElement atCaret) {
+    return false;
   }
 
   @Override
@@ -97,18 +109,29 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     return true;
   }
 
+  @Override
+  protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull java.util.List<PsiElement> result) {
+  }
+
   private class FunctionCallEnterProcessor extends FixEnterProcessor {
     @Override
     public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
       final CaretModel caretModel = editor.getCaretModel();
-      if (modified && file.isValid()) {
-        CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, caretModel.getOffset());
-        reformat(atCaret);
-        commit(editor);
+      CodeStyleManager.getInstance(file.getProject()).adjustLineIndent(file, caretModel.getOffset());
+      reformat(atCaret);
+      commit(editor);
+      if (atCaret instanceof FunctionCall && modified && file.isValid()) {
         return true;
       }
-      if (atCaret instanceof PsiFile || atCaret instanceof CompoundExpression) {
-        return false;
+      if (atCaret instanceof CompoundExpression) {
+        super.plainEnter(editor);
+        return true;
+      }
+      if (atCaret instanceof PsiComment) {
+        return true;
+      }
+      if (atCaret instanceof PsiFile) {
+        return true;
       } else {
         caretModel.moveToOffset(atCaret.getTextOffset() + atCaret.getTextLength());
         return true;

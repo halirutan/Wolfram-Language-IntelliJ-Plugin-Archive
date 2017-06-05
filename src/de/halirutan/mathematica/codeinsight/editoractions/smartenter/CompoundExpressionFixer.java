@@ -24,8 +24,10 @@ package de.halirutan.mathematica.codeinsight.editoractions.smartenter;
 import com.intellij.lang.SmartEnterProcessorWithFixers.Fixer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.text.CharArrayUtil;
 import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,12 +40,19 @@ class CompoundExpressionFixer extends Fixer<MathematicaSmartEnter> {
   @Override
   public void apply(@NotNull Editor editor, @NotNull MathematicaSmartEnter processor, @NotNull PsiElement element) throws IncorrectOperationException {
     Document doc = editor.getDocument();
-    if (element instanceof CompoundExpression && element.getTextOffset()+element.getTextLength() == editor.getCaretModel().getOffset()) {
+    final int caretOffset = editor.getCaretModel().getOffset();
+    if (element instanceof CompoundExpression) {
       final PsiElement lastChild = element.getLastChild();
+      final TextRange lastChildRange = lastChild.getTextRange();
+
       if (!lastChild.getNode().getElementType().equals(SEMICOLON)) {
-        final int offset = lastChild.getTextOffset() + lastChild.getTextLength();
-        doc.insertString(offset, ";\n");
-        editor.getCaretModel().moveToOffset(offset + 2);
+        if (lastChildRange.containsOffset(caretOffset) || lastChildRange.getEndOffset() < caretOffset) {
+          int offset = lastChild.getTextOffset() + lastChild.getTextLength();
+          offset = CharArrayUtil.shiftBackward(editor.getDocument().getCharsSequence(), offset - 1, " \t\n") + 1;
+          doc.insertString(offset, ";");
+          editor.getCaretModel().moveToOffset(offset + 1);
+          processor.commit(editor);
+        }
       }
     }
   }
