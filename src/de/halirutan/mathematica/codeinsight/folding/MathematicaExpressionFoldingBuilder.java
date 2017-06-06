@@ -195,6 +195,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
     final int currentLine = document.getLineNumber(comment.getTextOffset());
     int endOffset = document.getTextLength();
 
+    // Check if we have a valid section description in the next line
     if (currentLine < document.getLineCount() - 1) {
       final PsiComment nextLineComment = PsiTreeUtil.findElementOfClassAtRange(
           file,
