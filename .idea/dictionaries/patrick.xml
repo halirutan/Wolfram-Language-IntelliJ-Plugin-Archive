@@ -11,6 +11,8 @@
       <w>intell</w>
       <w>intelli</w>
       <w>intellijidea</w>
+      <w>itemnumbered</w>
+      <w>itemparagraph</w>
       <w>jlink</w>
       <w>listable</w>
       <w>livetemplates</w>
@@ -30,6 +32,12 @@
       <w>stringified</w>
       <w>structureview</w>
       <w>subchapter</w>
+      <w>subitem</w>
+      <w>subitemnumbered</w>
+      <w>subitemparagraph</w>
+      <w>subsubitem</w>
+      <w>subsubitemnumbered</w>
+      <w>subsubitemparagraph</w>
       <w>subsubsection</w>
       <w>subsubsubsection</w>
       <w>subsubsubsubsubsection</w>

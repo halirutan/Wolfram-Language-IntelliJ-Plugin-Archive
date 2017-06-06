@@ -27,37 +27,26 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.codeinsight.completion.CommentCompletionProvider;
-import org.apache.commons.lang.StringUtils;
+import de.halirutan.mathematica.parsing.psi.util.Comments;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
+ * Provides bold and bright highlighting for tags and sectioning comments.
  * @author patrick (03.03.15)
  */
 public class CommentAnnotator implements Annotator {
 
-  private static final Pattern ourTagPattern;
-
-  static {
-    List<String> commentTags = new ArrayList<>(CommentCompletionProvider.COMMENT_TAGS.length);
-    for (String tag : CommentCompletionProvider.COMMENT_TAGS) {
-      commentTags.add(":" + tag + ":");
-    }
-    ourTagPattern = Pattern.compile(StringUtils.join(commentTags, "|"));
-  }
-
+  private static final Pattern ourTagPattern = Pattern.compile("[^:]:\\w+:[^:]");
 
   @Override
   public void annotate(@NotNull final PsiElement element, @NotNull final AnnotationHolder holder) {
     if (element instanceof PsiComment) {
       final Annotation commentAnnotation = holder.createInfoAnnotation(element, null);
-      if (isCorrectSectionComment(element)) {
+      if (Comments.isCorrectSectionComment((PsiComment) element)) {
         commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
         return;
       }
@@ -76,47 +65,4 @@ public class CommentAnnotator implements Annotator {
       tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
     }
   }
-
-  /**
-   * Tests if a comment is a valid Section, Subsection, ... comment. AFAIK these comments can only contain the section
-   * specifier and nothing else (whitespace should be OK). Therefore, I match comments that look like this
-   * <p>
-   * <code>(* ::Section:: *)</code>
-   * <p>
-   * Please see {@link CommentCompletionProvider#COMMENT_SECTIONS}.
-   *
-   * @param comment the comment PsiElement
-   * @return true if the comment is a valid title, section, ... comment
-   */
-  private boolean isCorrectSectionComment(@NotNull final PsiElement comment) {
-    final String text = comment.getText();
-    final String name = text.replace("(*", "").replace("*)", "").trim();
-    if (name.length() > 0 && name.matches("::.*::")) {
-      final String sectionName = name.replace(":", "");
-      for (String commentSection : CommentCompletionProvider.COMMENT_SECTIONS) {
-        if (commentSection.equals(sectionName)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * This is not as strict as {@link CommentAnnotator#isCorrectSectionComment(PsiElement)} and it does only check
-   * if there is a section tag (::Section::, ::Subsection::, ...) inside the comment.
-   *
-   * @param comment Comment to check
-   * @return true if a section tag could be found inside the comment
-   */
-  private boolean containsSectionTag(@NotNull final PsiElement comment) {
-    final String text = comment.getText();
-    for (String commentSection : CommentCompletionProvider.COMMENT_SECTIONS) {
-      if (text.contains("::" + commentSection + "::")) {
-        return true;
-      }
-    }
-    return false;
-  }
-
 }
