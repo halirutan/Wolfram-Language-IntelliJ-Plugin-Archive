@@ -195,6 +195,20 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
     final int currentLine = document.getLineNumber(comment.getTextOffset());
     int endOffset = document.getTextLength();
 
+    if (currentLine < document.getLineCount() - 1) {
+      final PsiComment nextLineComment = PsiTreeUtil.findElementOfClassAtRange(
+          file,
+          document.getLineStartOffset(currentLine + 1),
+          document.getLineEndOffset(currentLine + 1),
+          PsiComment.class
+      );
+      if (nextLineComment != null && !Comments.isCorrectSectionComment(nextLineComment)) {
+        placeHolderText.append(Comments.getStrippedText(nextLineComment));
+      } else {
+        placeHolderText.append("No description given");
+      }
+    }
+
     for (int i = currentLine + 1; i < document.getLineCount(); i++) {
       int start = document.getLineStartOffset(i);
       int end = document.getLineEndOffset(i);
@@ -203,19 +217,6 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
         final CommentStyle commentStyle = Comments.getStyle(commentsInLine);
         if (commentStyle != null && commentStyle.compareTo(style) <= 0) {
           endOffset = start - 1;
-          if (i < document.getLineCount() - 1) {
-            final PsiComment nextLineComment = PsiTreeUtil.findElementOfClassAtRange(
-                file,
-                document.getLineStartOffset(i + 1),
-                document.getLineEndOffset(i + 1),
-                PsiComment.class
-            );
-            if (nextLineComment != null && !Comments.isCorrectSectionComment(nextLineComment)) {
-              placeHolderText.append(Comments.getStrippedText(nextLineComment));
-            } else {
-              placeHolderText.append("No description given");
-            }
-          }
           break;
         }
       }
