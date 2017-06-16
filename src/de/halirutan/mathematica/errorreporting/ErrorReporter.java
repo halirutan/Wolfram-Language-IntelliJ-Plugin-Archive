@@ -106,20 +106,22 @@ public class ErrorReporter extends ErrorReportSubmitter {
 
     final Project project = CommonDataKeys.PROJECT.getData(dataContext);
 
-    Consumer<String> successCallback = token -> {
+    Consumer<String> successCallback = successMessage -> {
       final SubmittedReportInfo reportInfo = new SubmittedReportInfo(
-          null, "Issue " + token, SubmissionStatus.NEW_ISSUE);
+          null, successMessage, SubmissionStatus.NEW_ISSUE);
       callback.consume(reportInfo);
 
-      ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT,
-          "Submitted",
+      ReportMessages.GROUP.createNotification(
+          ReportMessages.ERROR_REPORT,
+          successMessage,
           NotificationType.INFORMATION,
           null).setImportant(false).notify(project);
     };
 
     Consumer<Exception> errorCallback = e -> {
       String message = e.getMessage();
-      ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT,
+      ReportMessages.GROUP.createNotification(
+          ReportMessages.ERROR_REPORT,
           message,
           NotificationType.ERROR,
           NotificationListener.URL_OPENING_LISTENER).setImportant(false).notify(project);

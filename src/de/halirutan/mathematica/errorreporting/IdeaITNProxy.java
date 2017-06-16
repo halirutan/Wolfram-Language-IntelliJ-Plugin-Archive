@@ -60,10 +60,9 @@ class IdeaITNProxy {
 
     params.put("Last Action", error.getLastAction());
 
-    //params.put("previous.exception", error.getPreviousException() == null ? null : Integer.toString(error.getPreviousException()));
-
     params.put("error.message", error.getMessage());
     params.put("error.stacktrace", error.getStackTrace());
+    params.put("error.hash", String.valueOf(error.getStackTrace().hashCode()));
 
     for (Attachment attachment : error.getAttachments()) {
       params.put("attachment.name", attachment.getName());

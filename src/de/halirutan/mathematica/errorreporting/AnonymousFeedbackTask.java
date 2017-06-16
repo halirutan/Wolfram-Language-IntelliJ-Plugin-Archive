@@ -25,13 +25,9 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task.Backgroundable;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.Consumer;
-import com.intellij.util.net.HttpConfigurable;
-import de.halirutan.mathematica.errorreporting.AnonymousFeedback.HttpConnectionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.LinkedHashMap;
 
 
@@ -67,13 +63,6 @@ public class AnonymousFeedbackTask extends Backgroundable {
       myCallback.consume(token);
     } catch (Exception e) {
       myErrorCallback.consume(e);
-    }
-  }
-
-  private static class ProxyHttpConnectionFactory extends HttpConnectionFactory {
-    @Override
-    protected HttpURLConnection openHttpConnection(String url) throws IOException {
-      return HttpConfigurable.getInstance().openHttpConnection(url);
     }
   }
 }

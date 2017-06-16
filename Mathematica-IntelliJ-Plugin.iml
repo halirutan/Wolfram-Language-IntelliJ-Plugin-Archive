@@ -21,5 +21,6 @@
     </orderEntry>
     <orderEntry type="library" exported="" name="com.google.guava:guava:r09" level="project" />
     <orderEntry type="library" name="com.jcabi:jcabi-github:0.9.4" level="project" />
+    <orderEntry type="library" name="org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5" level="project" />
   </component>
 </module>
