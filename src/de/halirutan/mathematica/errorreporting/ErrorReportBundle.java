@@ -23,6 +23,8 @@ package de.halirutan.mathematica.errorreporting;
 import com.intellij.CommonBundle;
 import org.jetbrains.annotations.PropertyKey;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
 /**
@@ -30,14 +32,25 @@ import java.util.ResourceBundle;
  *
  * @author <a href="mailto:intellij@studer.nu">Etienne Studer</a>, Jun 13, 2006
  */
-class PluginErrorReportSubmitterBundle {
-  private static final ResourceBundle OUR_BUNDLE = ResourceBundle.getBundle("com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle");
+class ErrorReportBundle {
+  private static final String BUNDLE = "de.halirutan.mathematica.errorreporting.ErrorReportBundle";
+  private static Reference<ResourceBundle> ourBundle = null;
 
-  private PluginErrorReportSubmitterBundle() {
+  private ErrorReportBundle() {
   }
 
-  public static String message(@PropertyKey(resourceBundle = "com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle") String key,
-                               Object... params) {
-    return CommonBundle.message(OUR_BUNDLE, key, params);
+  public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+    return CommonBundle.message(getBundle(), key, params);
+  }
+
+
+  private static ResourceBundle getBundle() {
+    ResourceBundle bundle = null;
+    if (ourBundle != null) bundle = ourBundle.get();
+    if (bundle == null) {
+      bundle = ResourceBundle.getBundle(BUNDLE);
+      ourBundle = new SoftReference<>(bundle);
+    }
+    return bundle;
   }
 }

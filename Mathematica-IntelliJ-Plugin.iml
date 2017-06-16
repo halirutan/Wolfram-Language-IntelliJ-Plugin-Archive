@@ -20,5 +20,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="com.google.guava:guava:r09" level="project" />
+    <orderEntry type="library" name="com.jcabi:jcabi-github:0.9.4" level="project" />
   </component>
 </module>

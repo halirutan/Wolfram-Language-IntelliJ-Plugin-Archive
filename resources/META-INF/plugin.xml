@@ -82,7 +82,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <internalFileTemplate name="Package"/>
 
-    <errorHandler implementation="de.halirutan.mathematica.errorreporting.YouTrackBugReporter"/>
+    <errorHandler implementation="de.halirutan.mathematica.errorreporting.ErrorReporter"/>
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
@@ -211,11 +211,11 @@
     <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
     <!--</action>-->
 
-    <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
-    <!--<action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"-->
-    <!--class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">-->
-    <!--<keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>-->
-    <!--</action>-->
+    Action for throwing an exception just to test the reporting of errors into the YouTrack database
+    <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
+    class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">
+    <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>
+    </action>
     <group id="MathematicaMenu" text="Mathematica" popup="true">
       <action id="Mathematica.ExpandNamedCharacters"
               class="de.halirutan.mathematica.actions.ExpandNamedCharactersAction"
