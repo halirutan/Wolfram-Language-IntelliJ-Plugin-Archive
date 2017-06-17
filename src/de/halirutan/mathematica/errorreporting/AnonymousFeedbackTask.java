@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.errorreporting;
 
+import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task.Backgroundable;
 import com.intellij.openapi.project.Project;
@@ -37,32 +38,23 @@ import java.util.LinkedHashMap;
  * As per answer from here: http://devnet.jetbrains.com/message/5526206;jsessionid=F5422B4AF1AFD05AAF032636E5455E90#5526206
  */
 public class AnonymousFeedbackTask extends Backgroundable {
-  private final Consumer<String> myCallback;
-  private final Consumer<Exception> myErrorCallback;
+  private final Consumer<SubmittedReportInfo> myCallback;
   private final LinkedHashMap<String, String> myParams;
 
   AnonymousFeedbackTask(@Nullable Project project,
                         @NotNull String title,
                         boolean canBeCancelled,
                         LinkedHashMap<String, String> params,
-                        final Consumer<String> callback,
-                        final Consumer<Exception> errorCallback) {
+                        final Consumer<SubmittedReportInfo> callback) {
     super(project, title, canBeCancelled);
 
     myParams = params;
     myCallback = callback;
-    myErrorCallback = errorCallback;
   }
 
   @Override
   public void run(@NotNull ProgressIndicator indicator) {
     indicator.setIndeterminate(true);
-    AnonymousFeedback feedback = new AnonymousFeedback();
-    try {
-      String token = feedback.sendFeedback(myParams);
-      myCallback.consume(token);
-    } catch (Exception e) {
-      myErrorCallback.consume(e);
-    }
+    myCallback.consume(AnonymousFeedback.sendFeedback(myParams));
   }
 }

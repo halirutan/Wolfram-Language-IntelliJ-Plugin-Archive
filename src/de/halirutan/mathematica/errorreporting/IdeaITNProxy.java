@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.errorreporting;
 
-import com.intellij.errorreport.bean.ErrorBean;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.application.ex.ApplicationInfoEx;
@@ -36,7 +35,7 @@ import java.util.LinkedHashMap;
  * As per answer from here: http://devnet.jetbrains.com/message/5526206;jsessionid=F5422B4AF1AFD05AAF032636E5455E90#5526206
  */
 class IdeaITNProxy {
-  static LinkedHashMap<String, String> getKeyValuePairs(ErrorBean error,
+  static LinkedHashMap<String, String> getKeyValuePairs(GitHubErrorBean error,
                                                         Application application,
                                                         ApplicationInfoEx appInfo,
                                                         ApplicationNamesInfo namesInfo) {
@@ -62,13 +61,12 @@ class IdeaITNProxy {
 
     params.put("error.message", error.getMessage());
     params.put("error.stacktrace", error.getStackTrace());
-    params.put("error.hash", String.valueOf(error.getStackTrace().hashCode()));
+    params.put("error.hash", error.getExceptionHash());
 
     for (Attachment attachment : error.getAttachments()) {
       params.put("attachment.name", attachment.getName());
       params.put("attachment.value", attachment.getEncodedBytes());
     }
-
     return params;
   }
 }

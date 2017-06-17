@@ -21,63 +21,100 @@
 
 package de.halirutan.mathematica.errorreporting;
 
+import com.intellij.openapi.diagnostic.SubmittedReportInfo;
+import com.intellij.openapi.diagnostic.SubmittedReportInfo.SubmissionStatus;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.Label;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.client.PageIterator;
 import org.eclipse.egit.github.core.service.IssueService;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.Map.Entry;
 
 class AnonymousFeedback {
 
   private final static String gitAccessToken = "097a2a4e4a94ff65a73508083da690d4565fd038";
-  private final static String gitRepoUser = "halirutan";
-  private final static String gitRepo = "Mathematica-IntelliJ-Plugin";
+  private final static String gitRepoUser = "Mathematica-IntelliJ-Plugin";
+  private final static String gitRepo = "Auto-generated-issues-for-the-Mathematica-Plugin";
 
-  private GitHubClient myGitHub;
-  private RepositoryId myRepoID;
+  private final static String issueLabel = "auto-generated";
 
-  AnonymousFeedback() {
-    myGitHub = new GitHubClient();
-    myGitHub.setOAuth2Token(gitAccessToken);
-    myRepoID = new RepositoryId(gitRepoUser, gitRepo);
+  private AnonymousFeedback() { }
+
+  static SubmittedReportInfo sendFeedback(LinkedHashMap<String, String> environmentDetails) {
+
+    final SubmittedReportInfo result;
+    try {
+      GitHubClient client = new GitHubClient();
+      client.setOAuth2Token(gitAccessToken);
+      RepositoryId repoID = new RepositoryId(gitRepoUser, gitRepo);
+      IssueService issueService = new IssueService(client);
+
+      String errorDescription = environmentDetails.get("error.description");
+
+      Issue newGibHubIssue = createNewGibHubIssue(environmentDetails);
+      Issue duplicate = findFirstDuplicate(newGibHubIssue.getTitle(), issueService, repoID);
+      boolean isNewIssue = true;
+      if (duplicate != null) {
+        if(errorDescription != null) {
+          issueService.createComment(repoID, duplicate.getNumber(), errorDescription);
+        }
+        newGibHubIssue = duplicate;
+        isNewIssue = false;
+      } else {
+        newGibHubIssue = issueService.createIssue(repoID, newGibHubIssue);
+      }
+
+      final long id = newGibHubIssue.getNumber();
+      final String htmlUrl = newGibHubIssue.getHtmlUrl();
+      final String message = ErrorReportBundle.message(isNewIssue ? "git.issue.text" : "git.issue.duplicate.text", htmlUrl, id);
+      result = new SubmittedReportInfo(htmlUrl, message, isNewIssue ? SubmissionStatus.NEW_ISSUE : SubmissionStatus.DUPLICATE);
+      return result;
+    } catch (IOException e) {
+      return new SubmittedReportInfo(null, ErrorReportBundle.message("report.error.connection.failure"), SubmissionStatus.FAILED);
+    }
   }
-//
-//  public int findDuplicate(@NotNull final String titel) {
-//    final HashMap<String, String> filter = new HashMap<>();
-//    filter.put("filter", "all");
-//    for (Issue issue : myIssues.iterate(filter)) {
-//      System.out.println(issue);
-//    }
-//    return 0;
-//  }
 
-  String sendFeedback(LinkedHashMap<String, String> environmentDetails) throws IOException {
-    String errorMessage = environmentDetails.get("error.message");
+  @Nullable
+  private static Issue findFirstDuplicate(String uniqueTitle, final IssueService service, RepositoryId repo) throws IOException {
+    Map<String, String> searchParameters = new HashMap<>(2);
+    searchParameters.put(IssueService.FILTER_STATE, IssueService.STATE_OPEN);
+    final PageIterator<Issue> pages = service.pageIssues(repo, searchParameters);
+    for (Collection<Issue> page : pages) {
+      for (Issue issue : page) {
+        if (issue.getTitle().equals(uniqueTitle)) {
+          return issue;
+        }
+      }
+    }
+    return null;
+  }
+
+  private static Issue createNewGibHubIssue(LinkedHashMap<String, String> details) {
+    String errorMessage = details.get("error.message");
     if (errorMessage == null || errorMessage.isEmpty()) {
       errorMessage = "Unspecified error";
     }
-    environmentDetails.remove("error.message");
+    details.remove("error.message");
 
-    final String body = generateGitHubIssueBody(environmentDetails);
-    try {
-      final Issue newIssue = new Issue();
-      newIssue.setTitle(ErrorReportBundle.message("issue.title", errorMessage));
-      newIssue.setBody(body);
-      Label label = new Label();
-      label.setName("auto-generated");
-      newIssue.setLabels(Collections.singletonList(label));
-      IssueService issueService = new IssueService(myGitHub);
-      final Issue issue = issueService.createIssue(myRepoID, newIssue);
-      final long id = issue.getNumber();
-      return "<a href=\"" + issue.getHtmlUrl() + "\">Created issue #" + id + "</a>";
-    } catch (IOException e) {
-      throw new IOException("Failed to create issue on GitHub");
+    String errorHash = details.get("error.hash");
+    if (errorHash == null) {
+      errorHash = "";
     }
+    details.remove("error.hash");
+
+    final Issue gitHubIssue = new Issue();
+    final String body = generateGitHubIssueBody(details);
+    gitHubIssue.setTitle(ErrorReportBundle.message("git.issue.title", errorHash, errorMessage));
+    gitHubIssue.setBody(body);
+    Label label = new Label();
+    label.setName(issueLabel);
+    gitHubIssue.setLabels(Collections.singletonList(label));
+    return gitHubIssue;
   }
 
   private static String generateGitHubIssueBody(LinkedHashMap<String, String> details) {
@@ -87,11 +124,6 @@ class AnonymousFeedback {
     }
     details.remove("error.description");
 
-    String errorHash = details.get("error.hash");
-    if (errorHash == null) {
-      errorHash = "";
-    }
-    details.remove("error.hash");
 
     String stackTrace = details.get("error.stacktrace");
     if (stackTrace == null || stackTrace.isEmpty()) {
@@ -117,8 +149,6 @@ class AnonymousFeedback {
     result.append("\n```\n");
     result.append(stackTrace);
     result.append("\n```\n");
-
-    result.append("Hash Code:\n").append(errorHash);
 
     return result.toString();
   }

@@ -82,7 +82,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <internalFileTemplate name="Package"/>
 
-    <errorHandler implementation="de.halirutan.mathematica.errorreporting.ErrorReporter"/>
+    <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>

@@ -24,7 +24,6 @@ package de.halirutan.mathematica.errorreporting;
 import com.intellij.diagnostic.IdeErrorsDialog;
 import com.intellij.diagnostic.LogMessageEx;
 import com.intellij.diagnostic.ReportMessages;
-import com.intellij.errorreport.bean.ErrorBean;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
@@ -56,24 +55,12 @@ import java.util.LinkedHashMap;
  * https://android.googlesource.com/platform/tools/adt/idea/+/master/android/src/com/android/tools/idea/diagnostics/error/ErrorReporter.java
  * As per answer from here: http://devnet.jetbrains.com/message/5526206;jsessionid=F5422B4AF1AFD05AAF032636E5455E90#5526206
  */
-public class ErrorReporter extends ErrorReportSubmitter {
-  @NotNull
-  @Override
-  public String getReportActionText() {
-    return ErrorReportBundle.message("report.error.to.plugin.vendor");
-  }
-
-  @Override
-  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
-    ErrorBean errorBean = new ErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
-    return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
-  }
-
+public class GitHubErrorReporter extends ErrorReportSubmitter {
   @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
   private static boolean doSubmit(final IdeaLoggingEvent event,
                                   final Component parentComponent,
                                   final Consumer<SubmittedReportInfo> callback,
-                                  final ErrorBean bean,
+                                  final GitHubErrorBean bean,
                                   final String description) {
     final DataContext dataContext = DataManager.getInstance().getDataContext(parentComponent);
 
@@ -106,28 +93,9 @@ public class ErrorReporter extends ErrorReportSubmitter {
 
     final Project project = CommonDataKeys.PROJECT.getData(dataContext);
 
-    Consumer<String> successCallback = successMessage -> {
-      final SubmittedReportInfo reportInfo = new SubmittedReportInfo(
-          null, successMessage, SubmissionStatus.NEW_ISSUE);
-      callback.consume(reportInfo);
-
-      ReportMessages.GROUP.createNotification(
-          ReportMessages.ERROR_REPORT,
-          successMessage,
-          NotificationType.INFORMATION,
-          null).setImportant(false).notify(project);
-    };
-
-    Consumer<Exception> errorCallback = e -> {
-      String message = e.getMessage();
-      ReportMessages.GROUP.createNotification(
-          ReportMessages.ERROR_REPORT,
-          message,
-          NotificationType.ERROR,
-          NotificationListener.URL_OPENING_LISTENER).setImportant(false).notify(project);
-    };
+    final CallbackWithNotification notifyingCallback = new CallbackWithNotification(callback, project);
     AnonymousFeedbackTask task =
-        new AnonymousFeedbackTask(project, ErrorReportBundle.message("progress.dialog.text"), true, reportValues, successCallback, errorCallback);
+        new AnonymousFeedbackTask(project, ErrorReportBundle.message("report.error.progress.dialog.text"), true, reportValues, notifyingCallback);
     if (project == null) {
       task.run(new EmptyProgressIndicator());
     } else {
@@ -135,4 +103,49 @@ public class ErrorReporter extends ErrorReportSubmitter {
     }
     return true;
   }
+
+  @NotNull
+  @Override
+  public String getReportActionText() {
+    return ErrorReportBundle.message("report.error.to.plugin.vendor");
+  }
+
+  @Override
+  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+    GitHubErrorBean errorBean = new GitHubErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
+    return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
+  }
+
+  static class CallbackWithNotification implements Consumer<SubmittedReportInfo> {
+
+    private final Consumer<SubmittedReportInfo> myOriginalConsumer;
+    private final Project myProject;
+
+    CallbackWithNotification(Consumer<SubmittedReportInfo> originalConsumer, Project project) {
+      this.myOriginalConsumer = originalConsumer;
+      this.myProject = project;
+    }
+
+    @Override
+    public void consume(SubmittedReportInfo reportInfo) {
+      myOriginalConsumer.consume(reportInfo);
+
+      if (reportInfo.getStatus().equals(SubmissionStatus.FAILED)) {
+        ReportMessages.GROUP.createNotification(
+            ReportMessages.ERROR_REPORT,
+            reportInfo.getLinkText(),
+            NotificationType.ERROR,
+            null).setImportant(false).notify(myProject);
+      } else {
+        ReportMessages.GROUP.createNotification(
+            ReportMessages.ERROR_REPORT,
+            reportInfo.getLinkText(),
+            NotificationType.INFORMATION,
+            NotificationListener.URL_OPENING_LISTENER).setImportant(false).notify(myProject);
+      }
+
+    }
+  }
+
+
 }
