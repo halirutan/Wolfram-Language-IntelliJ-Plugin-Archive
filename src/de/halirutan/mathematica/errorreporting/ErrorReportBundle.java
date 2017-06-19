@@ -28,9 +28,7 @@ import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
 /**
- * This class allows for i18n of the messages displayed by the error report submitter.
- *
- * @author <a href="mailto:intellij@studer.nu">Etienne Studer</a>, Jun 13, 2006
+ * Messages and strings used by the error reporter
  */
 class ErrorReportBundle {
   private static final String BUNDLE = "de.halirutan.mathematica.errorreporting.ErrorReportBundle";

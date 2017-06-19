@@ -23,7 +23,7 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.2</version>
+  <version>2.3</version>
   <idea-version since-build="163"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
@@ -67,6 +67,7 @@
       <i>New features and bug-fixes:</i>
       <br/>
       <ul>
+      <li>A better error reporter that creates issues on GitHub automatically</li>
       <li>Spell check for symbols, comments and strings</li>
       <li>Code folding based on section comments like (* ::Section:: *)</li>
       <li>SurroundWith (Ctrl+Alt+T) will now do something useful when pressed without an active selection</li>
@@ -196,22 +197,19 @@
   </extensions>
 
   <actions>
-
     <action id="Mathematica.NewMathematicaFile"
             class="de.halirutan.mathematica.actions.CreateMathematicaFile" text="Mathematica File"
             description="Create New Mathematica File">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
 
     </action>
-
-
     <!-- Action to test the resolving of symbol definitions and their usages -->
     <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
     <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
     <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
     <!--</action>-->
 
-    Action for throwing an exception just to test the reporting of errors into the YouTrack database
+    <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
     <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
     class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">
     <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>

@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * Provides functionality to create and send GitHub issues when an exception is thrown by a plugin.
+ */
 class AnonymousFeedback {
 
   private final static String gitAccessToken = "097a2a4e4a94ff65a73508083da690d4565fd038";
@@ -43,8 +46,17 @@ class AnonymousFeedback {
 
   private final static String issueLabel = "auto-generated";
 
-  private AnonymousFeedback() { }
+  private AnonymousFeedback() {
+  }
 
+  /**
+   * Makes a connection to GitHub. Checks if there is an issue that is a duplicate and based on this, creates either a
+   * new issue or comments on the duplicate (if the user provided additional information).
+   *
+   * @param environmentDetails Information collected by {@link IdeaInformationProxy}
+   * @return The report info that is then used in {@link GitHubErrorReporter} to show the user a balloon with the link
+   * of the created issue.
+   */
   static SubmittedReportInfo sendFeedback(LinkedHashMap<String, String> environmentDetails) {
 
     final SubmittedReportInfo result;
@@ -60,9 +72,8 @@ class AnonymousFeedback {
       Issue duplicate = findFirstDuplicate(newGibHubIssue.getTitle(), issueService, repoID);
       boolean isNewIssue = true;
       if (duplicate != null) {
-        if(errorDescription != null) {
-          issueService.createComment(repoID, duplicate.getNumber(), errorDescription);
-        }
+        errorDescription = errorDescription == null ? "Me too!" : errorDescription;
+        issueService.createComment(repoID, duplicate.getNumber(), errorDescription);
         newGibHubIssue = duplicate;
         isNewIssue = false;
       } else {
@@ -79,6 +90,18 @@ class AnonymousFeedback {
     }
   }
 
+  /**
+   * Collects all issues on the repo and finds the first duplicate that has the same title. For this to work, the title
+   * contains the hash of the stack trace.
+   *
+   * @param uniqueTitle Title of the newly created issue. Since for auto-reported issues the title is always the same,
+   *                    it includes the hash of the stack trace. The title is used so that I don't have to match
+   *                    something in the whole body of the issue.
+   * @param service     Issue-service of the GitHub lib that lets you access all issues
+   * @param repo        The repository that should be used
+   * @return The duplicate if one is found or null
+   * @throws IOException Problems when connecting to GitHub
+   */
   @Nullable
   private static Issue findFirstDuplicate(String uniqueTitle, final IssueService service, RepositoryId repo) throws IOException {
     Map<String, String> searchParameters = new HashMap<>(2);
@@ -94,6 +117,13 @@ class AnonymousFeedback {
     return null;
   }
 
+  /**
+   * Turns collected information of an error into a new (offline) GitHub issue
+   *
+   * @param details A map of the information. Note that I remove items from there when they should not go in the issue
+   *                body as well. When creating the body, all remaining items are iterated.
+   * @return The new issue
+   */
   private static Issue createNewGibHubIssue(LinkedHashMap<String, String> details) {
     String errorMessage = details.get("error.message");
     if (errorMessage == null || errorMessage.isEmpty()) {
@@ -117,6 +147,13 @@ class AnonymousFeedback {
     return gitHubIssue;
   }
 
+  /**
+   * Creates the body of the GitHub issue. It will contain information about the system, details provided by the user
+   * and the full stack trace. Everything is formatted using markdown.
+   *
+   * @param details Details provided by {@link IdeaInformationProxy}
+   * @return A markdown string representing the GitHub issue body.
+   */
   private static String generateGitHubIssueBody(LinkedHashMap<String, String> details) {
     String errorDescription = details.get("error.description");
     if (errorDescription == null) {

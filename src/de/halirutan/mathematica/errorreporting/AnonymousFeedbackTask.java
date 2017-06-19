@@ -33,9 +33,7 @@ import java.util.LinkedHashMap;
 
 
 /**
- * Sends crash reports to Github. Extensively inspired by the one used in the Android Studio.
- * https://android.googlesource.com/platform/tools/adt/idea/+/master/android/src/com/android/tools/idea/diagnostics/error/ErrorReporter.java
- * As per answer from here: http://devnet.jetbrains.com/message/5526206;jsessionid=F5422B4AF1AFD05AAF032636E5455E90#5526206
+ * Encapsulates the sending of feedback into a background task that is run by {@link GitHubErrorReporter}
  */
 public class AnonymousFeedbackTask extends Backgroundable {
   private final Consumer<SubmittedReportInfo> myCallback;

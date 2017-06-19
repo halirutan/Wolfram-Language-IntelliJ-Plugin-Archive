@@ -51,11 +51,18 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 
 /**
- * Sends crash reports to Github. Extensively inspired by the one used in the Android Studio.
- * https://android.googlesource.com/platform/tools/adt/idea/+/master/android/src/com/android/tools/idea/diagnostics/error/ErrorReporter.java
- * As per answer from here: http://devnet.jetbrains.com/message/5526206;jsessionid=F5422B4AF1AFD05AAF032636E5455E90#5526206
+ * Provides error reporting functionality for the plugin. When a user experiences an exception thrown by the plugin,
+ * this is used to create an issue on a dedicated GitHub repository. This class takes care of collecting information about
+ * the error and starts the creation of a GitHub issue as background task.
  */
 public class GitHubErrorReporter extends ErrorReportSubmitter {
+
+  @Override
+  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+    GitHubErrorBean errorBean = new GitHubErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
+    return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
+  }
+
   @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
   private static boolean doSubmit(final IdeaLoggingEvent event,
                                   final Component parentComponent,
@@ -85,7 +92,7 @@ public class GitHubErrorReporter extends ErrorReportSubmitter {
       bean.setAttachments(((LogMessageEx) data).getIncludedAttachments());
     }
 
-    LinkedHashMap<String, String> reportValues = IdeaITNProxy
+    LinkedHashMap<String, String> reportValues = IdeaInformationProxy
         .getKeyValuePairs(bean,
             ApplicationManager.getApplication(),
             (ApplicationInfoEx) ApplicationInfo.getInstance(),
@@ -110,12 +117,9 @@ public class GitHubErrorReporter extends ErrorReportSubmitter {
     return ErrorReportBundle.message("report.error.to.plugin.vendor");
   }
 
-  @Override
-  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
-    GitHubErrorBean errorBean = new GitHubErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
-    return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
-  }
-
+  /**
+   * Provides functionality to show a error report message to the user that gives a click-able link to the created issue.
+   */
   static class CallbackWithNotification implements Consumer<SubmittedReportInfo> {
 
     private final Consumer<SubmittedReportInfo> myOriginalConsumer;
