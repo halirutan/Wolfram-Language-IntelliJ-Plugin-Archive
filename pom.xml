@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jetbrains.plugins</groupId>
     <artifactId>Mathematica-IntelliJ-Plugin</artifactId>
-  <version>2.3.2</version>
+  <version>2.3.3</version>
     <name>Mathematica Support for IntelliJ IDEA</name>
     <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting,
         etc.
