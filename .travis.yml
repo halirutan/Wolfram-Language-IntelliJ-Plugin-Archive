@@ -5,7 +5,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: hTdCeGKOWi/Frbo3v9mUBvu+9NMIcD9rQrpQHQVC6WfRFGk329XDwnbQ6tscaY8qS9Mw+CQuxF/M0kgjNT4Ib0pVYee8+pCcDCnqOZBEOiADSo+kSERKKCxMII/9u4o+w7mtuEADBo6u6SlxBTHM6+mpv+MTCX4lEhvuWAcVXlI=
+    secure: SjGoIaqVMKnq9PXjpH18piLUtC8s2jFMwsqc61RDJYgQQiqgZdxV0VhTb5TdSsT7o1F+dcBLK7AxV0H/usScUJkK8ShlwsF961sKZaxmPuIqQlvdQzbfYAUVul2LJhJpihHotMeS9MjlSrxbk3L/keNjE4roFv6DHK/K9qCXi24=
   file: $CI_HOME/target/Mathematica-IntelliJ-Plugin-bin.zip
   on:
     repo: halirutan/Mathematica-IntelliJ-Plugin
