@@ -32,6 +32,7 @@ import org.eclipse.egit.github.core.service.IssueService;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -40,7 +41,7 @@ import java.util.Map.Entry;
  */
 class AnonymousFeedback {
 
-  private final static String gitAccessToken = "097a2a4e4a94ff65a73508083da690d4565fd038";
+  private final static String tokenFile = "de/halirutan/mathematica/errorreporting/ScrambledToken.bin";
   private final static String gitRepoUser = "Mathematica-IntelliJ-Plugin";
   private final static String gitRepo = "Auto-generated-issues-for-the-Mathematica-Plugin";
 
@@ -61,6 +62,11 @@ class AnonymousFeedback {
 
     final SubmittedReportInfo result;
     try {
+      final URL resource = AnonymousFeedback.class.getClassLoader().getResource(tokenFile);
+      if (resource == null) {
+        throw new IOException("Could not decrypt access token");
+      }
+      final String gitAccessToken = GitHubAccessTokenScrambler.decrypt(resource.getFile());
       GitHubClient client = new GitHubClient();
       client.setOAuth2Token(gitAccessToken);
       RepositoryId repoID = new RepositoryId(gitRepoUser, gitRepo);
@@ -85,7 +91,7 @@ class AnonymousFeedback {
       final String message = ErrorReportBundle.message(isNewIssue ? "git.issue.text" : "git.issue.duplicate.text", htmlUrl, id);
       result = new SubmittedReportInfo(htmlUrl, message, isNewIssue ? SubmissionStatus.NEW_ISSUE : SubmissionStatus.DUPLICATE);
       return result;
-    } catch (IOException e) {
+    } catch (Exception e) {
       return new SubmittedReportInfo(null, ErrorReportBundle.message("report.error.connection.failure"), SubmissionStatus.FAILED);
     }
   }

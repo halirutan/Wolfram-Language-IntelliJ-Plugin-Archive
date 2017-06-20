@@ -27,7 +27,7 @@
  * </p>
  * <ul>
  *   <li>@see <a href="https://android.googlesource.com/platform/tools/adt/idea/+/master/android/src/com/android/tools/idea/diagnostics/error/ErrorReporter.java">the android implementation</a></li>
- *   <li>@see <a href="http://devnet.jetbrains.com/message/5526206>a post on jetbrains</a></li>
+ *   <li>@see <a href="http://devnet.jetbrains.com/message/5526206">a post on jetbrains</a></li>
  * </ul>
  * <p>
  * Furthermore, an earlier implementation of Jon Akhtar (https://github.com/sylvanaar) gave me the idea of finding duplicates,
@@ -49,6 +49,15 @@
  *   Creating a valid GitHub issue and the communication with GitHub is done in {@link de.halirutan.mathematica.errorreporting.AnonymousFeedback}
  *   which is run as background task {@link de.halirutan.mathematica.errorreporting.AnonymousFeedbackTask}.
  *   The main class that is also registered in the plugin.xml and starts the whole procedure is {@link de.halirutan.mathematica.errorreporting.GitHubErrorReporter}.
+ * </p>
+ * <p>
+ *   You might consider using a subset of this functionality by not using the duplicate finding and commenting feature.
+ *   The advantage of this is, that you should be able to implement this without having a real fake user in the background
+ *   that reports for you. Creating issues can be done by anyone, commenting and labeling not. For commenting on an existing issue,
+ *   you need a higher level of access to GitHub and your requests need to be backed by a user/password or token. The problem
+ *   here is clearly that you need to give the plugin access to this token. No matter how you secure it, if the code is
+ *   open access it is not hard to decipher your token. Therefore, always use tokens with the lowest possible access level
+ *   (in this case, access to public repositories only) if you need to.
  * </p>
  */
 package de.halirutan.mathematica.errorreporting;
