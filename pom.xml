@@ -26,8 +26,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jetbrains.plugins</groupId>
-    <artifactId>mathematica-intellij-plugin</artifactId>
-  <version>2.1.1</version>
+    <artifactId>Mathematica-IntelliJ-Plugin</artifactId>
+  <version>2.3.1</version>
     <name>Mathematica Support for IntelliJ IDEA</name>
     <description>Includes syntax highlighting, function completion, documentation lookup, refactoring, code formatting,
         etc.
@@ -207,4 +207,16 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.mylyn.github</groupId>
+            <artifactId>org.eclipse.egit.github.core</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>
+    </dependencies>
 </project>

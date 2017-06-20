@@ -46,7 +46,10 @@
       <directory>${project.basedir}/lib</directory>
       <outputDirectory>/lib</outputDirectory>
       <includes>
-        <include>*.jar</include>
+        <include>gson-2.2.2.jar</include>
+        <include>guava-22.0.jar</include>
+        <include>org.eclipse.egit.github.core-2.1.5.jar</include>
+        <include>usages.jar</include>
       </includes>
     </fileSet>
 
