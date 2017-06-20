@@ -5,7 +5,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: SjGoIaqVMKnq9PXjpH18piLUtC8s2jFMwsqc61RDJYgQQiqgZdxV0VhTb5TdSsT7o1F+dcBLK7AxV0H/usScUJkK8ShlwsF961sKZaxmPuIqQlvdQzbfYAUVul2LJhJpihHotMeS9MjlSrxbk3L/keNjE4roFv6DHK/K9qCXi24=
+    secure: "iZeanQFM0pWDY8CYbInB3sbzd3HRKQndgQTz06EkwqVroIqIzwqRBGOIE6ME94KDJKuR20ga2c0FieUW+oKy/SS0hE9lIaHJNVHDNAkyKsURhdmbrdnt0sy2/8bNNudmMq34ZyqLQ0+oxYSVqJLQ6+nCm0Suog+C468J8vZbW2I="
   file: $CI_HOME/target/Mathematica-IntelliJ-Plugin-bin.zip
   on:
     repo: halirutan/Mathematica-IntelliJ-Plugin
@@ -17,5 +17,4 @@ env:
   - GIT_AUTHOR_NAME: TravisCI
   - GIT_AUTHOR_EMAIL: noreply@travis-ci.org
   - CI_HOME=`pwd`
-  - secure: EtVpVE54lkCGHxShrBXspb1dNZ0kgBgaiziWNLUlgt1dZx9yVrj4/dcc+OxHpjIoI/lxR/tNwZ5byPJCgYUdS8skjdPuqgf13dTh0Mi72M3xSF6q1D/K12YT5KT8qgJNqKxjm4fsIPcktFWPJAcZFRvKcEeeiSBdrnDgdrLIhSs=
 
