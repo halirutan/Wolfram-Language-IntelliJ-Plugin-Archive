@@ -1,6 +1,6 @@
-# Mathematica (Wolfram Language) support for IntelliJ IDEA
-
 [![Join the chat at https://gitter.im/Mathematica-IntelliJ/Lobby](https://badges.gitter.im/Mathematica-IntelliJ/Lobby.svg)](https://gitter.im/Mathematica-IntelliJ/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+# Mathematica (Wolfram Language) support for IntelliJ IDEA
 
 ![teaser](http://i.stack.imgur.com/N5KVt.gif)
 
