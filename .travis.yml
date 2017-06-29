@@ -1,6 +1,6 @@
 language: java
 jdk: oraclejdk8
-script: ./gradlew assemble
+script: ./gradlew assemble test
 sudo: required
 
 before_script:

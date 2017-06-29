@@ -22,10 +22,21 @@ repositories {
 
 sourceSets {
     main {
-        java.srcDir 'src'
-        resources.srcDir 'resources'
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+    test {
+        java.srcDirs = ['tests']
+        resources.srcDirs = ['testData']
     }
 }
+
+task copyResourcesToClasses(type: Copy) {
+    from "${projectDir}/testData"
+    into "${buildDir}/classes/test"
+}
+
+instrumentTestCode.dependsOn copyResourcesToClasses
 
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
