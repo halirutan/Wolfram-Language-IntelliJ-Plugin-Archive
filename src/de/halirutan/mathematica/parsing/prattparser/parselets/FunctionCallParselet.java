@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,12 +21,13 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Parses functions calls like f[x] or slot expressions like #["name"] or #[name] (used often with Associations)
@@ -43,13 +44,13 @@ public class FunctionCallParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
     // should never happen
     if ((!parser.getTokenType().equals(MathematicaElementTypes.LEFT_BRACKET)) && !left.isValid()) {
       return MathematicaParser.notParsed();
     }
 
-    PsiBuilder.Marker mainMark = left.getMark().precede();
+    Marker mainMark = left.getMark().precede();
 
     // parse the start. Could be one of the following:
     //   1. a Part expression like list[[
@@ -68,7 +69,7 @@ public class FunctionCallParselet implements InfixParselet {
       parser.advanceLexer();
     }
 
-    MathematicaParser.Result exprSeq = MathematicaParser.notParsed();
+    Result exprSeq = MathematicaParser.notParsed();
     boolean hasArgs = false;
     if (!parser.matchesToken(MathematicaElementTypes.RIGHT_BRACKET)) {
       exprSeq = ParserUtil.parseSequence(parser, MathematicaElementTypes.RIGHT_BRACKET);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -25,6 +25,7 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.module.MathematicaModuleBuilder.Empty;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ import javax.swing.*;
  */
 
 public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> {
-  public static final String MATHEMATICA_TYPE_ID = "MATHEMATICA_MODULE";
+  private static final String MATHEMATICA_TYPE_ID = "MATHEMATICA_MODULE";
 
   public MathematicaModuleType() {
     super(MATHEMATICA_TYPE_ID);
@@ -64,7 +65,7 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
   @NotNull
   @Override
   public MathematicaModuleBuilder createModuleBuilder() {
-    return new MathematicaModuleBuilder.Empty();
+    return new Empty();
   }
 
   @Override

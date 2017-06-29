@@ -1,0 +1,49 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.2.13"
+}
+
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+// On travis, we don't want to deploy to Jetbrains that requires credentials
+if (project.file('gradle.properties').exists()) {
+    apply from: "gradle.properties"
+}
+
+intellij {
+    version = '2017.1.4'
+    updateSinceUntilBuild = false
+    pluginName = 'Mathematica-IntelliJ-Plugin'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+    test {
+        java.srcDirs = ['tests']
+        resources.srcDirs = ['testData']
+    }
+}
+
+task copyResourcesToClasses(type: Copy) {
+    from "${projectDir}/testData"
+    into "${buildDir}/classes/test"
+}
+
+instrumentTestCode.dependsOn copyResourcesToClasses
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
+
+version '2.3.3'

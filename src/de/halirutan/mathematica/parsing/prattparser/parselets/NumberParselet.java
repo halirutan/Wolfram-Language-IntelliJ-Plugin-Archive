@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,10 +21,11 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 import de.halirutan.mathematica.parsing.prattparser.ParseletProvider;
 
 /**
@@ -42,9 +43,9 @@ public class NumberParselet implements PrefixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError {
+  public Result parse(MathematicaParser parser) throws CriticalParserError {
     IElementType token = parser.getTokenType();
-    PsiBuilder.Marker symbolMark = parser.mark();
+    Marker symbolMark = parser.mark();
     parser.advanceLexer();
     symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
     return MathematicaParser.result(symbolMark, token, true);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -60,7 +60,7 @@ public class MathematicaBlock extends AbstractMathematicaBlock {
 
   @Override
   protected List<Block> buildChildren() {
-    List<Block> blocks = new ArrayList<Block>();
+    List<Block> blocks = new ArrayList<>();
     Alignment baseAlignment = Alignment.createAlignment();
     IElementType parentType = getNode().getElementType();
     PsiElement psi = getNode().getPsi();

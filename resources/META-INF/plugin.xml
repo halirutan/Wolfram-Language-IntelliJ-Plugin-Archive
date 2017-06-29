@@ -19,11 +19,11 @@
   ~ THE SOFTWARE.
   -->
 
-<idea-plugin url="http://mathematicaplugin.halirutan.de" version="2">
+<idea-plugin url="http://mathematicaplugin.halirutan.de">
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.0.20</version>
+  <version>2.3.3</version>
   <idea-version since-build="163"/>
   <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
@@ -32,7 +32,7 @@
     <br/>
     <br/>
     <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub</a> |
-    <a href="http://halirutan.myjetbrains.com/youtrack/issues/MMAP">Bug Tracker</a> |
+    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues">Bug Tracker</a> |
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=876XDFGUQHKH6">Donate</a>
     <br/>
     <br/>
@@ -67,13 +67,14 @@
       <i>New features and bug-fixes:</i>
       <br/>
       <ul>
-        <li>Improvement of syntax highlighting for full names of symbols inside scoping constructs (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/52">GH-52</a>)</li>
-        <li>Recognize function names in usage messages (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/58">GH-58</a>)</li>
-        <li>Improved highlighting settings colors (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/47">GH-47</a>)</li>
-        <li>Fixed smart-completion of Options that stopped working (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/30">GH-30</a>)</li>
-        <li>Fixed some localization constructs and added unicode of the Eth symbol (<a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/26">GH-26</a> and <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/27">GH-27</a>)</li>
-        <li>Made indentation for Association brackets like the indentation for lists <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues/20">(GH-20)</a></li>
-        <li>Fixed the renaming engine so that renamed variables can now have context back-ticks</li>
+      <li>A better error reporter that creates issues on GitHub automatically</li>
+      <li>Spell check for symbols, comments and strings</li>
+      <li>Code folding based on section comments like (* ::Section:: *)</li>
+      <li>SurroundWith (Ctrl+Alt+T) will now do something useful when pressed without an active selection</li>
+      <li>Added Ctrl+Space completion inside comments</li>
+      <li>Reimplemented parsing of comments and comment annotation</li>
+      <li>Fixed null exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-91</a>)</li>
+      <li>Added guard to fix exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-88</a>)</li>
       </ul>
     ]]>
   </change-notes>
@@ -82,7 +83,7 @@
   <extensions defaultExtensionNs="com.intellij">
     <internalFileTemplate name="Package"/>
 
-    <errorHandler implementation="de.halirutan.mathematica.errorreporting.YouTrackBugReporter"/>
+    <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
     <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
@@ -124,7 +125,8 @@
 
     <lang.surroundDescriptor language="Mathematica"
                              implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
-
+    <codeInsight.surroundWithRangeAdjuster
+        implementation="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster"/>
     <liveTemplateContext
         implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
     <defaultLiveTemplatesProvider
@@ -136,8 +138,8 @@
         implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
 
     <!--<basicWordSelectionFilter-->
-        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>-->
-    
+    <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>-->
+
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
     <lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>
@@ -187,21 +189,20 @@
     <gotoRelatedProvider
         implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
 
+    <spellchecker.support language="Mathematica"
+                          implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
     <intentionAction>
       <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
     </intentionAction>
   </extensions>
 
   <actions>
-
     <action id="Mathematica.NewMathematicaFile"
             class="de.halirutan.mathematica.actions.CreateMathematicaFile" text="Mathematica File"
             description="Create New Mathematica File">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
 
     </action>
-
-
     <!-- Action to test the resolving of symbol definitions and their usages -->
     <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
     <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
@@ -209,10 +210,10 @@
     <!--</action>-->
 
     <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
-    <!--<action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"-->
-    <!--class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">-->
-    <!--<keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>-->
-    <!--</action>-->
+    <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
+    class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction" text="FireArtificialException">
+    <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>
+    </action>
     <group id="MathematicaMenu" text="Mathematica" popup="true">
       <action id="Mathematica.ExpandNamedCharacters"
               class="de.halirutan.mathematica.actions.ExpandNamedCharactersAction"
@@ -229,9 +230,9 @@
               <!--text="Rename Reference Resolve"/>-->
       <!--<separator/>-->
 
-      <!--<action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"-->
-      <!--text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">-->
-      <!--</action>-->
+      <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
+              text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
+      </action>
 
 
       <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>

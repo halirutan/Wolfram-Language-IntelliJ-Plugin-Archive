@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -18,26 +18,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.halirutan.mathematica.errorreporting;
 
-import com.intellij.CommonBundle;
-import org.jetbrains.annotations.PropertyKey;
-
-import java.util.ResourceBundle;
 
 /**
- * This class allows for i18n of the messages displayed by the error report submitter.
+ * The engine that drives the SurroundWith feature for Mathematica expressions.
+ * When the user presses Ctrl+Alt+T for SurroundWith, first the
+ * {@link de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster}
+ * is called which removes space on both ends of the selection. Additionally, it checks if the user had a selection in
+ * the first place. If not, it tries to find a good expression to surround with the help of
+ * {@link de.halirutan.mathematica.codeinsight.surround.SurroundExpressionFinder}.
+ * <p>
+ * Each available surrounder is extended from {@link de.halirutan.mathematica.codeinsight.surround.AbstractSurrounder}
+ * which provides the code for changing the text in the file. The surrounders itself only have to provide the pre- and
+ * postfix that will be used and they can adjust the final selection after the replacement is done.
  *
- * @author <a href="mailto:intellij@studer.nu">Etienne Studer</a>, Jun 13, 2006
+ * @author patrick (04.06.17).
  */
-public class PluginErrorReportSubmitterBundle {
-  private static final ResourceBundle OUR_BUNDLE = ResourceBundle.getBundle("com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle");
-
-  private PluginErrorReportSubmitterBundle() {
-  }
-
-  public static String message(@PropertyKey(resourceBundle = "com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle") String key,
-                               Object... params) {
-    return CommonBundle.message(OUR_BUNDLE, key, params);
-  }
-}
+package de.halirutan.mathematica.codeinsight.surround;

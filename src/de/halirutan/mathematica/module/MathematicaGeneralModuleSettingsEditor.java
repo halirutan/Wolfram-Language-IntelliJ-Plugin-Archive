@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -35,7 +35,7 @@ import java.awt.*;
 /**
  * @author patrick (21.11.16).
  */
-public class MathematicaGeneralModuleSettingsEditor extends CommonContentEntriesEditor {
+class MathematicaGeneralModuleSettingsEditor extends CommonContentEntriesEditor {
   public MathematicaGeneralModuleSettingsEditor(String moduleName, ModuleConfigurationState state) {
     super(moduleName, state, JavaSourceRootType.SOURCE,JavaSourceRootType.TEST_SOURCE, JavaResourceRootType.RESOURCE);
   }

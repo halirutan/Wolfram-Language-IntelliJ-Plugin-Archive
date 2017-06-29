@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -32,6 +32,7 @@ import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.parsing.psi.api.pattern.*;
 import de.halirutan.mathematica.parsing.psi.api.rules.Rule;
+import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,7 +87,7 @@ public class MathematicaPsiUtilities {
   }
 
   public static List<Symbol> getSymbolsFromArgumentPattern(@Nullable PsiElement element) {
-    final LinkedList<Symbol> result = new LinkedList<Symbol>();
+    final LinkedList<Symbol> result = new LinkedList<>();
     if (element == null) {
       return result;
     }
@@ -180,7 +181,7 @@ public class MathematicaPsiUtilities {
   public static List<Symbol> getLocalFunctionVariables(@NotNull FunctionCall element) {
     List<Symbol> localVariables = Lists.newArrayList();
 
-    if (element.isScopingConstruct() && element.getScopingConstruct().equals(LocalizationConstruct.ConstructType.FUNCTION)) {
+    if (element.isScopingConstruct() && element.getScopingConstruct().equals(ConstructType.FUNCTION)) {
       final List<PsiElement> arguments = getArguments(element);
       if (arguments.size() < 1) {
         return localVariables;
@@ -420,7 +421,7 @@ public class MathematicaPsiUtilities {
   }
 
   @Nullable
-  public static PsiElement getNextArgument(@Nullable PsiElement arg) {
+  private static PsiElement getNextArgument(@Nullable PsiElement arg) {
     if (arg == null) {
       return null;
     }

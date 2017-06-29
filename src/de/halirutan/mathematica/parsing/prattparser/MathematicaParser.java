@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.WhitespaceSkippedCallback;
 import com.intellij.psi.tree.IElementType;
@@ -71,7 +72,7 @@ public class MathematicaParser implements PsiParser {
    *     Whether the parsing of the expression was successful
    * @return The Result object with the given parsing information.
    */
-  public static Result result(PsiBuilder.Marker mark, IElementType token, boolean parsedQ) {
+  public static Result result(Marker mark, IElementType token, boolean parsedQ) {
     return new Result(mark, token, parsedQ);
   }
 
@@ -100,7 +101,7 @@ public class MathematicaParser implements PsiParser {
   @Override
   public ASTNode parse(IElementType root, PsiBuilder builder) {
     builder.setWhitespaceSkippedCallback(myImportantLinebreakHandler);
-    PsiBuilder.Marker rootMarker = builder.mark();
+    Marker rootMarker = builder.mark();
     this.myBuilder = builder;
     try {
       while (!builder.eof()) {
@@ -113,8 +114,8 @@ public class MathematicaParser implements PsiParser {
       rootMarker.done(root);
     } catch (CriticalParserError criticalParserError) {
       rootMarker.rollbackTo();
-      PsiBuilder.Marker newRoot = builder.mark();
-      final PsiBuilder.Marker errorMark = builder.mark();
+      Marker newRoot = builder.mark();
+      final Marker errorMark = builder.mark();
       while (!builder.eof()) {
         builder.advanceLexer();
       }
@@ -181,15 +182,15 @@ public class MathematicaParser implements PsiParser {
     return IMPLICIT_MULTIPLICATION_PARSELET;
   }
 
-  public int decreaseRecursionDepth() {
+  private int decreaseRecursionDepth() {
     return --myRecursionDepth;
   }
 
-  public int increaseRecursionDepth() {
+  private int increaseRecursionDepth() {
     return ++myRecursionDepth;
   }
 
-  public PsiBuilder.Marker mark() {
+  public Marker mark() {
     return myBuilder.mark();
   }
 
@@ -244,17 +245,17 @@ public class MathematicaParser implements PsiParser {
    */
   public static final class Result {
 
-    private final PsiBuilder.Marker myLeftMark;
+    private final Marker myLeftMark;
     private final IElementType myLeftToken;
     private final boolean myParsed;
 
-    private Result(PsiBuilder.Marker leftMark, IElementType leftToken, boolean parsed) {
+    private Result(Marker leftMark, IElementType leftToken, boolean parsed) {
       this.myLeftMark = leftMark;
       this.myLeftToken = leftToken;
       this.myParsed = parsed;
     }
 
-    public PsiBuilder.Marker getMark() {
+    public Marker getMark() {
       return myLeftMark;
     }
 

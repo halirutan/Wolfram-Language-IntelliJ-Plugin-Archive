@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -71,8 +71,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
     final int offset = caretOffset.get();
     final int lineNumber = document.getLineNumber(offset);
     final int lineStartOffset1 = document.getLineStartOffset(lineNumber);
-    final int lineStartOffset = lineStartOffset1;
-    final int prevLineStartOffset = lineNumber > 0 ? document.getLineStartOffset(lineNumber - 1) : lineStartOffset;
+    final int prevLineStartOffset = lineNumber > 0 ? document.getLineStartOffset(lineNumber - 1) : lineStartOffset1;
 
     if (project == null || offset <= 0) {
       return Result.Continue;
@@ -80,7 +79,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
 
     final EditorHighlighter highlighter = ((EditorEx)editor).getHighlighter();
     final HighlighterIterator iterator = highlighter.createIterator(caretOffset.get() - 1);
-    final IElementType type = getNonWhitespaceElementType(iterator, lineStartOffset, prevLineStartOffset);
+    final IElementType type = getNonWhitespaceElementType(iterator, lineStartOffset1, prevLineStartOffset);
 
     if (MathematicaElementTypes.INDENTABLE_OPERATORS.contains(type)) {
       final CodeStyleSettings currentSettings = CodeStyleSettingsManager.getInstance(project).getCurrentSettings();
@@ -98,7 +97,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
 
 
   @Nullable
-  protected IElementType getNonWhitespaceElementType(final HighlighterIterator iterator, int curLineStart, final int prevLineStartOffset) {
+  private IElementType getNonWhitespaceElementType(final HighlighterIterator iterator, int curLineStart, final int prevLineStartOffset) {
     while (!iterator.atEnd() && iterator.getEnd() >= curLineStart && iterator.getStart() >= prevLineStartOffset) {
       final IElementType tokenType = iterator.getTokenType();
       if (!MathematicaElementTypes.WHITE_SPACE_OR_COMMENTS.contains(tokenType)) {
@@ -109,7 +108,7 @@ public class MathematicaEnterAfterOperatorHandler extends EnterHandlerDelegateAd
     return null;
   }
 
-  protected Result skipWithResultQ(@NotNull final PsiFile file, @NotNull final Editor editor, @NotNull final DataContext dataContext) {
+  private Result skipWithResultQ(@NotNull final PsiFile file, @NotNull final Editor editor, @NotNull final DataContext dataContext) {
     final Project project = CommonDataKeys.PROJECT.getData(dataContext);
     if (project == null) {
       return Result.Continue;

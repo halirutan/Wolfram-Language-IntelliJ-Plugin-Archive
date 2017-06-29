@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -40,10 +40,10 @@ import java.util.Map;
  */
 public class ParseletProvider {
 
-  private static final Map<IElementType, PrefixParselet> IELEMENT_TO_PREFIX = new HashMap<IElementType, PrefixParselet>();
-  private static final Map<IElementType, InfixParselet> IELEMENT_TO_INFIX = new HashMap<IElementType, InfixParselet>();
-  private static final Map<PrefixParselet, IElementType> PREFIX_TO_IELEMENT = new HashMap<PrefixParselet, IElementType>();
-  private static final Map<InfixParselet, IElementType> INFIX_TO_IELEMENT = new HashMap<InfixParselet, IElementType>();
+  private static final Map<IElementType, PrefixParselet> IELEMENT_TO_PREFIX = new HashMap<>();
+  private static final Map<IElementType, InfixParselet> IELEMENT_TO_INFIX = new HashMap<>();
+  private static final Map<PrefixParselet, IElementType> PREFIX_TO_IELEMENT = new HashMap<>();
+  private static final Map<InfixParselet, IElementType> INFIX_TO_IELEMENT = new HashMap<>();
 
   static {
     register(MathematicaElementTypes.LEFT_PAR, MathematicaElementTypes.GROUP_EXPRESSION, new GroupParselet(85)); // Group(()

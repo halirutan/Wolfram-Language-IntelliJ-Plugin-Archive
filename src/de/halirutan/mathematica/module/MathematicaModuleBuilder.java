@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,7 +21,10 @@
 
 package de.halirutan.mathematica.module;
 
-import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.SettingsStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
@@ -40,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * @author patrick (4/8/13)
@@ -64,7 +66,7 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   private MathematicaLanguageLevel myLanguageLevel;
 
-  public MathematicaModuleBuilder(ProjectType type) {
+  MathematicaModuleBuilder(ProjectType type) {
     myProjectType = type;
     myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
   }
@@ -79,19 +81,7 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
       final Project project = rootModel.getProject();
       myProjectName = project.getName();
 
-      StartupManager.getInstance(project).runWhenProjectIsInitialized(new DumbAwareRunnable() {
-        public void run() {
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            public void run() {
-              ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                public void run() {
-                  createProject(project, contentRoot);
-                }
-              });
-            }
-          });
-        }
-      });
+      StartupManager.getInstance(project).runWhenProjectIsInitialized((DumbAwareRunnable) () -> ApplicationManager.getApplication().invokeLater(() -> ApplicationManager.getApplication().runWriteAction(() -> createProject(project, contentRoot))));
     }
   }
 
@@ -121,7 +111,6 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
     try {
       final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
       MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT, "init");
-    } catch (IOException ignored) {
     } catch (Exception ignored) {
     }
   }

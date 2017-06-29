@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -39,7 +39,7 @@ public class LocalizationConstruct {
   private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
   private static final Set<String> myManipulateLike = Sets.newHashSet("Manipulate");
 
-  public static boolean isLocalizationConstruct(String elementName) {
+  private static boolean isLocalizationConstruct(String elementName) {
     return myModuleLike.contains(elementName) ||
         myTableLike.contains(elementName) ||
         myCompileLike.contains(elementName) ||

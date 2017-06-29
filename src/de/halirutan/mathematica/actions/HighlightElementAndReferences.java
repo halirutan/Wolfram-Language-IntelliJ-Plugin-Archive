@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -73,7 +73,7 @@ public class HighlightElementAndReferences extends AnAction {
     //region Interesting part where I track down usages
     PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
     element = (element != null) ? element.getParent() : null;
-    final List<PsiElement> usages = new ArrayList<PsiElement>();
+    final List<PsiElement> usages = new ArrayList<>();
     if (element instanceof Symbol) {
 //      usages.add(element);
 

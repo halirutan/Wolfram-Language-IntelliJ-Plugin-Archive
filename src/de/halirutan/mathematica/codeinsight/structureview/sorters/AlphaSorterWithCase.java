@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,7 +21,7 @@
 
 package de.halirutan.mathematica.codeinsight.structureview.sorters;
 
-import com.intellij.icons.AllIcons;
+import com.intellij.icons.AllIcons.ObjectBrowser;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
@@ -44,13 +44,10 @@ public class AlphaSorterWithCase implements Sorter {
 
   @Override
   public Comparator getComparator() {
-    return new Comparator() {
-      @Override
-      public int compare(Object o1, Object o2) {
-        String s1 = SorterUtil.getStringPresentation(o1);
-        String s2 = SorterUtil.getStringPresentation(o2);
-        return s1.compareTo(s2);
-      }
+    return (o1, o2) -> {
+      String s1 = SorterUtil.getStringPresentation(o1);
+      String s2 = SorterUtil.getStringPresentation(o2);
+      return s1.compareTo(s2);
     };
   }
 
@@ -68,7 +65,7 @@ public class AlphaSorterWithCase implements Sorter {
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.sort.alphabetically"),
         IdeBundle.message("action.sort.alphabetically"),
-        AllIcons.ObjectBrowser.Sorted);
+        ObjectBrowser.Sorted);
   }
 
   @Override

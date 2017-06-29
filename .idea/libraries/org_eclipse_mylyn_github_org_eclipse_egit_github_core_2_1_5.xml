@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org.eclipse.egit.github.core-2.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/gson-2.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/build/share/javadoc/org.eclipse.egit.github.core-2.1.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/build/share/javadoc/org.eclipse.egit.github.core-2.1.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

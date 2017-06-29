@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -37,8 +37,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MathematicaPsiElementFactory {
 
-  public static final String DUMMY_FILE_NAME = "dummy.m";
-  private Project myProject;
+  private static final String DUMMY_FILE_NAME = "dummy.m";
+  private final Project myProject;
 
   public MathematicaPsiElementFactory(final Project project) {
     this.myProject = project;

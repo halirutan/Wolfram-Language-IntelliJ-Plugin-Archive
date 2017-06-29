@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -79,17 +79,18 @@ public interface MathematicaElementTypes {
       WHITE_SPACE, LINE_BREAK
   );
   IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
-  IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
-  IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
-  IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
-  IElementType COMMENT_SECTION = new MathematicaElementType("COMMENT_SECTION");
-  IElementType COMMENT_ANNOTATION = new MathematicaElementType("COMMENT_ANNOTATION");
+  IElementType COMMENT = new MathematicaElementType("COMMENT");
+  //  IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
+//  IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
+//  IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
+//  IElementType COMMENT_SECTION = new MathematicaElementType("COMMENT_SECTION");
+//  IElementType COMMENT_ANNOTATION = new MathematicaElementType("COMMENT_ANNOTATION");
   TokenSet COMMENTS = TokenSet.create(
-      COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
+      COMMENT
   );
   @SuppressWarnings("UnusedDeclaration")
   TokenSet WHITE_SPACE_OR_COMMENTS = TokenSet.create(
-      WHITE_SPACE, LINE_BREAK, COMMENT_CONTENT, COMMENT_END, COMMENT_START, COMMENT_SECTION, COMMENT_ANNOTATION
+      WHITE_SPACE, LINE_BREAK, COMMENT
   );
   IElementType STRING_LITERAL = new MathematicaElementType("STRING_LITERAL");
   IElementType STRING_NAMED_CHARACTER = new MathematicaElementType("STRING_NAMED_CHARACTER");

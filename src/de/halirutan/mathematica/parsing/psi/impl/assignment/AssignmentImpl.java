@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AssignmentImpl extends ExpressionImpl implements OperatorNameProvider {
 
-  public AssignmentImpl(@NotNull final ASTNode node) {
+  AssignmentImpl(@NotNull final ASTNode node) {
     super(node);
   }
 

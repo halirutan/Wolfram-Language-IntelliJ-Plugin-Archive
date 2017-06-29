@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,11 +21,12 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Parselet for MessageName's like symbol::usage or Sin::tag. There are some specialties about this because the left
@@ -42,21 +43,21 @@ public class MessageNameParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
 
-    PsiBuilder.Marker messageNameMarker = left.getMark().precede();
+    Marker messageNameMarker = left.getMark().precede();
     parser.advanceLexer();
-    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    Result result = parser.parseExpression(myPrecedence);
 
     if (result.isParsed()) {
       // Check whether we have a symbol or a string in usage message
       if ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
           (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION))) {
-        PsiBuilder.Marker errorMark = result.getMark().precede();
+        Marker errorMark = result.getMark().precede();
         errorMark.error(ParserBundle.message("MessageName.no.symbol.or.string"));
       } else if (result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) {
-        final PsiBuilder.Marker mark = result.getMark();
-        final PsiBuilder.Marker precede = mark.precede();
+        final Marker mark = result.getMark();
+        final Marker precede = mark.precede();
         precede.done(MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION);
         mark.drop();
       }
@@ -67,11 +68,11 @@ public class MessageNameParselet implements InfixParselet {
         result = parser.parseExpression(myPrecedence);
         if (result.isParsed() && ((!result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) &&
             (!result.getToken().equals(MathematicaElementTypes.STRING_LITERAL_EXPRESSION)))) {
-          PsiBuilder.Marker errMark = result.getMark().precede();
+          Marker errMark = result.getMark().precede();
           errMark.error(ParserBundle.message("MessageName.no.symbol.or.string"));
         } else if (result.isValid() && result.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION)) {
-          final PsiBuilder.Marker mark = result.getMark();
-          final PsiBuilder.Marker precede = mark.precede();
+          final Marker mark = result.getMark();
+          final Marker precede = mark.precede();
           precede.done(MathematicaElementTypes.STRINGIFIED_SYMBOL_EXPRESSION);
           mark.drop();
         }

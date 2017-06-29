@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -29,15 +29,15 @@ import com.intellij.psi.PsiElement;
 /**
  * @author patrick (7/18/13)
  */
-abstract public class MathematicaCompletionProvider extends CompletionProvider<CompletionParameters> {
+abstract class MathematicaCompletionProvider extends CompletionProvider<CompletionParameters> {
 
   abstract void addTo(CompletionContributor contributor);
 
-  protected String findOriginalText(PsiElement element) {
+  private String findOriginalText(PsiElement element) {
     return element.getText();
   }
 
-  protected String findCurrentText(CompletionParameters parameters, PsiElement element) {
+  String findCurrentText(CompletionParameters parameters, PsiElement element) {
     String originalText = findOriginalText(element);
     int elementOffset = parameters.getOffset() - element.getTextOffset();
 
@@ -45,5 +45,6 @@ abstract public class MathematicaCompletionProvider extends CompletionProvider<C
         ? originalText.substring(0, elementOffset)
         : originalText;
   }
+
 
 }

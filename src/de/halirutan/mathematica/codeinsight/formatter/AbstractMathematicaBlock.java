@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -35,27 +35,25 @@ import de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeSt
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.ASSOCIATION_EXPRESSION;
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.FUNCTION_CALL_EXPRESSION;
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.LIST_EXPRESSION;
+import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (10/20/13)
  */
 public abstract class AbstractMathematicaBlock extends AbstractBlock implements BlockEx {
 
-  protected final MathematicaCodeStyleSettings myMathematicaSettings;
+  final MathematicaCodeStyleSettings myMathematicaSettings;
   private final Indent myIndent;
-  protected SpacingBuilder mySpacingBuilder;
-  protected CommonCodeStyleSettings mySettings;
+  final SpacingBuilder mySpacingBuilder;
+  final CommonCodeStyleSettings mySettings;
 
 
-  protected AbstractMathematicaBlock(@NotNull ASTNode node,
-                                     @Nullable Alignment alignment,
-                                     SpacingBuilder spacingBuilder,
-                                     @Nullable Wrap wrap,
-                                     CommonCodeStyleSettings settings,
-                                     MathematicaCodeStyleSettings mmaSettings) {
+  AbstractMathematicaBlock(@NotNull ASTNode node,
+                           @Nullable Alignment alignment,
+                           SpacingBuilder spacingBuilder,
+                           @Nullable Wrap wrap,
+                           CommonCodeStyleSettings settings,
+                           MathematicaCodeStyleSettings mmaSettings) {
     super(node, wrap, alignment);
     mySpacingBuilder = spacingBuilder;
     mySettings = settings;
@@ -76,12 +74,12 @@ public abstract class AbstractMathematicaBlock extends AbstractBlock implements 
     );
   }
 
-  public static Block createMathematicaBlock(@NotNull ASTNode node,
-                                             @Nullable Alignment alignment,
-                                             SpacingBuilder spacingBuilder,
-                                             @Nullable Wrap wrap,
-                                             CommonCodeStyleSettings codeStyleSettings,
-                                             MathematicaCodeStyleSettings mathematicaSettings) {
+  static Block createMathematicaBlock(@NotNull ASTNode node,
+                                      @Nullable Alignment alignment,
+                                      SpacingBuilder spacingBuilder,
+                                      @Nullable Wrap wrap,
+                                      CommonCodeStyleSettings codeStyleSettings,
+                                      MathematicaCodeStyleSettings mathematicaSettings) {
     final IElementType elementType = node.getElementType();
     if (elementType == FUNCTION_CALL_EXPRESSION) {
       return new MathematicaFunctionBlock(node, alignment, spacingBuilder, wrap, codeStyleSettings, mathematicaSettings);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (16.08.15)
  */
-public class MathematicaNamedFoldingDescriptor extends FoldingDescriptor {
+class MathematicaNamedFoldingDescriptor extends FoldingDescriptor {
 
   private final String myFoldedText;
   private final boolean myIsNonExpandable;

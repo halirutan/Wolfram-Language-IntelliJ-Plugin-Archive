@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author patrick (6/12/14)
  */
-public abstract class AbstractSurrounder implements Surrounder {
+abstract class AbstractSurrounder implements Surrounder {
 
   @Override
   abstract public String getTemplateDescription();
@@ -45,27 +45,34 @@ public abstract class AbstractSurrounder implements Surrounder {
     return true;
   }
 
-  abstract public String getOpening();
-  abstract public String getClosing();
+  protected abstract String getOpening();
+
+  protected abstract String getClosing();
 
   @Nullable
   @Override
   public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements) throws IncorrectOperationException {
+    int selectionStart;
+    int selectionEnd;
     final SelectionModel selectionModel = editor.getSelectionModel();
-    if (selectionModel.hasSelection()) {
-      final Document document = editor.getDocument();
-      if (document.isWritable()) {
-        final int selectionStart = selectionModel.getSelectionStart();
-        final int selectionEnd = selectionModel.getSelectionEnd();
-        final String expr = document.getText(TextRange.create(selectionStart, selectionEnd));
-        document.replaceString(selectionStart, selectionEnd, getOpening() + expr + getClosing());
-        modifySelection(TextRange.create(selectionStart,selectionEnd), selectionModel);
-      }
+
+    if (elements.length > 0) {
+      selectionStart = elements[0].getTextOffset();
+      selectionEnd = elements[elements.length - 1].getTextRange().getEndOffset();
+    } else {
+      return null;
+    }
+
+    final Document document = editor.getDocument();
+    if (document.isWritable()) {
+      final String expr = document.getText(TextRange.create(selectionStart, selectionEnd));
+      document.replaceString(selectionStart, selectionEnd, getOpening() + expr + getClosing());
+      modifySelection(TextRange.create(selectionStart, selectionEnd), selectionModel);
     }
     return null;
   }
 
-  public void modifySelection(TextRange textRange, SelectionModel model) {
+  void modifySelection(TextRange textRange, SelectionModel model) {
     model.removeSelection();
   }
 

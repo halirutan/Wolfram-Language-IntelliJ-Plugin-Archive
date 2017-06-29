@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -31,6 +31,7 @@ import com.intellij.psi.util.PsiUtilBase;
 import de.halirutan.mathematica.Mathematica;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighter;
 import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import de.halirutan.mathematica.parsing.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -48,7 +49,7 @@ public class MathematicaTemplateContextType extends TemplateContextType {
   public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(MathematicaFileType.INSTANCE.getLanguage())) {
       PsiElement element = PsiUtilBase.getElementAtOffset(file, offset);
-      return PsiTreeUtil.getParentOfType(element, PsiComment.class, false) == null;
+      return PsiTreeUtil.getParentOfType(element, PsiComment.class, MString.class) == null;
     }
     return false;
   }
@@ -57,6 +58,5 @@ public class MathematicaTemplateContextType extends TemplateContextType {
   public SyntaxHighlighter createHighlighter() {
     return new MathematicaSyntaxHighlighter();
   }
-
 
 }

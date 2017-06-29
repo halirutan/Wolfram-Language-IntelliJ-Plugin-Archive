@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -33,6 +33,7 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import de.halirutan.mathematica.lexer.MathematicaLexer;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.parsing.MathematicaElementTypes.Factory;
 import de.halirutan.mathematica.parsing.psi.impl.MathematicaPsiFileImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +78,7 @@ public class MathematicaParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public PsiElement createElement(ASTNode node) {
-    return MathematicaElementTypes.Factory.create(node);
+    return Factory.create(node);
   }
 
   @Override

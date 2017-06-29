@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,12 +21,12 @@
 
 package de.halirutan.mathematica.parsing.psi;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.string.MString;
 import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,15 +35,17 @@ import java.util.ArrayList;
 /**
  * @author patrick (21.12.16).
  */
-public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
+class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
+
+  private static final Logger log = Logger.getInstance(MathematicaSymbolReferenceProvider.class);
+
   @NotNull
   @Override
   public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
     if (!(element instanceof Symbol)) {
       return new PsiReference[0];
     }
-    ArrayList<PsiReference> result = new ArrayList<PsiReference>();
-
+    ArrayList<PsiReference> result = new ArrayList<>();
     Symbol symbol = (Symbol) element;
     final SymbolPsiReference reference = (SymbolPsiReference) symbol.getReference();
     final PsiElement resolve;
@@ -52,8 +54,15 @@ public class MathematicaSymbolReferenceProvider extends PsiReferenceProvider {
       resolve = reference.resolve();
       if (resolve instanceof Symbol) {
         final PsiElement[] elemsReferencingToMe = ((Symbol) resolve).getElementsReferencingToMe();
-        for (PsiElement psiElement : elemsReferencingToMe) {
-          result.add(psiElement.getReference());
+        if (elemsReferencingToMe != null) {
+          for (PsiElement psiElement : elemsReferencingToMe) {
+            final PsiReference ref = psiElement.getReference();
+            if (ref == null) {
+              log.error("Reference should not be null: " + psiElement.getText());
+            } else {
+              result.add(ref);
+            }
+          }
         }
       }
     }

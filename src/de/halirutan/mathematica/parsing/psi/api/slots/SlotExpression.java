@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,6 +24,7 @@ package de.halirutan.mathematica.parsing.psi.api.slots;
 import de.halirutan.mathematica.parsing.psi.api.Expression;
 
 /**
+ * Implementation for SlotExpression
  * Created by rsmenon on 11/8/15.
  */
 public interface SlotExpression extends Expression {

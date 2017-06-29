@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -28,8 +28,8 @@ import de.halirutan.mathematica.MathematicaLanguage;
 /**
  * @author patrick (11/2/13)
  */
-public class MathematicaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
-  protected MathematicaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
+class MathematicaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
+  MathematicaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
     super(MathematicaLanguage.INSTANCE, currentSettings, settings);
   }
 }

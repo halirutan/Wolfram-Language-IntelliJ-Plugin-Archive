@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -46,14 +46,11 @@ public class CodePlaceSorter implements Sorter {
 
   @Override
   public Comparator getComparator() {
-    return new Comparator() {
-      @Override
-      public int compare(final Object o1, final Object o2) {
-        if (o1 instanceof CodePlaceProvider && o2 instanceof CodePlaceProvider) {
-          return ((CodePlaceProvider) o1).getPosition() - ((CodePlaceProvider) o2).getPosition();
-        }
-        return 0;
+    return (o1, o2) -> {
+      if (o1 instanceof CodePlaceProvider && o2 instanceof CodePlaceProvider) {
+        return ((CodePlaceProvider) o1).getPosition() - ((CodePlaceProvider) o2).getPosition();
       }
+      return 0;
     };
   }
 

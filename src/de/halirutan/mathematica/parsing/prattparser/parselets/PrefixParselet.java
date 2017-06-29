@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.prattparser.parselets;
 
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Interface for all prefix operator parselets. Prefix operators are not only the usual ++x or -3. In a+b a and b are
@@ -31,7 +32,7 @@ import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
  * @author patrick (3/27/13)
  */
 public interface PrefixParselet {
-  MathematicaParser.Result parse(MathematicaParser parser) throws CriticalParserError;
+  Result parse(MathematicaParser parser) throws CriticalParserError;
 
   int getPrecedence();
 

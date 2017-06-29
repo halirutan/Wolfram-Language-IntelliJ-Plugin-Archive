@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -28,6 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import de.halirutan.mathematica.MathematicaLanguage;
 import org.jetbrains.annotations.NonNls;
@@ -43,25 +44,22 @@ import java.io.LineNumberReader;
  * @author patrick (11/2/13)
  */
 public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
-  public static final String AROUND_OPERATORS = "Around Operators";
+  private static final String AROUND_OPERATORS = "Around Operators";
 
   private static final String GENERAL_EXAMPLE = readFromFile("spacingExample.m");
 
-  public static String readFromFile(@NonNls final String fileName) {
+  private static String readFromFile(@NonNls final String fileName) {
     try {
       final InputStream stream = MathematicaLanguageCodeStyleSettingsProvider.class.getResourceAsStream(fileName);
       final InputStreamReader reader = new InputStreamReader(stream);
       final StringBuffer result;
-      final LineNumberReader lineNumberReader = new LineNumberReader(reader);
-      try {
+      try (LineNumberReader lineNumberReader = new LineNumberReader(reader)) {
         result = new StringBuffer();
         String line;
         while ((line = lineNumberReader.readLine()) != null) {
           result.append(line);
           result.append("\n");
         }
-      } finally {
-        lineNumberReader.close();
       }
 
       return result.toString();
@@ -93,7 +91,7 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
   @Override
   public CommonCodeStyleSettings getDefaultCommonSettings() {
     CommonCodeStyleSettings defaultSettings = new CommonCodeStyleSettings(getLanguage());
-    CommonCodeStyleSettings.IndentOptions indentOptions = defaultSettings.initIndentOptions();
+    IndentOptions indentOptions = defaultSettings.initIndentOptions();
     indentOptions.INDENT_SIZE = 2;
     indentOptions.CONTINUATION_INDENT_SIZE = 4;
     indentOptions.TAB_SIZE = 2;

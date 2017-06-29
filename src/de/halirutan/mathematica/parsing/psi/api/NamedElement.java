@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -26,5 +26,5 @@ import com.intellij.psi.PsiNamedElement;
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:31 AM Purpose:
  */
-public interface NamedElement extends Expression, PsiNamedElement {
+interface NamedElement extends Expression, PsiNamedElement {
 }

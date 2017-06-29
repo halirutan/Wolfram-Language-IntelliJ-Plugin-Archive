@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,12 +21,13 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * Parselet for Pattern.
@@ -41,14 +42,14 @@ public class PatternParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
     if (!left.isValid()) {
       return MathematicaParser.notParsed();
     }
 
-    PsiBuilder.Marker patternOptional = left.getMark().precede();
+    Marker patternOptional = left.getMark().precede();
     parser.advanceLexer();
-    MathematicaParser.Result result = parser.parseExpression(myPrecedence);
+    Result result = parser.parseExpression(myPrecedence);
 
     IElementType expressionType = left.getToken().equals(MathematicaElementTypes.SYMBOL_EXPRESSION) ?
         MathematicaElementTypes.PATTERN_EXPRESSION : MathematicaElementTypes.OPTIONAL_EXPRESSION;

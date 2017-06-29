@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -29,7 +29,6 @@ import com.intellij.openapi.util.io.StreamUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -83,10 +82,7 @@ class Util {
             final Dict dict = PListParser.load(pkinfo);
             final String versionString = (String) dict.get("CFBundleShortVersionString");
             return versionString.trim();
-          } catch (XmlParseException e) {
-            e.printStackTrace();
-            return null;
-          } catch (IOException e) {
+          } catch (XmlParseException | IOException e) {
             e.printStackTrace();
             return null;
           }
@@ -97,12 +93,7 @@ class Util {
   }
 
   private static File findFileInDir(File rootDir, final String fileName) {
-    final File[] matchedFiles = rootDir.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return fileName.matches(name);
-      }
-    });
+    final File[] matchedFiles = rootDir.listFiles((dir, name) -> fileName.matches(name));
     if (matchedFiles != null && matchedFiles.length > 0) {
       return matchedFiles[0];
     }
@@ -110,7 +101,7 @@ class Util {
   }
 
   static List<File> findMathematicaKernels(String homePath) {
-    List<File> kernels = new ArrayList<File>();
+    List<File> kernels = new ArrayList<>();
     File rootDir = new File(homePath);
     Pattern kernelPattern;
     if (OS.contains("win")) {

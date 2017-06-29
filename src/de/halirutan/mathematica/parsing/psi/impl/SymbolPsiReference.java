@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -57,7 +57,15 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
     myVariable = element;
   }
 
-
+  public static boolean isBuiltInSymbol(PsiElement element) {
+    if (element instanceof Symbol) {
+      Symbol symbol = (Symbol) element;
+      final String name = symbol.getMathematicaContext().equals("") ?
+          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+      return NAMES.contains(name);
+    }
+    return false;
+  }
 
   @Nullable
   @Override
@@ -92,6 +100,7 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
       myVariable.setReferringElement((Symbol) globalDefinition, ConstructType.NULL, null);
       return globalDefinition;
     }
+
     return null;
   }
 
@@ -104,7 +113,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   public TextRange getRangeInElement() {
     return TextRange.from(0, myVariable.getFirstChild().getNode().getTextLength());
   }
-
 
   @NotNull
   @Override
@@ -134,16 +142,6 @@ public class SymbolPsiReference extends CachingReference implements PsiReference
   @Override
   public Object[] getVariants() {
     return new Object[0];
-  }
-
-  public static boolean isBuiltInSymbol(PsiElement element) {
-    if(element instanceof Symbol) {
-      Symbol symbol = (Symbol) element;
-      final String name = symbol.getMathematicaContext().equals("") ?
-          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
-      return NAMES.contains(name);
-    }
-    return false;
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 12/27/12 Time: 2:35 AM Purpose:
  */
-public class MathematicaElementType extends IElementType {
+class MathematicaElementType extends IElementType {
 
   public MathematicaElementType(@NotNull @NonNls String debugName) {
     super(debugName, MathematicaLanguage.INSTANCE);

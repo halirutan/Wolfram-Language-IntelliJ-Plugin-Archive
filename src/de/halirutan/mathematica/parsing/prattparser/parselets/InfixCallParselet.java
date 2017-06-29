@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,11 +21,12 @@
 
 package de.halirutan.mathematica.parsing.prattparser.parselets;
 
-import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilder.Marker;
 import de.halirutan.mathematica.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.parsing.ParserBundle;
 import de.halirutan.mathematica.parsing.prattparser.CriticalParserError;
 import de.halirutan.mathematica.parsing.prattparser.MathematicaParser;
+import de.halirutan.mathematica.parsing.prattparser.MathematicaParser.Result;
 
 /**
  * This parses infix calls of functions. Usually, functions are called like this f[a,b]. In Mathematica you can write
@@ -44,14 +45,14 @@ public class InfixCallParselet implements InfixParselet {
   }
 
   @Override
-  public MathematicaParser.Result parse(MathematicaParser parser, MathematicaParser.Result left) throws CriticalParserError {
-    PsiBuilder.Marker infixCall = left.getMark().precede();
+  public Result parse(MathematicaParser parser, Result left) throws CriticalParserError {
+    Marker infixCall = left.getMark().precede();
     parser.advanceLexer();
-    MathematicaParser.Result operator = parser.parseExpression(myPrecedence);
+    Result operator = parser.parseExpression(myPrecedence);
 
     if (parser.matchesToken(MathematicaElementTypes.INFIX_CALL)) {
       parser.advanceLexer();
-      MathematicaParser.Result operand2 = parser.parseExpression(myPrecedence);
+      Result operand2 = parser.parseExpression(myPrecedence);
       if (!operand2.isParsed()) {
         parser.error(ParserBundle.message("Infix.missing.arg2"));
       }

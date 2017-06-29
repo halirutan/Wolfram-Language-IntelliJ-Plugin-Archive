@@ -27,6 +27,15 @@ import de.halirutan.mathematica.parsing.MathematicaElementTypes;
         yybegin(state);
     }
 
+    private void yyclearstack() {
+      states.clear();
+    }
+
+    private Integer yypeakstate() {
+        if(states.size() > 0) return states.getFirst();
+        return -1;
+    }
+
 %}
 
 LineTerminator = \n | \r | \r\n
@@ -65,7 +74,7 @@ Out = "%"+
 %%
 
 <YYINITIAL> {
-	{CommentStart}		{ yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START; }
+	{CommentStart}		{ yypushstate(IN_COMMENT);}
 	{WhiteSpace}+ 	    { return MathematicaElementTypes.WHITE_SPACE; }
   "\\"{LineTerminator}  { return MathematicaElementTypes.WHITE_SPACE; }
 
@@ -224,13 +233,14 @@ Out = "%"+
 }
 
 <IN_COMMENT> {
-	{CommentStart}               { yypushstate(IN_COMMENT); return MathematicaElementTypes.COMMENT_START;}
-	[^\(\*\):]+                  { return MathematicaElementTypes.COMMENT_CONTENT; }
-	"::"[A-Z][A-Za-z]*"::"       {return MathematicaElementTypes.COMMENT_SECTION; }
-	":"[A-Z][A-Za-z ]*":"        {return MathematicaElementTypes.COMMENT_ANNOTATION; }
-	{CommentEnd}                 { yypopstate(); return MathematicaElementTypes.COMMENT_END; }
-	[\*\)\(:]			               { return MathematicaElementTypes.COMMENT_CONTENT; }
-	.					                   { return MathematicaElementTypes.BAD_CHARACTER; }
+	{CommentStart}               { yypushstate(IN_COMMENT);}
+	[^\(\*\)]+                   { }
+	{CommentEnd}                 {  yypopstate();
+	                                if(yystate() != IN_COMMENT) return MathematicaElementTypes.COMMENT;
+	                             }
+	[\*\)\(]			         { }
+	<<EOF>>                      { yyclearstack(); yybegin(YYINITIAL); return MathematicaElementTypes.COMMENT;}
+	.                            { return MathematicaElementTypes.BAD_CHARACTER;}
 }
 
 .|{LineTerminator}+ 	         { return MathematicaElementTypes.BAD_CHARACTER; }

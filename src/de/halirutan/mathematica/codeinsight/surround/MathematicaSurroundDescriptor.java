@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -25,12 +25,11 @@ import com.intellij.lang.surroundWith.SurroundDescriptor;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * Extension point that defines available surrounders.
  * @author patrick (6/11/14)
  */
 public class MathematicaSurroundDescriptor implements SurroundDescriptor {
@@ -43,11 +42,6 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   };
 
   @NotNull
-  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    return findElementsInRange(file, startOffset, endOffset);
-  }
-
-  @NotNull
   public Surrounder[] getSurrounders() {
     return SURROUNDERS;
   }
@@ -55,6 +49,12 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   @Override
   public boolean isExclusive() {
     return false;
+  }
+
+  @NotNull
+  @Override
+  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
+    return findElementsInRange(file, startOffset, endOffset);
   }
 
   private PsiElement[] findElementsInRange(PsiFile file, int startOffset, int endOffset) {
@@ -65,30 +65,17 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
       startOffset = tmp;
     }
 
-    // adjust start/end
-    PsiElement element1 = file.findElementAt(startOffset);
-    PsiElement element2 = file.findElementAt(endOffset - 1);
-    if (element1 instanceof PsiWhiteSpace) {
-      startOffset = element1.getTextRange().getEndOffset();
-    }
-    if (element2 instanceof PsiWhiteSpace) {
-      endOffset = element2.getTextRange().getStartOffset();
-    }
     final PsiElement elementAtStart = file.findElementAt(startOffset);
     final PsiElement elementAtEnd = file.findElementAt(endOffset - 1);
     if (elementAtStart != null && elementAtEnd != null) {
 
-      if (elementAtStart == elementAtEnd && !(elementAtStart instanceof Expression)) {
-        final PsiElement elementToSurround = elementAtStart.getParent();
-        if (elementToSurround instanceof Expression) {
-          return new PsiElement[]{elementToSurround};
-        }
-      } else {
-
-        final PsiElement commonContext = PsiTreeUtil.findCommonParent(elementAtStart, elementAtEnd);
-        if (commonContext != null)
-          return new PsiElement[]{commonContext};
+      final PsiElement parent = PsiTreeUtil.findCommonContext(elementAtStart, elementAtEnd);
+      if (parent != null && parent.getTextRange().equalsToRange(startOffset, endOffset)) {
+        return new PsiElement[]{parent};
       }
+
+      return new PsiElement[]{elementAtStart, elementAtEnd};
+
     }
     return PsiElement.EMPTY_ARRAY;
   }

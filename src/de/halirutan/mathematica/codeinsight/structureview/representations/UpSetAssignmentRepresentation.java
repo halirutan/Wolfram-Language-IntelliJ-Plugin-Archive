@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.codeinsight.structureview.representations;
 
 import de.halirutan.mathematica.MathematicaIcons;
-import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector;
+import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -32,7 +32,7 @@ import javax.swing.*;
  */
 public class UpSetAssignmentRepresentation extends BaseAssignmentRepresentation {
 
-  public UpSetAssignmentRepresentation(final GlobalDefinitionCollector.AssignmentProperty assignmentProperty) {
+  public UpSetAssignmentRepresentation(final AssignmentProperty assignmentProperty) {
     super(assignmentProperty);
   }
 
