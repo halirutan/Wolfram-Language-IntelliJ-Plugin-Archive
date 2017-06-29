@@ -4,3 +4,4 @@ out/
 target/
 Mathematica-IntelliJ-Plugin.zip
 /$LOG_DIR$/
+/gradle.properties
