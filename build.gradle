@@ -21,6 +21,7 @@ repositories {
 }
 
 sourceSets {
+    //noinspection GroovyAssignabilityCheck
     main {
         java.srcDirs = ['src']
         resources.srcDirs = ['resources']
@@ -46,4 +47,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '2.3.3'
+version '2.4.1'
