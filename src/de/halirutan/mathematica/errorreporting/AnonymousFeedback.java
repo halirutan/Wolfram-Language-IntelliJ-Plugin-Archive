@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.errorreporting;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo.SubmissionStatus;
 import org.eclipse.egit.github.core.Issue;
@@ -59,14 +60,16 @@ class AnonymousFeedback {
    * of the created issue.
    */
   static SubmittedReportInfo sendFeedback(LinkedHashMap<String, String> environmentDetails) {
+    final Logger myLogger = Logger.getInstance(AnonymousFeedback.class.getName());
 
     final SubmittedReportInfo result;
     try {
       final URL resource = AnonymousFeedback.class.getClassLoader().getResource(tokenFile);
       if (resource == null) {
+        myLogger.info("Could not find token file");
         throw new IOException("Could not decrypt access token");
       }
-      final String gitAccessToken = GitHubAccessTokenScrambler.decrypt(resource.getFile());
+      final String gitAccessToken = GitHubAccessTokenScrambler.decrypt(resource);
       GitHubClient client = new GitHubClient();
       client.setOAuth2Token(gitAccessToken);
       RepositoryId repoID = new RepositoryId(gitRepoUser, gitRepo);

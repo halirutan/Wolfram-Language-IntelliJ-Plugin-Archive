@@ -27,6 +27,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.net.URL;
 
 /**
  * Provides functionality to encode and decode secret tokens to make them not directly readable. Let me be clear:
@@ -70,9 +71,9 @@ public class GitHubAccessTokenScrambler {
         return null;
     }
 
-  static String decrypt(String file) throws Exception {
+  static String decrypt(URL file) throws Exception {
     String in;
-      final ObjectInputStream o = new ObjectInputStream(new FileInputStream(file));
+      final ObjectInputStream o = new ObjectInputStream(file.openStream());
       in = (String) o.readObject();
       IvParameterSpec iv = new IvParameterSpec(myInitVector.getBytes("UTF-8"));
       SecretKeySpec keySpec = new SecretKeySpec(myKey.getBytes("UTF-8"), "AES");
