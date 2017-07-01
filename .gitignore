@@ -2,3 +2,7 @@
 .idea/misc.xml
 /gradle.properties
 /classes/
+/.gradle/
+/build/
+/out/
+/$LOG_DIR$/

@@ -75,14 +75,11 @@ class AnonymousFeedback {
       RepositoryId repoID = new RepositoryId(gitRepoUser, gitRepo);
       IssueService issueService = new IssueService(client);
 
-      String errorDescription = environmentDetails.get("error.description");
-
       Issue newGibHubIssue = createNewGibHubIssue(environmentDetails);
       Issue duplicate = findFirstDuplicate(newGibHubIssue.getTitle(), issueService, repoID);
       boolean isNewIssue = true;
       if (duplicate != null) {
-        errorDescription = errorDescription == null ? "Me too!" : errorDescription;
-        issueService.createComment(repoID, duplicate.getNumber(), errorDescription);
+        issueService.createComment(repoID, duplicate.getNumber(), generateGitHubIssueBody(environmentDetails, false));
         newGibHubIssue = duplicate;
         isNewIssue = false;
       } else {
@@ -147,7 +144,7 @@ class AnonymousFeedback {
     details.remove("error.hash");
 
     final Issue gitHubIssue = new Issue();
-    final String body = generateGitHubIssueBody(details);
+    final String body = generateGitHubIssueBody(details, true);
     gitHubIssue.setTitle(ErrorReportBundle.message("git.issue.title", errorHash, errorMessage));
     gitHubIssue.setBody(body);
     Label label = new Label();
@@ -163,7 +160,7 @@ class AnonymousFeedback {
    * @param details Details provided by {@link IdeaInformationProxy}
    * @return A markdown string representing the GitHub issue body.
    */
-  private static String generateGitHubIssueBody(LinkedHashMap<String, String> details) {
+  private static String generateGitHubIssueBody(LinkedHashMap<String, String> details, final boolean includeStacktrace) {
     String errorDescription = details.get("error.description");
     if (errorDescription == null) {
       errorDescription = "";
@@ -192,9 +189,11 @@ class AnonymousFeedback {
       result.append("\n");
     }
 
-    result.append("\n```\n");
-    result.append(stackTrace);
-    result.append("\n```\n");
+    if (includeStacktrace) {
+      result.append("\n```\n");
+      result.append(stackTrace);
+      result.append("\n```\n");
+    }
 
     return result.toString();
   }
