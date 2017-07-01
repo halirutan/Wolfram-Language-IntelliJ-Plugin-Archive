@@ -39,8 +39,8 @@ public class MathematicaReferenceContributor extends PsiReferenceContributor {
    */
   @Override
   public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
-        new MathematicaSymbolReferenceProvider());
+//    registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
+//        new MathematicaSymbolReferenceProvider());
     registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
         new MathematicaStringReferenceProvider());
   }

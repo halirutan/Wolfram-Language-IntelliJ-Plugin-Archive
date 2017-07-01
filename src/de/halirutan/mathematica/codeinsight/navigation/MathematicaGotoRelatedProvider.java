@@ -67,9 +67,8 @@ public class MathematicaGotoRelatedProvider extends GotoRelatedProvider {
         PsiElement resolve = ref.resolve();
         if (resolve != null) {
           if (resolve instanceof Symbol) {
-            final PsiReference[] resolveReferences = resolve.getReferences();
-            for (PsiReference reference : resolveReferences) {
-              final PsiElement usageElement = reference.getElement();
+            final PsiElement[] resolveReferences = ((Symbol) resolve).getElementsReferencingToMe();
+            for (PsiElement usageElement : resolveReferences) {
               if (usageElement instanceof Symbol && usageElement.isValid()) {
                 // What follows is that want to collect code around the found element.
                 // I will collect neighbouring PsiElements but not more than 20 characters to the right and
@@ -80,29 +79,12 @@ public class MathematicaGotoRelatedProvider extends GotoRelatedProvider {
                 final int lineEndOffset = document.getLineEndOffset(lineNumber);
                 assert lineStartOffset <= lineEndOffset;
 
-                PsiElement displayStart = usageElement;
-                PsiElement displayEnd = usageElement;
-                while (displayStart.getPrevSibling() != null) {
-                  PsiElement tmpStart = displayStart.getPrevSibling();
-                  if (usageElement.getTextOffset() - tmpStart.getTextOffset() > 20
-                      || tmpStart.getTextOffset() < lineStartOffset) break;
+                String testToShow = document.getText(TextRange.create(lineStartOffset, lineEndOffset)).trim();
+                testToShow = testToShow.length()>80 ? testToShow.substring(0,80) :testToShow;
 
-                  displayStart = tmpStart;
-                }
-
-                while (displayEnd.getNextSibling() != null) {
-                  PsiElement tmpEnd = displayEnd.getNextSibling();
-                  if (tmpEnd.getTextOffset() - (usageElement.getTextOffset() + usageElement.getTextLength()) > 20
-                      || tmpEnd.getTextOffset() + tmpEnd.getTextLength() > lineEndOffset) break;
-
-                  displayEnd = tmpEnd;
-                }
-
-                final String lineText = document.getText(
-                    TextRange.create(displayStart.getTextOffset(), displayEnd.getTextOffset() + displayEnd.getTextLength()));
                 final GotoSymbolItem item = new GotoSymbolItem(
                     usageElement,
-                    lineText,
+                    testToShow,
                     "(" + (lineNumber+1) + " in " + ((Symbol) resolve).getLocalizationConstruct() +")", lineNumber);
                 declarations.add(item);
 

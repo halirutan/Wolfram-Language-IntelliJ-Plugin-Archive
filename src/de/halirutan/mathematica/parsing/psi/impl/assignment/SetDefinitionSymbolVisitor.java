@@ -38,7 +38,13 @@ import java.util.Set;
  * @author patrick (7/3/14)
  */
 public class SetDefinitionSymbolVisitor extends MathematicaVisitor {
+
+  private static final String[] VALUES1 = {"Options", "Attributes", "MessageName", "Default", "Format", "N", "SyntaxInformation"};
+  private static final String[] VALUES2 = {"Options","Attributes","MessageName","Default","SyntaxInformation"};
+  private static final String[] PATTERNS = {"HoldPattern","Longest","Shortest","Repeated"};
+
   private static final HashMap<String, SymbolAssignmentType> ourHeadAssignmentMapping;
+
   static {
     ourHeadAssignmentMapping = new HashMap<>(6);
     ourHeadAssignmentMapping.put("Options", SymbolAssignmentType.OPTIONS_ASSIGNMENT);
@@ -100,14 +106,14 @@ public class SetDefinitionSymbolVisitor extends MathematicaVisitor {
     if (head instanceof Symbol) {
       // The next set are symbols that are just ignored and we have to check their first argument for a symbol
       // which is defined
-      if (functionCall.matchesHead("HoldPattern|Longest|Shortest|Repeated")) {
+      if (functionCall.hasHead(PATTERNS)) {
         final PsiElement arg1 = functionCall.getArgument(1);
         if (arg1 != null) {
           arg1.accept(this);
         }
       }
       // check if we have an assignment of the form Options[sym] = {...}
-      if (functionCall.equals(myStartElement) && functionCall.matchesHead("Options|Attributes|MessageName|Default|Format|N|SyntaxInformation")) {
+      if (functionCall.equals(myStartElement) && functionCall.hasHead(VALUES1)) {
         if (myFoundAssignmentType) {
           // we already saw eg Options[..] and this cannot be handled any further
           return;
@@ -116,7 +122,7 @@ public class SetDefinitionSymbolVisitor extends MathematicaVisitor {
         myFoundAssignmentType = true;
         PsiElement arg1 = functionCall.getArgument(1);
         if (arg1 != null) {
-          if (functionCall.matchesHead("Options|Attributes|MessageName|Default|SyntaxInformation")) {
+          if (functionCall.hasHead(VALUES2)) {
             if (arg1 instanceof Symbol) myUnboundSymbols.add((Symbol) arg1);
           } else {
             //if we have for instance  N[e : poly[cp_], pa_] := ... where the argument itself can be a complicated

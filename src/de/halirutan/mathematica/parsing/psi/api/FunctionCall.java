@@ -23,6 +23,7 @@ package de.halirutan.mathematica.parsing.psi.api;
 
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -51,11 +52,15 @@ public interface FunctionCall extends PsiElement {
   /**
    * Tests whether the function call has a head the matches the argument.
    *
-   * @param head
-   *     The head which should be tested.
+   * @param head The head which should be tested.
    * @return True, if head matches the Head of the function call.
    */
   public boolean matchesHead(String head);
+
+
+  public boolean hasHead(@NotNull final String otherHead);
+
+  public boolean hasHead(@NotNull final String[] otherHeads);
 
 
   /**
@@ -69,8 +74,7 @@ public interface FunctionCall extends PsiElement {
   /**
    * Returns the n'th argument of a function call <code >f[arg1, arg2, ...]</code> or null, if it does not exist.
    *
-   * @param n
-   *     Argument number, where 0 is the first argument.
+   * @param n Argument number, where 0 is the first argument.
    * @return The PsiElement of the argument or null if it does not exist.
    */
   @Nullable

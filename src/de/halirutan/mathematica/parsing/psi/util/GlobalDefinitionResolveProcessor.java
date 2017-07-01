@@ -58,14 +58,15 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
     }
 
     if (element instanceof FunctionCall) {
+      final FunctionCall call = (FunctionCall) element;
       final PsiElement lhs = ((FunctionCall) element).getArgument(1);
-      if (((FunctionCall) element).matchesHead("Set|SetDelayed")) {
+      if (call.hasHead("Set") || call.hasHead("SetDelayed")) {
         return visitSetDefinition(lhs);
-      } else if (((FunctionCall) element).matchesHead("TagSet|TagSetDelayed")) {
+      } else if (call.hasHead("TagSet") || call.hasHead("TagSetDelayed")) {
         return visitTagSetDefinition(lhs);
-      } else if (((FunctionCall) element).matchesHead("UpSet|UpSetDelayed")) {
+      } else if (call.hasHead("UpSet")|| call.hasHead("UpSetDelayed")) {
         return visitUpSetDefinition(lhs);
-      } else if (((FunctionCall) element).matchesHead("SetAttributes|SetOptions") && lhs instanceof Symbol) {
+      } else if ((call.hasHead("SetAttributes") || call.hasHead("SetOptions")) && lhs instanceof Symbol) {
         return visitSymbol((Symbol) lhs);
       }
     }

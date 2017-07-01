@@ -168,7 +168,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public PsiElement[] getElementsReferencingToMe() {
-    if (myReferringElements.isEmpty()) return new PsiElement[0];
+    if (myReferringElements.isEmpty()) return PsiElement.EMPTY_ARRAY;
     return myReferringElements.toArray(new Symbol[myReferringElements.size()]);
   }
 
@@ -181,10 +181,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     }
   }
 
-  @NotNull
-  @Override
-  public PsiReference[] getReferences() {
-    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
-  }
+//  @NotNull
+//  @Override
+//  public PsiReference[] getReferences() {
+//    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
+//  }
 
 }

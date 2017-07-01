@@ -38,11 +38,13 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
   private boolean myIsUpToDate;
+  private String myHead;
 
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
     myIsUpToDate = false;
+    myHead = node.getFirstChildNode().getText();
   }
 
   @Override
@@ -71,9 +73,18 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   @Override
   public boolean matchesHead(final String head) {
-    PsiElement myHead = getHead();
-    if (myHead != null) {
-      return myHead.getText().matches(head);
+    return myHead != null && head != null && myHead.matches(head);
+  }
+
+  public boolean hasHead(@NotNull final String otherHead) {
+    return myHead.equals(otherHead);
+  }
+
+  public boolean hasHead(@NotNull final String[] heads) {
+    for (String head : heads) {
+      if (head.equals(myHead)) {
+        return true;
+      }
     }
     return false;
   }
