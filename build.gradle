@@ -13,7 +13,7 @@ if (project.file('gradle.properties').exists()) {
 intellij {
     version = '2017.1.4'
     pluginName = 'Mathematica-IntelliJ-Plugin'
-    updateSinceUntilBuild = true
+    updateSinceUntilBuild = false
 }
 
 // Simple function to load change-notes.html and description.html into valid text for plugin.xml
