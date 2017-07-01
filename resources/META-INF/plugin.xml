@@ -23,62 +23,8 @@
   <id>de.halirutan.mathematica</id>
   <name>Mathematica Support</name>
   <category>Custom Language</category>
-  <version>2.3.3</version>
-  <idea-version since-build="163"/>
-  <vendor email="patrick@halirutan.de" url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
+  <vendor url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
   <depends>com.intellij.modules.lang</depends>
-  <description><![CDATA[
-    <strong>Mathematica (Wolfram Language) support for IntelliJ IDEA</strong>
-    <br/>
-    <br/>
-    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">GitHub</a> |
-    <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/issues">Bug Tracker</a> |
-    <a href="https://www.paypal.me/halirutan">Donate</a>
-    <br/>
-    <br/>
-
-    This plugin turns your IntelliJ IDEA into a powerful coding environment for Mathematica. For more information
-    check out the <a href="http://mathematicaplugin.halirutan.de">official website</a>. I have started to create user-friendly
-    documentation of various features on the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki">Wiki pages of GitHub</a>.
-    If you want to discuss specific topics, then ping me
-    (<a href="http://mathematica.stackexchange.com/users/187/halirutan?tab=profile">halirutan</a>) in the dedicated
-    <a href="http://chat.stackexchange.com/rooms/8636/intellijidea-plugin-for-mathematica">chat room on stackexchange</a>.
-    <br/>
-    <b>Features:</b>
-    <ul>
-      <li>Advanced syntax highlighting including patterns, anonymous functions, comment tags, and more</li>
-      <li>CamelHump autocompletion for all built-in Mathematica functions, local variables and package definitions</li>
-      <li>Smart completion for function options, messages and comment tags</li>
-      <li>Coloring and resolving of Module/Block/Table/... variables</li>
-      <li>Renaming of variables and functions</li>
-      <li>Code folding support for localization constructs like Module, With, Block, ...
-      <li>Quick documentation lookup for all built-in symbols and operators</li>
-      <li>Structured View for package definitions</li>
-      <li>Correct display of Mathematica's <a href="https://reference.wolfram.com/language/guide/ListingOfNamedCharacters.html">named characters</a>
-      <li>Inspections for version mismatch of symbols, possible errors through multiplicaton at linebreak, and missing commas and semicolons
-      <li>Autocompletion suggestions sorted by importance</li>
-      <li>Highlighting and smart inserting of braces, brackets and parenthesis</li>
-      <li>Quick navigation between symbol usages with Navigate - Related Symbol</li>
-    </ul>
-      ]]></description>
-
-  <change-notes>
-    <![CDATA[
-      <i>New features and bug-fixes:</i>
-      <br/>
-      <ul>
-      <li>A better error reporter that creates issues on GitHub automatically</li>
-      <li>Spell check for symbols, comments and strings</li>
-      <li>Code folding based on section comments like (* ::Section:: *)</li>
-      <li>SurroundWith (Ctrl+Alt+T) will now do something useful when pressed without an active selection</li>
-      <li>Added Ctrl+Space completion inside comments</li>
-      <li>Reimplemented parsing of comments and comment annotation</li>
-      <li>Fixed null exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-91</a>)</li>
-      <li>Added guard to fix exception (<a href="https://halirutan.myjetbrains.com/youtrack/issue/MMAP-88">MMAP-88</a>)</li>
-      </ul>
-    ]]>
-  </change-notes>
-
 
   <extensions defaultExtensionNs="com.intellij">
     <internalFileTemplate name="Package"/>
