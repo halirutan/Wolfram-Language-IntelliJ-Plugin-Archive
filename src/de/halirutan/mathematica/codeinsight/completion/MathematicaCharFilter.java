@@ -24,7 +24,7 @@ package de.halirutan.mathematica.codeinsight.completion;
 import com.intellij.codeInsight.lookup.CharFilter;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import de.halirutan.mathematica.file.MathematicaFileType;
 import org.jetbrains.annotations.Nullable;
 
 /**

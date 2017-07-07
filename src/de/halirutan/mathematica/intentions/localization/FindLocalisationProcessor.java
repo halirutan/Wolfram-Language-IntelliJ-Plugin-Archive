@@ -25,8 +25,8 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

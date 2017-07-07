@@ -33,12 +33,12 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.util.Comments;
-import de.halirutan.mathematica.parsing.psi.util.Comments.CommentStyle;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.util.Comments;
+import de.halirutan.mathematica.lang.psi.util.Comments.CommentStyle;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

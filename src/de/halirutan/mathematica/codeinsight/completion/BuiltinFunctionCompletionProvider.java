@@ -27,7 +27,7 @@ import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.settings.MathematicaSettings;
 import org.jetbrains.annotations.NotNull;
 

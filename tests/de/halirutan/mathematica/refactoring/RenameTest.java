@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.refactoring;
 
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
+import de.halirutan.mathematica.file.MathematicaFileType;
 
 /**
  * @author patrick (24.12.16).

@@ -30,16 +30,16 @@ import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.lists.List;
+import de.halirutan.mathematica.file.MathematicaFileType;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.lists.List;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getFirstListElement;
-import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
+import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.getFirstListElement;
+import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
 
 /**
  * Provides warnings when commas or semicolons are missing. Unlike in other languages, Mathematica regards whitespaces

@@ -23,7 +23,7 @@ package de.halirutan.mathematica;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.testFramework.LexerTestCase;
-import de.halirutan.mathematica.lexer.MathematicaLexer;
+import de.halirutan.mathematica.lang.lexer.MathematicaLexer;
 
 /**
  * Test small, important code snippets for their lexer output.

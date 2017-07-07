@@ -24,9 +24,9 @@ package de.halirutan.mathematica.refactoring;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
-import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.string.MString;
+import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

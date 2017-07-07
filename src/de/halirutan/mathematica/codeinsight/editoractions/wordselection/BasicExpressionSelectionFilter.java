@@ -23,7 +23,7 @@ package de.halirutan.mathematica.codeinsight.editoractions.wordselection;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
+import de.halirutan.mathematica.lang.psi.api.Expression;
 
 /**
  * @author patrick (01.09.15)

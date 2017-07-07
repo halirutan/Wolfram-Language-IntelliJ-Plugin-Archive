@@ -34,7 +34,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.settings.MathematicaSettings;
 import de.halirutan.mathematica.settings.MathematicaSettings.SmartEnterResult;
 import org.jetbrains.annotations.NotNull;

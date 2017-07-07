@@ -33,8 +33,8 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

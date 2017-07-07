@@ -29,7 +29,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.text.StringTokenizer;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;

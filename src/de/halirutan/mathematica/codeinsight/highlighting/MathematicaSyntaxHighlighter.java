@@ -25,8 +25,8 @@ import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.lexer.MathematicaLexer;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.lexer.MathematicaLexer;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

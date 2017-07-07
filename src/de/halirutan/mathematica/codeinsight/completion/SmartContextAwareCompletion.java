@@ -30,12 +30,12 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
-import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.MessageName;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

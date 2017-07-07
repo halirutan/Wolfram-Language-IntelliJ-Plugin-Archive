@@ -30,12 +30,12 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.formatter.common.AbstractBlock;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (10/20/13)

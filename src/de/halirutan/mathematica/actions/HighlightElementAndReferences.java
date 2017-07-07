@@ -38,7 +38,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
 
 import java.util.ArrayList;
 import java.util.Collection;

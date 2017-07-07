@@ -27,13 +27,13 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.file.MathematicaFileType;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-import static de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
+import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.getNextSiblingSkippingWhitespace;
 
 /**
  *

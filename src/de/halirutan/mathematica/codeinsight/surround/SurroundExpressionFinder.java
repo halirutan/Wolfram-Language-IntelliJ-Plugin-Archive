@@ -25,13 +25,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.Number;
-import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
-import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.Number;
+import de.halirutan.mathematica.lang.psi.api.StringifiedSymbol;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.slots.Slot;
+import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
 
 /**
  * When SurroundWith is pressed without having an explicit selection, we need to find the best expression the user

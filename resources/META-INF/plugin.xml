@@ -31,9 +31,9 @@
     <internalFileTemplate name="Package"/>
 
     <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
-    <fileTypeFactory implementation="de.halirutan.mathematica.MathematicaFileTypeFactory"/>
+    <fileTypeFactory implementation="de.halirutan.mathematica.file.MathematicaFileTypeFactory"/>
     <lang.parserDefinition language="Mathematica"
-                           implementationClass="de.halirutan.mathematica.parsing.prattparser.MathematicaParserDefinition"/>
+                           implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
 
     <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
     <moduleType id="MATHEMATICA_MODULE"
@@ -127,7 +127,7 @@
     <inspectionToolProvider
         implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
-    <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.parsing.psi.MathematicaReferenceContributor"/>
+    <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.lang.psi.MathematicaReferenceContributor"/>
     <renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>
 
     <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>

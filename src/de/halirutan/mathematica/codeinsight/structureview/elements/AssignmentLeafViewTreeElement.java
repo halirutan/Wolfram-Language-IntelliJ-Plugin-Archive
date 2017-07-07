@@ -29,8 +29,8 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.codeinsight.structureview.representations.*;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
-import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
-import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
+import de.halirutan.mathematica.lang.psi.SymbolAssignmentType;
+import de.halirutan.mathematica.lang.psi.util.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

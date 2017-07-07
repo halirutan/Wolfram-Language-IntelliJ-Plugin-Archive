@@ -26,7 +26,7 @@ import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.module.MathematicaModuleBuilder.Application;
 import de.halirutan.mathematica.module.MathematicaModuleBuilder.Basic;
 import org.jetbrains.annotations.NotNull;

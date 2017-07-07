@@ -25,7 +25,7 @@ import com.intellij.codeInsight.editorActions.wordSelection.BasicSelectioner;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -31,10 +31,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiWhiteSpace;
-import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiElementFactory;
+import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.impl.SymbolImpl;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

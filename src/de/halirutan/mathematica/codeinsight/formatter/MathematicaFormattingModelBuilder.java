@@ -30,7 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

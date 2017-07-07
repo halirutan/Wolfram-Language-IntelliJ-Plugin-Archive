@@ -26,7 +26,7 @@ import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.psi.tree.IElementType;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.*;
 
 /**
  * Provides the intelligent insertion of quotes. This, like the {@link MathematicaBraceMatcher} works on the lexer token

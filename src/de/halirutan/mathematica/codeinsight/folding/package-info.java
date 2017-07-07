@@ -51,6 +51,6 @@
  * opened in Mathematica. Note that it has no influence of the folding! A correct example is for instance <code> (*
  * ::Text::Bold::Italic:: *) </code>
  * <p>
- * The supported section-comments can be found in {@link de.halirutan.mathematica.parsing.psi.util.Comments.CommentStyle}.
+ * The supported section-comments can be found in {@link de.halirutan.mathematica.lang.psi.util.Comments.CommentStyle}.
  */
 package de.halirutan.mathematica.codeinsight.folding;

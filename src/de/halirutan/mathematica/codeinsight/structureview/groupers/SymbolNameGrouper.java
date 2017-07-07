@@ -24,10 +24,10 @@ package de.halirutan.mathematica.codeinsight.structureview.groupers;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.AlphaSorterWithCase;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

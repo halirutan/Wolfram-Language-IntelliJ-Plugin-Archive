@@ -31,8 +31,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiUtilBase;
-import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.lang.psi.api.Expression;
 import org.jetbrains.annotations.Nullable;
 
 /**

@@ -24,10 +24,10 @@ package de.halirutan.mathematica.codeinsight.formatter;
 import com.intellij.formatting.SpacingBuilder;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettings;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.*;
 
 /**
  * Provides a {@link SpacingBuilder} which specifies where space is required around/before/after Mathematica

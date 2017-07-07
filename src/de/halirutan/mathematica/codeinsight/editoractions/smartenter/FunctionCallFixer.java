@@ -27,11 +27,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import org.jetbrains.annotations.NotNull;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.COMMA;
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.RIGHT_BRACKET;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.COMMA;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.RIGHT_BRACKET;
 
 /**
  * @author patrick (30/10/13)

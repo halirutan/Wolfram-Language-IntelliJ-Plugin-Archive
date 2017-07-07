@@ -27,9 +27,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.lists.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -24,7 +24,7 @@ package de.halirutan.mathematica.module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.module.MathematicaModuleBuilder.Empty;
 import org.jetbrains.annotations.NotNull;
 

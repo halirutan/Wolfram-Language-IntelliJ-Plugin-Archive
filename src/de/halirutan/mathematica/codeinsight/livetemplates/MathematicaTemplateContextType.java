@@ -30,8 +30,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import de.halirutan.mathematica.Mathematica;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighter;
-import de.halirutan.mathematica.filetypes.MathematicaFileType;
-import de.halirutan.mathematica.parsing.psi.api.string.MString;
+import de.halirutan.mathematica.file.MathematicaFileType;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 
 /**
