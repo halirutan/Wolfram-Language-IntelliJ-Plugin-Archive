@@ -146,6 +146,6 @@ public class LightSymbol extends LightElement implements PsiNameIdentifierOwner,
 
   @Override
   public boolean isSoft() {
-    return false;
+    return true;
   }
 }

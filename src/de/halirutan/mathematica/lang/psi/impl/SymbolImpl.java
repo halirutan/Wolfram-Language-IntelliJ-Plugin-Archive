@@ -219,6 +219,6 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public boolean isSoft() {
-    return false;
+    return true;
   }
 }

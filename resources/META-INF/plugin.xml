@@ -44,14 +44,13 @@
 
     <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
-    <!-- Highlighting and annotating of code, StructureView and documentation lookup-->
 
     <lang.syntaxHighlighterFactory language="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
-    <!--<lang.psiStructureViewFactory language="Mathematica"-->
-                                  <!--implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>-->
-    <!--<lang.documentationProvider language="Mathematica"-->
-                                <!--implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>-->
+    <lang.psiStructureViewFactory language="Mathematica"
+                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
+    <lang.documentationProvider language="Mathematica"
+                                implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
 
     <annotator language="Mathematica"
                implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaHighlightingAnnotator"/>
