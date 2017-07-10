@@ -21,11 +21,11 @@
 
 package de.halirutan.mathematica.lang.psi.api.slots;
 
-import de.halirutan.mathematica.lang.psi.api.Expression;
+import de.halirutan.mathematica.lang.psi.api.Atom;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
-public interface Slot extends Expression {
+public interface Slot extends Atom {
 
 }

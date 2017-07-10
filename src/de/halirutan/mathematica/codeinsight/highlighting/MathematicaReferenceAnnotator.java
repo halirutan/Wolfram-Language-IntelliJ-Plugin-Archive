@@ -38,7 +38,7 @@ import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.MessageName;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
-import de.halirutan.mathematica.lang.psi.util.LocalDefinitionResolveProcessor;
+import de.halirutan.mathematica.lang.resolve.LocalDefinitionResolveProcessor;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 

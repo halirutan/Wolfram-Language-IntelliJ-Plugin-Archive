@@ -32,7 +32,6 @@ import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
-import de.halirutan.mathematica.lang.psi.impl.SymbolPsiReference;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPatternVisitor;
@@ -150,7 +149,6 @@ class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
     public int compare(Symbol o1, Symbol o2) {
       return (o1.getFullSymbolName().compareTo(o2.getFullSymbolName()));
     }
-
   }
 
 }

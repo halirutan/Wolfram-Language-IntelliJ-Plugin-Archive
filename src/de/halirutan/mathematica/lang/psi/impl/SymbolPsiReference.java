@@ -24,15 +24,10 @@ package de.halirutan.mathematica.lang.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.psi.util.GlobalDefinitionResolveProcessor;
-import de.halirutan.mathematica.lang.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.resolve.MathematicaSymbolResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,101 +42,75 @@ import java.util.Set;
  *
  * @author patrick (5/8/13)
  */
-public class SymbolPsiReference extends CachingReference implements PsiReference {
+public class SymbolPsiReference implements PsiReference {
 
   private static final Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
-  private final Symbol myVariable;
+  private final Symbol mySymbol;
 
   SymbolPsiReference(Symbol element) {
-    super();
-    myVariable = element;
+    mySymbol = element;
   }
 
-  public static boolean isBuiltInSymbol(PsiElement element) {
-    if (element instanceof Symbol) {
-      Symbol symbol = (Symbol) element;
-      final String name = symbol.getMathematicaContext().equals("") ?
-          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
-      return NAMES.contains(name);
-    }
-    return false;
-  }
-
-  @Nullable
-  @Override
-  public PsiElement resolveInner() {
-
-    if (isBuiltInSymbol(myVariable)) return myVariable;
-
-    if (myVariable.cachedResolve()) {
-      if (myVariable.getFullSymbolName().equals(myVariable.getResolveElement().getFullSymbolName()) ||
-          myVariable.getLocalizationConstruct().equals(ConstructType.ANONYMOUSFUNCTION)) {
-        return myVariable.getResolveElement();
-      } else {
-        myVariable.subtreeChanged();
-      }
-
-    }
-
-    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(myVariable);
-    PsiTreeUtil.treeWalkUp(processor, myVariable, myVariable.getContainingFile(), ResolveState.initial());
-    final PsiElement referringSymbol = processor.getMyReferringSymbol();
-    if (referringSymbol instanceof Symbol) {
-      myVariable.setReferringElement((Symbol) referringSymbol, processor.getMyLocalization(), processor.getMyLocalizationSymbol());
-      return referringSymbol;
-    }
-
-    GlobalDefinitionResolveProcessor globalProcessor = new GlobalDefinitionResolveProcessor(myVariable);
-    PsiTreeUtil.processElements(myVariable.getContainingFile(), globalProcessor);
-
-
-    final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
-    if (globalDefinition instanceof Symbol) {
-      myVariable.setReferringElement((Symbol) globalDefinition, ConstructType.NULL, null);
-      return globalDefinition;
-    }
-
-    return null;
-  }
 
   @Override
   public Symbol getElement() {
-    return myVariable;
+    return mySymbol;
   }
 
   @Override
   public TextRange getRangeInElement() {
-    return TextRange.from(0, myVariable.getFirstChild().getNode().getTextLength());
+    return TextRange.from(0, mySymbol.getTextLength());
+  }
+
+  private static final MathematicaSymbolResolver RESOLVER = new MathematicaSymbolResolver();
+
+  @Nullable
+  @Override
+  public PsiElement resolve() {
+//    ResolveCache resolveCache = ResolveCache.getInstance(mySymbol.getProject());
+//    resolveCache.clearCache(true);
+//    return resolveCache.resolveWithCaching(this, RESOLVER, false, false);
+    return null;
   }
 
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myVariable.getFullSymbolName();
+    return mySymbol.getFullSymbolName();
   }
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    return myVariable.setName(newElementName);
+    return mySymbol.setName(newElementName);
   }
 
   @Override
   public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
     if (isReferenceTo(element)) {
-      return myVariable;
+      return mySymbol;
     }
     return handleElementRename(element.getText());
   }
 
   @Override
-  public boolean isSoft() {
-    return super.isSoft();
+  public boolean isReferenceTo(PsiElement element) {
+    final PsiReference reference = element.getReference();
+    if (reference != null) {
+      final PsiElement resolve = reference.resolve();
+      return resolve instanceof Symbol && ((Symbol) resolve).getFullSymbolName().equals(mySymbol.getFullSymbolName());
+    }
+    return false;
   }
 
   @NotNull
   @Override
   public Object[] getVariants() {
     return new Object[0];
+  }
+
+  @Override
+  public boolean isSoft() {
+    return false;
   }
 
 }

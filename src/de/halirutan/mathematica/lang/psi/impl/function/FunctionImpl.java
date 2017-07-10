@@ -26,10 +26,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
+import de.halirutan.mathematica.lang.psi.api.slots.Slot;
+import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
 import de.halirutan.mathematica.lang.psi.impl.OperatorNameProviderImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,10 +45,8 @@ public class FunctionImpl extends OperatorNameProviderImpl implements Function {
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    if (place instanceof Symbol) {
-      if (MathematicaElementTypes.SLOTS.contains(place.getFirstChild().getNode().getElementType())) {
+    if (place instanceof Slot || place instanceof SlotExpression) {
         return processor.execute(this, state);
-      }
     }
     return true;
   }

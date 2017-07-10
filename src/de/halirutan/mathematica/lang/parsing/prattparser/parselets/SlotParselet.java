@@ -46,12 +46,12 @@ public class SlotParselet implements PrefixParselet {
 
   @Override
   public Result parse(MathematicaParser parser) throws CriticalParserError {
-    Marker symbolMark = parser.mark();
+    Marker mark = parser.mark();
     final IElementType tokenType = parser.getTokenType();
     if (SLOTS.contains(tokenType)) {
       parser.advanceLexer();
-      symbolMark.done(tokenType);
-      return MathematicaParser.result(symbolMark, tokenType, true);
+      mark.done(tokenType);
+      return MathematicaParser.result(mark, tokenType, true);
     } else {
       return MathematicaParser.notParsed();
     }

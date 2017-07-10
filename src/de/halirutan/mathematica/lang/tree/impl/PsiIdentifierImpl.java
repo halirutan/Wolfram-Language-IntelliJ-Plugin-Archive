@@ -19,28 +19,31 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.psi;
+package de.halirutan.mathematica.lang.tree.impl;
 
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiReferenceContributor;
-import com.intellij.psi.PsiReferenceRegistrar;
-import de.halirutan.mathematica.lang.psi.api.string.MString;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.tree.api.PsiIdentifier;
 
 /**
- * @author patrick (29.11.16).
+ * @author patrick (08.07.17).
  */
-public class MathematicaReferenceContributor extends PsiReferenceContributor {
+public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier {
 
-  /**
-   * Gives registrar the chance to do registrar
-   * @param registrar will work as registrar
-   */
+  private static final IElementType type = MathematicaElementTypes.IDENTIFIER;
+
+  public PsiIdentifierImpl(CharSequence text) {
+    super(type, text);
+  }
+
   @Override
-  public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-//    registrar.registerReferenceProvider(PlatformPatterns.psiElement(Symbol.class),
-//        new MathematicaSymbolReferenceProvider());
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(MString.class),
-        new MathematicaStringReferenceProvider());
+  public IElementType getTokenType() {
+    return type;
+  }
+
+  @Override
+  public String toString() {
+    return "Identifier[" + getText() + "]";
   }
 }

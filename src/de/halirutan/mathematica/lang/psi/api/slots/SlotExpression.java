@@ -21,12 +21,12 @@
 
 package de.halirutan.mathematica.lang.psi.api.slots;
 
-import de.halirutan.mathematica.lang.psi.api.Expression;
+import de.halirutan.mathematica.lang.psi.api.Atom;
 
 /**
  * Implementation for SlotExpression
  * Created by rsmenon on 11/8/15.
  */
-public interface SlotExpression extends Expression {
+public interface SlotExpression extends Atom {
 
 }

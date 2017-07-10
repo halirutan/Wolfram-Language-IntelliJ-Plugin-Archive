@@ -22,13 +22,19 @@
 package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import de.halirutan.mathematica.lang.psi.api.Number;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/27/13 Time: 11:25 PM Purpose:
  */
-public class NumberImpl extends ExpressionImpl {
+public class NumberImpl extends ExpressionImpl implements Number{
   public NumberImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  @Override
+  public String toString() {
+    return "Number(" + getText() + ")";
   }
 }

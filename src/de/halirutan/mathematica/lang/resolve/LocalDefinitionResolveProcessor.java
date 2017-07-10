@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.psi.util;
+package de.halirutan.mathematica.lang.resolve;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
@@ -33,7 +33,10 @@ import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.lang.psi.impl.SymbolPsiReference;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPatternVisitor;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +76,7 @@ import java.util.List;
 public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
 
   private final Symbol myStartElement;
-  private PsiElement myReferringSymbol;
+  private Symbol myReferringSymbol;
   private ConstructType myLocalization;
   private PsiElement myLocalizationSymbol = null;
 
@@ -178,7 +181,7 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
    * @return Sorted and cleaned list of collected symbols.
    */
   @Nullable
-  public PsiElement getMyReferringSymbol() {
+  public Symbol getMyReferringSymbol() {
     return myReferringSymbol;
   }
 

@@ -28,7 +28,7 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.lang.psi.api.Expression;
-import de.halirutan.mathematica.lang.psi.util.GlobalDefinitionCollector.AssignmentProperty;
+import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

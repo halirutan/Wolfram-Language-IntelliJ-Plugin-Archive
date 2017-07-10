@@ -32,6 +32,7 @@
 
     <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
     <fileTypeFactory implementation="de.halirutan.mathematica.file.MathematicaFileTypeFactory"/>
+    <lang.ast.factory language="Mathematica" implementationClass="de.halirutan.mathematica.lang.tree.MathematicaASTFactory"/>
     <lang.parserDefinition language="Mathematica"
                            implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
 
@@ -47,10 +48,10 @@
 
     <lang.syntaxHighlighterFactory language="Mathematica"
                                    implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
-    <lang.psiStructureViewFactory language="Mathematica"
-                                  implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
-    <lang.documentationProvider language="Mathematica"
-                                implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+    <!--<lang.psiStructureViewFactory language="Mathematica"-->
+                                  <!--implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>-->
+    <!--<lang.documentationProvider language="Mathematica"-->
+                                <!--implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>-->
 
     <annotator language="Mathematica"
                implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaHighlightingAnnotator"/>
@@ -58,52 +59,52 @@
                        implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher"/>
 
     <!-- Smart editing features -->
-    <quoteHandler fileType="Mathematica"
-                  className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>
-    <completion.contributor language="Mathematica"
-                            implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
+    <!--<quoteHandler fileType="Mathematica"-->
+                  <!--className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>-->
+    <!--<completion.contributor language="Mathematica"-->
+                            <!--implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>-->
 
-    <lang.smartEnterProcessor language="Mathematica"
-                              implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>
-    <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
+    <!--<lang.smartEnterProcessor language="Mathematica"-->
+                              <!--implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>-->
+    <!--<lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>-->
 
-    <lang.commenter language="Mathematica"
-                    implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>
+    <!--<lang.commenter language="Mathematica"-->
+                    <!--implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>-->
 
-    <lang.surroundDescriptor language="Mathematica"
-                             implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
-    <codeInsight.surroundWithRangeAdjuster
-        implementation="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster"/>
-    <liveTemplateContext
-        implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
-    <defaultLiveTemplatesProvider
-        implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
+    <!--<lang.surroundDescriptor language="Mathematica"-->
+                             <!--implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>-->
+    <!--<codeInsight.surroundWithRangeAdjuster-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster"/>-->
+    <!--<liveTemplateContext-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>-->
+    <!--<defaultLiveTemplatesProvider-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>-->
 
-    <extendWordSelectionHandler
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>
-    <extendWordSelectionHandler
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
+    <!--<extendWordSelectionHandler-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>-->
+    <!--<extendWordSelectionHandler-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>-->
 
-    <!--<basicWordSelectionFilter-->
-    <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>-->
+    <!--&lt;!&ndash;<basicWordSelectionFilter&ndash;&gt;-->
+    <!--&lt;!&ndash;implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>&ndash;&gt;-->
 
-    <lang.refactoringSupport language="Mathematica"
-                             implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
-    <lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>
-    <lang.foldingBuilder language="Mathematica"
-                         implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
+    <!--<lang.refactoringSupport language="Mathematica"-->
+                             <!--implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>-->
+    <!--<lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>-->
+    <!--<lang.foldingBuilder language="Mathematica"-->
+                         <!--implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>-->
 
-    <applicationService
-        serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"
-        serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>
-    <codeFoldingOptionsProvider
-        instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
+    <!--<applicationService-->
+        <!--serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"-->
+        <!--serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>-->
+    <!--<codeFoldingOptionsProvider-->
+        <!--instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>-->
 
-    <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>
+    <!--<enterHandlerDelegate-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>-->
 
-    <enterHandlerDelegate
-        implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
+    <!--<enterHandlerDelegate-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>-->
 
     <!-- Code-style and colors-->
     <colorSettingsPage
@@ -120,27 +121,26 @@
     <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
     <lang.refactoringSupport language="Mathematica"
                              implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
+    <!--<annotator language="Mathematica"-->
+               <!--implementationClass="de.halirutan.mathematica.codeinsight.highlighting.CommentAnnotator"/>-->
 
-    <annotator language="Mathematica"
-               implementationClass="de.halirutan.mathematica.codeinsight.highlighting.CommentAnnotator"/>
+    <!--<inspectionToolProvider-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>-->
 
-    <inspectionToolProvider
-        implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
-
-    <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.lang.psi.MathematicaReferenceContributor"/>
-    <renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>
+    <!--<psi.referenceContributor language="Mathematica" implementatide.halirutan.mathematica.lang.resolve.MathematicaReferenceContributorutor"/>-->
+    <!--<renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>-->
 
     <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>
     <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica"
                              instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
-    <gotoRelatedProvider
-        implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
+    <!--<gotoRelatedProvider-->
+        <!--implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>-->
 
-    <spellchecker.support language="Mathematica"
-                          implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
-    <intentionAction>
-      <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
-    </intentionAction>
+    <!--<spellchecker.support language="Mathematica"-->
+                          <!--implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>-->
+    <!--<intentionAction>-->
+      <!--<className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>-->
+    <!--</intentionAction>-->
   </extensions>
 
   <actions>

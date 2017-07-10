@@ -3,6 +3,7 @@
     <module name="Mathematica-IntelliJ-Plugin" />
     <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m  -ea" />
     <option name="PROGRAM_PARAMETERS" value="" />
+    <alternative-path path="IntelliJ IDEA Community Edition IC-171.4073.35" alternative-path-enabled="true" />
     <predefined_log_file id="idea.log" enabled="true" />
     <RunnerSettings RunnerId="Profile ">
       <option name="myExternalizedOptions" value="launch-ui=false&#10;force-bitness=64&#10;additional-options2=onexit\=snapshot" />

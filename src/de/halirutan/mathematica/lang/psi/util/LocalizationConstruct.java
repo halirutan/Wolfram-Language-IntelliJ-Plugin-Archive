@@ -114,7 +114,7 @@ public class LocalizationConstruct {
 
   public enum ConstructType {
     MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, DO, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
-    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D;
+    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D, BUILT_IN;
 
 
     @Override
@@ -140,8 +140,10 @@ public class LocalizationConstruct {
           return "ParametricPlot";
         case PARAMETRICPLOT3D:
           return "ParametricPlot3D";
+        case BUILT_IN:
+          return "BuiltIn";
         case NULL:
-          return "file scope";
+          return "Unknown scope";
         default:
           String str = name().toLowerCase();
           str = str.substring(0,1).toUpperCase() + str.substring(1);

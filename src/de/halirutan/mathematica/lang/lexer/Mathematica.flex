@@ -181,7 +181,7 @@ Out = "%"+
 	"="					{ return MathematicaElementTypes.SET; }
 
 
-    {SlotSequence}		{ return MathematicaElementTypes.SLOT_SEQUENCE; }
+    {SlotSequence}		{ return MathematicaElementTypes.SLOT; }
     {Slot}				{ return MathematicaElementTypes.SLOT; }
     {AssociationSlot}   { return MathematicaElementTypes.ASSOCIATION_SLOT; }
 

@@ -76,6 +76,8 @@ public class MathematicaParser implements PsiParser {
     return new Result(mark, token, parsedQ);
   }
 
+
+
   /**
    * This is the return value of a parser when errors happened.
    *
@@ -99,7 +101,7 @@ public class MathematicaParser implements PsiParser {
    */
   @NotNull
   @Override
-  public ASTNode parse(IElementType root, PsiBuilder builder) {
+  public ASTNode parse(@NotNull IElementType root, @NotNull PsiBuilder builder) {
     builder.setWhitespaceSkippedCallback(myImportantLinebreakHandler);
     Marker rootMarker = builder.mark();
     this.myBuilder = builder;

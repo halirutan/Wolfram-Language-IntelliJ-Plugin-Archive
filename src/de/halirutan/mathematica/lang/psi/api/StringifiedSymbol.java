@@ -21,10 +21,12 @@
 
 package de.halirutan.mathematica.lang.psi.api;
 
+import com.intellij.psi.PsiNamedElement;
+
 /**
  * A stringified symbol is an identifier in Mathematica code which looks like a normal symbol, but is interpreted as
  * string. Examples are tag in symbol::tag, second in first>>second, foo in <<foo and (to be correct) slut in #slut. The
  * last one is currently handled as normal symbol.
  */
-public interface StringifiedSymbol extends Expression, NamedElement {
+public interface StringifiedSymbol extends PsiNamedElement {
 }

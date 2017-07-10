@@ -24,6 +24,6 @@ package de.halirutan.mathematica.lang.psi.api;
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
-public interface Number extends Expression {
+public interface Number extends Atom {
 
 }

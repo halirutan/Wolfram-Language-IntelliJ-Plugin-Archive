@@ -45,10 +45,10 @@ public class NumberParselet implements PrefixParselet {
   @Override
   public Result parse(MathematicaParser parser) throws CriticalParserError {
     IElementType token = parser.getTokenType();
-    Marker symbolMark = parser.mark();
+    Marker mark = parser.mark();
     parser.advanceLexer();
-    symbolMark.done(ParseletProvider.getPrefixPsiElement(this));
-    return MathematicaParser.result(symbolMark, token, true);
+    mark.done(ParseletProvider.getPrefixPsiElement(this));
+    return MathematicaParser.result(mark, token, true);
   }
 
   public int getPrecedence() {

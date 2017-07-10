@@ -45,4 +45,9 @@ public class SlotExpressionImpl extends ExpressionImpl implements SlotExpression
       super.accept(visitor);
     }
   }
+
+  @Override
+  public String toString() {
+    return "AssociationSlot[" + getText() + "]";
+  }
 }

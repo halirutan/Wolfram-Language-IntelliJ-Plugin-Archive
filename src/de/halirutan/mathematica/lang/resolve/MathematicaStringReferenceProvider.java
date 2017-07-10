@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.psi;
+package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;

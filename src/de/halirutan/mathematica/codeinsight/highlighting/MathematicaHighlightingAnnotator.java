@@ -29,9 +29,7 @@ import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
@@ -42,8 +40,8 @@ import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
 import de.halirutan.mathematica.lang.psi.api.slots.Slot;
 import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
-import de.halirutan.mathematica.lang.psi.util.LocalDefinitionResolveProcessor;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -86,32 +84,28 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    String possibleGlobalSymbol = symbol.getMathematicaContext().equals("") ?
-        "System`"+symbol.getSymbolName() : symbol.getFullSymbolName();
-    if (NAMES.contains(possibleGlobalSymbol)) {
-      setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-      return;
-    }
-
-    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
-    PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
-
-    final ConstructType scope = processor.getMyLocalization();
-    switch (scope) {
-      case NULL:
-        break;
-      case MODULE:
-        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
-        break;
-      case BLOCK:
-        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED);
-        break;
-      case SETDELAYEDPATTERN:
-        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
-        break;
-      default:
-        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
-        break;
+    final SymbolResolveResult symbolResolveResult = symbol.advancedResolve();
+    if (symbolResolveResult != null) {
+      final ConstructType scope = symbolResolveResult.getLocalization();
+      switch (scope) {
+        case NULL:
+          break;
+        case BUILT_IN:
+          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+          break;
+        case MODULE:
+          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+          break;
+        case BLOCK:
+          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED);
+          break;
+        case SETDELAYEDPATTERN:
+          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
+          break;
+        default:
+          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+          break;
+      }
     }
   }
 
@@ -160,5 +154,4 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
       setHighlightingStrict(children[i].getPsi(), myHolder, color);
     }
   }
-
 }

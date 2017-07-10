@@ -25,8 +25,8 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.navigation.ItemPresentation;
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.lang.psi.util.GlobalDefinitionCollector;
-import de.halirutan.mathematica.lang.psi.util.GlobalDefinitionCollector.AssignmentProperty;
+import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector;
+import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

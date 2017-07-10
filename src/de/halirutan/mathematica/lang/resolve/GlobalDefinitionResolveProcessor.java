@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.psi.util;
+package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * @author patrick (1/6/14)
  */
 @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
+class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
 

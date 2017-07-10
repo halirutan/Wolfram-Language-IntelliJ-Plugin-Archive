@@ -23,6 +23,7 @@ package de.halirutan.mathematica.lang.psi.util;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.*;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
@@ -43,6 +44,18 @@ import java.util.List;
  * @author patrick (5/21/13)
  */
 public class MathematicaPsiUtilities {
+
+  private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSymbolNames().keySet();
+
+  public static boolean isBuiltInSymbol(PsiElement element) {
+    if (element instanceof Symbol) {
+      Symbol symbol = (Symbol) element;
+      final String name = symbol.getMathematicaContext().equals("") ?
+          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+      return NAMES.contains(name);
+    }
+    return false;
+  }
 
 
   /**
@@ -99,38 +112,38 @@ public class MathematicaPsiUtilities {
       private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
 
       @Override
-      public void visitElement(PsiElement element) {
-        if (element instanceof Blank ||
-            element instanceof BlankSequence ||
-            element instanceof BlankNullSequence ||
-            element instanceof Pattern) {
-          PsiElement possibleSymbol = element.getFirstChild();
+      public void visitElement(PsiElement elm) {
+        if (elm instanceof Blank ||
+            elm instanceof BlankSequence ||
+            elm instanceof BlankNullSequence ||
+            elm instanceof Pattern) {
+          PsiElement possibleSymbol = elm.getFirstChild();
           if (possibleSymbol instanceof Symbol) {
             result.add((Symbol) possibleSymbol);
           }
 
-          if (element instanceof Pattern) {
-            element.acceptChildren(this);
+          if (elm instanceof Pattern) {
+            elm.acceptChildren(this);
           }
 
-        } else if (element instanceof Optional || element instanceof Condition || element instanceof PatternTest) {
-          PsiElement firstChild = element.getFirstChild();
+        } else if (elm instanceof Optional || elm instanceof Condition || elm instanceof PatternTest) {
+          PsiElement firstChild = elm.getFirstChild();
           if (firstChild != null) {
             firstChild.accept(this);
           }
-        } else if (element instanceof FunctionCall) {
-          PsiElement head = element.getFirstChild();
+        } else if (elm instanceof FunctionCall) {
+          PsiElement head = elm.getFirstChild();
           final String name = head.getNode().getText();
           if (myDiveInFirstChild.contains(name)) {
-            List<PsiElement> args = getArguments(element);
+            List<PsiElement> args = getArguments(elm);
             if (args.size() > 0) {
               args.get(0).accept(this);
             }
           } else if (!myDoNotDiveIn.contains(name)) {
-            element.acceptChildren(this);
+            elm.acceptChildren(this);
           }
         } else {
-          element.acceptChildren(this);
+          elm.acceptChildren(this);
         }
       }
     };

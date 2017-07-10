@@ -47,4 +47,9 @@ public class SlotImpl extends ExpressionImpl implements Slot {
       super.accept(visitor);
     }
   }
+
+  @Override
+  public String toString() {
+    return "Slot[" + getText() + "]";
+  }
 }

@@ -22,20 +22,20 @@
 package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiReference;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.resolve.MathematicaSymbolResolver;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashSet;
 
 /**
  * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
@@ -44,23 +44,21 @@ import java.util.HashSet;
  * <p/>
  * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class
  * provides methods to separate the parts.
+ * <br/>
+ *  Provides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
+ * uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
+ * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions are
+ * done at file-scope. The class uses caching to speed up the resolve process. Once a definition for a symbol is found,
+ * it is stored as long as the code in the concerning areas is not edited.
  *
  * @author patrick (3/28/13)
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-  private final HashSet<Symbol> myReferringElements = new HashSet<>();
-  private boolean myIsUpToDate;
-  private ConstructType myLocalization;
-  private Symbol myDefinitionElement;
-  private PsiElement myLocalizationElement;
+  private static final MathematicaSymbolResolver RESOLVER = new MathematicaSymbolResolver();
 
-  public SymbolImpl(@NotNull ASTNode node) {
+  public SymbolImpl(ASTNode node) {
     super(node);
-    myLocalization = ConstructType.NULL;
-    myDefinitionElement = null;
-    myLocalizationElement = null;
-    myIsUpToDate = false;
   }
 
   @Override
@@ -114,61 +112,19 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     return this;
   }
 
-  @Override
-  public PsiReference getReference() {
-    return new SymbolPsiReference(this);
-  }
-
-  @Override
-  public void subtreeChanged() {
-    for (Symbol myReferringElement : myReferringElements) {
-      myReferringElement.subtreeChanged();
-    }
-    myReferringElements.clear();
-    if (myLocalizationElement instanceof SymbolImpl) {
-      ((SymbolImpl) myLocalizationElement).subtreeChanged();
-    }
-    myIsUpToDate = false;
-    myLocalizationElement = null;
-    myLocalization = ConstructType.NULL;
-  }
-
-  public boolean cachedResolve() {
-    return myIsUpToDate;
-  }
-
-  public Symbol getResolveElement() {
-    if (myIsUpToDate) {
-      return myDefinitionElement;
-    }
-    return null;
-  }
 
   public ConstructType getLocalizationConstruct() {
-    if (myIsUpToDate && myLocalization != null) {
-      return myLocalization;
-    }
+//    if (myIsUpToDate && myLocalization != null) {
+//      return myLocalization;
+//    }
     return ConstructType.NULL;
   }
 
   @Override
-  public void setReferringElement(Symbol referringSymbol, ConstructType type, PsiElement localizationElement) {
-    myDefinitionElement = referringSymbol;
-    referringSymbol.addElementReferencingToMe(this);
-    myLocalizationElement = localizationElement;
-    myLocalization = type;
-    myIsUpToDate = true;
-  }
-
-  @Override
-  public void addElementReferencingToMe(Symbol reference) {
-    if (!reference.equals(this)) myReferringElements.add(reference);
-  }
-
-  @Override
   public PsiElement[] getElementsReferencingToMe() {
-    if (myReferringElements.isEmpty()) return PsiElement.EMPTY_ARRAY;
-    return myReferringElements.toArray(new Symbol[myReferringElements.size()]);
+//    if (myReferringElements.isEmpty()) return PsiElement.EMPTY_ARRAY;
+//    return myReferringElements.toArray(new Symbol[myReferringElements.size()]);
+    return PsiElement.EMPTY_ARRAY;
   }
 
   @Override
@@ -180,10 +136,89 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     }
   }
 
-//  @NotNull
-//  @Override
-//  public PsiReference[] getReferences() {
-//    return ReferenceProvidersRegistry.getReferencesFromProviders(this);
-//  }
+  @Override
+  public String toString() {
+    return "Symbol";
+  }
 
+  @Override
+  public PsiElement getElement() {
+    return this;
+  }
+
+  @Override
+  public TextRange getRangeInElement() {
+    return TextRange.create(0, getTextLength());
+  }
+
+  @Override
+  public PsiReference getReference() {
+    return this;
+  }
+
+  @Nullable
+  @Override
+  public PsiElement resolve() {
+    final SymbolResolveResult symbolResolveResult = advancedResolve();
+    if (symbolResolveResult != null) {
+      return symbolResolveResult.getElement();
+    }
+    return null;
+  }
+
+  @Override
+  public SymbolResolveResult advancedResolve() {
+    ResolveCache resolveCache = ResolveCache.getInstance(getProject());
+    return resolveCache.resolveWithCaching(this, RESOLVER, false, false);
+  }
+
+  @NotNull
+  @Override
+  public String getCanonicalText() {
+    return getFullSymbolName();
+  }
+
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    return setName(newElementName);
+  }
+
+  @Override
+  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    return null;
+  }
+
+  /**
+   * This method is used by {@link PsiManager#areElementsEquivalent(PsiElement, PsiElement)}
+   * @param another the other element which is tested to be equal to this element
+   * @return true if the full symbol name is the same.
+   */
+  @Override
+  public boolean isEquivalentTo(PsiElement another) {
+    if (super.isEquivalentTo(another)) {
+      return true;
+    }
+    if (another instanceof PsiReference) {
+      final PsiElement myDef = resolve();
+      final PsiElement otherDef = ((PsiReference) another).resolve();
+      return myDef != null && otherDef != null && myDef == otherDef;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return getManager().areElementsEquivalent(resolve(), element);
+  }
+
+  @NotNull
+  @Override
+  public Object[] getVariants() {
+    return new Object[0];
+  }
+
+  @Override
+  public boolean isSoft() {
+    return false;
+  }
 }

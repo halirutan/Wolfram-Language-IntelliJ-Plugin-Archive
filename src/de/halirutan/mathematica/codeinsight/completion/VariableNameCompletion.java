@@ -34,11 +34,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.psi.impl.SymbolPsiReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
+
+import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
 
 
 /**
@@ -82,7 +83,7 @@ class VariableNameCompletion extends MathematicaCompletionProvider {
 
 
       for (Symbol currentSymbol : variants) {
-        if (!SymbolPsiReference.isBuiltInSymbol(currentSymbol)) {
+        if (!isBuiltInSymbol(currentSymbol)) {
           result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol), LOCAL_VARIABLE_PRIORITY));
         }
       }
