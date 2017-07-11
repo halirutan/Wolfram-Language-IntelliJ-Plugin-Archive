@@ -99,7 +99,7 @@ class BuiltinSymbolLookupElement extends LookupElement {
           final int currentPosition = context.getTailOffset();
           document.insertString(currentPosition, myInfo.getCallPattern());
           document.insertString(context.getTailOffset(), Character.toString(CLOSING_BRACKET));
-          final int endOffset = getFirstArgumentRange(myInfo).getEndOffset() + currentPosition;
+          final int endOffset = getFirstArgumentRange(myInfo) + currentPosition;
           editor.getSelectionModel().setSelection(currentPosition, endOffset);
           editor.getCaretModel().moveToOffset(endOffset);
 
@@ -155,12 +155,12 @@ class BuiltinSymbolLookupElement extends LookupElement {
     PsiDocumentManager.getInstance(project).commitDocument(document);
   }
 
-  private TextRange getFirstArgumentRange(SymbolInformation info) {
+  private int getFirstArgumentRange(SymbolInformation info) {
     final String callPattern = info.getCallPattern();
     final int firstComma = callPattern.indexOf(',');
     if (firstComma == -1) {
-      return new TextRange(1, callPattern.length());
+      return callPattern.length();
     }
-    return new TextRange(1, firstComma);
+    return firstComma;
   }
 }

@@ -23,7 +23,6 @@ symbols in context.";
 
 Begin["`Private`"];
 
-
 (*	Here we replace Mathematica box expressions with HTML constructs. If we lack of some things we just use a
 	a string representation like with UnderscriptBox *)
 $boxRules = {

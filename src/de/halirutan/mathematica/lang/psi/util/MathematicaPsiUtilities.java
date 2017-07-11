@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2013 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -441,6 +441,48 @@ public class MathematicaPsiUtilities {
     PsiElement comma = getNextSiblingSkippingWhitespace(arg);
     if (comma != null && comma.getNode().getElementType().equals(MathematicaElementTypes.COMMA)) {
       return getNextSiblingSkippingWhitespace(comma);
+    }
+    return null;
+  }
+
+  /**
+   * Extracts the context of a BeginPackage["Context`"] or Begin["Context`"] call
+   * @param element {@link FunctionCall} element that is a BeginPackage
+   * @return context string or null if it could not be extracted
+   */
+  @Nullable
+  public static String getBeginPackageContext(@NotNull PsiElement element) {
+    return getContext(element, true);
+  }
+
+  /**
+   * Extracts the context of a Begin["Context`"] call
+   * @param element {@link FunctionCall} element that is a BeginPackage
+   * @return context string or null if it could not be extracted
+   */
+  @Nullable
+  public static String getBeginContext(@NotNull PsiElement element) {
+    return getContext(element, false);
+  }
+
+  /**
+   * Extracts the context of a BeginPackage["Context`"] or Begin["Context`"] call
+   * @param element {@link FunctionCall} element that is a BeginPackage
+   * @param beginPackageOnly true if it only should extract BeginPackage contexts
+   * @return context string or null if it could not be extracted
+   */
+  @Nullable
+  public static String getContext(@NotNull PsiElement element, final boolean beginPackageOnly) {
+    if (element instanceof FunctionCall) {
+      final FunctionCall functionCall = (FunctionCall) element;
+      if (functionCall.matchesHead("BeginPackage") || (!beginPackageOnly && functionCall.matchesHead("Begin"))) {
+        final PsiElement context = functionCall.getArgument(1);
+        if (context instanceof MString) {
+          final String contextString = context.getText();
+            // We need to strip the quotes from the beginning and the end
+            return contextString.substring(1, contextString.length() - 1);
+        }
+      }
     }
     return null;
   }
