@@ -38,8 +38,8 @@ import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.MessageName;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.resolve.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -88,7 +88,7 @@ public class MathematicaReferenceAnnotator extends MathematicaVisitor implements
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
     PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
 
-    final ConstructType scope = processor.getMyLocalization();
+    final LocalizationConstruct.MScope scope = processor.getMyLocalization();
     switch (scope) {
       case NULL:
         break;

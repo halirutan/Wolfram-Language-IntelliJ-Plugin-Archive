@@ -23,37 +23,51 @@ package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (10.07.17).
  */
-public class LightSymbol extends LightElement implements PsiNameIdentifierOwner, PsiReference {
+public class LightSymbol extends LightElement implements Symbol {
+  private final PsiFile myFile;
   private String myName;
-  private String myContext;
 
-  public LightSymbol(@NotNull PsiManager manager, @NotNull final String symbolName, final String context) {
-    super(manager, MathematicaLanguage.INSTANCE);
-    myName = symbolName;
-    myContext = context;
+
+  public LightSymbol(@NotNull final Symbol symbol) {
+    super(symbol.getManager(), MathematicaLanguage.INSTANCE);
+    myName = symbol.getText();
+    myFile = symbol.getContainingFile();
+  }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor){
+      visitor.visitElement(this);
   }
 
   @Override
   public String toString() {
-    return "LightSymbol[" + myContext + '`' + myName + "]";
+    return "LightSymbol[" + myName + "]";
+  }
+
+  @Override
+  public PsiFile getContainingFile() {
+    return myFile;
   }
 
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof LightSymbol) {
-      return ((LightSymbol) obj).getSymbolName().equals(myName) && ((LightSymbol) obj).getSymbolContext().equals(myContext);
+      return ((LightSymbol) obj).getSymbolName().equals(myName);
     }
     return false;
   }
@@ -71,16 +85,36 @@ public class LightSymbol extends LightElement implements PsiNameIdentifierOwner,
   public int hashCode() {
     int hash = 1;
     hash = hash * 31 + myName.hashCode();
-    hash = hash * 31 + myContext.hashCode();
     return hash;
+  }
+
+  @Override
+  public String getMathematicaContext() {
+    return null;
   }
 
   public String getSymbolName() {
     return myName;
   }
 
-  public String getSymbolContext() {
-    return myContext;
+  @Override
+  public String getFullSymbolName() {
+    return myName;
+  }
+
+  @Override
+  public LocalizationConstruct.MScope getLocalizationConstruct() {
+    return null;
+  }
+
+  @Override
+  public PsiElement[] getElementsReferencingToMe() {
+    return new PsiElement[0];
+  }
+
+  @Override
+  public SymbolResolveResult advancedResolve() {
+    return null;
   }
 
   @Nullable
@@ -111,10 +145,15 @@ public class LightSymbol extends LightElement implements PsiNameIdentifierOwner,
     return this;
   }
 
+  @Override
+  public String getText() {
+    return myName;
+  }
+
   @NotNull
   @Override
   public String getCanonicalText() {
-    return myName;
+    return getText();
   }
 
   @Override

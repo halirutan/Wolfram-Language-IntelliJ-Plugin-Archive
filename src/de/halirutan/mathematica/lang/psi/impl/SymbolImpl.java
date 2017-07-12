@@ -30,7 +30,7 @@ import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.MathematicaSymbolResolver;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NonNls;
@@ -113,11 +113,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   }
 
 
-  public ConstructType getLocalizationConstruct() {
+  public MScope getLocalizationConstruct() {
 //    if (myIsUpToDate && myLocalization != null) {
 //      return myLocalization;
 //    }
-    return ConstructType.NULL;
+    return MScope.NULL;
   }
 
   @Override
@@ -155,6 +155,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   public PsiReference getReference() {
     return this;
   }
+
 
   @Nullable
   @Override

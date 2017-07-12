@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.lang.psi.api;
 
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,9 +66,9 @@ public interface FunctionCall extends PsiElement {
   /**
    * Returns the type of scoping construct, if the function call is e.g. <code >Module[..]</code>
    *
-   * @return The scoping construct or ConstructType.NULL if it is no scoping construct.
+   * @return The scoping construct or MScope.NULL if it is no scoping construct.
    */
-  public ConstructType getScopingConstruct();
+  public MScope getScopingConstruct();
 
 
   /**

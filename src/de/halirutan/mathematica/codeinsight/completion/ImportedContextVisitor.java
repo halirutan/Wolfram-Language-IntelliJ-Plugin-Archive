@@ -23,10 +23,10 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.string.MString;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 
 import java.util.HashSet;
 

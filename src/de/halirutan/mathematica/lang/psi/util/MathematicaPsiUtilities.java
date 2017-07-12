@@ -33,7 +33,7 @@ import de.halirutan.mathematica.lang.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.lang.psi.api.pattern.*;
 import de.halirutan.mathematica.lang.psi.api.rules.Rule;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -194,7 +194,7 @@ public class MathematicaPsiUtilities {
   public static List<Symbol> getLocalFunctionVariables(@NotNull FunctionCall element) {
     List<Symbol> localVariables = Lists.newArrayList();
 
-    if (element.isScopingConstruct() && element.getScopingConstruct().equals(ConstructType.FUNCTION)) {
+    if (element.isScopingConstruct() && element.getScopingConstruct().equals(LocalizationConstruct.MScope.FUNCTION)) {
       final List<PsiElement> arguments = getArguments(element);
       if (arguments.size() < 1) {
         return localVariables;

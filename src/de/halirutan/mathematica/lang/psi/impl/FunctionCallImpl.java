@@ -31,7 +31,7 @@ import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
@@ -122,15 +122,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    ConstructType type = (ConstructType) getUserData(myScopeKey);
-    return type != null && !type.equals(ConstructType.NULL);
+    MScope type = (LocalizationConstruct.MScope) getUserData(myScopeKey);
+    return type != null && !type.equals(MScope.NULL);
   }
 
-  public ConstructType getScopingConstruct() {
+  public LocalizationConstruct.MScope getScopingConstruct() {
     if (!myIsUpToDate) {
       cacheScopingConstruct();
     }
-    return (ConstructType) getUserData(myScopeKey);
+    return (LocalizationConstruct.MScope) getUserData(myScopeKey);
   }
 
   private void cacheScopingConstruct() {
@@ -139,7 +139,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     if (head instanceof Symbol) {
       cacheScopingConstruct(((Symbol) head).getSymbolName());
     } else {
-      putUserData(myScopeKey, ConstructType.NULL);
+      putUserData(myScopeKey, MScope.NULL);
     }
     myIsUpToDate = true;
   }

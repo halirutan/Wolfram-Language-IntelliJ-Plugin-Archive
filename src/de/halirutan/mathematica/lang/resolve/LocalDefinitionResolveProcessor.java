@@ -34,7 +34,7 @@ import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.lang.psi.impl.SymbolPsiReference;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPatternVisitor;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
@@ -77,20 +77,20 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
 
   private final Symbol myStartElement;
   private Symbol myReferringSymbol;
-  private ConstructType myLocalization;
+  private MScope myLocalization;
   private PsiElement myLocalizationSymbol = null;
 
   public LocalDefinitionResolveProcessor(Symbol startElement) {
     this.myStartElement = startElement;
     this.myReferringSymbol = null;
-    this.myLocalization = ConstructType.NULL;
+    this.myLocalization = MScope.NULL;
 
   }
 
   /**
    * There are several places where a local variable can be "defined". First I check all localization constructs which
    * are always function call like <code >Module[{blub},...]</code>. The complete list of localization constructs can be
-   * found in {@link ConstructType}.
+   * found in {@link MScope}.
    * <p/>
    * Secondly I check the patterns in e.g. <code >f[var_]:=...</code> for <code >SetDelayed</code> and <code
    * >TagSetDelayed</code>.
@@ -109,7 +109,7 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
       final FunctionCall functionCall = (FunctionCall) element;
       if (functionCall.isScopingConstruct()) {
         List<Symbol> vars = Lists.newArrayList();
-        final ConstructType scopingConstruct = functionCall.getScopingConstruct();
+        final MScope scopingConstruct = functionCall.getScopingConstruct();
 
         if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
           vars = MathematicaPsiUtilities.getLocalFunctionVariables(functionCall);
@@ -151,7 +151,7 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
       for (Symbol p : patternVisitor.getPatternSymbols()) {
         if (p.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
           myReferringSymbol = p;
-          myLocalization = ConstructType.SETDELAYEDPATTERN;
+          myLocalization = MScope.SETDELAYEDPATTERN;
           myLocalizationSymbol = element;
           return false;
         }
@@ -163,7 +163,7 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
       for (Symbol symbol : patternVisitor.getPatternSymbols()) {
         if (symbol.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
           myReferringSymbol = symbol;
-          myLocalization = ConstructType.RULEDELAYED;
+          myLocalization = MScope.RULEDELAYED;
           myLocalizationSymbol = element;
           return false;
         }
@@ -185,7 +185,7 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
     return myReferringSymbol;
   }
 
-  public ConstructType getMyLocalization() {
+  public MScope getMyLocalization() {
     return myLocalization;
   }
 

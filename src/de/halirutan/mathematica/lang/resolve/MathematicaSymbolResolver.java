@@ -27,7 +27,8 @@ import com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.impl.LightSymbol;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
@@ -42,8 +43,7 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
   public SymbolResolveResult resolve(@NotNull Symbol ref, boolean incompleteCode) {
 
     if (isBuiltInSymbol(ref)){
-      final LightSymbol lightSymbol = new LightSymbol(ref.getManager(), ref.getSymbolName(), ref.getMathematicaContext());
-      return new SymbolResolveResult(lightSymbol, ConstructType.BUILT_IN, true);
+      return new SymbolResolveResult(ref, MScope.BUILT_IN, true);
     }
 
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
@@ -59,10 +59,9 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
 
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition != null) {
-      return new SymbolResolveResult(globalDefinition, ConstructType.NULL, true);
+      return new SymbolResolveResult(globalDefinition, MScope.FILE, true);
     } else {
-      final LightSymbol lightSymbol = new LightSymbol(ref.getManager(), ref.getSymbolName(), ref.getMathematicaContext());
-      return new SymbolResolveResult(lightSymbol, ConstructType.NULL, true);
+      return new SymbolResolveResult(ref, MScope.NULL, true);
     }
   }
 

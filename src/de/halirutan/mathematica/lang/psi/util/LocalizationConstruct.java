@@ -49,7 +49,7 @@ public class LocalizationConstruct {
         myFunctionLike.contains(elementName);
   }
 
-  public static boolean isModuleLike(ConstructType scopingConstruct) {
+  public static boolean isModuleLike(MScope scopingConstruct) {
     for (String s : myModuleLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -57,7 +57,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isTableLike(ConstructType scopingConstruct) {
+  public static boolean isTableLike(MScope scopingConstruct) {
     for (String s : myTableLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -65,7 +65,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isCompileLike(ConstructType scopingConstruct) {
+  public static boolean isCompileLike(MScope scopingConstruct) {
     for (String s : myCompileLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -73,7 +73,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isManipulateLike(ConstructType scopingConstruct) {
+  public static boolean isManipulateLike(MScope scopingConstruct) {
     for (String s : myManipulateLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -81,7 +81,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isRuleLike(ConstructType scopingConstruct) {
+  public static boolean isRuleLike(MScope scopingConstruct) {
     for (String s : myRuleLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -89,7 +89,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isLimitLike(ConstructType scopingConstruct) {
+  public static boolean isLimitLike(MScope scopingConstruct) {
     for (String s : myLimitLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -97,7 +97,7 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static boolean isFunctionLike(ConstructType scopingConstruct) {
+  public static boolean isFunctionLike(MScope scopingConstruct) {
     for (String s : myFunctionLike) {
       if (s.equalsIgnoreCase(scopingConstruct.toString()))
         return true;
@@ -105,16 +105,16 @@ public class LocalizationConstruct {
     return false;
   }
 
-  public static ConstructType getType(String name) {
+  public static MScope getType(String name) {
     if (isLocalizationConstruct(name)) {
-      return ConstructType.valueOf(name.toUpperCase());
+      return MScope.valueOf(name.toUpperCase());
     }
-    return ConstructType.NULL;
+    return MScope.NULL;
   }
 
-  public enum ConstructType {
+  public enum MScope {
     MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, DO, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
-    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D, BUILT_IN;
+    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D, BUILT_IN, FILE;
 
 
     @Override
@@ -142,6 +142,8 @@ public class LocalizationConstruct {
           return "ParametricPlot3D";
         case BUILT_IN:
           return "BuiltIn";
+        case FILE:
+          return "File Scope";
         case NULL:
           return "Unknown scope";
         default:
