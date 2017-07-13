@@ -21,60 +21,17 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
-import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.lang.MathematicaLanguage;
+import com.intellij.psi.SyntheticElement;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (10.07.17).
+ * @author patrick (12.07.17).
  */
-public class LightSymbol extends LightElement implements PsiNamedElement {
-  private String myName;
-  private PsiFile myFile;
+public class LightBuiltInSymbol extends LightSymbol implements SyntheticElement{
 
-  LightSymbol(@NotNull Symbol symbol) {
-    super(symbol.getManager(), MathematicaLanguage.INSTANCE);
-    myName = symbol.getText();
-    myFile = symbol.getContainingFile();
+  public LightBuiltInSymbol(@NotNull Symbol symbol) {
+    super(symbol);
   }
 
-  @Override
-  public String toString() {
-    return myName;
-  }
-
-  @Override
-  public String getName() {
-    return myName;
-  }
-
-  @Override
-  public PsiFile getContainingFile() {
-    return myFile;
-  }
-
-  @Override
-  public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
-    myName = name;
-    return this;
-  }
-
-  @NotNull
-  @Override
-  public SearchScope getUseScope() {
-    return myFile.getUseScope();
-  }
-
-  @Override
-  public boolean isEquivalentTo(PsiElement another) {
-    if (another instanceof Symbol || another instanceof LightSymbol) {
-      final String name = ((PsiNamedElement) another).getName();
-      return myName.equals(name);
-    }
-    return false;
-  }
 }

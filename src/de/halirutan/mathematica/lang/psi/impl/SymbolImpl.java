@@ -170,7 +170,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public SymbolResolveResult advancedResolve() {
     ResolveCache resolveCache = ResolveCache.getInstance(getProject());
-    return resolveCache.resolveWithCaching(this, RESOLVER, false, false);
+    return resolveCache.resolveWithCaching(this, RESOLVER, true, false);
   }
 
   @NotNull
