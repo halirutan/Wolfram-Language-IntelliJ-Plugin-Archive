@@ -21,16 +21,101 @@
 
 package de.halirutan.mathematica.index.packageexport;
 
+import com.intellij.util.io.IOUtil;
+import com.intellij.util.io.KeyDescriptor;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.Objects;
+
 /**
  * @author patrick (01.11.16).
  */
-public class PackageExportSymbol {
+public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
 
-  public final String nameSpace;
-  public final String symbol;
+  public static final PackageExportSymbol INSTANCE = new PackageExportSymbol();
 
-  public PackageExportSymbol(String nameSpace, String symbol) {
-    this.nameSpace = nameSpace;
-    this.symbol = symbol;
+  private final String myNameSpace;
+  private final String mySymbol;
+  private final boolean myExported;
+  private final String myFileName;
+
+  PackageExportSymbol(String filename, String nameSpace, String symbol, boolean isExport)  {
+    this.myFileName = filename;
+    this.myNameSpace = nameSpace;
+    this.mySymbol = symbol;
+    this.myExported = isExport;
+  }
+
+  private PackageExportSymbol() {
+    this("", "", "", false);
+  }
+
+  public String getFileName() {
+    return myFileName;
+  }
+
+  public String getNameSpace() {
+    return myNameSpace;
+  }
+
+  public String getSymbol() {
+    return mySymbol;
+  }
+
+  public boolean isExported() {
+    return myExported;
+  }
+
+  @Override
+  public void save(@NotNull DataOutput out, PackageExportSymbol value) throws IOException {
+    IOUtil.writeUTF(out, value.myFileName);
+    IOUtil.writeUTF(out, value.myNameSpace);
+    IOUtil.writeUTF(out, value.mySymbol);
+    out.writeBoolean(value.myExported);
+  }
+
+  @Override
+  public PackageExportSymbol read(@NotNull DataInput in) throws IOException {
+    final String filename = IOUtil.readUTF(in);
+    final String namespace = IOUtil.readUTF(in);
+    final String symbol = IOUtil.readUTF(in);
+    final boolean exported = in.readBoolean();
+    return new PackageExportSymbol(filename, namespace, symbol, exported);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = myExported ? 1 : 2;
+    hash = hash*31 + myFileName.hashCode();
+    hash = hash*31 + myNameSpace.hashCode();
+    hash = hash*31 + mySymbol.hashCode();
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof PackageExportSymbol)) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+    return myExported == ((PackageExportSymbol) obj).myExported &&
+        Objects.equals(mySymbol, ((PackageExportSymbol) obj).mySymbol) &&
+        Objects.equals(myNameSpace, ((PackageExportSymbol) obj).myNameSpace) &&
+        Objects.equals(myFileName, ((PackageExportSymbol) obj).myFileName);
+  }
+
+  @Override
+  public int getHashCode(PackageExportSymbol value) {
+    return hashCode();
+  }
+
+  @Override
+  public boolean isEqual(PackageExportSymbol val1, PackageExportSymbol val2) {
+    return val1.equals(val2);
   }
 }

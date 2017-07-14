@@ -26,6 +26,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -95,7 +96,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
           setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.IDENTIFIER);
           break;
         case NULL:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BAD_CHARACTER);
+          setHighlighting(symbol, myHolder, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
           break;
         case BUILT_IN:
           setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);

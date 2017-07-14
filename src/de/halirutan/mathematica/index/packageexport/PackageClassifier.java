@@ -21,13 +21,13 @@
 
 package de.halirutan.mathematica.index.packageexport;
 
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.index.PackageUtil;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
-import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
-import de.halirutan.mathematica.lang.psi.api.FunctionCall;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.*;
 import de.halirutan.mathematica.lang.psi.api.assignment.Set;
 import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.impl.assignment.SetDefinitionSymbolVisitor;
@@ -35,6 +35,7 @@ import de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
 /**
@@ -42,22 +43,25 @@ import java.util.Stack;
  */
 public class PackageClassifier extends MathematicaVisitor {
 
-  private HashMap<String, PackageExportSymbol> myExportInfo;
+  private HashSet<PackageExportSymbol> myExportInfo;
   private Stack<String> myContextStack;
+  private String myFileName;
 
   PackageClassifier() {
-    myContextStack = new Stack<String>();
-    myExportInfo = new HashMap<String, PackageExportSymbol>();
+    myContextStack = new Stack<>();
+    myExportInfo = new HashSet<>();
     myContextStack.push("Global`");
+    myFileName = "";
   }
 
   Collection<PackageExportSymbol> getListOfExportSymbols() {
-    return myExportInfo.values();
+    return myExportInfo;
   }
 
 
   @Override
   public void visitFile(PsiFile file) {
+    myFileName = file.getName();
     file.acceptChildren(this);
   }
 
@@ -84,34 +88,45 @@ public class PackageClassifier extends MathematicaVisitor {
   @Override
   public void visitSet(Set set) {
     final PsiElement lhs = set.getFirstChild();
-    collectSetDefinitions(lhs);
-  }
-
-  @Override
-  public void visitSetDelayed(SetDelayed setDelayed) {
-    final PsiElement lhs = setDelayed.getFirstChild();
-    collectSetDefinitions(lhs);
-  }
-
-
-  private void collectSetDefinitions(PsiElement lhs) {
-    if (lhs != null) {
-      SetDefinitionSymbolVisitor visitor = new SetDefinitionSymbolVisitor(lhs);
-      lhs.accept(visitor);
-      final java.util.Set<Symbol> unboundSymbols = visitor.getUnboundSymbols();
-      for (Symbol symbol : unboundSymbols) {
-        final String mathematicaContext = symbol.getMathematicaContext();
-        if ("".equals(mathematicaContext)) {
+    if (lhs instanceof MessageName) {
+      final StringifiedSymbol tag = ((MessageName) lhs).getTag();
+      if ("usage".equals(tag != null ? tag.getText() : "")) {
+        final Expression symbol = ((MessageName) lhs).getSymbol();
+        if (symbol instanceof Symbol) {
           final String context = PackageUtil.buildContext(myContextStack);
-          myExportInfo.put(context+symbol.getSymbolName(), new PackageExportSymbol(context, symbol.getSymbolName()));
-        } else {
-          myContextStack.push(mathematicaContext);
-          final String context = PackageUtil.buildContext(myContextStack);
-          myExportInfo.put(context+symbol.getSymbolName(), new PackageExportSymbol(context, symbol.getSymbolName()));
-          myContextStack.pop();
+          myExportInfo.add(new PackageExportSymbol(myFileName, context, ((Symbol) symbol).getSymbolName(), true));
         }
       }
     }
   }
+
+
+
+//  @Override
+//  public void visitSetDelayed(SetDelayed setDelayed) {
+//    final PsiElement lhs = setDelayed.getFirstChild();
+//    collectSetDefinitions(lhs);
+//  }
+//
+//
+//  private void collectSetDefinitions(PsiElement lhs) {
+//    if (lhs != null) {
+//      SetDefinitionSymbolVisitor visitor = new SetDefinitionSymbolVisitor(lhs);
+//      lhs.accept(visitor);
+//      final java.util.Set<Symbol> unboundSymbols = visitor.getUnboundSymbols();
+//      for (Symbol symbol : unboundSymbols) {
+//        final String mathematicaContext = symbol.getMathematicaContext();
+//        if ("".equals(mathematicaContext)) {
+//          final String context = PackageUtil.buildContext(myContextStack);
+//          myExportInfo.put(context+symbol.getSymbolName(), new PackageExportSymbol(context, symbol.getSymbolName(), true));
+//        } else {
+//          myContextStack.push(mathematicaContext);
+//          final String context = PackageUtil.buildContext(myContextStack);
+//          myExportInfo.put(context+symbol.getSymbolName(), new PackageExportSymbol(context, symbol.getSymbolName(), true));
+//          myContextStack.pop();
+//        }
+//      }
+//    }
+//  }
 
 }
