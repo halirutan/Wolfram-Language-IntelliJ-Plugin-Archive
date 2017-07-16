@@ -45,6 +45,9 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
 
   private final Set<Symbol> myPatternSymbols = Sets.newHashSet();
   private final LinkedHashSet<Symbol> myUnboundSymbols = Sets.newLinkedHashSet();
+  /* Except | Longest | Optional | PatternTest | Repeated | RepeatedNull | Shortest
+  * HoldPattern | IgnoringInactive | KeyValuePattern | Literal | Longest | Optional | Repeated | RepeatedNull | Shortest
+  * */
   private final List<String> myDiveInFirstChild = Lists.newArrayList("Longest", "Shortest", "Repeated", "Optional", "PatternTest", "Condition");
   private final List<String> myDoNotDiveIn = Lists.newArrayList("Verbatim");
   private Assignment myAssignmentType = Assignment.NONE_;

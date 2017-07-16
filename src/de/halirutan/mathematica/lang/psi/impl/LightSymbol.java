@@ -70,10 +70,29 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
   }
 
   @Override
+  public int hashCode() {
+    int hash = 1;
+    hash = hash*17 + myName.hashCode();
+    hash = hash * 31 + myFile.hashCode();
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj != null && obj instanceof LightSymbol) {
+      return obj.hashCode() == hashCode();
+    }
+    return false;
+  }
+
+  @Override
   public boolean isEquivalentTo(PsiElement another) {
-    if (another instanceof Symbol || another instanceof LightSymbol) {
-      final String name = ((PsiNamedElement) another).getName();
-      return myName.equals(name);
+    if (another instanceof Symbol) {
+      final PsiElement resolve = ((Symbol) another).resolve();
+      return resolve != null && resolve.equals(this);
+    }
+    if (another instanceof LightSymbol) {
+      return another.hashCode() == hashCode();
     }
     return false;
   }

@@ -29,6 +29,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.assignment.Set;
 import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
@@ -144,12 +145,15 @@ public class LocalDefinitionResolveProcessor extends BaseScopeProcessor {
           }
         }
       }
-    } else if (element instanceof SetDelayed || element instanceof TagSetDelayed) {
+    } else if (element instanceof SetDelayed || element instanceof TagSetDelayed || element instanceof Set) {
 
       MathematicaPatternVisitor patternVisitor = new MathematicaPatternVisitor();
       element.accept(patternVisitor);
       for (Symbol p : patternVisitor.getPatternSymbols()) {
         if (p.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
+          if (element instanceof Set && myStartElement != p) {
+            continue;
+          }
           myReferringSymbol = p;
           myLocalization = MScope.SETDELAYEDPATTERN;
           myLocalizationSymbol = element;
