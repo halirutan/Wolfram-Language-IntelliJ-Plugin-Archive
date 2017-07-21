@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 
 /**
@@ -60,9 +61,11 @@ public interface Symbol extends PsiNameIdentifierOwner, PsiReference {
    *
    * @return type of localization
    */
-  LocalizationConstruct.MScope getLocalizationConstruct();
+  MScope getLocalizationConstruct();
 
   PsiElement[] getElementsReferencingToMe();
 
   SymbolResolveResult advancedResolve();
+
+  boolean isSelfReference();
 }

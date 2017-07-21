@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.codeinsight.highlighting;
 
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -42,9 +41,7 @@ import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
 import de.halirutan.mathematica.lang.psi.api.slots.Slot;
 import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -64,8 +61,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     final Annotation annotation = holder.createInfoAnnotation(element, null);
     annotation.setTextAttributes(key);
-    annotation.setHighlightType(ProblemHighlightType.ERROR);
-    annotation.setNeedsUpdateOnTyping(false);
+    annotation.setNeedsUpdateOnTyping(true);
   }
 
   private static void setHighlightingStrict(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
@@ -88,33 +84,32 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    final SymbolResolveResult symbolResolveResult = symbol.advancedResolve();
-    if (symbolResolveResult != null) {
-      final MScope scope = symbolResolveResult.getLocalization();
-      switch (scope) {
-        case FILE:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.IDENTIFIER);
-          break;
-        case NULL:
-          setHighlighting(symbol, myHolder, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
-          break;
-        case BUILT_IN:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-          break;
-        case MODULE:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
-          break;
-        case BLOCK:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED);
-          break;
-        case SETDELAYEDPATTERN:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
-          break;
-        default:
-          setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
-          break;
-      }
+    symbol.resolve();
+    final MScope scope = symbol.getLocalizationConstruct();
+    switch (scope) {
+      case FILE:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.IDENTIFIER);
+        break;
+      case NULL:
+        setHighlighting(symbol, myHolder, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
+        break;
+      case BUILT_IN:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
+        break;
+      case MODULE:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+        break;
+      case BLOCK:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED);
+        break;
+      case SETDELAYEDPATTERN:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.PATTERN);
+        break;
+      default:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
+        break;
     }
+
   }
 
   @Override

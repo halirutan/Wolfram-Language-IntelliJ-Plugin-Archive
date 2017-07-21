@@ -22,44 +22,44 @@
 package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
+import de.halirutan.mathematica.lang.resolve.processors.SymbolResolveHint;
 import org.jetbrains.annotations.NotNull;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
-  private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
-  private boolean myIsUpToDate;
+//  private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
+//  private boolean myIsUpToDate;
   private String myHead;
+  private MScope myLocalizationConstruct = MScope.NULL;
 
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
-    myIsUpToDate = false;
+//    myIsUpToDate = false;
     myHead = node.getFirstChildNode().getText();
+    myLocalizationConstruct = LocalizationConstruct.getType(myHead);
   }
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    final PsiElement head = getFirstChild();
-    if (head instanceof Symbol) {
+    if (isScopingConstruct()) {
       // In a tree-up-walk, we only consider declarations of Module, Block, .. when we come from inside this Module.
       // Therefore, we need to check whether our last position was inside and if not, we don't consider the declarations
       // of this.
-      if (lastParent.getParent() != this) {
+      if (lastParent == this.getHead() || lastParent.getParent() != this) {
         return true;
       }
-      final String symbolName = ((Symbol) head).getSymbolName();
-      cacheScopingConstruct(symbolName);
       if (isScopingConstruct()) {
+        state = state.put(SymbolResolveHint.RESOLVE_CONTEXT, this);
+        state = state.put(SymbolResolveHint.LAST_PARENT, lastParent);
         return processor.execute(this, state);
       }
     }
@@ -102,10 +102,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
   }
 
   @Override
-  public void subtreeChanged() {
-    super.subtreeChanged();
-    myIsUpToDate = false;
+  public PsiElement[] getArguments() {
+    return getChildren();
   }
+
+//  @Override
+//  public void subtreeChanged() {
+//    super.subtreeChanged();
+//    myIsUpToDate = false;
+//  }
 
   /**
    * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}. This can
@@ -118,35 +123,24 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   @Override
   public boolean isScopingConstruct() {
-
-    if (!myIsUpToDate) {
-      cacheScopingConstruct();
-    }
-    MScope type = (LocalizationConstruct.MScope) getUserData(myScopeKey);
-    return type != null && !type.equals(MScope.NULL);
+    return myLocalizationConstruct != MScope.NULL;
   }
 
-  public LocalizationConstruct.MScope getScopingConstruct() {
-    if (!myIsUpToDate) {
-      cacheScopingConstruct();
-    }
-    return (LocalizationConstruct.MScope) getUserData(myScopeKey);
+  @Override
+  public MScope getScopingConstruct() {
+    return myLocalizationConstruct;
   }
-
-  private void cacheScopingConstruct() {
-    if (myIsUpToDate) return;
-    PsiElement head = getFirstChild();
-    if (head instanceof Symbol) {
-      cacheScopingConstruct(((Symbol) head).getSymbolName());
-    } else {
-      putUserData(myScopeKey, MScope.NULL);
-    }
-    myIsUpToDate = true;
-  }
-
-  private void cacheScopingConstruct(String functionName) {
-    putUserData(myScopeKey, LocalizationConstruct.getType(functionName));
-  }
+//
+//  private void cacheScopingConstruct() {
+//    if (myIsUpToDate) return;
+//    PsiElement head = getFirstChild();
+//    if (head instanceof Symbol) {
+//      cacheScopingConstruct(((Symbol) head).getSymbolName());
+//    } else {
+//      putUserData(myScopeKey, MScope.NULL);
+//    }
+//    myIsUpToDate = true;
+//  }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {

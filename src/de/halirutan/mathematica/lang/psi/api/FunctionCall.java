@@ -40,14 +40,15 @@ public interface FunctionCall extends PsiElement {
    *
    * @return true if it is a scoping construct.
    */
-  public boolean isScopingConstruct();
+  boolean isScopingConstruct();
 
-  /**
-   * Extracts the PsiElement which represents the Head of a function call.
-   *
-   * @return The head
-   */
-  public PsiElement getHead();
+
+    /**
+     * Extracts the PsiElement which represents the Head of a function call.
+     *
+     * @return The head
+     */
+    PsiElement getHead();
 
   /**
    * Tests whether the function call has a head the matches the argument.
@@ -55,12 +56,12 @@ public interface FunctionCall extends PsiElement {
    * @param head The head which should be tested.
    * @return True, if head matches the Head of the function call.
    */
-  public boolean matchesHead(String head);
+  boolean matchesHead(String head);
 
 
-  public boolean hasHead(@NotNull final String otherHead);
+  boolean hasHead(@NotNull final String otherHead);
 
-  public boolean hasHead(@NotNull final String[] otherHeads);
+  boolean hasHead(@NotNull final String[] otherHeads);
 
 
   /**
@@ -68,7 +69,7 @@ public interface FunctionCall extends PsiElement {
    *
    * @return The scoping construct or MScope.NULL if it is no scoping construct.
    */
-  public MScope getScopingConstruct();
+  MScope getScopingConstruct();
 
 
   /**
@@ -79,4 +80,6 @@ public interface FunctionCall extends PsiElement {
    */
   @Nullable
   PsiElement getArgument(int n);
+
+  PsiElement[] getArguments();
 }

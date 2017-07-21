@@ -21,39 +21,22 @@
 
 package de.halirutan.mathematica.lang.resolve;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiReference;
+import com.intellij.testFramework.ResolveTestCase;
+import de.halirutan.mathematica.MathematicaTestUtils;
 
 /**
- * @author patrick (08.07.17).
+ * @author patrick (20.07.17).
  */
-public class SymbolResolveResult implements ResolveResult {
-
-  private final PsiElement myElement;
-  private final boolean myIsValid;
-  private MScope myLocalization;
-
-  public SymbolResolveResult(PsiElement element, MScope scope, boolean isValid) {
-    this.myElement = element;
-    this.myLocalization = scope;
-    this.myIsValid = isValid;
-  }
-
-  @Nullable
-  @Override
-  public PsiElement getElement() {
-    return myElement;
-  }
-
-  public MScope getLocalization() {
-    return myLocalization;
-  }
+public class AbstractResolveTest extends ResolveTestCase {
 
   @Override
-  public boolean isValidResult() {
-    return myIsValid;
+  protected String getTestDataPath() {
+    return MathematicaTestUtils.getTestPath() + "/lang/resolve/";
   }
+
+  protected PsiReference configure() throws Exception {
+    return configureByFile( getTestName(false) + ".m", null);
+  }
+
 }

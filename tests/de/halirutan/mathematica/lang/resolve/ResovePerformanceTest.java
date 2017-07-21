@@ -22,38 +22,34 @@
 package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiFile;
+import com.intellij.testFramework.PsiTestCase;
+import de.halirutan.mathematica.MathematicaTestUtils;
+import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
 
 /**
- * @author patrick (08.07.17).
+ * @author patrick (20.07.17).
  */
-public class SymbolResolveResult implements ResolveResult {
-
-  private final PsiElement myElement;
-  private final boolean myIsValid;
-  private MScope myLocalization;
-
-  public SymbolResolveResult(PsiElement element, MScope scope, boolean isValid) {
-    this.myElement = element;
-    this.myLocalization = scope;
-    this.myIsValid = isValid;
-  }
-
-  @Nullable
-  @Override
-  public PsiElement getElement() {
-    return myElement;
-  }
-
-  public MScope getLocalization() {
-    return myLocalization;
-  }
+public class ResovePerformanceTest extends PsiTestCase {
 
   @Override
-  public boolean isValidResult() {
-    return myIsValid;
+  protected String getTestDataPath() {
+    return MathematicaTestUtils.getTestPath() + "/lang/resolve";
+  }
+
+  public void testLargeFile() throws Exception {
+    final int[] numResolved = {0};
+    final PsiFile file = createFile("LargeFile.m", loadFile("LargeFile.m"));
+    file.accept(new MathematicaRecursiveVisitor(){
+      @Override
+      public void visitSymbol(Symbol symbol) {
+        final PsiElement resolve = symbol.resolve();
+        if (resolve != null) {
+          numResolved[0]++;
+        }
+      }
+    });
+    System.out.println(numResolved[0]);
   }
 }

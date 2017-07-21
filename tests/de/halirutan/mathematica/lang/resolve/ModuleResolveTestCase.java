@@ -22,38 +22,15 @@
 package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.PsiReference;
 
 /**
- * @author patrick (08.07.17).
+ * @author patrick (20.07.17).
  */
-public class SymbolResolveResult implements ResolveResult {
+public class ModuleResolveTestCase extends AbstractResolveTest {
 
-  private final PsiElement myElement;
-  private final boolean myIsValid;
-  private MScope myLocalization;
-
-  public SymbolResolveResult(PsiElement element, MScope scope, boolean isValid) {
-    this.myElement = element;
-    this.myLocalization = scope;
-    this.myIsValid = isValid;
-  }
-
-  @Nullable
-  @Override
-  public PsiElement getElement() {
-    return myElement;
-  }
-
-  public MScope getLocalization() {
-    return myLocalization;
-  }
-
-  @Override
-  public boolean isValidResult() {
-    return myIsValid;
+  public void testSimpleModule() throws Exception {
+    final PsiReference psiReference = configure();
+    final PsiElement resolve = psiReference.resolve();
   }
 }

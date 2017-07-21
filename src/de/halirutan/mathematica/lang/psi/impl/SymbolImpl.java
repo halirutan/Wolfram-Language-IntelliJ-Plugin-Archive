@@ -37,6 +37,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Implementation of Mathematica symbols which are probably the most important elements of a parse tree. Symbols in
  * Mathematica are not only the variables you use. Due to the <em>data is code</em> paradigm of Mathematica, even the
@@ -56,6 +58,9 @@ import org.jetbrains.annotations.Nullable;
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   private static final MathematicaSymbolResolver RESOLVER = new MathematicaSymbolResolver();
+
+  private MScope myScope = MScope.NULL;
+  private boolean mySelfReferenceQ = false;
 
   public SymbolImpl(ASTNode node) {
     super(node);
@@ -114,10 +119,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
 
   public MScope getLocalizationConstruct() {
-//    if (myIsUpToDate && myLocalization != null) {
-//      return myLocalization;
-//    }
-    return MScope.NULL;
+    return myScope;
   }
 
   @Override
@@ -162,6 +164,8 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   public PsiElement resolve() {
     final SymbolResolveResult symbolResolveResult = advancedResolve();
     if (symbolResolveResult != null) {
+      myScope = symbolResolveResult.getLocalization();
+      mySelfReferenceQ = Objects.equals(symbolResolveResult.getElement(), this);
       return symbolResolveResult.getElement();
     }
     return null;
@@ -171,6 +175,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   public SymbolResolveResult advancedResolve() {
     ResolveCache resolveCache = ResolveCache.getInstance(getProject());
     return resolveCache.resolveWithCaching(this, RESOLVER, true, false);
+  }
+
+  @Override
+  public boolean isSelfReference() {
+    return mySelfReferenceQ;
   }
 
   @NotNull

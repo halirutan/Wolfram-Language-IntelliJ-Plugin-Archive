@@ -40,13 +40,13 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    PsiElement children[] = getChildren();
-    for (PsiElement child : children) {
-      if (child.equals(lastParent)) {
-        continue;
-      }
-      if (!child.processDeclarations(processor, state, this, place)) return false;
-    }
+//    PsiElement children[] = getChildren();
+//    for (PsiElement child : children) {
+//      if (child.equals(lastParent)) {
+//        continue;
+//      }
+//      if (!child.processDeclarations(processor, state, this, place)) return false;
+//    }
     return true;
   }
 

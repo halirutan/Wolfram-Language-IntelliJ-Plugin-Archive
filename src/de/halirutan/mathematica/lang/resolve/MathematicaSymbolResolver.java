@@ -27,10 +27,9 @@ import com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
-import de.halirutan.mathematica.lang.psi.impl.LightSymbol;
 import de.halirutan.mathematica.lang.psi.impl.LightUndefinedSymbol;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
+import de.halirutan.mathematica.lang.resolve.processors.LocalDefinitionResolveProcessor2;
 import org.jetbrains.annotations.NotNull;
 
 import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
@@ -48,7 +47,7 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
       return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.BUILT_IN, true);
     }
 
-    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
+    LocalDefinitionResolveProcessor2 processor = new LocalDefinitionResolveProcessor2(ref);
     PsiTreeUtil.treeWalkUp(processor, ref, ref.getContainingFile(), ResolveState.initial());
     final Symbol referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol != null) {
