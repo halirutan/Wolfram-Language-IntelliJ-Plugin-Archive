@@ -32,7 +32,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
 /**

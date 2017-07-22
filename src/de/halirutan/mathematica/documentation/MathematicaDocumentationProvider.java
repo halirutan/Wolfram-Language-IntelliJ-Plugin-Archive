@@ -31,10 +31,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiWhiteSpace;
-import de.halirutan.mathematica.parsing.psi.api.OperatorNameProvider;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.impl.SymbolImpl;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiElementFactory;
+import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,12 +115,13 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     final LookupEx activeLookup = LookupManager.getActiveLookup(editor);
     if ((activeLookup != null) && activeLookup.isFocused()) {
       final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset() - 1);
-      if (elementAt != null) {
-        Symbol lookup = new SymbolImpl(elementAt.getNode());
+      // TODO: Check
+      if (elementAt instanceof Symbol) {
+//        Symbol lookup = new SymbolImpl(elementAt.getNode());
         final LookupElement currentItem = activeLookup.getCurrentItem();
         final String lookupString = currentItem != null ? currentItem.getLookupString() : "";
-        lookup.setName(lookupString);
-        return lookup;
+//        lookup.setName(lookupString);
+        return elementAt;
       }
     }
 
@@ -136,9 +136,9 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
         }
       }
 
-      if (parent instanceof Symbol) {
-        return new SymbolImpl(parent.getNode());
-      }
+//      if (parent instanceof Symbol) {
+//        return new SymbolImpl(parent.getNode());
+//      }
 
       // Determine if the contextElement is the operator sign of an operation.
       // See the doc to OperatorNameProviderImpl.

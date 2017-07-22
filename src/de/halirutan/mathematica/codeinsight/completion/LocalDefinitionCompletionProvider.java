@@ -25,18 +25,16 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.assignment.Set;
-import de.halirutan.mathematica.parsing.psi.api.assignment.SetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSet;
-import de.halirutan.mathematica.parsing.psi.api.assignment.TagSetDelayed;
-import de.halirutan.mathematica.parsing.psi.api.rules.RuleDelayed;
-import de.halirutan.mathematica.parsing.psi.impl.SymbolPsiReference;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPatternVisitor;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiUtilities;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.assignment.Set;
+import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
+import de.halirutan.mathematica.lang.psi.api.assignment.TagSet;
+import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPatternVisitor;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -70,7 +68,7 @@ class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
       final FunctionCall functionCall = (FunctionCall) element;
       if (functionCall.isScopingConstruct()) {
         List<Symbol> vars = Lists.newArrayList();
-        final ConstructType scopingConstruct = functionCall.getScopingConstruct();
+        final LocalizationConstruct.MScope scopingConstruct = functionCall.getScopingConstruct();
 
         if (LocalizationConstruct.isFunctionLike(scopingConstruct)) {
           vars = MathematicaPsiUtilities.getLocalFunctionVariables(functionCall);
@@ -150,7 +148,6 @@ class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
     public int compare(Symbol o1, Symbol o2) {
       return (o1.getFullSymbolName().compareTo(o2.getFullSymbolName()));
     }
-
   }
 
 }

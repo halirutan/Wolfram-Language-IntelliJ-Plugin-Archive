@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.codeinsight.structureview.representations;
 
 import com.intellij.navigation.ItemPresentation;
-import de.halirutan.mathematica.parsing.psi.util.GlobalDefinitionCollector.AssignmentProperty;
+import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector.AssignmentProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

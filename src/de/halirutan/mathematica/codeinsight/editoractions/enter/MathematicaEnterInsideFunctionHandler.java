@@ -39,9 +39,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

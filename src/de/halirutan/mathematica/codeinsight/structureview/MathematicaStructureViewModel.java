@@ -36,8 +36,8 @@ import de.halirutan.mathematica.codeinsight.structureview.groupers.AssignmentTyp
 import de.halirutan.mathematica.codeinsight.structureview.groupers.SymbolNameGrouper;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.AlphaSorterWithCase;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceSorter;
-import de.halirutan.mathematica.parsing.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

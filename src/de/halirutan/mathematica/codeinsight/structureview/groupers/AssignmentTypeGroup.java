@@ -30,7 +30,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.CodePlaceProvider;
-import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
+import de.halirutan.mathematica.lang.psi.SymbolAssignmentType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

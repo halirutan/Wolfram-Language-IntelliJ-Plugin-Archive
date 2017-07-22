@@ -35,7 +35,7 @@ import java.util.List;
 public class MathematicaListSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {
-    return e instanceof de.halirutan.mathematica.parsing.psi.api.lists.List;
+    return e instanceof de.halirutan.mathematica.lang.psi.api.lists.List;
   }
 
   @Override

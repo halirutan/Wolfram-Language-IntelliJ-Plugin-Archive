@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (11/4/13)

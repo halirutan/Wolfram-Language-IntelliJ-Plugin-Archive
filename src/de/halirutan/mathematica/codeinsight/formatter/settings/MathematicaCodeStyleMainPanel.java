@@ -23,7 +23,7 @@ package de.halirutan.mathematica.codeinsight.formatter.settings;
 
 import com.intellij.application.options.TabbedLanguageCodeStylePanel;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import de.halirutan.mathematica.MathematicaLanguage;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 
 /**
  * @author patrick (11/2/13)

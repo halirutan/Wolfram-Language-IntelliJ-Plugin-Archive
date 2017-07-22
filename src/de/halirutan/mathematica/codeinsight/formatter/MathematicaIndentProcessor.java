@@ -26,7 +26,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.tree.IElementType;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.*;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.*;
 
 /**
  * @author patrick (11/1/13)

@@ -33,12 +33,12 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.util.Comments;
-import de.halirutan.mathematica.parsing.psi.util.Comments.CommentStyle;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.util.Comments;
+import de.halirutan.mathematica.lang.psi.util.Comments.CommentStyle;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -120,7 +120,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
       final PsiElement psi = node.getPsi();
       if (psi instanceof FunctionCall) {
         final FunctionCall functionCall = (FunctionCall) psi;
-        if (functionCall.getScopingConstruct() != ConstructType.NULL) {
+        if (functionCall.getScopingConstruct() != MScope.NULL) {
           descriptors.add(new NamedFoldingDescriptor(
               node,
               node.getTextRange(),

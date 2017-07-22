@@ -27,7 +27,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import de.halirutan.mathematica.parsing.psi.util.Comments;
+import de.halirutan.mathematica.lang.psi.util.Comments;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;

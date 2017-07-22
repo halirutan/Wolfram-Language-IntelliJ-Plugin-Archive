@@ -25,25 +25,23 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.StringifiedSymbol;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.api.slots.Slot;
-import de.halirutan.mathematica.parsing.psi.api.slots.SlotExpression;
-import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.MessageName;
+import de.halirutan.mathematica.lang.psi.api.StringifiedSymbol;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.function.Function;
+import de.halirutan.mathematica.lang.psi.api.slots.Slot;
+import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -63,7 +61,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     final Annotation annotation = holder.createInfoAnnotation(element, null);
     annotation.setTextAttributes(key);
-    annotation.setNeedsUpdateOnTyping(false);
+    annotation.setNeedsUpdateOnTyping(true);
   }
 
   private static void setHighlightingStrict(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
@@ -86,19 +84,17 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
 
   @Override
   public void visitSymbol(final Symbol symbol) {
-    String possibleGlobalSymbol = symbol.getMathematicaContext().equals("") ?
-        "System`"+symbol.getSymbolName() : symbol.getFullSymbolName();
-    if (NAMES.contains(possibleGlobalSymbol)) {
-      setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
-      return;
-    }
-
-    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
-    PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
-
-    final ConstructType scope = processor.getMyLocalization();
+    symbol.resolve();
+    final MScope scope = symbol.getLocalizationConstruct();
     switch (scope) {
+      case FILE:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.IDENTIFIER);
+        break;
       case NULL:
+        setHighlighting(symbol, myHolder, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES);
+        break;
+      case BUILT_IN:
+        setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION);
         break;
       case MODULE:
         setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
@@ -113,6 +109,7 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
         setHighlighting(symbol, myHolder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED);
         break;
     }
+
   }
 
   @Override
@@ -160,5 +157,4 @@ public class MathematicaHighlightingAnnotator extends MathematicaVisitor impleme
       setHighlightingStrict(children[i].getPsi(), myHolder, color);
     }
   }
-
 }

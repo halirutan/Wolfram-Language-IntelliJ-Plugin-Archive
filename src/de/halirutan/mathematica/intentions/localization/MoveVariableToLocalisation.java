@@ -29,12 +29,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.intentions.IntentionBundle;
-import de.halirutan.mathematica.parsing.psi.api.Expression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.lists.List;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
-import de.halirutan.mathematica.parsing.psi.util.MathematicaPsiElementFactory;
+import de.halirutan.mathematica.lang.psi.api.Expression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,8 +80,8 @@ public class MoveVariableToLocalisation implements IntentionAction {
       if (reference != null) {
         PsiElement resolve = reference.resolve();
         if (resolve instanceof Symbol) {
-          ConstructType elementConstruct = ((Symbol) resolve).getLocalizationConstruct();
-          if (elementConstruct != ConstructType.NULL) {
+          LocalizationConstruct.MScope elementConstruct = ((Symbol) resolve).getLocalizationConstruct();
+          if (elementConstruct != LocalizationConstruct.MScope.NULL) {
             return false;
           }
         }

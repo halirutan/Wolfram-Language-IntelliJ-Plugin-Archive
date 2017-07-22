@@ -33,13 +33,13 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.MessageName;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.function.Function;
-import de.halirutan.mathematica.parsing.psi.util.LocalDefinitionResolveProcessor;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.MessageName;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.function.Function;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
+import de.halirutan.mathematica.lang.resolve.LocalDefinitionResolveProcessor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -88,7 +88,7 @@ public class MathematicaReferenceAnnotator extends MathematicaVisitor implements
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(symbol);
     PsiTreeUtil.treeWalkUp(processor, symbol, symbol.getContainingFile(), ResolveState.initial());
 
-    final ConstructType scope = processor.getMyLocalization();
+    final LocalizationConstruct.MScope scope = processor.getMyLocalization();
     switch (scope) {
       case NULL:
         break;

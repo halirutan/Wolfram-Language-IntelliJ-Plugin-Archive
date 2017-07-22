@@ -27,11 +27,11 @@ import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.Grouper;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.MathematicaIcons;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.structureview.elements.AssignmentLeafViewTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.elements.SimpleStringTreeElement;
 import de.halirutan.mathematica.codeinsight.structureview.sorters.AssignmentTypeGroupComparator;
-import de.halirutan.mathematica.parsing.psi.SymbolAssignmentType;
+import de.halirutan.mathematica.lang.psi.SymbolAssignmentType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

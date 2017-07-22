@@ -23,13 +23,13 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.parsing.psi.MathematicaVisitor;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.api.Symbol;
-import de.halirutan.mathematica.parsing.psi.api.assignment.*;
-import de.halirutan.mathematica.parsing.psi.impl.assignment.SetDefinitionSymbolVisitor;
-import de.halirutan.mathematica.parsing.psi.impl.assignment.UpSetDefinitionSymbolVisitor;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.api.assignment.*;
+import de.halirutan.mathematica.lang.psi.impl.assignment.SetDefinitionSymbolVisitor;
+import de.halirutan.mathematica.lang.psi.impl.assignment.UpSetDefinitionSymbolVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,7 +57,7 @@ class GlobalDefinitionCompletionProvider extends MathematicaVisitor {
     cacheFromSetAssignment(setDelayed);
   }
 
-  public void visitSet(de.halirutan.mathematica.parsing.psi.api.assignment.Set set) {
+  public void visitSet(de.halirutan.mathematica.lang.psi.api.assignment.Set set) {
     cacheFromSetAssignment(set);
   }
 

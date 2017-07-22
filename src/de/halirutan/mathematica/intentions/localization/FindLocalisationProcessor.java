@@ -25,8 +25,8 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import de.halirutan.mathematica.parsing.psi.api.FunctionCall;
-import de.halirutan.mathematica.parsing.psi.util.LocalizationConstruct.ConstructType;
+import de.halirutan.mathematica.lang.psi.api.FunctionCall;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,10 +41,10 @@ class FindLocalisationProcessor implements PsiScopeProcessor {
   public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
     if (element instanceof FunctionCall) {
       if (((FunctionCall) element).isScopingConstruct()) {
-        ConstructType scopingConstruct = ((FunctionCall) element).getScopingConstruct();
-        if (scopingConstruct.equals(ConstructType.BLOCK) ||
-            scopingConstruct.equals(ConstructType.MODULE) ||
-            scopingConstruct.equals(ConstructType.WITH)) {
+        LocalizationConstruct.MScope scopingConstruct = ((FunctionCall) element).getScopingConstruct();
+        if (scopingConstruct.equals(LocalizationConstruct.MScope.BLOCK) ||
+            scopingConstruct.equals(LocalizationConstruct.MScope.MODULE) ||
+            scopingConstruct.equals(LocalizationConstruct.MScope.WITH)) {
           myLocalisationElement = (FunctionCall) element;
           return false;
         }

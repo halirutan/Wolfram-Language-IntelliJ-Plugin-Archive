@@ -41,8 +41,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.tree.IElementType;
-import de.halirutan.mathematica.MathematicaLanguage;
-import de.halirutan.mathematica.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

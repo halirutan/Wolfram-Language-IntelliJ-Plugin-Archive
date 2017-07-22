@@ -8,6 +8,8 @@
           <option name="RIGHT_MARGIN" value="72" />
         </MarkdownNavigatorCodeStyleSettings>
         <XML>
+          <option name="XML_ATTRIBUTE_WRAP" value="0" />
+          <option name="XML_TEXT_WRAP" value="0" />
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
         <codeStyleSettings language="JAVA">
@@ -22,6 +24,7 @@
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="XML">
+          <option name="WRAP_ON_TYPING" value="0" />
           <indentOptions>
             <option name="INDENT_SIZE" value="2" />
             <option name="CONTINUATION_INDENT_SIZE" value="4" />

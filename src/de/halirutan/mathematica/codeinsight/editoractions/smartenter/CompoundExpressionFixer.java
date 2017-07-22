@@ -28,10 +28,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.text.CharArrayUtil;
-import de.halirutan.mathematica.parsing.psi.api.CompoundExpression;
+import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
 import org.jetbrains.annotations.NotNull;
 
-import static de.halirutan.mathematica.parsing.MathematicaElementTypes.SEMICOLON;
+import static de.halirutan.mathematica.lang.parsing.MathematicaElementTypes.SEMICOLON;
 
 /**
  * @author patrick (11/12/13)
