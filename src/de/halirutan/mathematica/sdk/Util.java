@@ -21,9 +21,9 @@
 
 package de.halirutan.mathematica.sdk;
 
-import com.btr.proxy.util.PListParser;
-import com.btr.proxy.util.PListParser.Dict;
-import com.btr.proxy.util.PListParser.XmlParseException;
+import com.github.markusbernhardt.proxy.util.PListParser;
+import com.github.markusbernhardt.proxy.util.PListParser.Dict;
+import com.github.markusbernhardt.proxy.util.PListParser.XmlParseException;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.StreamUtil;
 

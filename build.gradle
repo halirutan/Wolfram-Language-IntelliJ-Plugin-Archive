@@ -11,7 +11,7 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.1.4'
+    version = '2017.2'
     pluginName = 'Mathematica-IntelliJ-Plugin'
     updateSinceUntilBuild = false
 }
@@ -56,4 +56,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '2.4.3'
+version '2.4.4'

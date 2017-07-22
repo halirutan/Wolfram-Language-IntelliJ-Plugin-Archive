@@ -57,11 +57,6 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
     return MathematicaBundle.message("module.type.description");
   }
 
-  @Override
-  public Icon getBigIcon() {
-    return MathematicaIcons.FILE_ICON;
-  }
-
   @NotNull
   @Override
   public MathematicaModuleBuilder createModuleBuilder() {

@@ -132,11 +132,6 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
   }
 
   @Override
-  public Icon getBigIcon() {
-    return MathematicaIcons.FILE_ICON;
-  }
-
-  @Override
   public Icon getNodeIcon() {
     return MathematicaIcons.FILE_ICON;
   }
