@@ -107,15 +107,15 @@ class MathematicaSpacingBuilderProvider {
 
   }
 
-  public static SpacingBuilder getSpacingBuilder(CommonCodeStyleSettings settings, MathematicaCodeStyleSettings mathematicaSettings) {
+  static SpacingBuilder getSpacingBuilder(CommonCodeStyleSettings settings, MathematicaCodeStyleSettings mathematicaSettings) {
     return new SpacingBuilder(settings.getRootSettings(), MathematicaLanguage.INSTANCE)
-        .around(ourAssignments).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_ASSIGNMENT_OPERATIONS)
-        .around(ourArithmeticOperations).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
-        .aroundInside(MINUS, MINUS_EXPRESSION).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
-        .around(ourRelationalOperations).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_RELATION_OPERATIONS)
-        .around(ourRuleOperations).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_RULE_OPERATIONS)
-        .around(ourFunctionalOperations).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_FUNCTIONAL_OPERATIONS)
-        .around(ourOtherOperations).spaceIf(MathematicaCodeStyleSettings.SPACE_AROUND_OTHER_OPERATIONS)
+        .around(ourAssignments).spaceIf(mathematicaSettings.SPACE_AROUND_ASSIGNMENT_OPERATIONS)
+        .around(ourArithmeticOperations).spaceIf(mathematicaSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
+        .aroundInside(MINUS, MINUS_EXPRESSION).spaceIf(mathematicaSettings.SPACE_AROUND_ARITHMETIC_OPERATIONS)
+        .around(ourRelationalOperations).spaceIf(mathematicaSettings.SPACE_AROUND_RELATION_OPERATIONS)
+        .around(ourRuleOperations).spaceIf(mathematicaSettings.SPACE_AROUND_RULE_OPERATIONS)
+        .around(ourFunctionalOperations).spaceIf(mathematicaSettings.SPACE_AROUND_FUNCTIONAL_OPERATIONS)
+        .around(ourOtherOperations).spaceIf(mathematicaSettings.SPACE_AROUND_OTHER_OPERATIONS)
         .after(COMMA).spaceIf(settings.SPACE_AFTER_COMMA)
         .before(LEFT_BRACKET).none()
         .after(RIGHT_BRACKET).none();
