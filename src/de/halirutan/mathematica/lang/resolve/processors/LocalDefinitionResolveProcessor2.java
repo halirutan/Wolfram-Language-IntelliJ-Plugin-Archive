@@ -122,15 +122,11 @@ public class LocalDefinitionResolveProcessor2 extends BaseScopeProcessor {
           myResolveResult = MathematicaPsiUtilities.resolveLocalModuleLikeVariables(myStartElement, functionCall, state);
         } else if (LocalizationConstruct.isTableLike(scopingConstruct)) {
           myResolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, functionCall, state);
+        } else if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
+          myResolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, functionCall, state);
+        } else if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
+          myResolveResult = MathematicaPsiUtilities.resolveLocalCompileLikeVariables(myStartElement, functionCall, state);
         }
-//
-//        if (LocalizationConstruct.isManipulateLike(scopingConstruct)) {
-//          vars = MathematicaPsiUtilities.getLocalManipulateLikeVariables(functionCall);
-//        }
-//
-//        if (LocalizationConstruct.isCompileLike(scopingConstruct)) {
-//          vars = MathematicaPsiUtilities.getLocalCompileLikeVariables(functionCall);
-//        }
 //
 //        if (LocalizationConstruct.isLimitLike(scopingConstruct)) {
 //          vars = MathematicaPsiUtilities.getLocalLimitVariables(functionCall);

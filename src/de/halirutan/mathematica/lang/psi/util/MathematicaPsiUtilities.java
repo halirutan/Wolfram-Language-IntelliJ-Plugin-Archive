@@ -71,7 +71,7 @@ public class MathematicaPsiUtilities {
    * @return List of symbols which are assigned.
    */
   @Nullable
-  public static List<Symbol> getAssignmentSymbols(PsiElement element) {
+  static List<Symbol> getAssignmentSymbols(PsiElement element) {
     PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
 
@@ -525,6 +525,48 @@ public class MathematicaPsiUtilities {
     return localVariables;
   }
 
+
+  @Nullable
+  public static SymbolResolveResult resolveLocalCompileLikeVariables(Symbol myStartElement, FunctionCall functionCall, ResolveState state) {
+
+    final PsiElement lastParent = state.get(SymbolResolveHint.LAST_PARENT);
+    final List<PsiElement> arguments = getArguments(functionCall);
+    if (arguments.size() < 1) {
+      return null;
+    }
+
+    final PsiElement firstArgument = arguments.get(0);
+    boolean inDef = firstArgument.equals(lastParent);
+
+
+    final MScope scopingConstruct = functionCall.getScopingConstruct();
+    if (firstArgument instanceof Symbol) {
+      if (((Symbol) firstArgument).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
+        return new SymbolResolveResult(firstArgument, scopingConstruct, true);
+      }
+    } else if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      final PsiElement[] children = firstArgument.getChildren();
+      for (PsiElement child : children) {
+        if (child instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+          child = child.getFirstChild();
+        }
+        if (child instanceof Symbol) {
+          if (inDef) {
+            if (child.equals(myStartElement)) {
+              return new SymbolResolveResult(child, scopingConstruct, true);
+            }
+          } else {
+            if (((Symbol) child).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
+              return new SymbolResolveResult(child, scopingConstruct, true);
+            }
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+
   /**
    * This extracts the local defined argument for a <code>Limit[Sin[x]/x, x-> 0]</code> call. Note that the returned
    * list has always only one element since <code>Limit</code> always uses only one variable.
@@ -578,7 +620,7 @@ public class MathematicaPsiUtilities {
    * @return List of arguments
    */
   @NotNull
-  public static List<PsiElement> getArguments(@Nullable PsiElement func) {
+  static List<PsiElement> getArguments(@Nullable PsiElement func) {
     List<PsiElement> allArguments = Lists.newLinkedList();
     if (!(func instanceof FunctionCall)) {
       return allArguments;
@@ -636,7 +678,7 @@ public class MathematicaPsiUtilities {
    * @return context string or null if it could not be extracted
    */
   @Nullable
-  public static String getContext(@NotNull PsiElement element, final boolean beginPackageOnly) {
+  private static String getContext(@NotNull PsiElement element, final boolean beginPackageOnly) {
     if (element instanceof FunctionCall) {
       final FunctionCall functionCall = (FunctionCall) element;
       if (functionCall.matchesHead("BeginPackage") || (!beginPackageOnly && functionCall.matchesHead("Begin"))) {
