@@ -21,10 +21,12 @@
 
 package de.halirutan.mathematica.codeinsight.formatter.settings;
 
+import com.intellij.lang.Language;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,13 +42,13 @@ public class MathematicaCodeStyleSettingsProvider extends CodeStyleSettingsProvi
 
   @Nullable
   @Override
-  public String getConfigurableDisplayName() {
-    return "Mathematica";
+  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+    return new MathematicaCodeStyleSettings(settings);
   }
 
   @Nullable
   @Override
-  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
-    return new MathematicaCodeStyleSettings(settings);
+  public Language getLanguage() {
+    return MathematicaLanguage.INSTANCE;
   }
 }

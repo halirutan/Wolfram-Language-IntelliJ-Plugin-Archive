@@ -41,22 +41,25 @@ public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
   private final String mySymbol;
   private final boolean myExported;
   private final String myFileName;
+  private final int myOffset;
 
-  PackageExportSymbol(String filename, String nameSpace, String symbol, boolean isExport)  {
+  PackageExportSymbol(String filename, String nameSpace, String symbol, boolean isExport, int offset)  {
     this.myFileName = filename;
     this.myNameSpace = nameSpace;
     this.mySymbol = symbol;
     this.myExported = isExport;
+    this.myOffset = offset;
   }
 
   private PackageExportSymbol() {
-    this("", "", "", false);
+    this("", "", "", false, 0);
   }
 
   public String getFileName() {
     return myFileName;
   }
 
+  @SuppressWarnings("unused")
   public String getNameSpace() {
     return myNameSpace;
   }
@@ -69,12 +72,17 @@ public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
     return myExported;
   }
 
+  public int getOffset() {
+    return myOffset;
+  }
+
   @Override
   public void save(@NotNull DataOutput out, PackageExportSymbol value) throws IOException {
     IOUtil.writeUTF(out, value.myFileName);
     IOUtil.writeUTF(out, value.myNameSpace);
     IOUtil.writeUTF(out, value.mySymbol);
     out.writeBoolean(value.myExported);
+    out.writeInt(value.myOffset);
   }
 
   @Override
@@ -83,7 +91,8 @@ public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
     final String namespace = IOUtil.readUTF(in);
     final String symbol = IOUtil.readUTF(in);
     final boolean exported = in.readBoolean();
-    return new PackageExportSymbol(filename, namespace, symbol, exported);
+    final int offset = in.readInt();
+    return new PackageExportSymbol(filename, namespace, symbol, exported, offset);
   }
 
   @Override
@@ -92,6 +101,7 @@ public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
     hash = hash*31 + myFileName.hashCode();
     hash = hash*31 + myNameSpace.hashCode();
     hash = hash*31 + mySymbol.hashCode();
+    hash = hash*31 + myOffset;
     return hash;
   }
 
@@ -106,7 +116,8 @@ public class PackageExportSymbol implements KeyDescriptor<PackageExportSymbol> {
     return myExported == ((PackageExportSymbol) obj).myExported &&
         Objects.equals(mySymbol, ((PackageExportSymbol) obj).mySymbol) &&
         Objects.equals(myNameSpace, ((PackageExportSymbol) obj).myNameSpace) &&
-        Objects.equals(myFileName, ((PackageExportSymbol) obj).myFileName);
+        Objects.equals(myFileName, ((PackageExportSymbol) obj).myFileName) &&
+        myOffset == ((PackageExportSymbol) obj).myOffset;
   }
 
   @Override

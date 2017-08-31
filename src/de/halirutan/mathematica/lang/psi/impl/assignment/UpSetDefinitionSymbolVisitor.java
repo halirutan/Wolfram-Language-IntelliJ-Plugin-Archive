@@ -27,7 +27,7 @@ import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Group;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.api.pattern.Condition;
 import de.halirutan.mathematica.lang.psi.api.pattern.Pattern;
 
@@ -94,8 +94,8 @@ public class UpSetDefinitionSymbolVisitor extends MathematicaVisitor {
   }
 
   @Override
-  public void visitList(List list) {
-    list.acceptChildren(this);
+  public void visitList(MList mList) {
+    mList.acceptChildren(this);
   }
 
 

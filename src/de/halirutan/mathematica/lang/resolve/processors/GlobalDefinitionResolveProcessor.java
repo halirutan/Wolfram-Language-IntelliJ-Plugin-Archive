@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.resolve;
+package de.halirutan.mathematica.lang.resolve.processors;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.PsiElementProcessor;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  * @author patrick (1/6/14)
  */
 @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
+public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   private final Symbol myStartElement;
   private PsiElement myReferringSymbol;
 

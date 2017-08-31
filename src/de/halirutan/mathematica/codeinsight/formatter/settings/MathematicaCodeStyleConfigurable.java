@@ -23,20 +23,23 @@ package de.halirutan.mathematica.codeinsight.formatter.settings;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
+import com.intellij.application.options.TabbedLanguageCodeStylePanel;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author patrick (11/1/13)
  */
 class MathematicaCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
-  public MathematicaCodeStyleConfigurable(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
+  MathematicaCodeStyleConfigurable(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
     super(settings, originalSettings, "Mathematica");
   }
 
   @Override
   protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
-    return new MathematicaCodeStyleMainPanel(getCurrentSettings(), settings);
+    return new MathematicaCodeStylePanel(getCurrentSettings(), settings);
   }
 
   @Nullable
@@ -44,4 +47,20 @@ class MathematicaCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
   public String getHelpTopic() {
     return null;
   }
+
+  private class MathematicaCodeStylePanel extends TabbedLanguageCodeStylePanel {
+    private MathematicaCodeStylePanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
+      super(MathematicaLanguage.INSTANCE, currentSettings, settings);
+    }
+
+    @Override
+    protected void initTabs(CodeStyleSettings settings) {
+      LanguageCodeStyleSettingsProvider provider = LanguageCodeStyleSettingsProvider.forLanguage(getDefaultLanguage());
+      addIndentOptionsTab(settings);
+      if (provider != null) {
+        addSpacesTab(settings);
+      }
+    }
+  }
+
 }

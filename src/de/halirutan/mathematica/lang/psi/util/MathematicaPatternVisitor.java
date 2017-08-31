@@ -31,6 +31,7 @@ import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.api.pattern.*;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
 
@@ -135,8 +136,8 @@ public class MathematicaPatternVisitor extends MathematicaVisitor {
   }
 
   @Override
-  public void visitList(de.halirutan.mathematica.lang.psi.api.lists.List list) {
-    list.acceptChildren(this);
+  public void visitList(MList mList) {
+    mList.acceptChildren(this);
   }
 
   @Override

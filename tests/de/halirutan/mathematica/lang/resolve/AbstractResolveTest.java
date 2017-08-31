@@ -35,7 +35,7 @@ public class AbstractResolveTest extends ResolveTestCase {
     return MathematicaTestUtils.getTestPath() + "/lang/resolve/";
   }
 
-  protected PsiReference configure() throws Exception {
+  PsiReference configure() throws Exception {
     return configureByFile( getTestName(false) + ".m", null);
   }
 

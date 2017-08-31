@@ -29,7 +29,7 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
-import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,7 +62,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
     final PsiElement expressionAtCaret = PsiTreeUtil.getParentOfType(atCaret,
         FunctionCall.class,
         CompoundExpression.class,
-        List.class
+        MList.class
     );
 
     if (expressionAtCaret != null && PsiTreeUtil.hasErrorElements(expressionAtCaret)) {
@@ -78,7 +78,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
       }
     }
 
-    if (expressionAtCaret instanceof List) {
+    if (expressionAtCaret instanceof MList) {
       if (atCaret.getText().equals("}") || !PsiTreeUtil.hasErrorElements(expressionAtCaret))
         return expressionAtCaret.getParent();
     }
@@ -88,7 +88,7 @@ public class MathematicaSmartEnter extends SmartEnterProcessorWithFixers {
         PsiElement parent = PsiTreeUtil.getParentOfType(atCaret.getParent(),
             FunctionCall.class,
             CompoundExpression.class,
-            List.class
+            MList.class
         );
         return parent;
       }

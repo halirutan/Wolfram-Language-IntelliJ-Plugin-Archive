@@ -24,8 +24,6 @@ package de.halirutan.mathematica.codeinsight.formatter.settings;
 import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.SmartIndentOptionsEditor;
 import com.intellij.lang.Language;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings.IndentOptions;
@@ -74,11 +72,17 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
     return MathematicaLanguage.INSTANCE;
   }
 
+  @Nullable
+  @Override
+  public String getFileExt() {
+    return ".m";
+  }
+
   @Override
   public String getCodeSample(@NotNull SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) return GENERAL_EXAMPLE;
     if (settingsType == SettingsType.BLANK_LINES_SETTINGS) return readFromFile("blankLinesExample.m");
-    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return readFromFile("spacingExample.m");
+//    if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) return readFromFile("spacingExample.m");
 
     return GENERAL_EXAMPLE;
   }
@@ -101,18 +105,6 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
   }
 
 
-  //    final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(
-//        "sample.m", MathematicaFileType.INSTANCE, text, LocalTimeCounter.currentTime(), false, false
-//    );
-//    return file;
-//  }
-
-  @Nullable
-  @Override
-  public PsiFile createFileFromText(Project project, String text) {
-    return super.createFileFromText(project, text);
-  }
-
   @Override
   public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer, @NotNull SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
@@ -120,13 +112,11 @@ public class MathematicaLanguageCodeStyleSettingsProvider extends LanguageCodeSt
           "SPACE_AFTER_COMMA"
       );
       consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ASSIGNMENT_OPERATIONS", "Assignment (=, :=)", AROUND_OPERATORS);
-      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ARITHMETIC_OPERATIONS", "Arithmetic (+, -)", AROUND_OPERATORS);
+      consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_ARITHMETIC_OPERATIONS", "Arithmetic (+, -)", AROUND_OPERATORS, CodeStyleSettingsCustomizable.SPACES_AROUND_OPERATORS);
       consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RELATION_OPERATIONS", "Relation (==, =!=)", AROUND_OPERATORS);
       consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_RULE_OPERATIONS", "Rules (/., ->)", AROUND_OPERATORS);
       consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_FUNCTIONAL_OPERATIONS", "Functional (/@, @@)", AROUND_OPERATORS);
       consumer.showCustomOption(MathematicaCodeStyleSettings.class, "SPACE_AROUND_OTHER_OPERATIONS", "Other (~~, /;)", AROUND_OPERATORS);
-    } else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
-      consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");
     }
   }
 

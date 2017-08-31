@@ -21,16 +21,27 @@
 
 package de.halirutan.mathematica.lang.resolve;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.resolve.ResolveCache.AbstractResolver;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.indexing.FileBasedIndex;
+import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
+import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
 import de.halirutan.mathematica.lang.psi.impl.LightUndefinedSymbol;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import de.halirutan.mathematica.lang.resolve.processors.LocalDefinitionResolveProcessor2;
+import de.halirutan.mathematica.lang.resolve.processors.GlobalDefinitionResolveProcessor;
+import de.halirutan.mathematica.lang.resolve.processors.LocalDefinitionResolveProcessor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
 
@@ -47,14 +58,13 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
       return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.BUILT_IN, true);
     }
 
-    LocalDefinitionResolveProcessor2 processor = new LocalDefinitionResolveProcessor2(ref);
+    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
     PsiTreeUtil.treeWalkUp(processor, ref, ref.getContainingFile(), ResolveState.initial());
     final Symbol referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol != null) {
       return new SymbolResolveResult(referringSymbol, processor.getMyLocalization(), true);
     }
 
-//    return null;
     GlobalDefinitionResolveProcessor globalProcessor = new GlobalDefinitionResolveProcessor(ref);
     PsiTreeUtil.processElements(ref.getContainingFile(), globalProcessor);
 
@@ -62,9 +72,33 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition != null) {
       return new SymbolResolveResult(globalDefinition, MScope.FILE, true);
-    } else {
-      return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL, true);
     }
+
+    final FileBasedIndex fileIndex = FileBasedIndex.getInstance();
+    final Project project = ref.getProject();
+    final Collection<PackageExportSymbol> allKeys = fileIndex.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
+
+
+    for (PackageExportSymbol key : allKeys) {
+      if (key.isExported() && key.getSymbol().equals(ref.getSymbolName())) {
+        final Collection<VirtualFile> containingFiles = fileIndex.getContainingFiles(MathematicaPackageExportIndex.INDEX_ID, key, GlobalSearchScope.allScope(project));
+        if (containingFiles.size() > 0) {
+          final VirtualFile file = containingFiles.iterator().next();
+          final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+          if (psiFile != null) {
+//            final PsiElement elementAt = psiFile.findElementAt(key.getOffset());
+            final Symbol elementAt = PsiTreeUtil.findElementOfClassAtOffset(psiFile, key.getOffset(), Symbol.class, true);
+            if (elementAt != null) {
+              return new SymbolResolveResult(elementAt, MScope.FILE, true);
+            }
+            return new SymbolResolveResult(psiFile, MScope.FILE, true);
+          }
+        }
+      }
+    }
+
+    return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL, true);
+
   }
 
 }

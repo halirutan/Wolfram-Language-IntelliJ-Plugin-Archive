@@ -118,6 +118,7 @@ class MathematicaSpacingBuilderProvider {
         .around(ourOtherOperations).spaceIf(mathematicaSettings.SPACE_AROUND_OTHER_OPERATIONS)
         .after(COMMA).spaceIf(settings.SPACE_AFTER_COMMA)
         .before(LEFT_BRACKET).none()
-        .after(RIGHT_BRACKET).none();
+        .after(RIGHT_BRACKET).none()
+        ;
   }
 }

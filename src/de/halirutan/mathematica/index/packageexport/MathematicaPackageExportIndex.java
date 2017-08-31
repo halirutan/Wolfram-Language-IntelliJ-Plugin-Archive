@@ -22,40 +22,35 @@
 package de.halirutan.mathematica.index.packageexport;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.HashMap;
-import com.intellij.util.indexing.*;
+import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileBasedIndex.InputFilter;
-import com.intellij.util.io.EnumeratorStringDescriptor;
-import com.intellij.util.io.IOUtil;
+import com.intellij.util.indexing.FileContent;
+import com.intellij.util.indexing.ID;
+import com.intellij.util.indexing.ScalarIndexExtension;
 import com.intellij.util.io.KeyDescriptor;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
 /**
+ * Simple file index for functions that are exported from a package by giving them a usage message.
  * @author patrick (01.11.16).
  */
 public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageExportSymbol> {
 
   public static final ID<PackageExportSymbol, Void> INDEX_ID = ID.create("Mathematica.fileExports");
-  private static final int BASE_VERSION = 7;
+  private static final int BASE_VERSION = 9;
 
   @NotNull
   @Override
   public InputFilter getInputFilter() {
-    return new InputFilter() {
-      @Override
-      public boolean acceptInput(@NotNull VirtualFile file) {
-        final LanguageFileType fileType = MathematicaLanguage.INSTANCE.getAssociatedFileType();
-        return file.getFileType().equals(fileType);
-      }
+    return file -> {
+      final LanguageFileType fileType = MathematicaLanguage.INSTANCE.getAssociatedFileType();
+      return file.getFileType().equals(fileType);
     };
   }
 
@@ -78,21 +73,17 @@ public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageE
   @NotNull
   @Override
   public DataIndexer<PackageExportSymbol, Void, FileContent> getIndexer() {
-    return new DataIndexer<PackageExportSymbol, Void, FileContent>() {
-      @NotNull
-      @Override
-      public Map<PackageExportSymbol, Void> map(@NotNull FileContent inputData) {
-        final Map<PackageExportSymbol , Void> map = new HashMap<>();
-        final PsiFile psiFile = inputData.getPsiFile();
-        PackageClassifier visitor = new PackageClassifier();
-        psiFile.accept(visitor);
-        final Collection<PackageExportSymbol> listOfExportSymbols = visitor.getListOfExportSymbols();
+    return inputData -> {
+      final Map<PackageExportSymbol , Void> map = new HashMap<>();
+      final PsiFile psiFile = inputData.getPsiFile();
+      PackageClassifier visitor = new PackageClassifier();
+      psiFile.accept(visitor);
+      final Collection<PackageExportSymbol> listOfExportSymbols = visitor.getMyExportInfo();
 
-        for (PackageExportSymbol symbol : listOfExportSymbols) {
-          map.putIfAbsent(symbol, null);
-        }
-        return map;
+      for (PackageExportSymbol symbol : listOfExportSymbols) {
+        map.putIfAbsent(symbol, null);
       }
+      return map;
     };
   }
 

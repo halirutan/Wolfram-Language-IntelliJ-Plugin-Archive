@@ -25,12 +25,14 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.SymbolNames;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.assignment.Set;
 import de.halirutan.mathematica.lang.psi.api.assignment.SetDelayed;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSet;
 import de.halirutan.mathematica.lang.psi.api.assignment.TagSetDelayed;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.api.pattern.*;
 import de.halirutan.mathematica.lang.psi.api.rules.Rule;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
@@ -68,7 +70,7 @@ public class MathematicaPsiUtilities {
    * variables.
    *
    * @param element PsiElement of the assignment
-   * @return List of symbols which are assigned.
+   * @return MList of symbols which are assigned.
    */
   @Nullable
   static List<Symbol> getAssignmentSymbols(PsiElement element) {
@@ -91,7 +93,7 @@ public class MathematicaPsiUtilities {
         }
       } else
         // extract a,b,c,d from things like {{a,b},{c,d}} = {{1,2},{3,4}}
-        if (firstChild instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (firstChild instanceof MList) {
           assignees.addAll(getSymbolsFromNestedList(firstChild));
         }
     } else if (element instanceof TagSetDelayed || element instanceof TagSet) {
@@ -160,8 +162,8 @@ public class MathematicaPsiUtilities {
    * would be extracted successfully: <ul > <li ><code>{a,b,c,d}</code></li> <li ><code>{{a,b},c,d}</code></li> <li
    * ><code>{{a},b,{c},d}</code></li> </ul>
    *
-   * @param listHead List to extract from
-   * @return List of extracted {@link Symbol} PsiElement's.
+   * @param listHead MList to extract from
+   * @return MList of extracted {@link Symbol} PsiElement's.
    */
   @NotNull
   private static List<Symbol> getSymbolsFromNestedList(PsiElement listHead) {
@@ -187,8 +189,8 @@ public class MathematicaPsiUtilities {
   /**
    * Extracts all lhs from a list of definitions like {a, b=1, c}
    *
-   * @param listHead List to extract from
-   * @return List of extracted {@link Symbol} PsiElement's.
+   * @param listHead MList to extract from
+   * @return MList of extracted {@link Symbol} PsiElement's.
    */
   @NotNull
   private static List<Symbol> getDefinitionSymbolsFromList(PsiElement listHead) {
@@ -234,14 +236,14 @@ public class MathematicaPsiUtilities {
         case 2:
           if (firstArgument instanceof Symbol) {
             localVariables.add((Symbol) firstArgument);
-          } else if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+          } else if (firstArgument instanceof MList) {
             localVariables = getSymbolsFromNestedList(firstArgument);
           }
           break;
         case 3:
           if (firstArgument instanceof Symbol && !((Symbol) firstArgument).getSymbolName().equals("Null")) {
             localVariables.add((Symbol) firstArgument);
-          } else if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+          } else if (firstArgument instanceof MList) {
             localVariables = getSymbolsFromNestedList(firstArgument);
           }
           break;
@@ -266,7 +268,7 @@ public class MathematicaPsiUtilities {
       boolean inDefition = definitions.equals(lastParent);
       if (firstArgument instanceof Symbol && !((Symbol) firstArgument).getSymbolName().equals("Null") && ((Symbol) firstArgument).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
         return new SymbolResolveResult(firstArgument, MScope.FUNCTION, true);
-      } else if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      } else if (firstArgument instanceof MList) {
         final List<Symbol> defs = getDefinitionSymbolsFromList(firstArgument);
         for (Symbol def : defs) {
           if (def.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
@@ -301,7 +303,7 @@ public class MathematicaPsiUtilities {
       }
 
       final PsiElement firstArgument = arguments.get(0);
-      if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      if (firstArgument instanceof MList) {
         for (PsiElement e : firstArgument.getChildren()) {
           if (e instanceof Symbol) {
             localVariables.add((Symbol) e);
@@ -336,7 +338,7 @@ public class MathematicaPsiUtilities {
 
       final PsiElement moduleDefList = arguments.get(0);
       final boolean isInDefList = moduleDefList.equals(lastParent);
-      if (moduleDefList instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      if (moduleDefList instanceof MList) {
         for (PsiElement e : moduleDefList.getChildren()) {
           if (e instanceof Set || e instanceof SetDelayed) {
             if (e.getFirstChild() instanceof Symbol) {
@@ -384,7 +386,7 @@ public class MathematicaPsiUtilities {
 
       for (int i = 1; i < arguments.size(); i++) {
         final PsiElement currentArgument = arguments.get(i);
-        if (currentArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (currentArgument instanceof MList) {
           final PsiElement firstListElement = getFirstListElement(currentArgument);
           if (firstListElement instanceof Symbol) {
             localVariables.add((Symbol) firstListElement);
@@ -418,7 +420,7 @@ public class MathematicaPsiUtilities {
     if (pos == 1) {
       for (int i = 2; i < args.length; i++) {
         final PsiElement currentIterator = args[i];
-        if (currentIterator instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (currentIterator instanceof MList) {
           final PsiElement firstListElement = getFirstListElement(currentIterator);
           if (firstListElement instanceof Symbol) {
             if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
@@ -429,7 +431,7 @@ public class MathematicaPsiUtilities {
       }
     } else if (pos > 1) {
       // self-reference if we are the iterator
-      if (args[pos] instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      if (args[pos] instanceof MList) {
         if (Objects.equals(getFirstListElement(args[pos]), myStartElement)) {
           return new SymbolResolveResult(myStartElement, scopingConstruct, true);
         }
@@ -437,7 +439,7 @@ public class MathematicaPsiUtilities {
 
       // test if we refer to an earlier iterator
       for (int i = 2; i < pos; i++) {
-        if (args[i] instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (args[i] instanceof MList) {
           final PsiElement firstListElement = getFirstListElement(args[i]);
           if (firstListElement instanceof Symbol) {
             if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
@@ -471,11 +473,11 @@ public class MathematicaPsiUtilities {
 
       for (int i = 1; i < arguments.size(); i++) {
         final PsiElement currentArgument = arguments.get(i);
-        if (currentArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (currentArgument instanceof MList) {
           final PsiElement firstListElement = getFirstListElement(currentArgument);
           if (firstListElement instanceof Symbol) {
             localVariables.add((Symbol) firstListElement);
-          } else if (firstListElement instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+          } else if (firstListElement instanceof MList) {
             final PsiElement subListArg = getFirstListElement(firstListElement);
             if (subListArg instanceof Symbol) {
               localVariables.add((Symbol) subListArg);
@@ -509,10 +511,10 @@ public class MathematicaPsiUtilities {
         return localVariables;
       }
 
-      if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+      if (firstArgument instanceof MList) {
         PsiElement listElement = getFirstListElement(firstArgument);
         while (listElement != null) {
-          if (listElement instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+          if (listElement instanceof MList) {
             final PsiElement possibleSymbol = getFirstListElement(listElement);
             if (possibleSymbol instanceof Symbol) {
               localVariables.add((Symbol) possibleSymbol);
@@ -544,10 +546,10 @@ public class MathematicaPsiUtilities {
       if (((Symbol) firstArgument).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
         return new SymbolResolveResult(firstArgument, scopingConstruct, true);
       }
-    } else if (firstArgument instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+    } else if (firstArgument instanceof MList) {
       final PsiElement[] children = firstArgument.getChildren();
       for (PsiElement child : children) {
-        if (child instanceof de.halirutan.mathematica.lang.psi.api.lists.List) {
+        if (child instanceof MList) {
           child = child.getFirstChild();
         }
         if (child instanceof Symbol) {
@@ -617,7 +619,7 @@ public class MathematicaPsiUtilities {
    * and skips over function-head, whitespaces and commas to give you only the arguments.
    *
    * @param func {@link FunctionCall} element from which you want the arguments
-   * @return List of arguments
+   * @return MList of arguments
    */
   @NotNull
   static List<PsiElement> getArguments(@Nullable PsiElement func) {
@@ -681,7 +683,7 @@ public class MathematicaPsiUtilities {
   private static String getContext(@NotNull PsiElement element, final boolean beginPackageOnly) {
     if (element instanceof FunctionCall) {
       final FunctionCall functionCall = (FunctionCall) element;
-      if (functionCall.matchesHead("BeginPackage") || (!beginPackageOnly && functionCall.matchesHead("Begin"))) {
+      if (functionCall.matchesHead(SymbolNames.BeginPackage) || (!beginPackageOnly && functionCall.matchesHead(SymbolNames.Begin))) {
         final PsiElement context = functionCall.getArgument(1);
         if (context instanceof MString) {
           final String contextString = context.getText();

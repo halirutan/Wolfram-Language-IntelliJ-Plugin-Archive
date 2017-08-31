@@ -19,37 +19,36 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.lang.resolve;
+package de.halirutan.mathematica.lang.resolve
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.PsiTestCase;
-import de.halirutan.mathematica.MathematicaTestUtils;
-import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
+import com.intellij.testFramework.PsiTestCase
+import de.halirutan.mathematica.MathematicaTestUtils
+import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor
+import de.halirutan.mathematica.lang.psi.api.Symbol
 
 /**
  * @author patrick (20.07.17).
  */
-public class ResovePerformanceTest extends PsiTestCase {
+class ResolvePerformanceTest : PsiTestCase() {
 
-  @Override
-  protected String getTestDataPath() {
-    return MathematicaTestUtils.getTestPath() + "/lang/resolve";
-  }
+    override fun getTestDataPath(): String {
+        return MathematicaTestUtils.getTestPath() + "/lang/resolve"
+    }
 
-  public void testLargeFile() throws Exception {
-    final int[] numResolved = {0};
-    final PsiFile file = createFile("LargeFile.m", loadFile("LargeFile.m"));
-    file.accept(new MathematicaRecursiveVisitor(){
-      @Override
-      public void visitSymbol(Symbol symbol) {
-        final PsiElement resolve = symbol.resolve();
-        if (resolve != null) {
-          numResolved[0]++;
+    @Throws(Exception::class)
+    fun testLargeFile() {
+        val count = object {
+            var value = 0
         }
-      }
-    });
-    System.out.println(numResolved[0]);
-  }
+        val start = System.nanoTime()
+        val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
+        file.accept(object : MathematicaRecursiveVisitor() {
+            override fun visitSymbol(symbol: Symbol) {
+                val resolve = symbol.resolve()
+                resolve?.let { count.value++ }
+            }
+        })
+        val stop = System.nanoTime()
+        println("Resolved ${count.value} in ${(stop - start)/1e9} seconds")
+    }
 }

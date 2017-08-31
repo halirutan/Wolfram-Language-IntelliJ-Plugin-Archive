@@ -45,7 +45,7 @@ public class OperatorNameProviderImpl extends ExpressionImpl implements Operator
    * "PsiElement(APPLY)" and the parent element in the parse tree is an instance of {@link Apply}. Now the method checks
    * this and concludes, that <code >@@</code> is indeed the operator sign to Apply.
    * <p/>
-   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of List and
+   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of MList and
    * the function returns false.
    *
    * @param operatorSignElement

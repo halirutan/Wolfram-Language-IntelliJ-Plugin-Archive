@@ -35,7 +35,7 @@
 //import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 //
 //import java.util.Collection;
-//import java.util.List;
+//import java.util.MList;
 //
 ///**
 // * @author patrick (08.11.16).
@@ -52,14 +52,14 @@
 //
 //    final VirtualFile currentFile = e.getDataContext().getData(DataKeys.VIRTUAL_FILE);
 //    final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
-//    final ID<Key, List<PackageExportSymbol>> indexId = MathematicaPackageExportIndex.INDEX_ID;
+//    final ID<Key, MList<PackageExportSymbol>> indexId = MathematicaPackageExportIndex.INDEX_ID;
 //    final Collection<Key> allKeys = fileBasedIndex.getAllKeys(indexId,project);
 //
 //    for (Key next : allKeys) {
 //      final VirtualFile file = fileBasedIndex.findFileById(project, ((FileKey) next).getFileId());
 //      System.out.printf("\nFILE: " + file.getPresentableName() + "\n-----------------------------------------\n");
-//      final List<List<PackageExportSymbol>> values = fileBasedIndex.getValues(indexId, next, GlobalSearchScope.allScope(project));
-//      for (List<PackageExportSymbol> list : values) {
+//      final MList<MList<PackageExportSymbol>> values = fileBasedIndex.getValues(indexId, next, GlobalSearchScope.allScope(project));
+//      for (MList<PackageExportSymbol> list : values) {
 //        for (PackageExportSymbol info : list) {
 //          System.out.println(info.symbol + " (" + info.nameSpace +")");
 //        }

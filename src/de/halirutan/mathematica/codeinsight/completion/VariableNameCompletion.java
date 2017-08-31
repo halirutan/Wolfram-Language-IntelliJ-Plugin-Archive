@@ -94,8 +94,8 @@ class VariableNameCompletion extends MathematicaCompletionProvider {
         }
       }
 //      for (String  key : allKeys) {
-//        final List<List<PackageExportSymbol>> values = index.getValues(MathematicaPackageExportIndex.INDEX_ID, key, GlobalSearchScope.allScope(callingSymbol.getProject()));
-//        for (List<PackageExportSymbol> value : values) {
+//        final MList<MList<PackageExportSymbol>> values = index.getValues(MathematicaPackageExportIndex.INDEX_ID, key, GlobalSearchScope.allScope(callingSymbol.getProject()));
+//        for (MList<PackageExportSymbol> value : values) {
 //          for (PackageExportSymbol packageExportSymbol : value) {
 //            //TODO: Implement adding completions
 ////            if(packageExportSymbol.nameSpace.equals())

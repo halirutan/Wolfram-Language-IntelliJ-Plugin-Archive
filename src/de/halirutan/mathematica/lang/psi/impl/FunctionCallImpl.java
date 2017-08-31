@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
+import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -32,6 +33,9 @@ import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.processors.SymbolResolveHint;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
@@ -106,11 +110,21 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return getChildren();
   }
 
-//  @Override
-//  public void subtreeChanged() {
-//    super.subtreeChanged();
-//    myIsUpToDate = false;
-//  }
+  @Override
+  public List<PsiElement> getParameters() {
+    List<PsiElement> allArguments = Lists.newLinkedList();
+
+    boolean skipHead = true;
+    for (PsiElement child : this.getChildren()) {
+      if (skipHead) {
+        skipHead = false;
+        continue;
+      }
+      allArguments.add(child);
+    }
+    return allArguments;
+  }
+
 
   /**
    * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}. This can

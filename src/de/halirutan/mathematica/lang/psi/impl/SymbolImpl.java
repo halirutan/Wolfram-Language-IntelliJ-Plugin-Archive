@@ -231,4 +231,5 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   public boolean isSoft() {
     return false;
   }
+
 }

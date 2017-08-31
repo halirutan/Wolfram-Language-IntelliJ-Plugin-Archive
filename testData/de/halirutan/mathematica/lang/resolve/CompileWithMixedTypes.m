@@ -1,0 +1,1 @@
+Compile[{{x, _Real}, y, {z, _Real, 0}}, x+<ref>y+z ]

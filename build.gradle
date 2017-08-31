@@ -1,9 +1,11 @@
 plugins {
     id "org.jetbrains.intellij" version "0.2.13"
+    id "org.jetbrains.kotlin.jvm" version "1.1.4-3"
 }
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
+apply plugin: "kotlin"
 
 // On travis, we don't want to deploy to Jetbrains that requires credentials
 if (project.file('gradle.properties').exists()) {
@@ -11,13 +13,13 @@ if (project.file('gradle.properties').exists()) {
 }
 
 intellij {
-    version = '2017.2'
+    version = '2017.2.2'
     pluginName = 'Mathematica-IntelliJ-Plugin'
     updateSinceUntilBuild = false
 }
 
 // Simple function to load change-notes.html and description.html into valid text for plugin.xml
-def htmlFixer = {f -> file(f).text.replace('<html>', '').replace('</html>', '')}
+def htmlFixer = {htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '')}
 
 patchPluginXml {
     changeNotes = htmlFixer('resources/META-INF/change-notes.html')
@@ -56,4 +58,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
-version '2.4.4'
+version '2.4.5'

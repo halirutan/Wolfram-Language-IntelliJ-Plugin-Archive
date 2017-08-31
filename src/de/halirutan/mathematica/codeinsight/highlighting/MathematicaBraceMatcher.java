@@ -50,7 +50,7 @@ public class MathematicaBraceMatcher implements PairedBraceMatcher {
    * This functions returns a list of {@link IElementType} pairs which correspond to the opening and closing brace lexer
    * tokens.
    *
-   * @return List of the matching brace lexer token pairs.
+   * @return MList of the matching brace lexer token pairs.
    */
   @Override
   public BracePair[] getPairs() {

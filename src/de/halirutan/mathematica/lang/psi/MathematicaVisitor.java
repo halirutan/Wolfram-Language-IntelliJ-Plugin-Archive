@@ -30,7 +30,7 @@ import de.halirutan.mathematica.lang.psi.api.comparison.ComparisonOperation;
 import de.halirutan.mathematica.lang.psi.api.function.Function;
 import de.halirutan.mathematica.lang.psi.api.graph.UndirectedEdge;
 import de.halirutan.mathematica.lang.psi.api.lists.Association;
-import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.api.pattern.*;
 import de.halirutan.mathematica.lang.psi.api.rules.ReplaceAll;
 import de.halirutan.mathematica.lang.psi.api.rules.ReplaceRepeated;
@@ -165,8 +165,8 @@ public class MathematicaVisitor extends PsiElementVisitor {
     visitElement(symbol);
   }
 
-  public void visitList(List list) {
-    visitElement(list);
+  public void visitList(MList mList) {
+    visitElement(mList);
   }
 
   public void visitStringifiedSymbol(StringifiedSymbol stringifiedSymbol) {

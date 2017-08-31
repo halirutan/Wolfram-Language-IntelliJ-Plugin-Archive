@@ -33,7 +33,7 @@ import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBun
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
-import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -122,8 +122,8 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
     }
 
     @Override
-    public void visitList(final List list) {
-      PsiElement elm = getFirstListElement(list);
+    public void visitList(final MList mList) {
+      PsiElement elm = getFirstListElement(mList);
       PsiElement next;
       int argsWithoutComma = 1;
       while ((next = getNextSiblingSkippingWhitespace(elm)) != null &&

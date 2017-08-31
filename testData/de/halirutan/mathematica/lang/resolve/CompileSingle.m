@@ -1,0 +1,1 @@
+Compile[var, Sin[var] + <ref>var];

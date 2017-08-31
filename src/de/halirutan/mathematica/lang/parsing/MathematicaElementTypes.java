@@ -39,7 +39,7 @@ import de.halirutan.mathematica.lang.psi.impl.files.PutImpl;
 import de.halirutan.mathematica.lang.psi.impl.function.*;
 import de.halirutan.mathematica.lang.psi.impl.graph.UndirectedEdgeImpl;
 import de.halirutan.mathematica.lang.psi.impl.lists.AssociationImpl;
-import de.halirutan.mathematica.lang.psi.impl.lists.ListImpl;
+import de.halirutan.mathematica.lang.psi.impl.lists.MListImpl;
 import de.halirutan.mathematica.lang.psi.impl.lists.PartImpl;
 import de.halirutan.mathematica.lang.psi.impl.lists.SpanImpl;
 import de.halirutan.mathematica.lang.psi.impl.logical.AndImpl;
@@ -394,8 +394,8 @@ public interface MathematicaElementTypes {
       if (type.equals(COMPOSITION_EXPRESSION)) return new CompositionImpl(node);
       if (type.equals(RIGHT_COMPOSITION_EXPRESSION)) return new RightCompositionImpl(node);
 
-      // List or Association related
-      if (type.equals(LIST_EXPRESSION)) return new ListImpl(node);
+      // MList or Association related
+      if (type.equals(LIST_EXPRESSION)) return new MListImpl(node);
       if (type.equals(ASSOCIATION_EXPRESSION)) return new AssociationImpl(node);
       if (type.equals(PART_EXPRESSION)) return new PartImpl(node);
       if (type.equals(SPAN_EXPRESSION)) return new SpanImpl(node);

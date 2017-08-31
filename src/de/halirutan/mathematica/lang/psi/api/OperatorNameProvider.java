@@ -38,7 +38,7 @@ public interface OperatorNameProvider {
    * de.halirutan.mathematica.lang.psi.api.function.Apply}. Now the method checks this and concludes, that <code
    * >@@</code> is indeed the operator sign to Apply.
    * <p/>
-   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of List and
+   * On the contrary, say you are beside a comma in the code {a,b,c} then the comma is not the operator sign of MList and
    * the function returns false.
    *
    * @param operatorSignElement

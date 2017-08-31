@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  */
 public class MathematicaSdkType extends SdkType {
 
-  private static final Pattern PACKAGE_INIT_PATTERN = Pattern.compile(".*Kernel/init\\.m");
+  private static final Pattern PACLET_INFO_PATTERN = Pattern.compile(".*PacletInfo\\.m");
   private static final String OS = System.getProperty("os.name").toLowerCase();
 
   private MathematicaSdkType() {
@@ -87,18 +87,19 @@ public class MathematicaSdkType extends SdkType {
 
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
     String addOnsPath = homePath + File.separatorChar + "AddOns";
+    String componentsPath = homePath + File.separatorChar + "SystemFiles" + File.separator + "Components";
     File addOnsFile;
     if (OS.contains("mac") && !Util.isAccessibleDir(addOnsPath)) {
       addOnsFile = new File(homePath + File.separatorChar + "Contents/AddOns");
     } else {
       addOnsFile = new File(addOnsPath);
     }
-    Pattern initMPattern = Pattern.compile(".*init\\.m");
     if (addOnsFile.isDirectory()) {
-      final List<File> initFiles = FileUtil.findFilesByMask(initMPattern, addOnsFile);
+      final List<File> initFiles = FileUtil.findFilesByMask(PACLET_INFO_PATTERN, addOnsFile);
+      initFiles.addAll(FileUtil.findFilesByMask(PACLET_INFO_PATTERN, new File(componentsPath)));
       for (File file : initFiles) {
-        if (PACKAGE_INIT_PATTERN.matcher(file.getPath()).matches()) {
-          final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getPath().replace("Kernel/init.m", ""));
+        if (PACLET_INFO_PATTERN.matcher(file.getPath()).matches()) {
+          final VirtualFile packageDirectory = LocalFileSystem.getInstance().findFileByPath(file.getParent());
           sdkModificator.addRoot(packageDirectory, OrderRootType.SOURCES);
         }
       }

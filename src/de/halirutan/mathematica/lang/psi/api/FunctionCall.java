@@ -26,6 +26,8 @@ import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
@@ -33,6 +35,12 @@ public interface FunctionCall extends PsiElement {
 
 //  public static final Set<String> SCOPING_CONSTRUCTS = new HashSet<String>(Arrays.asList(
 //      new String[]{"Module", "Block", "With", "Function", "Table", "Do", "Integrate", "NIntegrate"}));
+
+  /**
+   * Returns a list of PsiElements that are the parameters for the function call
+   * @return MList of parameters
+   */
+  List<PsiElement> getParameters();
 
   /**
    * Returns true if the function call is any function which scopes some variables like Module, Block, Table, and so

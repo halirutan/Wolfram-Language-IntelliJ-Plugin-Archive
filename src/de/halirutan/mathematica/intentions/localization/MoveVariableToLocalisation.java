@@ -32,7 +32,7 @@ import de.halirutan.mathematica.intentions.IntentionBundle;
 import de.halirutan.mathematica.lang.psi.api.Expression;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.psi.api.lists.List;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.Nls;
@@ -104,7 +104,7 @@ public class MoveVariableToLocalisation implements IntentionAction {
       FunctionCall localisationElement = processor.myLocalisationElement;
       if (localisationElement != null && localisationElement.isValid()) {
         PsiElement initList = localisationElement.getArgument(1);
-        if (initList instanceof List) {
+        if (initList instanceof MList) {
           MathematicaPsiElementFactory factory = new MathematicaPsiElementFactory(project);
           String text = initList.getText();
           Expression newList = factory.createExpressionFromText(text.substring(0, text.length() - 1) +

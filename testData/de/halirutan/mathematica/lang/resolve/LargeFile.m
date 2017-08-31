@@ -45,7 +45,7 @@ IGDocumentation::usage = "IGDocumentation[] opens the IGraph/M documentation.";
 mytest::usage = "Test";
 
 IGData::usage =
-    "IGData[] returns a list of available items.\n" <>
+    "IGData[] returns a MList of available items.\n" <>
     "IGData[item] returns the requested item.";
 
 IGVersion::usage = "IGVersion[] returns the IGraph/M version along with the version of the igraph library in use.";
@@ -75,21 +75,21 @@ IGConnectNeighborhood::usage =
     "IGConnectNeighborhood[graph] connects each vertex in graph to its 2nd order neighbourhood.\n" <>
     "IGConnectNeighborhood[graph, k] connects each vertex in graph to its order k neighbourhood. Weights and other graph properties are discarded.";
 
-IGBetweenness::usage = "IGBetweenness[graph] gives a list of betweenness centralities for the vertices of graph.";
-IGEdgeBetweenness::usage = "IGEdgeBetweenness[graph] gives a list of betweenness centralities for the edges of graph.";
-IGCloseness::usage = "IGCloseness[graph] gives a list of closeness centralities for the vertices of graph.";
+IGBetweenness::usage = "IGBetweenness[graph] gives a MList of betweenness centralities for the vertices of graph.";
+IGEdgeBetweenness::usage = "IGEdgeBetweenness[graph] gives a MList of betweenness centralities for the edges of graph.";
+IGCloseness::usage = "IGCloseness[graph] gives a MList of closeness centralities for the vertices of graph.";
 
 IGBetweennessEstimate::usage = "IGBetweennessEstimate[graph, cutoff] estimates vertex betweenness by considering only paths of at most length cutoff.";
 IGEdgeBetweennessEstimate::usage = "IGEdgeBetweennessEstimate[graph, cutoff] estimates edge betweenness by considering only paths of at most length cutoff.";
 IGClosenessEstimate::usage = "IGClosenessEstimate[graph, cutoff] estimates closeness centrality by considering only paths of at most length cutoff.";
 
 IGPageRank::usage =
-    "IGPageRank[graph] gives a list of PageRank centralities for the vertices of the graph.\n" <>
-    "IGPageRank[graph, damping] gives a list of PageRank centralities for the vertices of the graph using damping factor damping.";
+    "IGPageRank[graph] gives a MList of PageRank centralities for the vertices of the graph.\n" <>
+    "IGPageRank[graph, damping] gives a MList of PageRank centralities for the vertices of the graph using damping factor damping.";
 
 IGPersonalizedPageRank::usage =
-    "IGPersonalizedPageRank[graph, reset] gives a list of personalized PageRank centralities for the vertices of the graph.\n" <>
-    "IGPersonalizedPageRank[graph, reset, damping] gives a list of personalized PageRank centralities for the vertices of the graph using damping factor damping.";
+    "IGPersonalizedPageRank[graph, reset] gives a MList of personalized PageRank centralities for the vertices of the graph.\n" <>
+    "IGPersonalizedPageRank[graph, reset, damping] gives a MList of personalized PageRank centralities for the vertices of the graph using damping factor damping.";
 
 IGEigenvectorCentrality::usage = "IGEigenvectorCentrality[graph] return the eigenvector centrality of each vertex.";
 IGHubScore::usage = "IGHubScore[graph] returns Kleinberg's hub score for each vertex.";
@@ -109,7 +109,7 @@ IGBipartiteQ::usage = "IGBipartiteQ[graph] tests if graph is bipartite.";
 
 IGIsomorphicQ::usage = "IGIsomorphicQ[graph1, graph2] tests if graph1 and graph2 are isomorphic.";
 IGSubisomorphicQ::usage = "IGSubisomorphicQ[subgraph, graph] tests if subgraph is contained within graph.";
-IGIsoclass::usage = "IGIsoclass[graph] returns the isomorphism class of the graph. Used as the index into the vector returned by motif finding functions. See IGData[] to get list of graphs ordered by isoclass.";
+IGIsoclass::usage = "IGIsoclass[graph] returns the isomorphism class of the graph. Used as the index into the vector returned by motif finding functions. See IGData[] to get MList of graphs ordered by isoclass.";
 
 IGBlissCanonicalLabeling::usage =
     "IGBlissCanonicalLabeling[graph] computes a canonical integer labeling of the graph vertices. Using this labeling brings representations of isomorphic graphs to the same form.\n" <>
@@ -381,7 +381,7 @@ IGCompareCommunities::usage =
     "IGCompareCommunities[graph, communities1, communities2, {method1, \[Ellipsis]}] compares two community structures using each given method.";
 
 Test::usage =
-    "Test[graph, {{v11, v12, \[Ellipsis]}, {v21, v22, \[Ellipsis]}, \[Ellipsis]}] computes the modularity of graph based on the given partitioning of the vertex list into communities.\n" <>
+    "Test[graph, {{v11, v12, \[Ellipsis]}, {v21, v22, \[Ellipsis]}, \[Ellipsis]}] computes the modularity of graph based on the given partitioning of the vertex MList into communities.\n" <>
     "Test[graph, clusterdata] computes the modularity of graph based on the community structure represented as an IGClusterData object.";
 IGCommunitiesEdgeBetweenness::usage = "IGCommunitiesEdgeBetweenness[graph] finds communities using the Girvan–Newman algorithm.";
 IGCommunitiesGreedy::usage = "IGCommunitiesGreedy[graph] finds communities using greedy optimization of modularity.";
@@ -405,7 +405,7 @@ IGBipartitePartitions::usage = "IGBipartitePartitions[graph] partitions the vert
 
 IGVertexContract::usage = "IGVertexContract[g, {{v1, v2, \[Ellipsis]}, \[Ellipsis]}] returns a graph in which the specified vertex sets are contracted into single vertices.";
 
-IGRandomWalk::usage = "IGRandomWalk[graph, start, steps] takes a random walk of length steps on graph, starting at vertex 'start'. The list of traversed vertices is returned.";
+IGRandomWalk::usage = "IGRandomWalk[graph, start, steps] takes a random walk of length steps on graph, starting at vertex 'start'. The MList of traversed vertices is returned.";
 
 IGVertexTransitiveQ::usage = "IGVertexTransitiveQ[graph] tests if graph is vertex transitive.";
 IGEdgeTransitiveQ::usage = "IGEdgeTransitiveQ[graph] tests if graph is edge transitive.";
@@ -922,14 +922,14 @@ zimport[filename_] :=
     ]
 
 
-(* Get an IG compatible edge list. *)
+(* Get an IG compatible edge MList. *)
 (* This implementation attempts to select the fastest method based on the internal representation
    of the graph. With the "Simple" representation, IndexGraph is very fast. With "Incidence" it's
    slower than the Lookup method. With "NullGraph", performance doesn't matter.
 
    While GraphComputation`GraphRepresentation is an internal undocumented function, hopefully this
    is robust against changes as both branches of the If are valid ways to retrieve
-   the edge list for any graph. They only differ in performance.
+   the edge MList for any graph. They only differ in performance.
 *)
 igEdgeList[graph_] :=
     Developer`ToPackedArray@If[GraphComputation`GraphRepresentation[graph] === "Simple",
@@ -940,7 +940,7 @@ igEdgeList[graph_] :=
         Flatten[EdgeList[graph], 1, If[DirectedGraphQ[graph], DirectedEdge, UndirectedEdge]]
       ]
     ]
-(* igEdgeList[graph_] := List @@@ EdgeList@IndexGraph[graph, 0]; *)
+(* igEdgeList[graph_] := MList @@@ EdgeList@IndexGraph[graph, 0]; *)
 
 (* Convert IG format vertex or edge index vector to Mathematica format. *)
 igIndexVec[expr_LibraryFunctionError] := expr (* hack: allows LibraryFunctionError to fall through *)
@@ -1028,7 +1028,7 @@ igVertexNames[graph_][indices_] := Part[VertexList[graph], indices]
 
 partitionRagged[v_List, l_?VectorQ] := MapThread[Take[v, {#1, #2}] &, Module[{a = Accumulate[l]}, {a - l + 1, a}]]
 
-(* Unpacks an index list representing vertex sets from an integer array,
+(* Unpacks an index MList representing vertex sets from an integer array,
    To be used in conunction with IG::packListIntoIntTensor() *)
 igUnpackVertexSet[graph_][packed_] :=
     With[{len = First[packed]},
@@ -1038,7 +1038,7 @@ igUnpackVertexSet[graph_][packed_] :=
       ]
     ]
 
-(* convert vertex list to IG format *)
+(* convert vertex MList to IG format *)
 vss[graph_][All] := {}
 vss[graph_][vs_List] := Check[VertexIndex[graph, #] - 1& /@ vs, throw[$Failed]]
 
@@ -1640,12 +1640,12 @@ IGIsoclass[graph_?igGraphQ] := Block[{ig = igMakeFast[graph]}, sck@ig@"isoclass"
 
 (* Vertex and edge colouring helper functions *)
 
-IGraphM::vcol = "The \"VertexColors\" option must be a list of integers, an association assigning integers to vertices, or None.";
-IGraphM::ecol = "The \"EdgeColors\" option must be a list of integers, an association assigning integers to edges, or None.";
+IGraphM::vcol = "The \"VertexColors\" option must be a MList of integers, an association assigning integers to vertices, or None.";
+IGraphM::ecol = "The \"EdgeColors\" option must be a MList of integers, an association assigning integers to edges, or None.";
 IGraphM::bdecol = "Edge colors: the following edges are not in the graph: ``.";
 IGraphM::bdvcol = "Vertex colors: the following vertices are not in the graph: ``.";
-IGraphM::vcolcnt = "When vertex colours are specified as a list, the list length must be the same as the vertex count of the graph.";
-IGraphM::ecolcnt = "When edge colours are specified as a list, the list length must be the same as the edge count of the graph.";
+IGraphM::vcolcnt = "When vertex colours are specified as a MList, the MList length must be the same as the vertex count of the graph.";
+IGraphM::ecolcnt = "When edge colours are specified as a MList, the MList length must be the same as the edge count of the graph.";
 IGraphM::vcmm = "Only one graph is vertex coloured. Colours will be ignored.";
 
 defaultVF2Colors = {"EdgeColors" -> None, "VertexColors" -> None};
@@ -2876,7 +2876,7 @@ IGWeightedClusteringCoefficient[graph_?igGraphQ] :=
 
 (* Similarity *)
 
-(* for those that return a list of vectors *)
+(* for those that return a MList of vectors *)
 similarityFunction1[name_, post_ : Identity][graph_, All] :=
     catch@Block[{ig = igMakeFast[graph]}, post@check@ig@name[{}] ]
 similarityFunction1[name_, post_ : Identity][graph_, {}] := {}
@@ -3447,7 +3447,7 @@ IGBipartitePartitions[graph_?igGraphQ] :=
 (* Vertex contraction *)
 
 IGVertexContract::inv = "The vertices `` are not present in the graph.";
-IGVertexContract::vset = "`` must be a list of vertex sets.";
+IGVertexContract::vset = "`` must be a MList of vertex sets.";
 
 Options[IGVertexContract] = { SelfLoops -> False, "MultipleEdges" -> False };
 SyntaxInformation[IGVertexContract] = {"ArgumentsPattern" -> {_, _, OptionsPattern[]}, "OptionNames" -> optNames[IGVertexContract, Graph]};

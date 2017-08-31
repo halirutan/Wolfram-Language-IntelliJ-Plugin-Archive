@@ -94,7 +94,7 @@ class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
           vars = MathematicaPsiUtilities.getLocalLimitVariables(functionCall);
         }
 
-//      List<Symbol> declaredSymbols = MathematicaPsiUtilities.extractLocalizedVariables(element);
+//      MList<Symbol> declaredSymbols = MathematicaPsiUtilities.extractLocalizedVariables(element);
         if (vars.size() > 0 && !vars.contains(myStartElement)) {
           mySymbols.addAll(vars);
         }

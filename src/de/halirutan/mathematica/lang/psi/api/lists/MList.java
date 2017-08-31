@@ -21,10 +21,18 @@
 
 package de.halirutan.mathematica.lang.psi.api.lists;
 
+import com.intellij.psi.PsiElement;
 import de.halirutan.mathematica.lang.psi.api.Expression;
+
+import java.util.List;
 
 /**
  * @author patrick (4/14/13)
  */
-public interface List extends Expression {
+public interface MList extends Expression {
+  /**
+   * Returns the list elements
+   * @return List of elements
+   */
+  List<PsiElement> getListElements();
 }

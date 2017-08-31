@@ -19,17 +19,14 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.formatter.settings;
-
-import com.intellij.application.options.TabbedLanguageCodeStylePanel;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import de.halirutan.mathematica.lang.MathematicaLanguage;
+package de.halirutan.mathematica.lang.psi
 
 /**
- * @author patrick (11/2/13)
+ * @author patrick (30.08.17).
  */
-class MathematicaCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
-  MathematicaCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
-    super(MathematicaLanguage.INSTANCE, currentSettings, settings);
-  }
+object SymbolNames {
+    const val Begin = "Begin"
+    const val BeginPackage = "BeginPackage"
+    const val EndPackage = "EndPackage"
+    const val End = "End"
 }

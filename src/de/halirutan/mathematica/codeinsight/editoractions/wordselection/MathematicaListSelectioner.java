@@ -25,6 +25,7 @@ import com.intellij.codeInsight.editorActions.wordSelection.BasicSelectioner;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.lang.psi.api.lists.MList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
 public class MathematicaListSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {
-    return e instanceof de.halirutan.mathematica.lang.psi.api.lists.List;
+    return e instanceof MList;
   }
 
   @Override

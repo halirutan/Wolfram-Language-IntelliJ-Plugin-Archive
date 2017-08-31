@@ -28,6 +28,6 @@ import java.io.Reader;
 
 public class MathematicaLexer extends FlexAdapter {
   public MathematicaLexer() {
-    super(new _MathematicaLexer((Reader) null));
+    super(new _MathematicaLexer(null));
   }
 }
