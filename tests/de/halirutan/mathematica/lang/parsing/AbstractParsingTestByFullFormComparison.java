@@ -30,13 +30,13 @@ import de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefini
  */
 public abstract class AbstractParsingTestByFullFormComparison extends ParsingTestCase {
 
-  public AbstractParsingTestByFullFormComparison() {
+  AbstractParsingTestByFullFormComparison() {
     super("parsing", "m", new MathematicaParserDefinition());
   }
 
   @Override
   protected String getTestDataPath() {
-    return MathematicaTestUtils.TEST_PATH;
+    return "testData";
   }
 
   @Override

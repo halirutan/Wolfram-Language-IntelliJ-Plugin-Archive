@@ -29,7 +29,7 @@ import java.io.File;
  */
 public class MathematicaTestUtils {
 
-  public static final String TEST_PATH;
+  private static final String TEST_PATH;
 
   static {
     final String path = MathematicaTestUtils.class.getResource("MathematicaTestUtils.class").getPath();
@@ -42,6 +42,4 @@ public class MathematicaTestUtils {
   public static String getTestPath() {
     return TEST_PATH;
   }
-
-
 }

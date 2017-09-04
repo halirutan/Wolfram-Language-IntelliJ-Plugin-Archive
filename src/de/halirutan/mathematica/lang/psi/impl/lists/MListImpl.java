@@ -54,4 +54,9 @@ public class MListImpl extends ExpressionImpl implements MList {
   public List<PsiElement> getListElements() {
     return Arrays.asList(getChildren());
   }
+
+  @Override
+  public String toString() {
+    return "List";
+  }
 }

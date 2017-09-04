@@ -52,7 +52,7 @@ public class MathematicaPsiElementFactory {
    * @return The newly created PsiFile with content code
    */
   @NotNull
-  private MathematicaPsiFile createDummyFile(@NotNull CharSequence code) {
+  public MathematicaPsiFile createDummyFile(@NotNull CharSequence code) {
     final FileType type = MathematicaFileType.INSTANCE;
     return (MathematicaPsiFile) PsiFileFactory.getInstance(myProject).createFileFromText(DUMMY_FILE_NAME, type, code);
   }

@@ -151,5 +151,9 @@
 
       <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
     </group>
+    <action id="MathematicaFullFormViewer" class="de.halirutan.mathematica.actions.MathematicaFullFormViewer" text="View FullForm" description="Show the estimated FullForm of the selected expression">
+      <add-to-group group-id="MathematicaMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl E"/>
+    </action>
   </actions>
 </idea-plugin>

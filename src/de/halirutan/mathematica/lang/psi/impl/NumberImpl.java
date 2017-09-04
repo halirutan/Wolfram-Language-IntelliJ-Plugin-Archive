@@ -22,6 +22,8 @@
 package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElementVisitor;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Number;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +36,17 @@ public class NumberImpl extends ExpressionImpl implements Number{
   }
 
   @Override
-  public String toString() {
-    return "Number(" + getText() + ")";
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitNumber(this);
+    } else {
+      super.accept(visitor);
+    }
   }
+
+
+//  @Override
+//  public String toString() {
+//    return "Number(" + getText() + ")";
+//  }
 }

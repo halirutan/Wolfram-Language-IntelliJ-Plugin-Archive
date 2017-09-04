@@ -38,6 +38,7 @@ import de.halirutan.mathematica.lang.psi.api.rules.Rule;
 import de.halirutan.mathematica.lang.psi.api.rules.RuleDelayed;
 import de.halirutan.mathematica.lang.psi.api.slots.Slot;
 import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 
 
 /**
@@ -167,6 +168,10 @@ public class MathematicaVisitor extends PsiElementVisitor {
 
   public void visitList(MList mList) {
     visitElement(mList);
+  }
+
+  public void visitString(MString mString) {
+    visitElement(mString);
   }
 
   public void visitStringifiedSymbol(StringifiedSymbol stringifiedSymbol) {

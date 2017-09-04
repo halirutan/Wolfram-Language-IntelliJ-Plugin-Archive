@@ -23,12 +23,14 @@ package de.halirutan.mathematica.lang.psi.impl.string;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
 import de.halirutan.mathematica.lang.psi.impl.MathematicaPsiFileImpl;
 import de.halirutan.mathematica.lang.psi.impl.OperatorNameProviderImpl;
@@ -77,4 +79,14 @@ public class StringImpl extends OperatorNameProviderImpl implements MString {
     }
     return myReferences;
   }
+
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof MathematicaVisitor) {
+      ((MathematicaVisitor) visitor).visitString(this);
+    } else {
+      super.accept(visitor);
+    }
+  }
+
 }

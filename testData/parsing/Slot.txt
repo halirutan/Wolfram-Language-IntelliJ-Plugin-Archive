@@ -1,3 +1,25 @@
+(* Slots & SlotSequences *)
+#&;
+#2&;
+##&;
+##1&;
+
+(* Simple Association Slots *)
+#Test&;
+#"Test"&;
+{#"Test", #"Test2"}&;
+
+(* Function-call like Slot expressions *)
+#["Test"]&;
+#[Test]&;
+
+(* Yo Dawg, I heard you like Slots... *)
+#[#Test]&;
+#[#"Test"]&;
+#[#Test&, #"Test"&]&;
+#Test[#, #"Test"]&;
+#"Test"[#Test&, #]&;
+-----
 FILE(0,313)
   PsiComment(COMMENT)('(* Slots & SlotSequences *)')(0,27)
   PsiWhiteSpace('\n')(27,28)
