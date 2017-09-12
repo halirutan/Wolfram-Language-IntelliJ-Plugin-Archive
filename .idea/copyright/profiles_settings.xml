@@ -1,8 +1,0 @@
-<component name="CopyrightManager">
-  <settings>
-    <module2copyright>
-      <element module="Plugin Files" copyright="plugin license" />
-      <element module="Wolfram Files" copyright="Wolfram license" />
-    </module2copyright>
-  </settings>
-</component>

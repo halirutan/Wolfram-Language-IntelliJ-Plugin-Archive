@@ -23,8 +23,6 @@ package de.halirutan.mathematica.lang.resolve
 
 import com.intellij.testFramework.PsiTestCase
 import de.halirutan.mathematica.MathematicaTestUtils
-import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor
-import de.halirutan.mathematica.lang.psi.api.Symbol
 
 /**
  * @author patrick (20.07.17).
@@ -37,18 +35,18 @@ class ResolvePerformanceTest : PsiTestCase() {
 
     @Throws(Exception::class)
     fun testLargeFile() {
-        val count = object {
-            var value = 0
-        }
-        val start = System.nanoTime()
-        val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
-        file.accept(object : MathematicaRecursiveVisitor() {
-            override fun visitSymbol(symbol: Symbol) {
-                val resolve = symbol.resolve()
-                resolve?.let { count.value++ }
-            }
-        })
-        val stop = System.nanoTime()
-        println("Resolved ${count.value} in ${(stop - start)/1e9} seconds")
+//        val count = object {
+//            var value = 0
+//        }
+//        val start = System.nanoTime()
+//        val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
+//        file.accept(object : MathematicaRecursiveVisitor() {
+//            override fun visitSymbol(symbol: Symbol) {
+//                val resolve = symbol.resolve()
+//                resolve?.let { count.value++ }
+//            }
+//        })
+//        val stop = System.nanoTime()
+//        println("Resolved ${count.value} in ${(stop - start)/1e9} seconds")
     }
 }

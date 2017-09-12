@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Mathematica-IntelliJ-Plugin.iml" filepath="$PROJECT_DIR$/Mathematica-IntelliJ-Plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Mathematica-IntelliJ-Plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Mathematica-IntelliJ-Plugin_main.iml" group="Mathematica-IntelliJ-Plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Mathematica-IntelliJ-Plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Mathematica-IntelliJ-Plugin_test.iml" group="Mathematica-IntelliJ-Plugin" />
     </modules>
   </component>
 </project>

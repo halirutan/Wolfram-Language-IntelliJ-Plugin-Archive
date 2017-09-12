@@ -35,7 +35,7 @@ public class MathematicaParsingTest extends AbstractParsingTestByFullFormCompari
   }
 
   public void testAssignment() throws Exception {
-    doTest(true);
+    doTest(false);
   }
 
   public void testPattern() throws Exception {

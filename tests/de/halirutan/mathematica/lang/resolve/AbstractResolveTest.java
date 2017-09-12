@@ -28,7 +28,7 @@ import de.halirutan.mathematica.MathematicaTestUtils;
 /**
  * @author patrick (20.07.17).
  */
-public class AbstractResolveTest extends ResolveTestCase {
+abstract public class AbstractResolveTest extends ResolveTestCase {
 
   @Override
   protected String getTestDataPath() {
