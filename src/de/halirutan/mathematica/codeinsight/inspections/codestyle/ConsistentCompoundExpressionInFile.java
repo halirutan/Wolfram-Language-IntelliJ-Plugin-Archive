@@ -26,7 +26,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
-import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
@@ -53,20 +53,20 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
   @NotNull
   @Override
   public String getDisplayName() {
-    return MathematicaInspectionBundle.message("consistent.compound.expression.in.file.name");
+    return InspectionBundle.message("consistent.compound.expression.in.file.name");
   }
 
   @NotNull
   @Override
   public String getStaticDescription() {
-    return MathematicaInspectionBundle.message("consistent.compound.expression.in.file.description");
+    return InspectionBundle.message("consistent.compound.expression.in.file.description");
   }
 
   @Nls
   @NotNull
   @Override
   public String getGroupDisplayName() {
-    return MathematicaInspectionBundle.message("group.codestyle");
+    return InspectionBundle.message("group.codestyle");
   }
 
   @SuppressWarnings("OverlyComplexAnonymousInnerClass")
@@ -89,7 +89,7 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
               holder.registerProblem(
                   file,
                   TextRange.from(Math.max(child.getTextOffset() + child.getTextLength() - 1, 0), 1),
-                  MathematicaInspectionBundle.message("consistent.compound.expression.in.file.message"),
+                  InspectionBundle.message("consistent.compound.expression.in.file.message"),
                   new ConsistentCompoundExpressionQuickFix());
 //            }
             child = child.getNextSibling();

@@ -19,24 +19,24 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.inspections;
+package de.halirutan.mathematica.codeinsight.inspections
 
-import com.intellij.codeInspection.InspectionToolProvider;
-import de.halirutan.mathematica.codeinsight.inspections.bugs.ImplicitTimesThroughLinebreak;
-import de.halirutan.mathematica.codeinsight.inspections.bugs.UnsupportedVersion;
-import de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionInFile;
+import com.intellij.codeInspection.InspectionToolProvider
+import de.halirutan.mathematica.codeinsight.inspections.bugs.ImplicitTimesThroughLinebreak
+import de.halirutan.mathematica.codeinsight.inspections.bugs.UnsupportedVersion
+import de.halirutan.mathematica.codeinsight.inspections.codestyle.ConsistentCompoundExpressionInFile
+import de.halirutan.mathematica.codeinsight.inspections.symbol.UnresolvedSymbolInspection
 
 /**
  * @author patrick (7/8/14)
  */
-public class MathematicaInspectionProvider implements InspectionToolProvider {
-  @Override
-  public Class[] getInspectionClasses() {
-    return new Class[]{
-        ConsistentCompoundExpressionInFile.class,
-        ImplicitTimesThroughLinebreak.class,
-        UnsupportedVersion.class
-    };
-
-  }
+class MathematicaInspectionProvider : InspectionToolProvider {
+    override fun getInspectionClasses(): Array<Class<*>> {
+        return arrayOf(
+                UnresolvedSymbolInspection::class.java,
+                ConsistentCompoundExpressionInFile::class.java,
+                ImplicitTimesThroughLinebreak::class.java,
+                UnsupportedVersion::class.java
+        )
+    }
 }

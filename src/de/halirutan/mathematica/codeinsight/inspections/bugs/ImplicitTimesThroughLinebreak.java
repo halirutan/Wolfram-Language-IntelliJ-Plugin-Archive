@@ -29,7 +29,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
-import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
@@ -55,20 +55,20 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
   @NotNull
   @Override
   public String getDisplayName() {
-    return MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.name");
+    return InspectionBundle.message("bugs.implicit.times.through.linebreak.name");
   }
 
   @Nullable
   @Override
   public String getStaticDescription() {
-    return MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.description");
+    return InspectionBundle.message("bugs.implicit.times.through.linebreak.description");
   }
 
   @Nls
   @NotNull
   @Override
   public String getGroupDisplayName() {
-    return MathematicaInspectionBundle.message("group.bugs");
+    return InspectionBundle.message("group.bugs");
   }
 
   @NotNull
@@ -86,7 +86,7 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
 
     private final ProblemsHolder myHolder;
 
-    public ImplicitTimesVisitor(final ProblemsHolder holder) {
+    ImplicitTimesVisitor(final ProblemsHolder holder) {
       this.myHolder = holder;
     }
 
@@ -94,7 +94,7 @@ public class ImplicitTimesThroughLinebreak extends AbstractInspection {
       myHolder.registerProblem(
           element,
           TextRange.from(element.getTextLength()-1,1),
-          MathematicaInspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
+          InspectionBundle.message("bugs.implicit.times.through.linebreak.message"));
     }
 
     @Override

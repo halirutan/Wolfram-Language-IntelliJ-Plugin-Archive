@@ -33,7 +33,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.codeinsight.completion.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
-import de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionBundle;
+import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
@@ -122,20 +122,20 @@ public class UnsupportedVersion extends AbstractInspection {
   @NotNull
   @Override
   public String getDisplayName() {
-    return MathematicaInspectionBundle.message("bugs.unsupported.version.name");
+    return InspectionBundle.message("bugs.unsupported.version.name");
   }
 
   @Nullable
   @Override
   public String getStaticDescription() {
-    return MathematicaInspectionBundle.message("bugs.unsupported.version.description");
+    return InspectionBundle.message("bugs.unsupported.version.description");
   }
 
   @Nls
   @NotNull
   @Override
   public String getGroupDisplayName() {
-    return MathematicaInspectionBundle.message("group.bugs");
+    return InspectionBundle.message("group.bugs");
   }
 
   @NotNull

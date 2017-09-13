@@ -76,9 +76,12 @@ class MathematicaHighlightingAnnotator : MathematicaVisitor(), Annotator {
     override fun visitSymbol(symbol: Symbol) {
         symbol.resolve()
         val scope = symbol.localizationConstruct
+        if (scope == LocalizationConstruct.MScope.NULL) {
+            return
+        }
         when (scope) {
             LocalizationConstruct.MScope.FILE -> setHighlighting(symbol, myHolder!!, MathematicaSyntaxHighlighterColors.IDENTIFIER)
-            LocalizationConstruct.MScope.NULL -> setHighlighting(symbol, myHolder!!, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
+//            LocalizationConstruct.MScope.NULL -> setHighlighting(symbol, myHolder!!, CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
             LocalizationConstruct.MScope.BUILT_IN -> setHighlighting(symbol, myHolder!!, MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION)
             LocalizationConstruct.MScope.MODULE -> setHighlighting(symbol, myHolder!!, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
             LocalizationConstruct.MScope.BLOCK -> setHighlighting(symbol, myHolder!!, MathematicaSyntaxHighlighterColors.BLOCK_LOCALIZED)

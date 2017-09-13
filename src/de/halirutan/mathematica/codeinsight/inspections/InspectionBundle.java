@@ -31,11 +31,11 @@ import java.util.ResourceBundle;
 /**
  * @author patrick (7/8/14)
  */
-public class MathematicaInspectionBundle {
+public class InspectionBundle {
   private static final String BUNDLE = "de.halirutan.mathematica.MathematicaInspectionBundle";
   private static Reference<ResourceBundle> ourBundle = null;
 
-  private MathematicaInspectionBundle() {
+  private InspectionBundle() {
   }
 
   public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
