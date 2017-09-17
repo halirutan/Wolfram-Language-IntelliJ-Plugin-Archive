@@ -79,7 +79,7 @@ class MathematicaColorSettingsPage : ColorSettingsPage {
 
     override fun getAttributeDescriptors(): Array<AttributesDescriptor> {
         return arrayOf(
-                AttributesDescriptor("Identifier", MathematicaSyntaxHighlighterColors.IDENTIFIER),
+                AttributesDescriptor("Symbols", MathematicaSyntaxHighlighterColors.IDENTIFIER),
                 AttributesDescriptor("Built-In Function", MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION),
                 AttributesDescriptor("Number", MathematicaSyntaxHighlighterColors.LITERAL),
                 AttributesDescriptor("Operator Sign", MathematicaSyntaxHighlighterColors.OPERATORS),
