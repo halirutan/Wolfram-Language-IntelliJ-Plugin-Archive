@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.highlighting;
+package de.halirutan.mathematica.codeinsight.highlighting.annotators;
 
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -27,6 +27,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors;
 import de.halirutan.mathematica.lang.psi.util.Comments;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +48,7 @@ public class CommentAnnotator implements Annotator {
     if (element instanceof PsiComment) {
       final Annotation commentAnnotation = holder.createInfoAnnotation(element, null);
       if (Comments.isCorrectSectionComment((PsiComment) element)) {
-        commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
+        commentAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.INSTANCE.getCOMMENT_SPECIAL());
         return;
       }
       annotateCommentTags(element, holder);
@@ -62,7 +63,7 @@ public class CommentAnnotator implements Annotator {
       int start = matcher.start();
       int end = matcher.end();
       final Annotation tagAnnotation = holder.createInfoAnnotation(TextRange.create(commentStart + start, commentStart + end), "");
-      tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.COMMENT_SPECIAL);
+      tagAnnotation.setTextAttributes(MathematicaSyntaxHighlighterColors.INSTANCE.getCOMMENT_SPECIAL());
     }
   }
 }

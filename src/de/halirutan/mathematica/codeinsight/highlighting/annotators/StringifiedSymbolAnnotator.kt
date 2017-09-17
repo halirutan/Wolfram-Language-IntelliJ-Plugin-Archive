@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
+ * Copyright (c) 2017 Patrick Scheibe
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,22 +19,24 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.highlighting;
+package de.halirutan.mathematica.codeinsight.highlighting.annotators
 
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.lang.annotation.AnnotationHolder
+import com.intellij.lang.annotation.Annotator
+import com.intellij.psi.PsiElement
+import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors
+import de.halirutan.mathematica.lang.psi.api.StringifiedSymbol
+
 
 /**
- * @author patrick (4/4/13)
+ * Provides bold and bright highlighting for tags and sectioning comments.
+ * @author patrick (03.03.15)
  */
-public class MathematicaSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
-  @NotNull
-  @Override
-  public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
-    return new MathematicaSyntaxHighlighter();
-  }
+class StringifiedSymbolAnnotator : Annotator {
+
+    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
+        if (element is StringifiedSymbol) {
+            MathematicaSyntaxHighlighterColors.setHighlighting(element, holder, MathematicaSyntaxHighlighterColors.MESSAGE)
+        }
+    }
 }
