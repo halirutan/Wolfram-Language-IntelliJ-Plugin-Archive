@@ -39,7 +39,7 @@ fun resolveLocalCompileLikeVariables(myStartElement: Symbol, functionCall: Funct
         return null
     }
 
-    val firstArgument = arguments.get(0)
+    val firstArgument = arguments[0]
     val inDef = firstArgument == lastParent
 
 

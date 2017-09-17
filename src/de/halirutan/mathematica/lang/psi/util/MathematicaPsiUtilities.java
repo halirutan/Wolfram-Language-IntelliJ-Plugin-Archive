@@ -72,7 +72,7 @@ public class MathematicaPsiUtilities {
    * @param element PsiElement of the assignment
    * @return MList of symbols which are assigned.
    */
-  @Nullable
+  @NotNull
   static List<Symbol> getAssignmentSymbols(PsiElement element) {
     PsiElement firstChild = element.getFirstChild();
     final List<Symbol> assignees = Lists.newArrayList();
@@ -275,7 +275,7 @@ public class MathematicaPsiUtilities {
             if (!inDefition || def.equals(myStartElement)) {
               return new SymbolResolveResult(def, MScope.FUNCTION, true);
             } else {
-              return new SymbolResolveResult(myStartElement, MScope.NULL, true);
+              return new SymbolResolveResult(myStartElement, MScope.NULL_SCOPE, true);
             }
           }
         }
@@ -289,8 +289,7 @@ public class MathematicaPsiUtilities {
    * <li><code>Module[{arg}, arg^2]</code> extracts <code>arg</code></li> <li><code>With[{a=1,b=2}, a*b]</code> extracts
    * <code>a,b</code></li> </ul>
    *
-   * @param element    The {@link PsiElement} of the function call
-   * @param lastParent the last PsiElement before we made a tree-up step
+   * @param  element Module to find the local variables for
    * @return The set of localized function arguments
    */
   public static List<Symbol> getLocalModuleLikeVariables(@NotNull FunctionCall element) {
@@ -322,16 +321,18 @@ public class MathematicaPsiUtilities {
    * <li><code>Module[{arg}, arg^2]</code> extracts <code>arg</code></li> <li><code>With[{a=1,b=2}, a*b]</code> extracts
    * <code>a,b</code></li> </ul>
    *
-   * @param element    The {@link PsiElement} of the function call
-   * @param lastParent the last PsiElement before we made a tree-up step
+   * @param symbol Symbol we try to resolve
+   * @param functionCall    The {@link PsiElement} of the function call
+   * @param state The resolve state
    * @return The set of localized function arguments
    */
   @Nullable
-  public static SymbolResolveResult resolveLocalModuleLikeVariables(@NotNull Symbol symbol, @NotNull FunctionCall element, ResolveState state) {
+  public static SymbolResolveResult resolveLocalModuleLikeVariables(@NotNull Symbol symbol, @NotNull FunctionCall functionCall, ResolveState state) {
 
     final PsiElement lastParent = state.get(SymbolResolveHint.LAST_PARENT);
-    if (element.isScopingConstruct() && LocalizationConstruct.isModuleLike(element.getScopingConstruct())) {
-      final List<PsiElement> arguments = getArguments(element);
+    final MScope scopingConstruct = functionCall.getScopingConstruct();
+    if (functionCall.isScopingConstruct() && LocalizationConstruct.isModuleLike(scopingConstruct)) {
+      final List<PsiElement> arguments = getArguments(functionCall);
       if (arguments.size() < 1) {
         return null;
       }
@@ -350,11 +351,11 @@ public class MathematicaPsiUtilities {
           if (e instanceof Symbol) {
             if (((Symbol) e).getSymbolName().equals(symbol.getSymbolName())) {
               if (!isInDefList || e.equals(symbol)) {
-                return new SymbolResolveResult(e, element.getScopingConstruct(), true);
+                return new SymbolResolveResult(e, scopingConstruct, true);
               } else {
                 final List<Symbol> definitionInList = getDefinitionSymbolsFromList(moduleDefList);
                 if (definitionInList.contains(symbol)) {
-                  return new SymbolResolveResult(symbol, MScope.NULL, true);
+                  return new SymbolResolveResult(symbol, scopingConstruct, false);
                 } else {
                   return null;
                 }

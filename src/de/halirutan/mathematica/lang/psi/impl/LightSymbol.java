@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LightSymbol extends LightElement implements PsiNamedElement {
   private String myName;
-  private PsiFile myFile;
+  private final PsiFile myFile;
 
   LightSymbol(@NotNull Symbol symbol) {
     super(symbol.getManager(), MathematicaLanguage.INSTANCE);
@@ -79,10 +79,7 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj != null && obj instanceof LightSymbol) {
-      return obj.hashCode() == hashCode();
-    }
-    return false;
+    return obj != null && obj instanceof LightSymbol && obj.hashCode() == hashCode();
   }
 
   @Override
@@ -91,9 +88,6 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
       final PsiElement resolve = ((Symbol) another).resolve();
       return resolve != null && resolve.equals(this);
     }
-    if (another instanceof LightSymbol) {
-      return another.hashCode() == hashCode();
-    }
-    return false;
+    return another instanceof LightSymbol && another.hashCode() == hashCode();
   }
 }

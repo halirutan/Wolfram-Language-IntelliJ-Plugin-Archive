@@ -75,7 +75,7 @@ public interface FunctionCall extends PsiElement {
   /**
    * Returns the type of scoping construct, if the function call is e.g. <code >Module[..]</code>
    *
-   * @return The scoping construct or MScope.NULL if it is no scoping construct.
+   * @return The scoping construct or MScope.NULL_SCOPE if it is no scoping construct.
    */
   MScope getScopingConstruct();
 

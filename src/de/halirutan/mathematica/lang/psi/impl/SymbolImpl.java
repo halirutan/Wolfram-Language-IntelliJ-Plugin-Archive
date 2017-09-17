@@ -30,6 +30,7 @@ import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.MathematicaSymbolResolver;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
@@ -59,8 +60,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   private static final MathematicaSymbolResolver RESOLVER = new MathematicaSymbolResolver();
 
-  private MScope myScope = MScope.NULL;
+  private MScope myScope = MScope.NULL_SCOPE;
+  private PsiElement myScopeElement = null;
   private boolean mySelfReferenceQ = false;
+
 
   public SymbolImpl(ASTNode node) {
     super(node);
@@ -165,6 +168,9 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     final SymbolResolveResult symbolResolveResult = advancedResolve();
     if (symbolResolveResult != null) {
       myScope = symbolResolveResult.getLocalization();
+      if (LocalizationConstruct.isLocalScoping(myScope)) {
+        myScopeElement = symbolResolveResult.getElement();
+      }
       mySelfReferenceQ = Objects.equals(symbolResolveResult.getElement(), this);
       return symbolResolveResult.getElement();
     }
@@ -180,6 +186,11 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Override
   public boolean isSelfReference() {
     return mySelfReferenceQ;
+  }
+
+  @Override
+  public boolean isLocallyBound() {
+    return myScopeElement != null && myScopeElement.isValid();
   }
 
   @NotNull

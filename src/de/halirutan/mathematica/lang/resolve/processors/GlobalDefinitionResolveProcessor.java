@@ -28,6 +28,7 @@ import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.assignment.*;
 import de.halirutan.mathematica.lang.psi.impl.assignment.SetDefinitionSymbolVisitor;
 import de.halirutan.mathematica.lang.psi.impl.assignment.UpSetDefinitionSymbolVisitor;
+import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,9 +82,8 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
    * @return true if the names are equal
    */
   private boolean visitSymbol(final Symbol symbol) {
-    if (myStartElement.getFullSymbolName().equals(symbol.getFullSymbolName())) {
-      myReferringSymbol = symbol;
-      return false;
+    if (symbol.getLocalizationConstruct() == LocalizationConstruct.MScope.NULL_SCOPE && myStartElement.getFullSymbolName().equals(symbol.getFullSymbolName())) {
+      return checkIfFound(symbol);
     }
     return true;
   }
@@ -96,8 +96,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
       final java.util.Set<Symbol> definitionSymbols = definitionVisitor.getUnboundSymbols();
       for (Symbol next : definitionSymbols) {
         if (next.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-          myReferringSymbol = next;
-          return false;
+          return checkIfFound(next);
         }
       }
     }
@@ -109,8 +108,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
    */
   private boolean visitTagSetDefinition(final PsiElement defSymbol) {
     if (defSymbol instanceof Symbol && ((Symbol) defSymbol).getFullSymbolName().matches(myStartElement.getFullSymbolName())) {
-      myReferringSymbol = defSymbol;
-      return false;
+      return checkIfFound((Symbol) defSymbol);
     }
     return true;
   }
@@ -122,8 +120,7 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
       final java.util.Set<Symbol> definitionSymbols = definitionVisitor.getUnboundSymbols();
       for (Symbol next : definitionSymbols) {
         if (next.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-          myReferringSymbol = next;
-          return false;
+          return checkIfFound(next);
         }
       }
     }
@@ -133,6 +130,14 @@ public class GlobalDefinitionResolveProcessor implements PsiElementProcessor {
   @Nullable
   public PsiElement getMyReferringSymbol() {
     return myReferringSymbol;
+  }
+
+  private boolean checkIfFound(final Symbol possibleDefinition) {
+    if (!possibleDefinition.isLocallyBound()) {
+      myReferringSymbol = possibleDefinition;
+      return false;
+    }
+    return true;
   }
 
 }

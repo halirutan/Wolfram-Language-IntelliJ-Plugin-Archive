@@ -46,7 +46,7 @@ public class AssignmentTypeGroup implements Group, CodePlaceProvider, ColoredIte
   private final Collection<TreeElement> myTreeElements;
   private final SymbolAssignmentType myType;
 
-  public AssignmentTypeGroup(final SymbolAssignmentType type, final Collection<TreeElement> treeElements) {
+  AssignmentTypeGroup(final SymbolAssignmentType type, final Collection<TreeElement> treeElements) {
     this.myTreeElements = treeElements;
     this.myType = type;
   }
@@ -83,11 +83,11 @@ public class AssignmentTypeGroup implements Group, CodePlaceProvider, ColoredIte
       case UP_SET_DELAYED_ASSIGNMENT:
         return DefaultLanguageHighlighterColors.INSTANCE_METHOD;
       case MESSAGE_ASSIGNMENT:
-        return MathematicaSyntaxHighlighterColors.MESSAGE;
+        return MathematicaSyntaxHighlighterColors.INSTANCE.getMESSAGE();
       case OPTIONS_ASSIGNMENT:
-        return MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED;
+        return MathematicaSyntaxHighlighterColors.INSTANCE.getMODULE_LOCALIZED();
       case ATTRIBUTES_ASSIGNMENT:
-        return MathematicaSyntaxHighlighterColors.BUILTIN_FUNCTION;
+        return MathematicaSyntaxHighlighterColors.INSTANCE.getBUILTIN_FUNCTION();
     }
     return null;
   }

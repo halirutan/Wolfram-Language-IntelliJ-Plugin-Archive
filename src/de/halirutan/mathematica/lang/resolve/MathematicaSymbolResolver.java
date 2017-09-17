@@ -55,7 +55,7 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
   public SymbolResolveResult resolve(@NotNull Symbol ref, boolean incompleteCode) {
 
     if (isBuiltInSymbol(ref)){
-      return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.BUILT_IN, true);
+      return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.KERNEL_SCOPE, true);
     }
 
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
@@ -71,7 +71,7 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
 
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition != null) {
-      return new SymbolResolveResult(globalDefinition, MScope.FILE, true);
+      return new SymbolResolveResult(globalDefinition, MScope.FILE_SCOPE, true);
     }
 
     final FileBasedIndex fileIndex = FileBasedIndex.getInstance();
@@ -89,15 +89,15 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
 //            final PsiElement elementAt = psiFile.findElementAt(key.getOffset());
             final Symbol elementAt = PsiTreeUtil.findElementOfClassAtOffset(psiFile, key.getOffset(), Symbol.class, true);
             if (elementAt != null) {
-              return new SymbolResolveResult(elementAt, MScope.FILE, true);
+              return new SymbolResolveResult(elementAt, MScope.FILE_SCOPE, true);
             }
-            return new SymbolResolveResult(psiFile, MScope.FILE, true);
+            return new SymbolResolveResult(psiFile, MScope.FILE_SCOPE, true);
           }
         }
       }
     }
 
-    return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL, true);
+    return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL_SCOPE, true);
 
   }
 

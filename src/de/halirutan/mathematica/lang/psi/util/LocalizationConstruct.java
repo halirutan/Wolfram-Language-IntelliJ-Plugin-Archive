@@ -30,131 +30,134 @@ import java.util.Set;
  */
 public class LocalizationConstruct {
 
-  private static final Set<String> myModuleLike = Sets.newHashSet("Module", "Block", "With", "DynamicModule");
-  private static final Set<String> myFunctionLike = Sets.newHashSet("Function");
-  private static final Set<String> myTableLike = Sets.newHashSet("Table", "Sum", "Integrate", "NSum", "Plot", "Plot3D",
-      "ContourPlot", "ContourPlot3D", "ParametricPlot", "ParametricPlot3D", "Do");
-  private static final Set<String> myCompileLike = Sets.newHashSet("Compile");
-  private static final Set<String> myLimitLike = Sets.newHashSet("Limit");
-  private static final Set<String> myRuleLike = Sets.newHashSet("RuleDelayed");
-  private static final Set<String> myManipulateLike = Sets.newHashSet("Manipulate");
+    private static final Set<String> ourScopesAsString = Sets.newHashSet();
 
-  private static boolean isLocalizationConstruct(String elementName) {
-    return myModuleLike.contains(elementName) ||
-        myTableLike.contains(elementName) ||
-        myCompileLike.contains(elementName) ||
-        myLimitLike.contains(elementName) ||
-        myRuleLike.contains(elementName) ||
-        myManipulateLike.contains(elementName) ||
-        myFunctionLike.contains(elementName);
-  }
-
-  public static boolean isModuleLike(MScope scopingConstruct) {
-    for (String s : myModuleLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    static {
+        for (MScope scope : MScope.values()) {
+            final String s = scope.toString();
+            if (!s.contains(" ")) {
+                ourScopesAsString.add(scope.toString());
+            }
+        }
     }
-    return false;
-  }
 
-  public static boolean isTableLike(MScope scopingConstruct) {
-    for (String s : myTableLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isScopingFunction(String elementName) {
+        return ourScopesAsString.contains(elementName);
     }
-    return false;
-  }
 
-  public static boolean isCompileLike(MScope scopingConstruct) {
-    for (String s : myCompileLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isLocalScoping(MScope scope) {
+        return scope.myType != ScopeParameter.NONE;
     }
-    return false;
-  }
 
-  public static boolean isManipulateLike(MScope scopingConstruct) {
-    for (String s : myManipulateLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isModuleLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.MODULE_LIKE;
     }
-    return false;
-  }
 
-  public static boolean isRuleLike(MScope scopingConstruct) {
-    for (String s : myRuleLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isTableLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.TABLE_LIKE;
     }
-    return false;
-  }
 
-  public static boolean isLimitLike(MScope scopingConstruct) {
-    for (String s : myLimitLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isCompileLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.COMPILE_LIKE;
     }
-    return false;
-  }
 
-  public static boolean isFunctionLike(MScope scopingConstruct) {
-    for (String s : myFunctionLike) {
-      if (s.equalsIgnoreCase(scopingConstruct.toString()))
-        return true;
+    public static boolean isManipulateLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.MANIPULATE_LIKE;
     }
-    return false;
-  }
 
-  public static MScope getType(String name) {
-    if (isLocalizationConstruct(name)) {
-      return MScope.valueOf(name.toUpperCase());
+    public static boolean isRuleLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.RULE_LIKE;
     }
-    return MScope.NULL;
-  }
 
-  public enum MScope {
-    MODULE, BLOCK, WITH, FUNCTION, DYNAMICMODULE, TABLE, DO, SUM, NULL, INTEGRATE, NSUM, PLOT, PLOT3D, CONTOURPLOT, CONTOURPLOT3D,
-    LIMIT, RULEDELAYED, SETDELAYEDPATTERN, MANIPULATE, COMPILE, ANONYMOUSFUNCTION, PARAMETRICPLOT, PARAMETRICPLOT3D, BUILT_IN, FILE;
+    public static boolean isLimitLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.LIMIT_LIKE;
+    }
+
+    public static boolean isFunctionLike(MScope scopingConstruct) {
+        return scopingConstruct.myType == ScopeParameter.FUNCTION_LIKE;
+    }
+
+    public static MScope getScope(String name) {
+        if (isScopingFunction(name)) {
+            return MScope.valueOf(name.toUpperCase());
+        }
+        return MScope.NULL_SCOPE;
+    }
+
+    public enum ScopeParameter {
+        MODULE_LIKE,
+        TABLE_LIKE,
+        COMPILE_LIKE,
+        MANIPULATE_LIKE,
+        RULE_LIKE,
+        LIMIT_LIKE,
+        FUNCTION_LIKE,
+        ANONYMOUS_FUNCTION_LIKE,
+        NONE
+    }
+
+    public enum MScope {
+        MODULE("Module", ScopeParameter.MODULE_LIKE, 1, 1),
+        BLOCK("Block", ScopeParameter.MODULE_LIKE, 1, 1),
+        DYNAMICMODULE("DynamicModule", ScopeParameter.MODULE_LIKE, 1, 1),
+        WITH("With", ScopeParameter.MODULE_LIKE, 1, 1),
+        FUNCTION("Function", ScopeParameter.FUNCTION_LIKE, 1, 1),
+        TABLE("Table", ScopeParameter.TABLE_LIKE, 2, -1),
+        DO("Do", ScopeParameter.TABLE_LIKE, 2, -1),
+        SUM("Sum", ScopeParameter.TABLE_LIKE, 2, -1),
+        NSUM("NSum", ScopeParameter.TABLE_LIKE, 2, -1),
+        INTEGRATE("Integrate", ScopeParameter.TABLE_LIKE, 2, -1),
+        NINTEGRATE("NIntegrate", ScopeParameter.TABLE_LIKE, 2, -1),
+
+        PLOT("Plot", ScopeParameter.TABLE_LIKE, 2, 2),
+        PLOT3D("Plot3D", ScopeParameter.TABLE_LIKE, 2, 3),
+        CONTOURPLOT("ContourPlot", ScopeParameter.TABLE_LIKE, 2, 3),
+        CONTOURPLOT3D("ContourPlot3D", ScopeParameter.TABLE_LIKE, 2, 4),
+        PARAMETRICPLOT("ParametricPlot", ScopeParameter.TABLE_LIKE, 2, 3),
+        PARAMETRICPLOT3D("ParametricPlot3D", ScopeParameter.TABLE_LIKE, 2, 3),
+        STREAMPLOT("StreamPlot", ScopeParameter.TABLE_LIKE, 2, 3),
+        STREAMDENSITYPLOT("StreamDensityPlot", ScopeParameter.TABLE_LIKE, 2, 3),
+        VECTORPLOT("VectorPlot", ScopeParameter.TABLE_LIKE, 2, 3),
+        VECTORPLOT3D("VectorPlot3D", ScopeParameter.TABLE_LIKE, 2, 4),
+
+        LIMIT("Limit", ScopeParameter.LIMIT_LIKE, 2, 2),
+        MANIPULATE("Manipulate", ScopeParameter.TABLE_LIKE, 2, -1),
+        COMPILE("Compile", ScopeParameter.COMPILE_LIKE, 1, 1),
+        // The last entries because they are not directly connected to a function call with a special head,
+        // because we create the scope from the PsiElement automatically.
+        ANONYMOUS_FUNCTION_SCOPE("AnonymousFunction Scope", ScopeParameter.ANONYMOUS_FUNCTION_LIKE, 1, 1),
+        RULEDELAYED_SCOPE("RuleDelayed Scope", ScopeParameter.RULE_LIKE, 1, 1),
+        SETDELAYED_SCOPE("SetDelayed Scope", ScopeParameter.RULE_LIKE, 1, 1),
+        KERNEL_SCOPE("Kernel Scope"),
+        FILE_SCOPE("File Scope"),
+        NULL_SCOPE("Null Scope");
+
+        private final String myName;
+        private final ScopeParameter myType;
+        private final int myScopePositionStart;
+        private final int myScopePositionEnd;
+
+        MScope(final String name, final ScopeParameter type, int start, int end) {
+            myName = name;
+            myType = type;
+            myScopePositionStart = start;
+            myScopePositionEnd = end;
+        }
+
+        MScope(final String name) {
+            myName = name;
+            myType = ScopeParameter.NONE;
+            myScopePositionStart = -1;
+            myScopePositionEnd = -1;
+        }
 
 
-    @Override
-    public String toString() {
-      switch (this) {
-        case ANONYMOUSFUNCTION:
-          return "Anonymous Function";
-        case DYNAMICMODULE:
-          return "DynamicModule";
-        case NSUM:
-          return "NSum";
-        case PLOT3D:
-          return "Plot3D";
-        case CONTOURPLOT:
-          return "ContourPlot";
-        case CONTOURPLOT3D:
-          return "ContourPlot3D";
-        case RULEDELAYED:
-          return "RuleDelayed";
-        case SETDELAYEDPATTERN:
-          return ":= Pattern";
-        case PARAMETRICPLOT:
-          return "ParametricPlot";
-        case PARAMETRICPLOT3D:
-          return "ParametricPlot3D";
-        case BUILT_IN:
-          return "BuiltIn";
-        case FILE:
-          return "File Scope";
-        case NULL:
-          return "Unknown scope";
-        default:
-          String str = name().toLowerCase();
-          str = str.substring(0,1).toUpperCase() + str.substring(1);
-          return str;
-      }
-
+        @Override
+        public String toString() {
+            return myName;
+        }
 
     }
-  }
 
 
 }

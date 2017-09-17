@@ -33,23 +33,22 @@ import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.processors.SymbolResolveHint;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
-//  private final Key<Object> myScopeKey = Key.create("SCOPING_CONSTRUCT");
-//  private boolean myIsUpToDate;
-  private String myHead;
-  private MScope myLocalizationConstruct = MScope.NULL;
+  private final String myHead;
+  private MScope myLocalizationConstruct = MScope.NULL_SCOPE;
+  private final boolean myIsScopingFunction;
 
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
 //    myIsUpToDate = false;
     myHead = node.getFirstChildNode().getText();
-    myLocalizationConstruct = LocalizationConstruct.getType(myHead);
+    myIsScopingFunction = LocalizationConstruct.isScopingFunction(myHead);
+    myLocalizationConstruct = myIsScopingFunction ? LocalizationConstruct.getScope(myHead) : MScope.NULL_SCOPE;
   }
 
   @Override
@@ -125,36 +124,15 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return allArguments;
   }
 
-
-  /**
-   * Extracts the head of the function call and looks whether it is in the list {@link #SCOPING_CONSTRUCTS}. This can
-   * lead to various false negatives. E.g. <code >(Block)[{..},..]</code> returns false, although after <em
-   * >evaluating</em> the code in Mathematica, it's of course found to be a correct scoping construct. Btw, the
-   * Mathematica front end has the same issues.
-   *
-   * @return True iff the head is a symbol defining the function as scoping construct like <code >Block[{..},..]</code>.
-   */
-
   @Override
   public boolean isScopingConstruct() {
-    return myLocalizationConstruct != MScope.NULL;
+    return myIsScopingFunction;
   }
 
   @Override
   public MScope getScopingConstruct() {
     return myLocalizationConstruct;
   }
-//
-//  private void cacheScopingConstruct() {
-//    if (myIsUpToDate) return;
-//    PsiElement head = getFirstChild();
-//    if (head instanceof Symbol) {
-//      cacheScopingConstruct(((Symbol) head).getSymbolName());
-//    } else {
-//      putUserData(myScopeKey, MScope.NULL);
-//    }
-//    myIsUpToDate = true;
-//  }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {

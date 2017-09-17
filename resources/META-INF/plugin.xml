@@ -44,8 +44,6 @@
     <lang.psiStructureViewFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
     <lang.documentationProvider language="Mathematica" implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
 
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaHighlightingAnnotator"/>
-
     <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.lang.resolve.MathematicaReferenceContributor"/>
     <fileBasedIndex implementation="de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex"/>
     <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
@@ -88,7 +86,12 @@
     <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
     <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
     <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.CommentAnnotator"/>
+
+    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.LocalizedSymbolAnnotator"/>
+    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.CommentAnnotator"/>
+    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.MessageNameAnnotator"/>
+    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.StringifiedSymbolAnnotator"/>
+    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.FunctionAnnotator"/>
 
     <inspectionToolProvider implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
@@ -105,6 +108,7 @@
     <!--<findUsagesHandlerFactory implementation="de.halirutan.mathematica.find.MathematicaFindUsageHandlerFactory"/>-->
 
     <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
+      <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
   </extensions>
 
   <actions>

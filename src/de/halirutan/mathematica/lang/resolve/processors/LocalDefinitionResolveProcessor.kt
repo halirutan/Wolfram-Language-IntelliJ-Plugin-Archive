@@ -24,7 +24,6 @@ package de.halirutan.mathematica.lang.resolve.processors
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
 import com.intellij.psi.scope.BaseScopeProcessor
-import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import de.halirutan.mathematica.lang.psi.api.FunctionCall
 import de.halirutan.mathematica.lang.psi.api.Symbol
@@ -91,7 +90,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
 
     init {
         this.myReferringSymbol = null
-        this.myLocalization = MScope.NULL
+        this.myLocalization = MScope.NULL_SCOPE
 
     }
 
@@ -101,15 +100,14 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
      * found in [MScope].
      *
      *
-     * Secondly I check the patterns in e.g. <code>f[var_]:=...</code>  for `SetDelayed` and `TagSetDelayed`.
+     * Secondly I check the patterns in e.g. <code>f@var_:=...</code>  for `SetDelayed` and `TagSetDelayed`.
      *
      *
      * Finally, `RuleDelayed` constructs are checked.
      *
      * @param element
      * Element to check for defining the [.myStartElement].
-     * @param state
-     * State of the resolving.
+     * @param state State of the resolving.
      * @return `false` if the search can be stopped, `true` otherwise
      */
     override fun execute(element: PsiElement, state: ResolveState): Boolean {
@@ -143,7 +141,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
                         continue
                     }
                     myReferringSymbol = p
-                    myLocalization = MScope.SETDELAYEDPATTERN
+                    myLocalization = MScope.SETDELAYED_SCOPE
                     myLocalizationSymbol = element
                     return false
                 }
@@ -155,7 +153,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
             for (symbol in patternVisitor.patternSymbols) {
                 if (symbol.fullSymbolName == myStartElement.fullSymbolName) {
                     myReferringSymbol = symbol
-                    myLocalization = MScope.RULEDELAYED
+                    myLocalization = MScope.RULEDELAYED_SCOPE
                     myLocalizationSymbol = element
                     return false
                 }

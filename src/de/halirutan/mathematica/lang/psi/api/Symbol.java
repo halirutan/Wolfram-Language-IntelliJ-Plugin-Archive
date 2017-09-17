@@ -24,7 +24,6 @@ package de.halirutan.mathematica.lang.psi.api;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 
@@ -51,6 +50,7 @@ public interface Symbol extends PsiNameIdentifierOwner, PsiReference {
 
   /**
    * Returns the full name of the symbol with context.
+   *
    * @return Symbol name with context
    */
   String getFullSymbolName();
@@ -68,4 +68,10 @@ public interface Symbol extends PsiNameIdentifierOwner, PsiReference {
   SymbolResolveResult advancedResolve();
 
   boolean isSelfReference();
+
+  /**
+   * Checks if this symbol is locally scoped by Module, ...
+   * @return true if it is bound by a localization function
+   */
+  boolean isLocallyBound();
 }

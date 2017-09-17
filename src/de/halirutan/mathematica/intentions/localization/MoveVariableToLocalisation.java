@@ -81,7 +81,7 @@ public class MoveVariableToLocalisation implements IntentionAction {
         PsiElement resolve = reference.resolve();
         if (resolve instanceof Symbol) {
           LocalizationConstruct.MScope elementConstruct = ((Symbol) resolve).getLocalizationConstruct();
-          if (elementConstruct != LocalizationConstruct.MScope.NULL) {
+          if (elementConstruct != LocalizationConstruct.MScope.NULL_SCOPE) {
             return false;
           }
         }
