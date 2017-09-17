@@ -30,8 +30,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.text.StringTokenizer;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.intellij.patterns.PlatformPatterns.psiComment;
@@ -47,7 +49,7 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
       "Section", "Subsection", "Subsubsection", "Text", "Package", "Title", "Subtitle", "Subsubtitle", "Chapter", "Subchapter", "Subsubsubsection", "Subsubsubsubsubsection",
   };
 
-  static final public String[] COMMENT_TAGS = {
+  private static final String[] COMMENT_TAGS = {
       "Name", "Title", "Author", "Date", "Summary", "Context",
       "Package Version", "Copyright", "Keywords", "Source",
       "Mathematica Version", "Limitation", "Discussion"};
@@ -82,10 +84,11 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
       }
 
       final PsiFile file = parameters.getOriginalFile();
-      GlobalDefinitionCompletionProvider provider = new GlobalDefinitionCompletionProvider();
-      file.accept(provider);
-      for (String functionName : provider.getFunctionsNames()) {
-        resultWithPrefix.addElement(LookupElementBuilder.create(functionName));
+      if (file instanceof MathematicaPsiFile) {
+        final Set<String> cachedDefinitions = ((MathematicaPsiFile) file).getCachedDefinitions();
+        for (String definition : cachedDefinitions) {
+          resultWithPrefix.addElement(LookupElementBuilder.create(definition));
+        }
       }
     }
   }

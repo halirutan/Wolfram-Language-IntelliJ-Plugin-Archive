@@ -25,20 +25,19 @@ import com.google.common.collect.Lists;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
 import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,18 +73,16 @@ class VariableNameCompletion extends MathematicaCompletionProvider {
       final PsiFile containingFile = parameters.getOriginalFile();
       List<Symbol> variants = Lists.newArrayList();
 
-      GlobalDefinitionCompletionProvider visitor = new GlobalDefinitionCompletionProvider();
-      containingFile.accept(visitor);
-      for (String name : visitor.getFunctionsNames()) {
-        String possibleBuiltIn = name.contains("`") ? name : "Symbol`" + name;
-        if (!NAMES.contains(possibleBuiltIn)) {
-          result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name), GLOBAL_VARIABLE_PRIORITY));
+      if (containingFile instanceof MathematicaPsiFile) {
+        final Set<String> cachedDefinitions = ((MathematicaPsiFile) containingFile).getCachedDefinitions();
+        for (String definition : cachedDefinitions) {
+          result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(definition), GLOBAL_VARIABLE_PRIORITY));
         }
       }
 
       ImportedContextVisitor importVisitor = new ImportedContextVisitor();
       callingSymbol.getContainingFile().accept(importVisitor);
-      final java.util.HashSet<String> importedContexts = importVisitor.getImportedContexts();
+//      final java.util.HashSet<String> importedContexts = importVisitor.getImportedContexts();
       final FileBasedIndex index = FileBasedIndex.getInstance();
       final Collection<PackageExportSymbol> allKeys = index.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
       for (PackageExportSymbol key : allKeys) {
@@ -93,15 +90,6 @@ class VariableNameCompletion extends MathematicaCompletionProvider {
           result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(key.getSymbol()).appendTailText("(" + key.getFileName() + ")",true), GLOBAL_VARIABLE_PRIORITY));
         }
       }
-//      for (String  key : allKeys) {
-//        final MList<MList<PackageExportSymbol>> values = index.getValues(MathematicaPackageExportIndex.INDEX_ID, key, GlobalSearchScope.allScope(callingSymbol.getProject()));
-//        for (MList<PackageExportSymbol> value : values) {
-//          for (PackageExportSymbol packageExportSymbol : value) {
-//            //TODO: Implement adding completions
-////            if(packageExportSymbol.nameSpace.equals())
-//          }
-//        }
-//      }
 
 
       final LocalDefinitionCompletionProvider processor = new LocalDefinitionCompletionProvider(callingSymbol);

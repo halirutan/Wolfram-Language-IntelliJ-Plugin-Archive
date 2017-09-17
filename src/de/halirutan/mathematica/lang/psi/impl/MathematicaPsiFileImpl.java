@@ -21,6 +21,7 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
+import com.google.common.collect.Sets;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
@@ -32,13 +33,39 @@ import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 12:09 PM Purpose:
  */
 public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPsiFile {
 
+  private final Set<String> myFileDefintions = Sets.newHashSet();
+  private boolean myRecacheDefinitions = false;
+
   public MathematicaPsiFileImpl(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, MathematicaLanguage.INSTANCE);
+  }
+
+  @Override
+  public void cacheDefinition(@NotNull final String name) {
+    if (myRecacheDefinitions) {
+      myFileDefintions.clear();
+      myRecacheDefinitions = false;
+    }
+    myFileDefintions.add(name);
+  }
+
+  @Override
+  public void subtreeChanged() {
+    super.subtreeChanged();
+    myRecacheDefinitions = true;
+  }
+
+  @Override
+  public Set<String> getCachedDefinitions() {
+    return myFileDefintions;
   }
 
   @NotNull

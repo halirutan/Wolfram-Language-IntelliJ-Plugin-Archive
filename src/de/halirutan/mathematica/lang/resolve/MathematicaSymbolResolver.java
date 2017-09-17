@@ -33,6 +33,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
 import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
 import de.halirutan.mathematica.lang.psi.impl.LightUndefinedSymbol;
@@ -59,18 +60,22 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
     }
 
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
-    PsiTreeUtil.treeWalkUp(processor, ref, ref.getContainingFile(), ResolveState.initial());
+    final PsiFile containingFile = ref.getContainingFile();
+    PsiTreeUtil.treeWalkUp(processor, ref, containingFile, ResolveState.initial());
     final Symbol referringSymbol = processor.getMyReferringSymbol();
     if (referringSymbol != null) {
       return new SymbolResolveResult(referringSymbol, processor.getMyLocalization(), true);
     }
 
     GlobalDefinitionResolveProcessor globalProcessor = new GlobalDefinitionResolveProcessor(ref);
-    PsiTreeUtil.processElements(ref.getContainingFile(), globalProcessor);
+    PsiTreeUtil.processElements(containingFile, globalProcessor);
 
 
     final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
     if (globalDefinition != null) {
+      if (containingFile instanceof MathematicaPsiFile) {
+        ((MathematicaPsiFile) containingFile).cacheDefinition(globalDefinition.getText());
+      }
       return new SymbolResolveResult(globalDefinition, MScope.FILE_SCOPE, true);
     }
 
