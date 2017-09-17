@@ -2,13 +2,14 @@
 <module external.linked.project.id="Mathematica-IntelliJ-Plugin:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="2.4.5" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+      <configuration version="3" platform="JVM 1.8" useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../build/kotlin-classes/main" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="Mathematica-IntelliJ-Plugin_main" />
+          <option name="jvmTarget" value="1.8" />
           <option name="addCompilerBuiltIns" value="true" />
           <option name="loadBuiltInsFromDependencies" value="true" />
           <option name="languageVersion" value="1.1" />
@@ -39,7 +40,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/org.eclipse.egit.github.core-2.1.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/usages.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -63,6 +64,24 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../lib/org.eclipse.egit.github.core-2.1.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar:///usr/local/java/jdk1.8.0_121/lib/tools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="PROVIDED">
       <library name="Gradle: com.jetbrains:ideaIC:2017.2.3">
         <CLASSES>
@@ -78,7 +97,6 @@
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/jsch.agentproxy.core.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/jna-platform.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/jh.jar!/" />
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/kotlin-runtime.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/lz4-java-1.3.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/sqlite-jdbc-3.16.1.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/studio-profiler-grpc-1.0-jarjar.jar!/" />
@@ -162,7 +180,6 @@
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/httpclient-4.5.2.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/coverage-instrumenter.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/swingx-core-1.6.2.jar!/" />
-          <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/kotlin-reflect.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/jdom.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/asm-tree-5.0.3.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2017.2.3/6d3f27fdf86b1f9734e90dd1c42f46def3235a84/ideaIC-2017.2.3/lib/jediterm-pty-2.5.jar!/" />
@@ -200,23 +217,7 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/usages.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" scope="RUNTIME">
-      <library>
-        <CLASSES>
-          <root url="jar:///usr/local/java/jdk1.8.0_121/lib/tools.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
   </component>
 </module>

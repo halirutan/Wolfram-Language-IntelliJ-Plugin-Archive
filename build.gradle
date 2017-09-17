@@ -1,3 +1,16 @@
+buildscript {
+    ext.kotlin_version = '1.1.4-3'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
 plugins {
     id "org.jetbrains.intellij" version "0.2.17"
     id "org.jetbrains.kotlin.jvm" version "1.1.4-3"
@@ -5,6 +18,15 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: "kotlin"
+
+
+//noinspection GroovyAssignabilityCheck,GrUnresolvedAccess
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    //noinspection GrUnresolvedAccess
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
 
 // On travis, we don't want to deploy to Jetbrains that requires credentials
 if (project.file('gradle.properties').exists()) {
@@ -26,10 +48,6 @@ patchPluginXml {
 }
 
 
-repositories {
-    mavenCentral()
-}
-
 sourceSets {
     //noinspection GroovyAssignabilityCheck
     main {
@@ -49,7 +67,12 @@ task copyResourcesToClasses(type: Copy) {
 
 instrumentTestCode.dependsOn copyResourcesToClasses
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile fileTree(dir: 'lib', include: ['*.jar'])
 }
 
