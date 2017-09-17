@@ -32,6 +32,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingGroups;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,7 @@ class CollapseExpandNamedCharactersHandler implements CodeInsightActionHandler {
 
   private final boolean myExpand;
 
-  public CollapseExpandNamedCharactersHandler(final boolean myExpand) {
+  CollapseExpandNamedCharactersHandler(final boolean myExpand) {
     this.myExpand = myExpand;
   }
 
@@ -57,10 +58,7 @@ class CollapseExpandNamedCharactersHandler implements CodeInsightActionHandler {
     Runnable processor = () -> {
       for (FoldRegion region : allFoldRegions) {
 
-        PsiElement element = EditorFoldingInfo.get(editor).getPsiElement(region);
-        final ASTNode node = element != null ? element.getNode() : null;
-        if (node != null &&
-            (node.getElementType() == MathematicaElementTypes.IDENTIFIER || node.getElementType() == MathematicaElementTypes.STRING_NAMED_CHARACTER)) {
+        if (region.getGroup() == MathematicaFoldingGroups.NAMED_CHARACTER_GROUP) {
           region.setExpanded(myExpand);
         }
       }

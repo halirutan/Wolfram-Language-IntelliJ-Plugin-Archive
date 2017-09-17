@@ -50,6 +50,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingGroups.NAMED_CHARACTER_GROUP;
+
 /**
  * Creates fold-regions from particular nodes of the AST tree. Currently, we support the folding of functions, lists,
  * and special "sectioning comments".
@@ -98,7 +100,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
           final TextRange nodeRange = node.getTextRange();
           final TextRange range = TextRange.create(nodeRange.getStartOffset() + matcher.start(), nodeRange.getStartOffset() + matcher.end());
           if (ourNamedCharacters.containsKey(key)) {
-            descriptors.add(new MathematicaNamedFoldingDescriptor(node, range, null, ourNamedCharacters.get(key), false));
+            descriptors.add(new MathematicaNamedFoldingDescriptor(node, range, NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
           }
         }
       }
@@ -106,7 +108,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
       final String name = node.getText();
       final String key = name.substring(2, name.length() - 1);
       if (ourNamedCharacters.containsKey(key)) {
-        descriptors.add(new MathematicaNamedFoldingDescriptor(node, node.getTextRange(), null, ourNamedCharacters.get(key), false));
+        descriptors.add(new MathematicaNamedFoldingDescriptor(node, node.getTextRange(), NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
       }
     } else if (elementType == MathematicaElementTypes.LIST_EXPRESSION) {
       // Well, we count the number of elements by counting the commas and adding one. Not bullet-proof, but will do.
@@ -120,7 +122,7 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
       final PsiElement psi = node.getPsi();
       if (psi instanceof FunctionCall) {
         final FunctionCall functionCall = (FunctionCall) psi;
-        if (functionCall.getScopingConstruct() != MScope.NULL) {
+        if (functionCall.getScopingConstruct() != MScope.NULL_SCOPE) {
           descriptors.add(new NamedFoldingDescriptor(
               node,
               node.getTextRange(),
@@ -130,6 +132,9 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
         }
       }
     } else if (node instanceof PsiComment) {
+      if (foldCharacters) {
+        foldNamedCharacters(node, descriptors);
+      }
       collectCommentRegion(node, document, descriptors);
     }
 
@@ -140,8 +145,6 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
   }
 
   /**
-   * Entry method that only check if we have a valid section-comment. The work is done in
-   * {@link MathematicaExpressionFoldingBuilder#collectCommentRegion(PsiComment, Document, List)}
    *
    * @param node        node to a PsiComment
    * @param document    the document of the code
@@ -231,6 +234,21 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
     ));
 
 
+  }
+
+  private void foldNamedCharacters(final ASTNode node, @NotNull List<FoldingDescriptor> descriptors ) {
+    final String text = node.getText();
+    final Matcher matcher = namedCharacterPattern.matcher(text);
+    while (matcher.find()) {
+      if (matcher.end() - matcher.start() > 3) {
+        final String key = text.substring(matcher.start() + 2, matcher.end() - 1);
+        final TextRange nodeRange = node.getTextRange();
+        final TextRange range = TextRange.create(nodeRange.getStartOffset() + matcher.start(), nodeRange.getStartOffset() + matcher.end());
+        if (ourNamedCharacters.containsKey(key)) {
+          descriptors.add(new MathematicaNamedFoldingDescriptor(node, range, NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
+        }
+      }
+    }
   }
 
   @Nullable
