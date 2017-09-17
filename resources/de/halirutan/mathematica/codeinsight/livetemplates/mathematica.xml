@@ -4,7 +4,7 @@
     <!-- Localization/scoping constructs -->
     <template name="blk" description="Block[{vars}, body]" toReformat="true"
               value="Block[{$VARS$}, $SELECTION$$END$]">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
+        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -12,7 +12,7 @@
 
     <template name="mdl" description="Module[{vars}, body]" toReformat="true"
               value="Module[{$VARS$}, $SELECTION$$END$]">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
+        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -20,34 +20,34 @@
 
     <template name="wth" description="With[{vars}, body]" toReformat="true"
               value="With[{$VARS$}, $SELECTION$$END$]">
-        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true" />
-        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true" />
+        <variable name="VARS" expression="" defaultValue="&quot;vars&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
-  <template name="cmpl" description="Compile[{vars}, body]" toReformat="true"
-            value="Compile[{$VARS$}, $SELECTION$$END$]">
-    <variable name="VARS" expression="" defaultValue="&quot;{x, _Real}&quot;" alwaysStopAt="true" />
-    <context>
-      <option name="Mathematica" value="true"/>
-    </context>
-  </template>
+    <template name="cmpl" description="Compile[{vars}, body]" toReformat="true"
+              value="Compile[{$VARS$}, $SELECTION$$END$]">
+        <variable name="VARS" expression="" defaultValue="&quot;{x, _Real}&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
 
-  <template name="fnct" description="Function[{vars}, body]" toReformat="true"
-            value="Function[{$VARS$}, $SELECTION$$END$]">
-    <variable name="VARS" expression="" defaultValue="&quot;var&quot;" alwaysStopAt="true" />
-    <context>
-      <option name="Mathematica" value="true"/>
-    </context>
-  </template>
+    <template name="fnct" description="Function[{vars}, body]" toReformat="true"
+              value="Function[{$VARS$}, $SELECTION$$END$]">
+        <variable name="VARS" expression="" defaultValue="&quot;var&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
 
 
-  <!-- Iteration -->
+    <!-- Iteration -->
     <template name="do" description="Do[body, {iter}]" toReformat="true"
               value="Do[$SELECTION$$END$, {$ITER$}]">
-        <variable name="ITER" expression="" defaultValue="&quot;iter&quot;" alwaysStopAt="true" />
+        <variable name="ITER" expression="" defaultValue="&quot;iter&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -55,8 +55,8 @@
 
     <template name="for" description="For[start, test, inc, body]" toReformat="true"
               value="For[$VAR$ = 0, $VAR$ &lt; $MAX$, $VAR$++, $SELECTION$$END$]">
-        <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true" />
-        <variable name="MAX" expression="" defaultValue="&quot;max&quot;" alwaysStopAt="true" />
+        <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true"/>
+        <variable name="MAX" expression="" defaultValue="&quot;max&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -64,8 +64,8 @@
 
     <template name="tbl" description="Table[body, {var, min, max}]" toReformat="true"
               value="Table[$SELECTION$$END$, {$VAR$, $LIMITS$}]">
-        <variable name="VAR" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true" />
-        <variable name="LIMITS" expression="" defaultValue="&quot;min, max, stepSize&quot;" alwaysStopAt="true" />
+        <variable name="VAR" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true"/>
+        <variable name="LIMITS" expression="" defaultValue="&quot;min, max, stepSize&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -73,8 +73,8 @@
 
     <template name="fld" description="Fold[func, firstElement, list]" toReformat="true"
               value="Fold[$SELECTION$$END$, $FIRST$, $LIST$]">
-        <variable name="FIRST" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true" />
-        <variable name="LIST" expression="" defaultValue="&quot;list&quot;" alwaysStopAt="true" />
+        <variable name="FIRST" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true"/>
+        <variable name="LIST" expression="" defaultValue="&quot;list&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -82,9 +82,9 @@
 
     <template name="nst" description="Nest[func, expr, n]" toReformat="true"
               value="Nest[$FUNC$, $EXPR$, $COUNT$]$END$">
-        <variable name="FUNC" expression="" defaultValue="&quot;func&quot;" alwaysStopAt="true" />
-        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true" />
-        <variable name="COUNT" expression="" defaultValue="&quot;n&quot;" alwaysStopAt="true" />
+        <variable name="FUNC" expression="" defaultValue="&quot;func&quot;" alwaysStopAt="true"/>
+        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true"/>
+        <variable name="COUNT" expression="" defaultValue="&quot;n&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -93,7 +93,7 @@
     <!-- Control Flow -->
     <template name="if" description="If[cond, then]" toReformat="true"
               value="If[$COND$, $SELECTION$$END$]">
-        <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true" />
+        <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -101,9 +101,9 @@
 
     <template name="ife" description="If[cond, then, else]" toReformat="true"
               value="If[$COND$, $THEN$, $ELSE$]$END$">
-        <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true" />
-        <variable name="THEN" expression="" defaultValue="&quot;then&quot;" alwaysStopAt="true" />
-        <variable name="ELSE" expression="" defaultValue="&quot;else&quot;" alwaysStopAt="true" />
+        <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true"/>
+        <variable name="THEN" expression="" defaultValue="&quot;then&quot;" alwaysStopAt="true"/>
+        <variable name="ELSE" expression="" defaultValue="&quot;else&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -111,12 +111,12 @@
 
     <template name="swtch" description="Switch[expr, form1, value1, form2, value2]" toReformat="true"
               value="Switch[$EXPR$, $FORM1$, $VAL1$, $FORM2$, $VAL2$$MORE_ARGS$]$END$">
-        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true" />
-        <variable name="FORM1" expression="" defaultValue="&quot;form1&quot;" alwaysStopAt="true" />
-        <variable name="VAL1" expression="" defaultValue="&quot;value1&quot;" alwaysStopAt="true" />
-        <variable name="FORM2" expression="" defaultValue="&quot;form2&quot;" alwaysStopAt="true" />
-        <variable name="VAL2" expression="" defaultValue="&quot;value2&quot;" alwaysStopAt="true" />
-        <variable name="MORE_ARGS" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true"/>
+        <variable name="FORM1" expression="" defaultValue="&quot;form1&quot;" alwaysStopAt="true"/>
+        <variable name="VAL1" expression="" defaultValue="&quot;value1&quot;" alwaysStopAt="true"/>
+        <variable name="FORM2" expression="" defaultValue="&quot;form2&quot;" alwaysStopAt="true"/>
+        <variable name="VAL2" expression="" defaultValue="&quot;value2&quot;" alwaysStopAt="true"/>
+        <variable name="MORE_ARGS" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -124,7 +124,7 @@
 
     <template name="whch" description="Which[test1, value1, test2, value2]" toReformat="true"
               value="Which[$BODY$$END$]">
-        <variable name="BODY" expression="" defaultValue="&quot;test1, val1, test2, val2&quot;" alwaysStopAt="true" />
+        <variable name="BODY" expression="" defaultValue="&quot;test1, val1, test2, val2&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -132,9 +132,9 @@
 
     <template name="chck" description="Check[expr, fail, msg]" toReformat="true"
               value="Check[$EXPR$, $FAIL$, $MSG$]$END$">
-        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true" />
-        <variable name="FAIL" expression="" defaultValue="&quot;fail&quot;" alwaysStopAt="true" />
-        <variable name="MSG" expression="" defaultValue="&quot;symbol::msg&quot;" alwaysStopAt="true" />
+        <variable name="EXPR" expression="" defaultValue="&quot;expr&quot;" alwaysStopAt="true"/>
+        <variable name="FAIL" expression="" defaultValue="&quot;fail&quot;" alwaysStopAt="true"/>
+        <variable name="MSG" expression="" defaultValue="&quot;symbol::msg&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -143,7 +143,7 @@
     <!-- Function calls -->
     <template name="pre" description="Prefix selection with f@" toReformat="true"
               value="$SYM$@($SELECTION$)$END$">
-        <variable name="SYM" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="SYM" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -151,7 +151,7 @@
 
     <template name="pst" description="Postfix selection with //f" toReformat="true"
               value="($SELECTION$ // $SYM$)$END$">
-        <variable name="SYM" expression="" defaultValue="" alwaysStopAt="true" />
+        <variable name="SYM" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -170,26 +170,36 @@
     <!-- Messages -->
     <template name="usg" description="Create usage message" toReformat="true"
               value="$SYM$::usage = &quot;$SYM$[$END$]&quot;;">
-        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
     </template>
 
-  <template name="opt" description="Create options for a symbol" toReformat="true"
-            value="Options[$SYM$] = { $LHS$ -> $END$}">
-    <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
-    <variable name="LHS" expression="" defaultValue="&quot;optionName&quot;" alwaysStopAt="true" />
-    <variable name="END" expression="" defaultValue="&quot;Automatic&quot;" alwaysStopAt="true" />
-    <context>
-      <option name="Mathematica" value="true"/>
-    </context>
-  </template>
+    <template name="opt" description="Create options for a symbol" toReformat="true"
+              value="Options[$SYM$] = { $LHS$ -> $END$}">
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true"/>
+        <variable name="LHS" expression="" defaultValue="&quot;optionName&quot;" alwaysStopAt="true"/>
+        <variable name="END" expression="" defaultValue="&quot;Automatic&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
+    <template name="att" description="Create attributes for a symbol" toReformat="true"
+              value="Attributes[$SYM$] = { $END$}">
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true"/>
+        <variable name="END" expression="" defaultValue="&quot;Flat, HoldAll, Listable, NumericFunction&quot;" alwaysStopAt="true"/>
+        <context>
+            <option name="Mathematica" value="true"/>
+        </context>
+    </template>
+
 
     <template name="msg" description="Create usage message" toReformat="true"
               value="$SYM$::$TAG$ = &quot;$END$&quot;;">
-        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true" />
-        <variable name="TAG" expression="" defaultValue="&quot;tag&quot;" alwaysStopAt="true" />
+        <variable name="SYM" expression="" defaultValue="&quot;sym&quot;" alwaysStopAt="true"/>
+        <variable name="TAG" expression="" defaultValue="&quot;tag&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
