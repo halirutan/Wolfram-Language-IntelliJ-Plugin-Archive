@@ -101,6 +101,7 @@
     <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica" instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
 
     <spellchecker.support language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
+    <spellchecker.bundledDictionaryProvider implementation="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaDictionaryProvider"/>
 
     <intentionAction>
       <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
@@ -108,7 +109,8 @@
     <!--<findUsagesHandlerFactory implementation="de.halirutan.mathematica.find.MathematicaFindUsageHandlerFactory"/>-->
 
     <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
-      <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
+    <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
+
   </extensions>
 
   <actions>
