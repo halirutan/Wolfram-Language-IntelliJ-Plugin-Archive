@@ -100,7 +100,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
      * found in [MScope].
      *
      *
-     * Secondly I check the patterns in e.g. <code>f@var_:=...!</code>  for `SetDelayed` and `TagSetDelayed`.
+     * Secondly I check the patterns in e.g. ```f[var_]:=...!```  for `SetDelayed` and `TagSetDelayed`.
      *
      *
      * Finally, `RuleDelayed` constructs are checked.
