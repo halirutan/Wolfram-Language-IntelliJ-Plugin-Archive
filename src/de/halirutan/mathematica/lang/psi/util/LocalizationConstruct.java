@@ -132,10 +132,10 @@ public class LocalizationConstruct {
         FILE_SCOPE("File Scope"),
         NULL_SCOPE("Null Scope");
 
-        private final String myName;
-        private final ScopeParameter myType;
-        private final int myScopePositionStart;
-        private final int myScopePositionEnd;
+        final String myName;
+        final ScopeParameter myType;
+        final int myScopePositionStart;
+        final int myScopePositionEnd;
 
         MScope(final String name, final ScopeParameter type, int start, int end) {
             myName = name;

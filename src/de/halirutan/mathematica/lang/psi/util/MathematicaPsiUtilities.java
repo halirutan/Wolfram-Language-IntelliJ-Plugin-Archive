@@ -261,21 +261,23 @@ public class MathematicaPsiUtilities {
       return null;
     }
 
+    final MScope scope = functionCall.getScopingConstruct();
+
     final PsiElement lastParent = state.get(SymbolResolveHint.LAST_PARENT);
     final PsiElement firstArgument = arguments.get(0);
     PsiElement definitions = arguments.size() > 1 ? firstArgument : null;
     if (definitions != null) {
-      boolean inDefition = definitions.equals(lastParent);
+      boolean inDefinition = definitions.equals(lastParent);
       if (firstArgument instanceof Symbol && !((Symbol) firstArgument).getSymbolName().equals("Null") && ((Symbol) firstArgument).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-        return new SymbolResolveResult(firstArgument, MScope.FUNCTION, true);
+        return new SymbolResolveResult(firstArgument, scope, functionCall, true);
       } else if (firstArgument instanceof MList) {
-        final List<Symbol> defs = getDefinitionSymbolsFromList(firstArgument);
-        for (Symbol def : defs) {
+        final List<Symbol> defSymbols = getDefinitionSymbolsFromList(firstArgument);
+        for (Symbol def : defSymbols) {
           if (def.getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-            if (!inDefition || def.equals(myStartElement)) {
-              return new SymbolResolveResult(def, MScope.FUNCTION, true);
+            if (!inDefinition || def.equals(myStartElement)) {
+              return new SymbolResolveResult(def, scope, functionCall, true);
             } else {
-              return new SymbolResolveResult(myStartElement, MScope.NULL_SCOPE, true);
+              return new SymbolResolveResult(myStartElement, scope, functionCall, true);
             }
           }
         }
@@ -351,11 +353,11 @@ public class MathematicaPsiUtilities {
           if (e instanceof Symbol) {
             if (((Symbol) e).getSymbolName().equals(symbol.getSymbolName())) {
               if (!isInDefList || e.equals(symbol)) {
-                return new SymbolResolveResult(e, scopingConstruct, true);
+                return new SymbolResolveResult(e, scopingConstruct, functionCall, true);
               } else {
                 final List<Symbol> definitionInList = getDefinitionSymbolsFromList(moduleDefList);
                 if (definitionInList.contains(symbol)) {
-                  return new SymbolResolveResult(symbol, scopingConstruct, false);
+                  return new SymbolResolveResult(symbol, scopingConstruct, functionCall, false);
                 } else {
                   return null;
                 }
@@ -425,7 +427,7 @@ public class MathematicaPsiUtilities {
           final PsiElement firstListElement = getFirstListElement(currentIterator);
           if (firstListElement instanceof Symbol) {
             if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-              return new SymbolResolveResult(firstListElement, scopingConstruct, true);
+              return new SymbolResolveResult(firstListElement, scopingConstruct, functionCall, true);
             }
           }
         }
@@ -434,7 +436,7 @@ public class MathematicaPsiUtilities {
       // self-reference if we are the iterator
       if (args[pos] instanceof MList) {
         if (Objects.equals(getFirstListElement(args[pos]), myStartElement)) {
-          return new SymbolResolveResult(myStartElement, scopingConstruct, true);
+          return new SymbolResolveResult(myStartElement, scopingConstruct, functionCall, true);
         }
       }
 
@@ -444,7 +446,7 @@ public class MathematicaPsiUtilities {
           final PsiElement firstListElement = getFirstListElement(args[i]);
           if (firstListElement instanceof Symbol) {
             if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-              return new SymbolResolveResult(firstListElement, scopingConstruct, true);
+              return new SymbolResolveResult(firstListElement, scopingConstruct, functionCall, true);
             }
           }
         }
@@ -526,47 +528,6 @@ public class MathematicaPsiUtilities {
       }
     }
     return localVariables;
-  }
-
-
-  @Nullable
-  public static SymbolResolveResult resolveLocalCompileLikeVariables(Symbol myStartElement, FunctionCall functionCall, ResolveState state) {
-
-    final PsiElement lastParent = state.get(SymbolResolveHint.LAST_PARENT);
-    final List<PsiElement> arguments = getArguments(functionCall);
-    if (arguments.size() < 1) {
-      return null;
-    }
-
-    final PsiElement firstArgument = arguments.get(0);
-    boolean inDef = firstArgument.equals(lastParent);
-
-
-    final MScope scopingConstruct = functionCall.getScopingConstruct();
-    if (firstArgument instanceof Symbol) {
-      if (((Symbol) firstArgument).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-        return new SymbolResolveResult(firstArgument, scopingConstruct, true);
-      }
-    } else if (firstArgument instanceof MList) {
-      final PsiElement[] children = firstArgument.getChildren();
-      for (PsiElement child : children) {
-        if (child instanceof MList) {
-          child = child.getFirstChild();
-        }
-        if (child instanceof Symbol) {
-          if (inDef) {
-            if (child.equals(myStartElement)) {
-              return new SymbolResolveResult(child, scopingConstruct, true);
-            }
-          } else {
-            if (((Symbol) child).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-              return new SymbolResolveResult(child, scopingConstruct, true);
-            }
-          }
-        }
-      }
-    }
-    return null;
   }
 
 

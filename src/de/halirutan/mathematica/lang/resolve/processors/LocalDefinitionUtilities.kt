@@ -46,7 +46,7 @@ fun resolveLocalCompileLikeVariables(myStartElement: Symbol, functionCall: Funct
     val scopingConstruct = functionCall.scopingConstruct
     if (firstArgument is Symbol) {
         if (firstArgument.fullSymbolName == myStartElement.fullSymbolName) {
-            return SymbolResolveResult(firstArgument, scopingConstruct, true)
+            return SymbolResolveResult(firstArgument, scopingConstruct, functionCall, true)
         }
     } else if (firstArgument is MList) {
         val children = firstArgument.listElements
@@ -63,11 +63,11 @@ fun resolveLocalCompileLikeVariables(myStartElement: Symbol, functionCall: Funct
             if (currentChild is Symbol) {
                 if (inDef) {
                     if (currentChild == myStartElement) {
-                        return SymbolResolveResult(currentChild, scopingConstruct, true)
+                        return SymbolResolveResult(currentChild, scopingConstruct, functionCall, true)
                     }
                 } else {
                     if (currentChild.fullSymbolName == myStartElement.fullSymbolName) {
-                        return SymbolResolveResult(currentChild, scopingConstruct, true)
+                        return SymbolResolveResult(currentChild, scopingConstruct, functionCall, true)
                     }
                 }
             }

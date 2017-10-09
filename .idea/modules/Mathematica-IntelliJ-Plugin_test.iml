@@ -20,6 +20,7 @@
           <option name="pluginClasspaths">
             <array />
           </option>
+          <option name="version" value="true" />
         </compilerArguments>
       </configuration>
     </facet>
@@ -42,7 +43,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/usages.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/gson-2.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -51,7 +52,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/gson-2.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/guava-22.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -69,7 +70,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/guava-22.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/usages.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -47,6 +47,11 @@ import java.util.Collection;
 import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
 
 /**
+ * The symbol resolver works currently in 3 steps to find a possible definition of a symbol that appears in the code.
+ * It will check if the symbol is a built-in symbol
+ * It will make a tree-walk upwards to check if the symbol is in any localization construct
+ * It will check the file, if the symbol is defined as a global symbol like a function at file-scope
+ * It will check the file-index and look for symbols that are exported from other files
  * @author patrick (08.07.17).
  */
 public class MathematicaSymbolResolver implements AbstractResolver<Symbol, SymbolResolveResult> {
@@ -56,27 +61,29 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
   public SymbolResolveResult resolve(@NotNull Symbol ref, boolean incompleteCode) {
 
     if (isBuiltInSymbol(ref)){
-      return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.KERNEL_SCOPE, true);
+      return new SymbolResolveResult(new LightBuiltInSymbol(ref), MScope.KERNEL_SCOPE, null, true);
     }
 
     LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
     final PsiFile containingFile = ref.getContainingFile();
     PsiTreeUtil.treeWalkUp(processor, ref, containingFile, ResolveState.initial());
-    final Symbol referringSymbol = processor.getMyReferringSymbol();
-    if (referringSymbol != null) {
-      return new SymbolResolveResult(referringSymbol, processor.getMyLocalization(), true);
+    final SymbolResolveResult resolveResult = processor.getResolveResult();
+    if (resolveResult != null) {
+      return resolveResult;
     }
 
     GlobalDefinitionResolveProcessor globalProcessor = new GlobalDefinitionResolveProcessor(ref);
     PsiTreeUtil.processElements(containingFile, globalProcessor);
 
 
-    final PsiElement globalDefinition = globalProcessor.getMyReferringSymbol();
-    if (globalDefinition != null) {
+    final SymbolResolveResult globalProcessorResolveResult = globalProcessor.getResolveResult();
+    if (globalProcessorResolveResult != null) {
       if (containingFile instanceof MathematicaPsiFile) {
-        ((MathematicaPsiFile) containingFile).cacheDefinition(globalDefinition.getText());
+        if (globalProcessorResolveResult.getElement() != null) {
+          ((MathematicaPsiFile) containingFile).cacheDefinition(globalProcessorResolveResult.getElement().getText());
+        }
       }
-      return new SymbolResolveResult(globalDefinition, MScope.FILE_SCOPE, true);
+      return globalProcessorResolveResult;
     }
 
     final FileBasedIndex fileIndex = FileBasedIndex.getInstance();
@@ -94,15 +101,15 @@ public class MathematicaSymbolResolver implements AbstractResolver<Symbol, Symbo
 //            final PsiElement elementAt = psiFile.findElementAt(key.getOffset());
             final Symbol elementAt = PsiTreeUtil.findElementOfClassAtOffset(psiFile, key.getOffset(), Symbol.class, true);
             if (elementAt != null) {
-              return new SymbolResolveResult(elementAt, MScope.FILE_SCOPE, true);
+              return new SymbolResolveResult(elementAt, MScope.FILE_SCOPE, psiFile, true);
             }
-            return new SymbolResolveResult(psiFile, MScope.FILE_SCOPE, true);
+            return new SymbolResolveResult(psiFile, MScope.FILE_SCOPE, psiFile, true);
           }
         }
       }
     }
 
-    return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL_SCOPE, true);
+    return new SymbolResolveResult(new LightUndefinedSymbol(ref), MScope.NULL_SCOPE, ref.getContainingFile(), false);
 
   }
 

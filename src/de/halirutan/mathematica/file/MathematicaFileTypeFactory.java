@@ -21,8 +21,13 @@
 
 package de.halirutan.mathematica.file;
 
+import com.intellij.icons.AllIcons;
+import com.intellij.ide.DataManager;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ex.ProjectManagerEx;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +38,7 @@ public class MathematicaFileTypeFactory extends FileTypeFactory {
 
   @Override
   public void createFileTypes(@NotNull FileTypeConsumer consumer) {
+    final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
     consumer.consume(MathematicaFileType.INSTANCE, "m;mb;mt;nb;wl;wlt");
   }
 

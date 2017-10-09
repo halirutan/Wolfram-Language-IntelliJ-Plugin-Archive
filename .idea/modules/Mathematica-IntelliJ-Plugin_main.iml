@@ -49,7 +49,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/gson-2.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/org.eclipse.egit.github.core-2.1.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -67,7 +67,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/org.eclipse.egit.github.core-2.1.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/gson-2.2.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

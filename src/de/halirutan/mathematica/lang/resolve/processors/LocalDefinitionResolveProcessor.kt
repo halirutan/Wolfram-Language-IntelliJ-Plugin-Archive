@@ -80,19 +80,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
      *
      * @return Sorted and cleaned list of collected symbols.
      */
-    var myReferringSymbol: Symbol? = null
-        private set
-    var myLocalization: MScope? = null
-        private set
-    var myLocalizationSymbol: PsiElement? = null
-        private set
-    private var myResolveResult: SymbolResolveResult? = null
-
-    init {
-        this.myReferringSymbol = null
-        this.myLocalization = MScope.NULL_SCOPE
-
-    }
+    var resolveResult: SymbolResolveResult? = null
 
     /**
      * There are several places where a local variable can be "defined". First I check all localization constructs which
@@ -117,19 +105,13 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
                 val scopingConstruct = element.scopingConstruct
 
                 when {
-                    LocalizationConstruct.isFunctionLike(scopingConstruct) -> myResolveResult = MathematicaPsiUtilities.resolveLocalFunctionVariables(myStartElement, element, state)
-                    LocalizationConstruct.isModuleLike(scopingConstruct) -> myResolveResult = MathematicaPsiUtilities.resolveLocalModuleLikeVariables(myStartElement, element, state)
-                    LocalizationConstruct.isTableLike(scopingConstruct) -> myResolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, element, state)
-                    LocalizationConstruct.isManipulateLike(scopingConstruct) -> myResolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, element, state)
-                    LocalizationConstruct.isCompileLike(scopingConstruct) -> myResolveResult = resolveLocalCompileLikeVariables(myStartElement, element, state)
+                    LocalizationConstruct.isFunctionLike(scopingConstruct) -> resolveResult = MathematicaPsiUtilities.resolveLocalFunctionVariables(myStartElement, element, state)
+                    LocalizationConstruct.isModuleLike(scopingConstruct) -> resolveResult = MathematicaPsiUtilities.resolveLocalModuleLikeVariables(myStartElement, element, state)
+                    LocalizationConstruct.isTableLike(scopingConstruct) -> resolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, element, state)
+                    LocalizationConstruct.isManipulateLike(scopingConstruct) -> resolveResult = MathematicaPsiUtilities.resolveLocalTableLikeVariables(myStartElement, element, state)
+                    LocalizationConstruct.isCompileLike(scopingConstruct) -> resolveResult = resolveLocalCompileLikeVariables(myStartElement, element, state)
                 }
-
-                if (myResolveResult != null) {
-                    myReferringSymbol = myResolveResult!!.element as Symbol?
-                    myLocalization = myResolveResult!!.localization
-                    myLocalizationSymbol = element
-                    return false
-                }
+                resolveResult?.let { return false }
             }
         } else if (element is SetDelayed || element is TagSetDelayed || element is Set) {
 
@@ -140,9 +122,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
                     if (element is Set && myStartElement !== p) {
                         continue
                     }
-                    myReferringSymbol = p
-                    myLocalization = MScope.SETDELAYED_SCOPE
-                    myLocalizationSymbol = element
+                    resolveResult = SymbolResolveResult(p, MScope.SETDELAYED_SCOPE, element, true)
                     return false
                 }
             }
@@ -152,9 +132,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
 
             for (symbol in patternVisitor.patternSymbols) {
                 if (symbol.fullSymbolName == myStartElement.fullSymbolName) {
-                    myReferringSymbol = symbol
-                    myLocalization = MScope.RULEDELAYED_SCOPE
-                    myLocalizationSymbol = element
+                    resolveResult = SymbolResolveResult(symbol, MScope.RULEDELAYED_SCOPE, element, true)
                     return false
                 }
             }

@@ -23,8 +23,8 @@ package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -33,12 +33,14 @@ import org.jetbrains.annotations.Nullable;
 public class SymbolResolveResult implements ResolveResult {
 
   private final PsiElement myElement;
+  private final PsiElement myScopingElement;
   private final boolean myIsValid;
   private MScope myLocalization;
 
-  public SymbolResolveResult(PsiElement element, MScope scope, boolean isValid) {
+  public SymbolResolveResult(@NotNull PsiElement element, @NotNull MScope scope, @Nullable PsiElement myScopingElement, boolean isValid) {
     this.myElement = element;
     this.myLocalization = scope;
+    this.myScopingElement = myScopingElement;
     this.myIsValid = isValid;
   }
 
@@ -50,6 +52,10 @@ public class SymbolResolveResult implements ResolveResult {
 
   public MScope getLocalization() {
     return myLocalization;
+  }
+
+  public PsiElement getScopingElement() {
+    return myScopingElement;
   }
 
   @Override
