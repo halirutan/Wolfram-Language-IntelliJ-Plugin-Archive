@@ -1,3 +1,4 @@
+![Download Count](https://img.shields.io/jetbrains/plugin/d/7232-mathematica-support.svg)
 [![Join the chat at https://gitter.im/Mathematica-IntelliJ/Lobby](https://badges.gitter.im/Mathematica-IntelliJ/Lobby.svg)](https://gitter.im/Mathematica-IntelliJ/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
 # Mathematica (Wolfram Language) support for IntelliJ IDEA
