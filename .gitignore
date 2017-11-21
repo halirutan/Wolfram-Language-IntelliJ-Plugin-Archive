@@ -1,8 +1,6 @@
-.idea/workspace.xml
-.idea/misc.xml
-/gradle.properties
-/classes/
-/.gradle/
-/build/
-/out/
-/$LOG_DIR$/
+.idea/
+gradle.properties
+.gradle/
+build/
+$LOG_DIR$/
+Mathematica-IntelliJ-Plugin.iml
