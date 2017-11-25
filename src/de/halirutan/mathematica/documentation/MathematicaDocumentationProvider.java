@@ -1,27 +1,28 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) 2017 Patrick Scheibe
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.documentation;
 
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupEx;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
@@ -30,7 +31,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
@@ -56,11 +57,10 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
    * operator. Then it tries to guess the usage message of the operator by converting the class name to a hopefully
    * valid operator name.
    *
-   * @param element
-   *     Element which was possibly altered by {@link #getCustomDocumentationElement(Editor, PsiFile, PsiElement)} or by
-   *     {@link #getDocumentationElementForLookupItem(PsiManager, Object, PsiElement)} if the lookup was active
-   * @param originalElement
-   *     The original element for which the doc was called (possibly whitespace)
+   * @param element         Element which was possibly altered by {@link #getCustomDocumentationElement(Editor, PsiFile, PsiElement)} or by
+   *                        {@link #getDocumentationElementForLookupItem(PsiManager, Object, PsiElement)} if the lookup was active
+   * @param originalElement The original element for which the doc was called (possibly whitespace)
+   *
    * @return The html string of the usage message or null if it could not be loaded
    */
   @Nullable
@@ -95,12 +95,10 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   /**
    * Calculates the correct element for which the user wants documentation.
    *
-   * @param editor
-   *     The editor of the file
-   * @param file
-   *     The file which is edited and where the doc call was made
-   * @param contextElement
-   *     The element where the caret was when the doc was called
+   * @param editor         The editor of the file
+   * @param file           The file which is edited and where the doc call was made
+   * @param contextElement The element where the caret was when the doc was called
+   *
    * @return The element for which the user wants documentation. If an item of the completion list is currently
    * highlighted, then this element. If the cursor is over/beside an identifier, then the symbol element. As last thing
    * it is determined whether the PsiElement is the operator-sign of an operation, then we get the corresponding
@@ -109,44 +107,31 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   @Nullable
   @Override
   public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-
-    // Check whether there is a completion item which is currently active and give a Symbol element
-    // containing the lookup name back.
-    final LookupEx activeLookup = LookupManager.getActiveLookup(editor);
-    if ((activeLookup != null) && activeLookup.isFocused()) {
-      final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset() - 1);
-      // TODO: Check
-      if (elementAt instanceof Symbol) {
-//        Symbol lookup = new SymbolImpl(elementAt.getNode());
-        final LookupElement currentItem = activeLookup.getCurrentItem();
-        final String lookupString = currentItem != null ? currentItem.getLookupString() : "";
-//        lookup.setName(lookupString);
-        return elementAt;
-      }
-    }
+    PsiElement docElement;
 
     if (contextElement != null) {
-      PsiElement parent = contextElement.getParent();
+      docElement = contextElement.getParent();
+    } else {
+      int offset = editor.getCaretModel().getCurrentCaret().getOffset();
+      offset = offset > 0 ? offset - 1 : offset;
+      docElement = PsiTreeUtil.findElementOfClassAtOffset(file, offset, Symbol.class, false);
+      docElement = docElement != null ? docElement : file.findElementAt(offset);
+    }
 
-      if ((contextElement instanceof PsiWhiteSpace) || !((parent instanceof Symbol) || (parent instanceof OperatorNameProvider))) {
-        PsiElement elm = file.findElementAt(editor.getCaretModel().getOffset() - 1);
-        if (elm != null) {
-          contextElement = elm;
-          parent = elm.getParent();
-        }
-      }
+    if (docElement != null && !(docElement instanceof Symbol) && !(docElement instanceof OperatorNameProvider)) {
+      docElement = docElement.getParent();
+    }
 
-//      if (parent instanceof Symbol) {
-//        return new SymbolImpl(parent.getNode());
+    if (docElement instanceof Symbol) {
+      return docElement;
+    }
+
+    // Determine if the contextElement is the operator sign of an operation.
+    // See the doc to OperatorNameProviderImpl.
+    if (docElement instanceof OperatorNameProvider) {
+//      if (((OperatorNameProvider) docElement).isOperatorSign(contextElement)) {
+      return docElement;
 //      }
-
-      // Determine if the contextElement is the operator sign of an operation.
-      // See the doc to OperatorNameProviderImpl.
-      if (parent instanceof OperatorNameProvider) {
-        if (((OperatorNameProvider) parent).isOperatorSign(contextElement)) {
-          return parent;
-        }
-      }
     }
     return null;
   }
@@ -155,15 +140,13 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
    * This makes it possible to have the documentation for each function while scrolling through the completion
    * suggestion list.
    *
-   * @param psiManager
-   *     access to Psi related things
-   * @param object
-   *     the current lookup object
-   * @param element
-   *     the element, the documentation was initially called for. Note that this is typically not a valid built-in
-   *     function, because you start typing Plo then the completion box pops up and when you call documentation on one
-   *     of the selected lookup entries, the elements name is still Plo, while you want to check the documentation for
-   *     the lookup element.
+   * @param psiManager access to Psi related things
+   * @param object     the current lookup object
+   * @param element    the element, the documentation was initially called for. Note that this is typically not a valid built-in
+   *                   function, because you start typing Plo then the completion box pops up and when you call documentation on one
+   *                   of the selected lookup entries, the elements name is still Plo, while you want to check the documentation for
+   *                   the lookup element.
+   *
    * @return The Symbol which was created from the string of the lookup element or null if it wasn't possible.
    */
   @Nullable
@@ -172,13 +155,11 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     if (element != null) {
       final LookupEx activeLookup = LookupManager.getActiveLookup(FileEditorManager.getInstance(element.getProject()).getSelectedTextEditor());
       if (activeLookup != null) {
-        if (activeLookup.isFocused()) {
-          MathematicaPsiElementFactory elementFactory = new MathematicaPsiElementFactory(psiManager.getProject());
-          try {
-            return elementFactory.createSymbol(object.toString());
-          } catch (Exception e) {
-            return null;
-          }
+        MathematicaPsiElementFactory elementFactory = new MathematicaPsiElementFactory(psiManager.getProject());
+        try {
+          return elementFactory.createSymbol(object.toString());
+        } catch (Exception e) {
+          return null;
         }
       }
     }
