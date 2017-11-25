@@ -1,165 +1,167 @@
 <!--
   ~ Copyright (c) 2017 Patrick Scheibe
-  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
-  ~ of this software and associated documentation files (the "Software"), to deal
-  ~ in the Software without restriction, including without limitation the rights
-  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  ~ copies of the Software, and to permit persons to whom the Software is
-  ~ furnished to do so, subject to the following conditions:
   ~
-  ~ The above copyright notice and this permission notice shall be included in
-  ~ all copies or substantial portions of the Software.
+  ~  Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~  of this software and associated documentation files (the "Software"), to deal
+  ~  in the Software without restriction, including without limitation the rights
+  ~  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~  copies of the Software, and to permit persons to whom the Software is
+  ~  furnished to do so, subject to the following conditions:
   ~
-  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  ~ THE SOFTWARE.
+  ~  The above copyright notice and this permission notice shall be included in
+  ~  all copies or substantial portions of the Software.
+  ~
+  ~   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~  THE SOFTWARE.
+  ~
   -->
 
 <idea-plugin url="http://mathematicaplugin.halirutan.de">
-  <id>de.halirutan.mathematica</id>
-  <name>Mathematica Support</name>
-  <category>Custom Language</category>
-  <vendor url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
-  <idea-version since-build="172"/>
-  <depends>com.intellij.modules.lang</depends>
+    <id>de.halirutan.mathematica</id>
+    <name>Mathematica Support</name>
+    <category>Custom Language</category>
+    <vendor url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
+    <idea-version since-build="172"/>
+    <depends>com.intellij.modules.lang</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
+    <extensions defaultExtensionNs="com.intellij">
 
-    <internalFileTemplate name="Package"/>
-    <fileTypeFactory implementation="de.halirutan.mathematica.file.MathematicaFileTypeFactory"/>
-    <lang.ast.factory language="Mathematica" implementationClass="de.halirutan.mathematica.lang.tree.MathematicaASTFactory"/>
-    <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
+        <internalFileTemplate name="Package"/>
+        <fileTypeFactory implementation="de.halirutan.mathematica.file.MathematicaFileTypeFactory"/>
+        <lang.ast.factory language="Mathematica" implementationClass="de.halirutan.mathematica.lang.tree.MathematicaASTFactory"/>
+        <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
 
-    <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
-    <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
-    <moduleConfigurationEditorProvider implementation="de.halirutan.mathematica.module.MathematicaModuleConfigurationEditor"/>
+        <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
+        <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
+        <moduleConfigurationEditorProvider implementation="de.halirutan.mathematica.module.MathematicaModuleConfigurationEditor"/>
 
-    <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
+        <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
-    <lang.syntaxHighlighterFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
-    <lang.psiStructureViewFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
-    <lang.documentationProvider language="Mathematica" implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
+        <lang.syntaxHighlighterFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
+        <lang.psiStructureViewFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.structureview.MathematicaStructureViewFactory"/>
+        <lang.documentationProvider language="Mathematica" implementationClass="de.halirutan.mathematica.documentation.MathematicaDocumentationProvider"/>
 
-    <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.lang.resolve.MathematicaReferenceContributor"/>
-    <fileBasedIndex implementation="de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex"/>
-    <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
-    <lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>
-    <gotoRelatedProvider implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
-    <lang.foldingBuilder language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
+        <psi.referenceContributor language="Mathematica" implementation="de.halirutan.mathematica.lang.resolve.MathematicaReferenceContributor"/>
+        <fileBasedIndex implementation="de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex"/>
+        <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
+        <lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>
+        <gotoRelatedProvider implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
+        <lang.foldingBuilder language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
 
-    <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
+        <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
 
-    <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>
-    <quoteHandler fileType="Mathematica" className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>
-    <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher"/>
-    <lang.smartEnterProcessor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>
-    <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
+        <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>
+        <quoteHandler fileType="Mathematica" className="de.halirutan.mathematica.codeinsight.completion.MathematicaQuoteHandler"/>
+        <lang.braceMatcher language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaBraceMatcher"/>
+        <lang.smartEnterProcessor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.editoractions.smartenter.MathematicaSmartEnter"/>
+        <lookup.charFilter implementation="de.halirutan.mathematica.codeinsight.completion.MathematicaCharFilter"/>
 
-    <lang.surroundDescriptor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
-    <codeInsight.surroundWithRangeAdjuster implementation="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster"/>
+        <lang.surroundDescriptor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundDescriptor"/>
+        <codeInsight.surroundWithRangeAdjuster implementation="de.halirutan.mathematica.codeinsight.surround.MathematicaSurroundWithRangeAdjuster"/>
 
-    <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>
-    <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
+        <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>
+        <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
 
-    <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
-    <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
+        <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
+        <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
 
-    <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>
-    <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
+        <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>
+        <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
 
-    <!--&lt;!&ndash;<basicWordSelectionFilter&ndash;&gt;-->
-    <!--&lt;!&ndash;implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<basicWordSelectionFilter&ndash;&gt;-->
+        <!--&lt;!&ndash;implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>&ndash;&gt;-->
 
-    <applicationService serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl" serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>
-    <codeFoldingOptionsProvider instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
+        <applicationService serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl" serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>
+        <codeFoldingOptionsProvider instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
 
-    <!-- Code-style and colors-->
-    <colorSettingsPage implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
-    <codeStyleSettingsProvider implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettingsProvider"/>
-    <langCodeStyleSettingsProvider implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
-    <lang.formatter language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder"/>
+        <!-- Code-style and colors-->
+        <colorSettingsPage implementation="de.halirutan.mathematica.codeinsight.highlighting.MathematicaColorSettingsPage"/>
+        <codeStyleSettingsProvider implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="de.halirutan.mathematica.codeinsight.formatter.settings.MathematicaLanguageCodeStyleSettingsProvider"/>
+        <lang.formatter language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder"/>
 
-    <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
-    <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
-    <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
+        <additionalTextAttributes scheme="Darcula" file="colors/MathematicaDarcula.xml"/>
+        <additionalTextAttributes scheme="Default" file="colors/MathematicaDefault.xml"/>
+        <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
 
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.LocalizedSymbolAnnotator"/>
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.CommentAnnotator"/>
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.MessageNameAnnotator"/>
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.StringifiedSymbolAnnotator"/>
-    <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.FunctionAnnotator"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.SymbolAnnotator"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.CommentAnnotator"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.MessageNameAnnotator"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.StringifiedSymbolAnnotator"/>
+        <annotator language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.annotators.FunctionAnnotator"/>
 
-    <inspectionToolProvider implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
+        <inspectionToolProvider implementation="de.halirutan.mathematica.codeinsight.inspections.MathematicaInspectionProvider"/>
 
-    <!--<renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>-->
+        <!--<renamePsiElementProcessor implementation="de.halirutan.mathematica.refactoring.MathematicaPsiRenameProcessor"/>-->
 
-    <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>
-    <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica" instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
+        <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>
+        <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica" instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
 
-    <spellchecker.support language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
-    <spellchecker.bundledDictionaryProvider implementation="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaDictionaryProvider"/>
+        <spellchecker.support language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
+        <spellchecker.bundledDictionaryProvider implementation="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaDictionaryProvider"/>
 
-    <intentionAction>
-      <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
-    </intentionAction>
-    <!--<findUsagesHandlerFactory implementation="de.halirutan.mathematica.find.MathematicaFindUsageHandlerFactory"/>-->
+        <intentionAction>
+            <className>de.halirutan.mathematica.intentions.localization.MoveVariableToLocalisation</className>
+        </intentionAction>
+        <!--<findUsagesHandlerFactory implementation="de.halirutan.mathematica.find.MathematicaFindUsageHandlerFactory"/>-->
 
-    <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
-    <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
+        <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
+        <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
 
-  </extensions>
+    </extensions>
 
-  <actions>
-    <action id="Mathematica.NewMathematicaFile"
-            class="de.halirutan.mathematica.actions.CreateMathematicaFile"
-            text="Mathematica File"
-            description="Create New Mathematica File">
-      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
-    </action>
+    <actions>
+        <action id="Mathematica.NewMathematicaFile"
+                class="de.halirutan.mathematica.actions.CreateMathematicaFile"
+                text="Mathematica File"
+                description="Create New Mathematica File">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+        </action>
 
-    <!-- Action to test the resolving of symbol definitions and their usages -->
-    <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
-    <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
-    <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
-    <!--</action>-->
+        <!-- Action to test the resolving of symbol definitions and their usages -->
+        <!--<action id="HighlightElementAndReferences" class="de.halirutan.mathematica.actions.HighlightElementAndReferences"-->
+        <!--text="Highlight References" description="Highlights the symbol under the cursor and its references">-->
+        <!--<add-to-group group-id="EditMenu" anchor="after" relative-to-action="TemplateParametersNavigation"/>-->
+        <!--</action>-->
 
-    <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
-    <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
-            class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
-            text="FireArtificialException">
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>
-    </action>
+        <!--Action for throwing an exception just to test the reporting of errors into the YouTrack database-->
+        <action id="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
+                class="de.halirutan.mathematica.errorreporting.TriggerExceptionAction"
+                text="FireArtificialException">
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F12"/>
+        </action>
 
-    <group id="MathematicaMenu" text="Mathematica" popup="true">
-      <action id="Mathematica.ExpandNamedCharacters"
-              class="de.halirutan.mathematica.actions.ExpandNamedCharactersAction"
-              text="Expand all \[Name] sections"
-              description="Expands all closed named characters into their FullForm.">
-      </action>
+        <group id="MathematicaMenu" text="Mathematica" popup="true">
+            <action id="Mathematica.ExpandNamedCharacters"
+                    class="de.halirutan.mathematica.actions.ExpandNamedCharactersAction"
+                    text="Expand all \[Name] sections"
+                    description="Expands all closed named characters into their FullForm.">
+            </action>
 
-      <action id="Mathematica.CollapseNamedCharacters"
-              class="de.halirutan.mathematica.actions.CollapseNamedCharactersAction"
-              text="Collapse all \[Name] sections"
-              description="Collapse all named characters into their utf8 counterpart.">
-      </action>
+            <action id="Mathematica.CollapseNamedCharacters"
+                    class="de.halirutan.mathematica.actions.CollapseNamedCharactersAction"
+                    text="Collapse all \[Name] sections"
+                    description="Collapse all named characters into their utf8 counterpart.">
+            </action>
 
-      <!--<action id="Mathematica.RenameReferenceResolve" class="de.halirutan.mathematica.actions.RenameReferenceResolve"-->
-      <!--text="Rename Reference Resolve"/>-->
-      <!--<separator/>-->
+            <!--<action id="Mathematica.RenameReferenceResolve" class="de.halirutan.mathematica.actions.RenameReferenceResolve"-->
+            <!--text="Rename Reference Resolve"/>-->
+            <!--<separator/>-->
 
-      <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
-              text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
-      </action>
+            <action id="Mathematica.ShowFormattingBlocks" class="de.halirutan.mathematica.actions.ShowFormattingBlocks"
+                    text="Show Formatting Blocks" description="Shows the underlying formatting blocks of a file">
+            </action>
 
-      <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
-    </group>
-    <action id="MathematicaFullFormViewer" class="de.halirutan.mathematica.actions.MathematicaFullFormViewer" text="View FullForm" description="Show the estimated FullForm of the selected expression">
-      <add-to-group group-id="MathematicaMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl E"/>
-    </action>
-  </actions>
+            <add-to-group group-id="MainMenu" anchor="after" relative-to-action="ToolsMenu"/>
+        </group>
+        <action id="MathematicaFullFormViewer" class="de.halirutan.mathematica.actions.MathematicaFullFormViewer" text="View FullForm" description="Show the estimated FullForm of the selected expression">
+            <add-to-group group-id="MathematicaMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt shift E"/>
+        </action>
+    </actions>
 </idea-plugin>

@@ -1,37 +1,40 @@
 /*
  * Copyright (c) 2017 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.lang.psi.impl;
 
-import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
+import de.halirutan.mathematica.lang.psi.api.Expression;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
-import de.halirutan.mathematica.lang.resolve.processors.SymbolResolveHint;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveHint;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,13 +42,11 @@ import java.util.List;
 public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
 
   private final String myHead;
-  private MScope myLocalizationConstruct = MScope.NULL_SCOPE;
   private final boolean myIsScopingFunction;
-
+  private MScope myLocalizationConstruct = MScope.NULL_SCOPE;
 
   public FunctionCallImpl(@NotNull ASTNode node) {
     super(node);
-//    myIsUpToDate = false;
     myHead = node.getFirstChildNode().getText();
     myIsScopingFunction = LocalizationConstruct.isScopingFunction(myHead);
     myLocalizationConstruct = myIsScopingFunction ? LocalizationConstruct.getScope(myHead) : MScope.NULL_SCOPE;
@@ -92,36 +93,27 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return false;
   }
 
+  @NotNull
+  @Override
+  public List<Expression> getArguments() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, Expression.class);
+  }
+
+  @NotNull
+  @Override
+  public List<Expression> getParameters() {
+    final List<Expression> arguments = getArguments();
+    arguments.remove(0);
+    return arguments;
+  }
+
   @Override
   public PsiElement getArgument(int n) {
-    for (PsiElement child : getChildren()) {
-      if (n > 0) {
-        n--;
-        continue;
-      }
-      return child;
+    final List<Expression> arguments = getArguments();
+    if (n >= 0 && n < arguments.size()) {
+      return arguments.get(n);
     }
     return null;
-  }
-
-  @Override
-  public PsiElement[] getArguments() {
-    return getChildren();
-  }
-
-  @Override
-  public List<PsiElement> getParameters() {
-    List<PsiElement> allArguments = Lists.newLinkedList();
-
-    boolean skipHead = true;
-    for (PsiElement child : this.getChildren()) {
-      if (skipHead) {
-        skipHead = false;
-        continue;
-      }
-      allArguments.add(child);
-    }
-    return allArguments;
   }
 
   @Override
@@ -129,6 +121,7 @@ public class FunctionCallImpl extends ExpressionImpl implements FunctionCall {
     return myIsScopingFunction;
   }
 
+  @NotNull
   @Override
   public MScope getScopingConstruct() {
     return myLocalizationConstruct;

@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) 2017 Patrick Scheibe
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.index.packageexport;
@@ -24,6 +26,7 @@ package de.halirutan.mathematica.index.packageexport;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.HashMap;
+import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileBasedIndex.InputFilter;
 import com.intellij.util.indexing.FileContent;
@@ -35,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Simple file index for functions that are exported from a package by giving them a usage message.
@@ -43,14 +47,25 @@ import java.util.Map;
 public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageExportSymbol> {
 
   public static final ID<PackageExportSymbol, Void> INDEX_ID = ID.create("Mathematica.fileExports");
-  private static final int BASE_VERSION = 9;
+  private static final int BASE_VERSION = 10;
+  private static final LanguageFileType MATHEMATICA_FILE_TYPE = MathematicaLanguage.INSTANCE.getAssociatedFileType();
+  private static final Set<String> IGNORED_FILES = new HashSet<>();
+
+  static {
+    IGNORED_FILES.add("PacletInfo.m");
+    IGNORED_FILES.add("init.m");
+  }
 
   @NotNull
   @Override
   public InputFilter getInputFilter() {
     return file -> {
-      final LanguageFileType fileType = MathematicaLanguage.INSTANCE.getAssociatedFileType();
-      return file.getFileType().equals(fileType);
+      if (file.getFileType() == MATHEMATICA_FILE_TYPE) {
+        final String fileName = file.getName();
+        // Don't index notebooks and ignored files like PacletInfo.m
+        return !"nb".equals(file.getExtension()) && !IGNORED_FILES.contains(fileName);
+      }
+      return false;
     };
   }
 
@@ -74,12 +89,12 @@ public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageE
   @Override
   public DataIndexer<PackageExportSymbol, Void, FileContent> getIndexer() {
     return inputData -> {
-      final Map<PackageExportSymbol , Void> map = new HashMap<>();
       final PsiFile psiFile = inputData.getPsiFile();
       PackageClassifier visitor = new PackageClassifier();
       psiFile.accept(visitor);
       final Collection<PackageExportSymbol> listOfExportSymbols = visitor.getMyExportInfo();
 
+      final Map<PackageExportSymbol, Void> map = new HashMap<>();
       for (PackageExportSymbol symbol : listOfExportSymbols) {
         map.putIfAbsent(symbol, null);
       }

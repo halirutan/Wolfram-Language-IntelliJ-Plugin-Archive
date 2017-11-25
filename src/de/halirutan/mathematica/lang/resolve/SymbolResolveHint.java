@@ -21,32 +21,16 @@
  *
  */
 
-package de.halirutan.mathematica.lang.resolve
+package de.halirutan.mathematica.lang.resolve;
 
-import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor
-import de.halirutan.mathematica.lang.psi.api.Symbol
-
+import com.intellij.openapi.util.Key;
+import com.intellij.psi.PsiElement;
 
 /**
- * @author patrick (20.07.17).
+ * @author patrick (16.07.17).
  */
-class ResolvePerformanceTest : AbstractResolveTest() {
+public interface SymbolResolveHint {
 
-  @Throws(Exception::class)
-  fun testLargeFile() {
-    val count = object {
-      var value = 0
-    }
-    val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
-    val start = System.nanoTime()
-    file.accept(object : MathematicaRecursiveVisitor() {
-      override fun visitSymbol(symbol: Symbol) {
-        val resolve = symbol.resolve()
-        resolve?.let { count.value++ }
-      }
-    })
-    val stop = System.nanoTime()
-    println("Resolved ${count.value} Symbols in ${(stop - start) / 1e9} seconds")
-  }
-
+  Key<PsiElement> RESOLVE_CONTEXT = Key.create("RESOLVE_CONTEXT");
+  Key<PsiElement> LAST_PARENT = Key.create("LAST_PARENT");
 }

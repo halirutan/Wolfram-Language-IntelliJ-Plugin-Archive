@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2013 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) 2017 Patrick Scheibe
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.lang.psi.util;
@@ -25,6 +27,8 @@ import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.psi.SymbolNames;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
@@ -36,15 +40,13 @@ import de.halirutan.mathematica.lang.psi.api.lists.MList;
 import de.halirutan.mathematica.lang.psi.api.pattern.*;
 import de.halirutan.mathematica.lang.psi.api.rules.Rule;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
-import de.halirutan.mathematica.lang.psi.util.LocalizationConstruct.MScope;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveHint;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
-import de.halirutan.mathematica.lang.resolve.processors.SymbolResolveHint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author patrick (5/21/13)
@@ -193,7 +195,7 @@ public class MathematicaPsiUtilities {
    * @return MList of extracted {@link Symbol} PsiElement's.
    */
   @NotNull
-  private static List<Symbol> getDefinitionSymbolsFromList(PsiElement listHead) {
+  public static List<Symbol> getDefinitionSymbolsFromList(PsiElement listHead) {
     List<Symbol> assignees = Lists.newArrayList();
     PsiElement children[] = listHead.getChildren();
 
@@ -398,62 +400,6 @@ public class MathematicaPsiUtilities {
       }
     }
     return localVariables;
-  }
-
-  @Nullable
-  public static SymbolResolveResult resolveLocalTableLikeVariables(Symbol myStartElement, FunctionCall functionCall, ResolveState state) {
-
-    final PsiElement lastParent = state.get(SymbolResolveHint.LAST_PARENT);
-    final PsiElement[] args = functionCall.getArguments();
-    // in a table we need at least Head, body and one iterator to search for a reference
-    if (args.length < 3) return null;
-
-    // find out where we were coming from. From within the body we can reference to the symbols in all iterator lists.
-    // But it is also possible to reference from to a earlier iterator inside an iterator itself.
-    int pos = -1;
-    for (int i = 1; i < args.length; i++) {
-      if (lastParent.equals(args[i])) {
-        pos = i;
-        break;
-      }
-    }
-
-    // This means we were coming from the body of the table and have to search for definitions in all of the iterator lists
-    final MScope scopingConstruct = functionCall.getScopingConstruct();
-    if (pos == 1) {
-      for (int i = 2; i < args.length; i++) {
-        final PsiElement currentIterator = args[i];
-        if (currentIterator instanceof MList) {
-          final PsiElement firstListElement = getFirstListElement(currentIterator);
-          if (firstListElement instanceof Symbol) {
-            if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-              return new SymbolResolveResult(firstListElement, scopingConstruct, functionCall, true);
-            }
-          }
-        }
-      }
-    } else if (pos > 1) {
-      // self-reference if we are the iterator
-      if (args[pos] instanceof MList) {
-        if (Objects.equals(getFirstListElement(args[pos]), myStartElement)) {
-          return new SymbolResolveResult(myStartElement, scopingConstruct, functionCall, true);
-        }
-      }
-
-      // test if we refer to an earlier iterator
-      for (int i = 2; i < pos; i++) {
-        if (args[i] instanceof MList) {
-          final PsiElement firstListElement = getFirstListElement(args[i]);
-          if (firstListElement instanceof Symbol) {
-            if (((Symbol) firstListElement).getFullSymbolName().equals(myStartElement.getFullSymbolName())) {
-              return new SymbolResolveResult(firstListElement, scopingConstruct, functionCall, true);
-            }
-          }
-        }
-      }
-
-    }
-    return null;
   }
 
 

@@ -21,32 +21,22 @@
  *
  */
 
-package de.halirutan.mathematica.lang.resolve
+package de.halirutan.mathematica.lang.resolve.resolvers
 
-import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor
+import com.intellij.psi.ResolveState
+import de.halirutan.mathematica.lang.psi.api.FunctionCall
 import de.halirutan.mathematica.lang.psi.api.Symbol
-
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult
 
 /**
- * @author patrick (20.07.17).
+ * Interface for resolvers of symbols in a local context.
+ * @author patrick (21.11.17).
  */
-class ResolvePerformanceTest : AbstractResolveTest() {
-
-  @Throws(Exception::class)
-  fun testLargeFile() {
-    val count = object {
-      var value = 0
-    }
-    val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
-    val start = System.nanoTime()
-    file.accept(object : MathematicaRecursiveVisitor() {
-      override fun visitSymbol(symbol: Symbol) {
-        val resolve = symbol.resolve()
-        resolve?.let { count.value++ }
-      }
-    })
-    val stop = System.nanoTime()
-    println("Resolved ${count.value} Symbols in ${(stop - start) / 1e9} seconds")
-  }
-
+interface Resolver {
+  /**
+   * Tries to resolve [symbol] in the context of the localization construct [scopingElement].
+   * [state] can be used to check in which child of [scopingElement] is located. This is important because
+   * resolving a symbol that is located in the same definition list itself is not allowed.
+   */
+  fun resolve(symbol: Symbol, scopingElement: FunctionCall, state: ResolveState): SymbolResolveResult?
 }

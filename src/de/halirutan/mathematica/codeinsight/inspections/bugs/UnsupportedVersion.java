@@ -1,22 +1,24 @@
 /*
  * Copyright (c) 2017 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
@@ -33,12 +35,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import de.halirutan.mathematica.codeinsight.completion.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
-import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.lists.Association;
+import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
@@ -47,6 +49,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.HashMap;
+
+import static de.halirutan.mathematica.codeinsight.inspections.InspectionBundle.message;
 
 /**
  * Provides warnings when you are using Mathematica symbols that are introduces later than the version you are using.
@@ -122,20 +126,20 @@ public class UnsupportedVersion extends AbstractInspection {
   @NotNull
   @Override
   public String getDisplayName() {
-    return InspectionBundle.message("bugs.unsupported.version.name");
+    return message("bugs.unsupported.version.name");
   }
 
   @Nullable
   @Override
   public String getStaticDescription() {
-    return InspectionBundle.message("bugs.unsupported.version.description");
+    return message("bugs.unsupported.version.description");
   }
 
   @Nls
   @NotNull
   @Override
   public String getGroupDisplayName() {
-    return InspectionBundle.message("group.bugs");
+    return message("group.bugs");
   }
 
   @NotNull
@@ -185,14 +189,19 @@ public class UnsupportedVersion extends AbstractInspection {
     public void visitFunctionCall(FunctionCall functionCall) {
       final PsiElement head = functionCall.getHead();
       if ("Association".equals(head.getText()) && myLanguageLevel.getVersionNumber() < 10 ) {
-        registerProblem(functionCall, "Associations where introduced in version 10. You are using " + myLanguageLevel.getPresentableText());
+        registerProblem(functionCall, message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
+      }
+
+      if (functionCall.hasHead("With") && myLanguageLevel.getVersionNumber() < 10.3 && functionCall.getArguments().size() > 3) {
+        registerProblem(functionCall, message("bugs.unsupported.version.with", myLanguageLevel.getPresentableText()));
+
       }
     }
 
     @Override
     public void visitAssociation(Association association) {
       if (myLanguageLevel.getVersionNumber() < 10) {
-        registerProblem(association, "Associations where introduced in version 10. You are using " + myLanguageLevel.getPresentableText());
+        registerProblem(association, message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
       }
     }
 
@@ -203,13 +212,15 @@ public class UnsupportedVersion extends AbstractInspection {
         return;
       }
 
-      String nameWithContext = symbol.getMathematicaContext().equals("") ?
-          "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+      final PsiElement resolve = symbol.resolve();
+      if (resolve instanceof LightBuiltInSymbol) {
+        String nameWithContext = symbol.getMathematicaContext().equals("") ? "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
 
-      if (mySymbolVersions.containsKey(nameWithContext)) {
-        double version = mySymbolVersions.get(nameWithContext);
-        if (version > myLanguageLevel.getVersionNumber()) {
-          registerProblem(symbol, "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());
+        if (mySymbolVersions.containsKey(nameWithContext)) {
+          double version = mySymbolVersions.get(nameWithContext);
+          if (version > myLanguageLevel.getVersionNumber()) {
+            registerProblem(symbol, "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());
+          }
         }
       }
     }
