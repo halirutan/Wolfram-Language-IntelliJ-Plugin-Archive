@@ -2,15 +2,15 @@ gradle.properties
 .gradle/
 build/
 $LOG_DIR$/
-Mathematica-IntelliJ-Plugin.iml
 out/
-/.idea/*.xml
-!/.idea/uiDesigner.xml
-!/.idea/copyright/
-!/.idea/statistic.xml
 
+/.idea/compiler.xml
+/.idea/gradle.xml
 /.idea/libraries/
 /.idea/markdown-navigator/
-/.idea/modules/
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/misc.xml
+/.idea/kotlinc.xml
 /.idea/dictionaries/
-
+*.iml

@@ -2,8 +2,6 @@
 [![Join the chat at https://gitter.im/Mathematica-IntelliJ/Lobby](https://badges.gitter.im/Mathematica-IntelliJ/Lobby.svg)](https://gitter.im/Mathematica-IntelliJ/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin.svg?branch=develop)](https://travis-ci.org/halirutan/Mathematica-IntelliJ-Plugin)
 
-[![Code Sponsor](https://app.codesponsor.io/embed/gPCX357E9akZQtegGQhuixbD/halirutan/Mathematica-IntelliJ-Plugin.svg)](https://app.codesponsor.io/link/gPCX357E9akZQtegGQhuixbD/halirutan/Mathematica-IntelliJ-Plugin)
-
 # Mathematica (Wolfram Language) support for IntelliJ IDEA
 
 ![teaser](http://i.stack.imgur.com/N5KVt.gif)
