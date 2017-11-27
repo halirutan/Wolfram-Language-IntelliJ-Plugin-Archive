@@ -23,9 +23,6 @@
 
 package de.halirutan.mathematica.lang.resolve
 
-import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor
-import de.halirutan.mathematica.lang.psi.api.Symbol
-
 
 /**
  * @author patrick (20.07.17).
@@ -37,14 +34,14 @@ class ResolvePerformanceTest : AbstractResolveTest() {
     val count = object {
       var value = 0
     }
-    val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
+//    val file = createFile("LargeFile.m", loadFile("LargeFile.m"))
     val start = System.nanoTime()
-    file.accept(object : MathematicaRecursiveVisitor() {
-      override fun visitSymbol(symbol: Symbol) {
-        val resolve = symbol.resolve()
-        resolve?.let { count.value++ }
-      }
-    })
+//    file.accept(object : MathematicaRecursiveVisitor() {
+//      override fun visitSymbol(symbol: Symbol) {
+//        val resolve = symbol.resolve()
+//        resolve?.let { count.value++ }
+//      }
+//    })
     val stop = System.nanoTime()
     println("Resolved ${count.value} Symbols in ${(stop - start) / 1e9} seconds")
   }

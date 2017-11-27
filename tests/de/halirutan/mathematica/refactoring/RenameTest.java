@@ -29,7 +29,7 @@ import de.halirutan.mathematica.file.MathematicaFileType;
  */
 public class RenameTest extends LightCodeInsightFixtureTestCase{
 
-  public void testNormalVariable() throws Exception {
+  public void testNormalVariable() {
     myFixture.configureByText(MathematicaFileType.INSTANCE,
         "var1;\n" +
             "var1::usage = \"var1 is equal to nothing..\";\n" +
@@ -40,7 +40,7 @@ public class RenameTest extends LightCodeInsightFixtureTestCase{
         "var2=1;");
   }
 
-  public void testModule() throws Exception {
+  public void testModule() {
     myFixture.configureByText(MathematicaFileType.INSTANCE,
         "var;\n" +
             "var::usage = \"var is equal to nothing..\";\n" +
@@ -61,14 +61,14 @@ public class RenameTest extends LightCodeInsightFixtureTestCase{
         "]");
   }
 
-  public void testUsage() throws Exception {
+  public void testUsage() {
     myFixture.configureByText(MathematicaFileType.INSTANCE,
         "func::usage = \"func<caret> is a function called like func[]\";");
     myFixture.renameElementAtCaret("newFunc");
     myFixture.checkResult("newFunc::usage = \"newFunc is a function called like newFunc[]\";");
   }
 
-  public void testUsage2() throws Exception {
+  public void testUsage2() {
     myFixture.configureByText(MathematicaFileType.INSTANCE,
         "func<caret>::usage = \"func is a function called like func[]\";");
     myFixture.renameElementAtCaret("newFunc");

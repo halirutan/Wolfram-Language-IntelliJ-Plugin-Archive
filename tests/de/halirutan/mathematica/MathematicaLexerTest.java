@@ -35,7 +35,7 @@ public class MathematicaLexerTest extends LexerTestCase {
     return new MathematicaLexer();
   }
 
-  public void testSlots1() throws Exception {
+  public void testSlots1() {
     doTest("#[#Test&, #\"Test\"&]&;",
         "SLOT ('#')\n" +
             "LEFT_BRACKET ('[')\n" +
@@ -50,7 +50,7 @@ public class MathematicaLexerTest extends LexerTestCase {
             "SEMICOLON (';')");
   }
 
-  public void testNumbers() throws Exception {
+  public void testNumbers() {
     doTest("1", "NUMBER ('1')");
     doTest("1.0", "NUMBER ('1.0')");
     doTest("16^^abc", "NUMBER ('16^^abc')");
@@ -62,7 +62,7 @@ public class MathematicaLexerTest extends LexerTestCase {
     doTest("12``12", "NUMBER ('12``12')");
   }
 
-  public void testRepeatedAmbiguity() throws Exception {
+  public void testRepeatedAmbiguity() {
     // Actually, this is not what Mathematica parses which is Repeated[1]
     // but the documentation states that the point for the number 1. should bind stronger
     doTest("1..", "NUMBER ('1.')\n" + "POINT ('.')");

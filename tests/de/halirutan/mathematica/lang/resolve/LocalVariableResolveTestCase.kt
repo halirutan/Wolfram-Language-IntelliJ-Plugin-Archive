@@ -45,23 +45,37 @@ class LocalVariableResolveTestCase : AbstractResolveTest() {
       "Compile[{{x, _Real}, y, {z, _Real, 0}}, x+<ref>y+z ]" to TextRange.create(21, 22)
   )
 
+  private val ruleDelayedLike = mapOf(
+      "{test_, test_} :> <ref>test" to TextRange.create(1, 5),
+      "HoldComplete[ReturnPacket[{expr_ :> expr_}]] :> HoldComplete[<ref>expr]" to TextRange.create(27, 31)
+  )
+
   fun testModule() {
-    for (testCase in moduleLike) {
-      val psiReference = configureByFileText(testCase.key)
+    for ((key, value) in moduleLike) {
+      val psiReference = configureByFileText(key)
       val resolve = psiReference.resolve()
       TestCase.assertNotNull(resolve)
-      TestCase.assertEquals(testCase.value, resolve?.textRange)
+      TestCase.assertEquals(value, resolve?.textRange)
     }
-    }
+  }
 
   fun testCompile() {
-    for (testCase in compileLike) {
-      val ref = configureByFileText(testCase.key)
+    for ((key, value) in compileLike) {
+      val ref = configureByFileText(key)
       val resolve = ref.resolve()
       TestCase.assertNotNull(resolve)
-      TestCase.assertEquals(testCase.value, resolve?.textRange)
+      TestCase.assertEquals(value, resolve?.textRange)
     }
+  }
+
+  fun testRuleDelayed() {
+    for ((key, value) in ruleDelayedLike) {
+      val ref = configureByFileText(key)
+      val resolve = ref.resolve()
+      TestCase.assertNotNull(resolve)
+      TestCase.assertEquals(value, resolve?.textRange)
     }
+  }
 
 
 }

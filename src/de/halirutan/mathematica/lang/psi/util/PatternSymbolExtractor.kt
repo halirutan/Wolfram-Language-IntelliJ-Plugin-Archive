@@ -41,7 +41,7 @@ import de.halirutan.mathematica.lang.psi.api.pattern.Pattern
  */
 class PatternSymbolExtractor : MathematicaVisitor() {
 
-  val patternSymbols = HashSet<Symbol>()
+  val patternSymbols = ArrayList<Symbol>()
   /* Except | Longest | Optional | PatternTest | Repeated | RepeatedNull | Shortest
 * HoldPattern | IgnoringInactive | KeyValuePattern | Literal | Longest | Optional | Repeated | RepeatedNull | Shortest
 * */

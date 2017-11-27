@@ -25,7 +25,10 @@ package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.file.MathematicaFileType;
@@ -212,27 +215,9 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     return null;
   }
 
-  /**
-   * This method is used by {@link PsiManager#areElementsEquivalent(PsiElement, PsiElement)}
-   * @param another the other element which is tested to be equal to this element
-   * @return true if the full symbol name is the same.
-   */
-  @Override
-  public boolean isEquivalentTo(PsiElement another) {
-    if (super.isEquivalentTo(another)) {
-      return true;
-    }
-    if (another instanceof PsiReference) {
-      final PsiElement myDef = resolve();
-      final PsiElement otherDef = ((PsiReference) another).resolve();
-      return myDef != null && otherDef != null && myDef == otherDef;
-    }
-    return false;
-  }
-
   @Override
   public boolean isReferenceTo(PsiElement element) {
-    return getManager().areElementsEquivalent(resolve(), element);
+    return (element instanceof Symbol || element instanceof LightSymbol) && getManager().areElementsEquivalent(resolve(), element);
   }
 
   @NotNull
