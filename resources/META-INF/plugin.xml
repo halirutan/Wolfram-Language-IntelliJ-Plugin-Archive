@@ -113,6 +113,11 @@
         <errorHandler implementation="de.halirutan.mathematica.errorreporting.GitHubErrorReporter"/>
         <referencesSearch implementation="de.halirutan.mathematica.lang.search.MathematicaReferenceSearch"/>
 
+        <!-- Support for libraries -->
+        <library.type implementation="de.halirutan.mathematica.library.MathematicaLibraryType"/>
+        <orderRootType id="MATHEMATICA_LIBRARY" order="FIRST" implementation="de.halirutan.mathematica.library.MathematicaLibraryRootType"/>
+        <OrderRootTypeUI key="MATHEMATICA_LIBRARY" implementationClass="de.halirutan.mathematica.library.MathematicaLibraryRootTypeUIFactory"/>
+
     </extensions>
 
     <actions>

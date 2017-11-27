@@ -75,7 +75,7 @@ task wrapper(type: Wrapper) {
 version '3.0pre1'
 
 intellij {
-    version = '2017.2.5'
+//    version = '2017.2.5'
     downloadSources = true
     pluginName = 'Mathematica-IntelliJ-Plugin'
     updateSinceUntilBuild = false

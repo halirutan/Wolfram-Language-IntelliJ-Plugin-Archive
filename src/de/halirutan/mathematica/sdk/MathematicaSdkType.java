@@ -1,22 +1,24 @@
 /*
  * Copyright (c) 2017 Patrick Scheibe
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
  */
 
 package de.halirutan.mathematica.sdk;
@@ -61,6 +63,7 @@ public class MathematicaSdkType extends SdkType {
    * Extracts the version from the .VersionID file for Mathematica version > 5
    *
    * @param path Path to the install directory
+   *
    * @return Version number in the format e.g. 9.0.1
    */
   private static String getMathematicaVersionString(String path) {
@@ -85,17 +88,15 @@ public class MathematicaSdkType extends SdkType {
     }
   }
 
+  @SuppressWarnings("unused")
   private static void addAddOnPackageSources(SdkModificator sdkModificator, String homePath) {
     String addOnsPath = homePath + File.separatorChar + "AddOns";
-    String componentsPath = homePath + File.separatorChar + "SystemFiles" + File.separator + "Components";
     File addOnsFile;
-    if (OS.contains("mac") && !Util.isAccessibleDir(addOnsPath)) {
-      addOnsFile = new File(homePath + File.separatorChar + "Contents/AddOns");
-    } else {
-      addOnsFile = new File(addOnsPath);
-    }
+    addOnsFile = OS.contains("mac") && !Util.isAccessibleDir(addOnsPath) ?
+        new File(homePath + File.separatorChar + "Contents/AddOns") : new File(addOnsPath);
     if (addOnsFile.isDirectory()) {
       final List<File> initFiles = FileUtil.findFilesByMask(PACLET_INFO_PATTERN, addOnsFile);
+      String componentsPath = homePath + File.separatorChar + "SystemFiles" + File.separator + "Components";
       initFiles.addAll(FileUtil.findFilesByMask(PACLET_INFO_PATTERN, new File(componentsPath)));
       for (File file : initFiles) {
         if (PACLET_INFO_PATTERN.matcher(file.getPath()).matches()) {
@@ -194,7 +195,7 @@ public class MathematicaSdkType extends SdkType {
     final SdkModificator sdkModificator = sdk.getSdkModificator();
     final String homePath = sdk.getHomePath();
     sdkModificator.setVersionString(getMathematicaVersionString(homePath));
-    addAddOnPackageSources(sdkModificator, homePath);
+//    addAddOnPackageSources(sdkModificator, homePath);
     addJLinkJars(sdkModificator, homePath);
     sdkModificator.commitChanges();
     return true;
