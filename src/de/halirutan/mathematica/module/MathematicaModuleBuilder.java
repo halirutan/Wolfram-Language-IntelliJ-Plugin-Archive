@@ -36,9 +36,9 @@ import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.file.MathematicaFileTemplateProvider;
-import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +55,12 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
    */
 
   private String myProjectName = null;
+  private MathematicaLanguageLevel myLanguageLevel;
+
+  MathematicaModuleBuilder(ProjectType type) {
+    myProjectType = type;
+    myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
+  }
 
   public MathematicaLanguageLevel getLanguageLevel() {
     return myLanguageLevel;
@@ -62,13 +68,6 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
 
   public void setLanguageLevel(MathematicaLanguageLevel myLanguageLevel) {
     this.myLanguageLevel = myLanguageLevel;
-  }
-
-  private MathematicaLanguageLevel myLanguageLevel;
-
-  MathematicaModuleBuilder(ProjectType type) {
-    myProjectType = type;
-    myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
   }
 
   public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
@@ -81,7 +80,9 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
       final Project project = rootModel.getProject();
       myProjectName = project.getName();
 
-      StartupManager.getInstance(project).runWhenProjectIsInitialized((DumbAwareRunnable) () -> ApplicationManager.getApplication().invokeLater(() -> ApplicationManager.getApplication().runWriteAction(() -> createProject(project, contentRoot))));
+      StartupManager.getInstance(project).runWhenProjectIsInitialized(
+          (DumbAwareRunnable) () -> ApplicationManager.getApplication().invokeLater(
+              () -> ApplicationManager.getApplication().runWriteAction(() -> createProject(project, contentRoot))));
     }
   }
 
@@ -91,12 +92,12 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
       case APPLICATION:
         createKernelFiles(project, contentRoot);
         createProjectFiles(project, contentRoot);
-
+        break;
       case BASIC:
         createProjectFiles(project, contentRoot);
-
-      default:
-
+        break;
+      case EMPTY:
+        break;
     }
   }
 
@@ -106,11 +107,11 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
   }
 
 
-
   private void createKernelFiles(Project project, VirtualFile contentRoot) {
     try {
       final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
-      MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT, "init");
+      MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT,
+          "init");
     } catch (Exception ignored) {
     }
   }
@@ -118,8 +119,10 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
   private void createProjectFiles(Project project, VirtualFile contentRoot) {
     //Create a .m and .nb file with the project's name
     try {
-      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACKAGE, myProjectName);
-      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK, myProjectName);
+      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACKAGE,
+          myProjectName);
+      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK,
+          myProjectName);
     } catch (Exception ignored) {
 
     }
@@ -146,8 +149,8 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
     return MathematicaModuleType.getInstance();
   }
 
-  public static class Basic extends MathematicaModuleBuilder {
-    public Basic() {
+  public static class MathematicaBasicModule extends MathematicaModuleBuilder {
+    MathematicaBasicModule() {
       super(ProjectType.BASIC);
     }
 
@@ -157,15 +160,14 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
   }
 
-  public static class Application extends MathematicaModuleBuilder {
-    public Application() {
+  public static class MathematicaApplicationModule extends MathematicaModuleBuilder {
+    MathematicaApplicationModule() {
       super(ProjectType.APPLICATION);
     }
 
@@ -175,16 +177,15 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 
   }
 
 
-  public static class Empty extends MathematicaModuleBuilder {
-    public Empty() {
+  public static class MathematicaEmptyModule extends MathematicaModuleBuilder {
+    MathematicaEmptyModule() {
       super(ProjectType.EMPTY);
     }
 
@@ -194,8 +195,7 @@ class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
 
     @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull ModulesProvider modulesProvider) {
       return ModuleWizardStep.EMPTY_ARRAY;
     }
 

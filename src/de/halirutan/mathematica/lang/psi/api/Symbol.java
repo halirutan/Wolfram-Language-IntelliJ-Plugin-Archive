@@ -23,16 +23,16 @@
 
 package de.halirutan.mathematica.lang.psi.api;
 
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReference;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
-import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 3/28/13 Time: 12:33 AM Purpose:
  */
-public interface Symbol extends PsiNameIdentifierOwner, PsiReference {
+public interface Symbol extends PsiNameIdentifierOwner, PsiReference, PsiPolyVariantReference {
 
   /**
    * Returns the context of a symbol which is not the correct context. It is either <code >System</code> or the explicit
@@ -72,17 +72,7 @@ public interface Symbol extends PsiNameIdentifierOwner, PsiReference {
    *
    * @return type of localization
    */
+  @NotNull
   MScope getLocalizationConstruct();
 
-  PsiElement[] getElementsReferencingToMe();
-
-  SymbolResolveResult advancedResolve();
-
-  boolean isSelfReference();
-
-  /**
-   * Checks if this symbol is locally scoped by Module, ...
-   * @return true if it is bound by a localization function
-   */
-  boolean isLocallyBound();
 }

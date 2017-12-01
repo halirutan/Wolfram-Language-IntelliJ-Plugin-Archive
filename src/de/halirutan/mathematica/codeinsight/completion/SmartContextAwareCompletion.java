@@ -30,12 +30,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
+import de.halirutan.mathematica.codeinsight.completion.providers.MathematicaCompletionProvider;
 import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.MessageName;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -57,13 +58,12 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
 
   private static final HashMap<String, SymbolInformation> ourSymbolInformation = SymbolInformationProvider.getSymbolNames();
-  private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<>(Arrays.asList(new String[]{
-      "EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
-      "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"
-  }));
+  private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<>(
+      Arrays.asList("EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
+          "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"));
 
   @Override
-  void addTo(CompletionContributor contributor) {
+  public void addTo(CompletionContributor contributor) {
     final Capture<PsiElement> funcPattern = psiElement().withSuperParent(2, FunctionCall.class);
     contributor.extend(CompletionType.SMART, funcPattern, this);
   }

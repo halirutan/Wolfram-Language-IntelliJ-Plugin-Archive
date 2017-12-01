@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.lang.psi.util;
 
 import com.intellij.psi.PsiComment;
-import de.halirutan.mathematica.codeinsight.completion.CommentCompletionProvider;
+import de.halirutan.mathematica.codeinsight.completion.providers.CommentCompletionProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

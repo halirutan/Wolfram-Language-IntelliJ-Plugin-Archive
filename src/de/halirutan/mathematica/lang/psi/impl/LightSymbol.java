@@ -21,7 +21,9 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
@@ -36,7 +38,7 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
   private String myName;
   private final PsiFile myFile;
 
-  LightSymbol(@NotNull Symbol symbol) {
+  public LightSymbol(@NotNull Symbol symbol) {
     super(symbol.getManager(), MathematicaLanguage.INSTANCE);
     myName = symbol.getText();
     myFile = symbol.getContainingFile();
@@ -47,6 +49,7 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
     return myName;
   }
 
+  @NotNull
   @Override
   public String getName() {
     return myName;
@@ -84,10 +87,6 @@ public class LightSymbol extends LightElement implements PsiNamedElement {
 
   @Override
   public boolean isEquivalentTo(PsiElement another) {
-    if (another instanceof Symbol) {
-      final PsiElement resolve = ((Symbol) another).resolve();
-      return resolve != null && resolve.equals(this);
-    }
     return another instanceof LightSymbol && another.hashCode() == hashCode();
   }
 }

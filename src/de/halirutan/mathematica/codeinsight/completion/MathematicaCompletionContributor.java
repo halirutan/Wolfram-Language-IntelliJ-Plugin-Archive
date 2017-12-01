@@ -23,6 +23,10 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionInitializationContext;
+import de.halirutan.mathematica.codeinsight.completion.providers.BuiltinFunctionCompletionProvider;
+import de.halirutan.mathematica.codeinsight.completion.providers.CommentCompletionProvider;
+import de.halirutan.mathematica.codeinsight.completion.providers.FileSymbolCompletion;
+import de.halirutan.mathematica.codeinsight.completion.providers.ImportedSymbolCompletion;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,10 +37,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MathematicaCompletionContributor extends CompletionContributor {
 
+  public static final double LOCAL_VARIABLE_PRIORITY = 4000;
+  public static final double GLOBAL_VARIABLE_PRIORITY = 3500;
+  public static final double IMPORT_VARIABLE_PRIORITY = 3000;
+
+
   public MathematicaCompletionContributor() {
     new BuiltinFunctionCompletionProvider().addTo(this);
+    new FileSymbolCompletion().addTo(this);
+    new ImportedSymbolCompletion().addTo(this);
     new SmartContextAwareCompletion().addTo(this);
-    new VariableNameCompletion().addTo(this);
     new CommentCompletionProvider().addTo(this);
   }
 

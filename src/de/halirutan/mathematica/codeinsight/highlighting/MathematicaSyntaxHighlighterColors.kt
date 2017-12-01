@@ -39,7 +39,7 @@ object MathematicaSyntaxHighlighterColors {
   val SYMBOL = TextAttributesKey.createTextAttributesKey("MMA.SYMBOL")
   val IMPORTED_SYMBOL = TextAttributesKey.createTextAttributesKey("MMA.IMPORTED_SYMBOL")
   val KERNEL_SYMBOL = TextAttributesKey.createTextAttributesKey("MMA.KERNEL_SYMBOL")
-  val UNKOWNN_SYMBOL = TextAttributesKey.createTextAttributesKey("MMA.UNKNOWN_SYMBOL")
+  val UNKNOWN_SYMBOL = TextAttributesKey.createTextAttributesKey("MMA.UNKNOWN_SYMBOL")
   val COMMENT = TextAttributesKey.createTextAttributesKey("MMA.COMMENT")
   val COMMENT_SPECIAL = TextAttributesKey.createTextAttributesKey("MMA.COMMENT_SPECIAL")
   val STRING = TextAttributesKey.createTextAttributesKey("MMA.STRING")
@@ -53,7 +53,7 @@ object MathematicaSyntaxHighlighterColors {
   val USAGE_MESSAGE = TextAttributesKey.createTextAttributesKey("MMA.USAGE_MESSAGE")
   val MODULE_LOCALIZED = TextAttributesKey.createTextAttributesKey("MMA.MODULE_LOCALIZED")
   val BLOCK_LOCALIZED = TextAttributesKey.createTextAttributesKey("MMA.BLOCK_LOCALIZED")
-  val BAD_CHARACTER = HighlighterColors.BAD_CHARACTER
+  val BAD_CHARACTER = HighlighterColors.BAD_CHARACTER!!
 
   fun setHighlighting(element: PsiElement, holder: AnnotationHolder, key: TextAttributesKey) {
     val annotation = holder.createInfoAnnotation(element, null)

@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.rendering;
 
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.Lookup;
@@ -29,10 +29,10 @@ import com.intellij.codeInsight.template.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.JBColor;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.settings.MathematicaSettings;
@@ -46,13 +46,13 @@ import org.jetbrains.annotations.Nullable;
  * @author patrick (30.11.16).
  */
 @SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
-class BuiltinSymbolLookupElement extends LookupElement {
+public class BuiltinSymbolLookupElement extends LookupElement {
 
   private final SymbolInformation myInfo;
   private static final char OPEN_BRACKET = '[';
   private static final char CLOSING_BRACKET = ']';
 
-  BuiltinSymbolLookupElement(SymbolInformation info) {
+  public BuiltinSymbolLookupElement(SymbolInformation info) {
     myInfo = info;
   }
 
@@ -68,6 +68,7 @@ class BuiltinSymbolLookupElement extends LookupElement {
   @Override
   public void renderElement(LookupElementPresentation presentation) {
     presentation.setItemText(getLookupString());
+    presentation.setItemTextForeground(JBColor.blue);
     presentation.setItemTextBold(myInfo.function);
     presentation.setTailText(myInfo.function ? "[" + myInfo.getCallPattern() + "]" : "", true);
     presentation.setTypeText(myInfo.context);

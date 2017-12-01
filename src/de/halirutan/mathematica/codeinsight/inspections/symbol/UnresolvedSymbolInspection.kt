@@ -29,9 +29,9 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElementVisitor
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection
 import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor
 import de.halirutan.mathematica.lang.psi.api.Symbol
-import de.halirutan.mathematica.lang.psi.impl.LightUndefinedSymbol
 
 /**
  *
@@ -47,12 +47,16 @@ class UnresolvedSymbolInspection : AbstractInspection() {
 
   override fun getDefaultLevel(): HighlightDisplayLevel = HighlightDisplayLevel.WEAK_WARNING
 
+  override fun runForWholeFile(): Boolean = false
+
   override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean, session: LocalInspectionToolSession): PsiElementVisitor {
     return object : MathematicaVisitor() {
       override fun visitSymbol(symbol: Symbol?) {
         symbol?.let {
-          val resolve = symbol.resolve()
-          if (resolve is LightUndefinedSymbol) {
+          if (!isOnTheFly) {
+            symbol.resolve()
+          }
+          if (symbol.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
             holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
           }
         }

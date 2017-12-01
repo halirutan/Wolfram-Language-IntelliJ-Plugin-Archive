@@ -23,7 +23,6 @@ package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.lang.psi.SymbolAssignmentType;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
@@ -46,7 +45,7 @@ public class GlobalDefinitionCollector {
 
   private final Map<String, HashSet<AssignmentProperty>> myAssignments;
 
-  public GlobalDefinitionCollector(PsiFile startElement) {
+  public GlobalDefinitionCollector(PsiElement startElement) {
     myAssignments = new HashMap<>();
     final CollectorVisitor myVisitor = new CollectorVisitor();
     startElement.accept(myVisitor);

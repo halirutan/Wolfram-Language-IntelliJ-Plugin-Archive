@@ -21,7 +21,7 @@
  *
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.providers;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -32,12 +32,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.text.StringTokenizer;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
-import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
+import de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.intellij.patterns.PlatformPatterns.psiComment;
@@ -49,7 +47,7 @@ import static com.intellij.patterns.PlatformPatterns.psiComment;
  */
 public class CommentCompletionProvider extends MathematicaCompletionProvider {
 
-  static final public String[] COMMENT_SECTIONS = {
+  private static final String[] COMMENT_SECTIONS = {
       "Section", "Subsection", "Subsubsection", "Text", "Package", "Title", "Subtitle", "Subsubtitle", "Chapter", "Subchapter", "Subsubsubsection", "Subsubsubsubsubsection",
   };
 
@@ -60,7 +58,7 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
   static private final Pattern EMPTY_COMMENT = Pattern.compile("\\(\\*\\s\\*\\)");
 
   @Override
-  void addTo(CompletionContributor contributor) {
+  public void addTo(CompletionContributor contributor) {
     final Capture<PsiComment> psiCommentCapture = psiComment().withLanguage(MathematicaLanguage.INSTANCE);
     contributor.extend(CompletionType.BASIC, psiCommentCapture, this);
   }
@@ -88,12 +86,10 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
       }
 
       final PsiFile file = parameters.getOriginalFile();
-      if (file instanceof MathematicaPsiFile) {
-        final Set<SymbolResolveResult> cachedDefinitions = ((MathematicaPsiFile) file).getCachedDefinitions();
-        for (SymbolResolveResult definition : cachedDefinitions) {
-          if (definition.getElement() instanceof Symbol)
-            resultWithPrefix.addElement(LookupElementBuilder.create(((Symbol) definition.getElement()).getFullSymbolName()));
-        }
+      final MathematicaGlobalResolveCache symbolCache = MathematicaGlobalResolveCache.getInstance(file.getProject());
+      final List<String> cachedDefinitions = symbolCache.getCachedFileSymbolNames(file);
+      for (String definition : cachedDefinitions) {
+        resultWithPrefix.addElement(LookupElementBuilder.create(definition));
       }
     }
   }

@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.util;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -31,6 +31,7 @@ import de.halirutan.mathematica.lang.psi.api.string.MString;
 import java.util.HashSet;
 
 /**
+ * This is currently unused
  * @author patrick (19.12.16).
  */
 public class ImportedContextVisitor extends MathematicaVisitor {
@@ -38,7 +39,7 @@ public class ImportedContextVisitor extends MathematicaVisitor {
   private final HashSet<String > myImportedContexts;
 
   public ImportedContextVisitor() {
-    myImportedContexts = new HashSet<String>();
+    myImportedContexts = new HashSet<>();
   }
 
   public HashSet<String> getImportedContexts() {

@@ -24,6 +24,7 @@
 package de.halirutan.mathematica.lang.psi;
 
 import com.google.common.collect.Sets;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -78,6 +79,7 @@ public class LocalizationConstruct {
     return scopingConstruct.myType == ScopeType.MANIPULATE_LIKE;
   }
 
+  @SuppressWarnings("unused")
   public static boolean isRuleLike(MScope scopingConstruct) {
     return scopingConstruct.myType == ScopeType.RULE_LIKE;
   }
@@ -152,6 +154,7 @@ public class LocalizationConstruct {
       return myName;
     }
 
+    @NotNull
     public ScopeType getType() {
       return myType;
     }

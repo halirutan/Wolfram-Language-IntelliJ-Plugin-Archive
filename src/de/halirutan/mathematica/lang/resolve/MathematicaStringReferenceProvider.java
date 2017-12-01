@@ -33,6 +33,7 @@ import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.assignment.Set;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
 import de.halirutan.mathematica.lang.psi.api.string.StringJoin;
+import de.halirutan.mathematica.lang.psi.impl.LightFileSymbol;
 import de.halirutan.mathematica.lang.psi.impl.StringUsageReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,16 +69,18 @@ class MathematicaStringReferenceProvider extends PsiReferenceProvider {
         if ("usage".equals(tag != null ? tag.getText() : null)) {
           final Expression symbol = ((MessageName) messageElement).getSymbol();
           if (symbol instanceof Symbol) {
-            String usageText = element.getText();
-            final String symbolName = Matcher.quoteReplacement(((Symbol) symbol).getFullSymbolName());
-            Pattern symbolNamePattern = StringUsageReference.getSymbolPattern(symbolName);
-            final Matcher matcher = symbolNamePattern.matcher(usageText);
-            while (matcher.find()) {
-              final int start = matcher.start(2);
-              final int end = matcher.end(2);
-              result.add(
-                  new StringUsageReference((MString) element, TextRange.create(start, end), symbolName, (Symbol) symbol.getReference().resolve())
-              );
+            final PsiElement resolve = ((Symbol) symbol).resolve();
+            if (resolve instanceof LightFileSymbol) {
+              String usageText = element.getText();
+              final String symbolName = Matcher.quoteReplacement(((Symbol) symbol).getFullSymbolName());
+              Pattern symbolNamePattern = StringUsageReference.getSymbolPattern(symbolName);
+              final Matcher matcher = symbolNamePattern.matcher(usageText);
+              while (matcher.find()) {
+                final int start = matcher.start(2);
+                final int end = matcher.end(2);
+                result.add(
+                    new StringUsageReference((MString) element, TextRange.create(start, end), symbolName, resolve));
+              }
             }
           }
 

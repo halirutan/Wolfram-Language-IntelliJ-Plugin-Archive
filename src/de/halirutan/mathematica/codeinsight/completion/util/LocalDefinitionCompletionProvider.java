@@ -21,7 +21,7 @@
  *
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.util;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
  *
  * @author patrick (5/22/13)
  */
-class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
+public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
 
   private final List<Symbol> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
@@ -109,7 +109,7 @@ class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
   }
 
   /**
-   * Returns the list of all symbols collected during a {@link SymbolPsiReference#getVariants()} run. Before returning
+   * Returns the list of all symbols collected. Before returning
    * the list, it removes duplicates, so that no entry appears more than once in the auto-completion window.
    *
    * @return Sorted and cleaned list of collected symbols.

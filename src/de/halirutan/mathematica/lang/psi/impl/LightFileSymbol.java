@@ -21,17 +21,18 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
-import com.intellij.psi.SyntheticElement;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (12.07.17).
+ * @author patrick (13.07.17).
  */
-public class LightBuiltInSymbol extends LightSymbol implements SyntheticElement{
+public class LightFileSymbol extends LightSymbol {
 
-  public LightBuiltInSymbol(@NotNull Symbol symbol) {
+
+  public LightFileSymbol(@NotNull Symbol symbol) {
     super(symbol);
   }
+
 
 }
