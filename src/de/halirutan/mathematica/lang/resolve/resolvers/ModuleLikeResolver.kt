@@ -42,11 +42,11 @@ class ModuleLikeResolver : Resolver {
     val parameters = scopingElement.parameters
 
     // when resolving doesn't make sense
-    if (!scopingElement.isScopingConstruct || !LocalizationConstruct.isModuleLike(scope) || parameters.size < 2) {
+    if (!scopingElement.isScopingConstruct || !LocalizationConstruct.isModuleLike(scope) || parameters.size < 1) {
       return null
     }
 
-    val body = getBodyElement(parameters, scope) ?: return null
+    val body = getBodyElement(parameters, scope)
     val defLists = getLocalizationParameters(parameters, scope).takeUnless { it.isEmpty() } ?: return null
 
     // Symbol to resolve is located in the body of Module

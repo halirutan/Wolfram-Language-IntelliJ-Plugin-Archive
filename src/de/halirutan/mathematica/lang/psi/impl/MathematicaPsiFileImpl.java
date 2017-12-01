@@ -23,7 +23,6 @@
 
 package de.halirutan.mathematica.lang.psi.impl;
 
-import com.google.common.collect.Sets;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
@@ -33,41 +32,15 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
-import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 12:09 PM Purpose:
  */
 public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPsiFile {
 
-  private final Set<SymbolResolveResult> myFileDefinitions = Sets.newHashSet();
-  private boolean myReCacheDefinitions = false;
-
   public MathematicaPsiFileImpl(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, MathematicaLanguage.INSTANCE);
-  }
-
-  @Override
-  public void cacheDefinition(@NotNull final SymbolResolveResult resolveResult) {
-    if (myReCacheDefinitions) {
-      myFileDefinitions.clear();
-      myReCacheDefinitions = false;
-    }
-    myFileDefinitions.add(resolveResult);
-  }
-
-  @Override
-  public void subtreeChanged() {
-    super.subtreeChanged();
-    myReCacheDefinitions = true;
-  }
-
-  @Override
-  public Set<SymbolResolveResult> getCachedDefinitions() {
-    return myFileDefinitions;
   }
 
   @NotNull
@@ -78,13 +51,6 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-//    PsiElement children[] = getChildren();
-//    for (PsiElement child : children) {
-//      if (child.equals(lastParent)) {
-//        continue;
-//      }
-//      if (!child.processDeclarations(processor, state, this, place)) return false;
-//    }
     return true;
   }
 

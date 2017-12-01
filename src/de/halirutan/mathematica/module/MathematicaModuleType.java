@@ -25,7 +25,6 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.util.MathematicaIcons;
-import de.halirutan.mathematica.module.MathematicaModuleBuilder.Empty;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -60,7 +59,7 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
   @NotNull
   @Override
   public MathematicaModuleBuilder createModuleBuilder() {
-    return new Empty();
+    return new MathematicaModuleBuilder.MathematicaEmptyModule();
   }
 
   @Override

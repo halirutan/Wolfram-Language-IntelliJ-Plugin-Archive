@@ -33,7 +33,7 @@ import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import de.halirutan.mathematica.codeinsight.completion.SymbolVersionProvider;
+import de.halirutan.mathematica.codeinsight.completion.util.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
@@ -170,7 +170,7 @@ public class UnsupportedVersion extends AbstractInspection {
   private static class WrongVersionVisitor extends MathematicaVisitor {
 
     private final HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
-    private MathematicaLanguageLevel myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
+    private MathematicaLanguageLevel myLanguageLevel;
     private final ProblemsHolder myHolder;
 
     WrongVersionVisitor(final ProblemsHolder holder, final MathematicaLanguageLevel usedLanguageVersion) {

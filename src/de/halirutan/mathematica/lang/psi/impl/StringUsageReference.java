@@ -25,7 +25,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
-import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,15 +33,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Provides references from inside strings, when the string is the rhs of a usage message
  * @author patrick (29.11.16).
  */
 public class StringUsageReference extends PsiReferenceBase<MString> {
 
   private MString myElement1;
   private final String mySymbolNameInside;
-  private final Symbol myTarget;
+  private final PsiElement myTarget;
 
-  public StringUsageReference(MString element, TextRange rangeInElement, final String symbolName, Symbol target) {
+  public StringUsageReference(MString element, TextRange rangeInElement, final String symbolName, PsiElement target) {
     super(element, rangeInElement, true);
     mySymbolNameInside = symbolName;
     myElement1 = element;
@@ -72,7 +72,7 @@ public class StringUsageReference extends PsiReferenceBase<MString> {
 
   @Override
   public boolean isReferenceTo(PsiElement element) {
-    return element.equals(myTarget);
+    return element instanceof LightFileSymbol && element.equals(myTarget);
   }
 
   /**

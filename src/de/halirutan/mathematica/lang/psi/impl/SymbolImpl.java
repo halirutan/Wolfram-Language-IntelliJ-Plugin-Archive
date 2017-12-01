@@ -25,24 +25,23 @@ package de.halirutan.mathematica.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.IncorrectOperationException;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
-import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.resolve.MathematicaGlobalSymbolResolver;
+import de.halirutan.mathematica.lang.resolve.MathematicaLocalSymbolResolver;
 import de.halirutan.mathematica.lang.resolve.MathematicaSymbolResolver;
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -63,12 +62,11 @@ import java.util.Objects;
  */
 public class SymbolImpl extends ExpressionImpl implements Symbol {
 
-  private static final MathematicaSymbolResolver RESOLVER = new MathematicaSymbolResolver();
+  private static final MathematicaSymbolResolver LOCAL_SYMBOL_RESOLVER = new MathematicaLocalSymbolResolver();
+  private static final MathematicaGlobalSymbolResolver GLOBAL_SYMBOL_RESOLVER = new MathematicaGlobalSymbolResolver();
 
-  private MScope myScope = MScope.NULL_SCOPE;
-  private PsiElement myScopeElement = null;
-  private boolean mySelfReferenceQ = false;
-
+  private final ResolveCache myResolveCache = ResolveCache.getInstance(getProject());
+  private MScope myScope = null;
 
   public SymbolImpl(ASTNode node) {
     super(node);
@@ -126,16 +124,13 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     return this;
   }
 
-
+  @NotNull
   public MScope getLocalizationConstruct() {
+    if (myScope == null) {
+      // this will always set the scope to a valid value
+      multiResolve(false);
+    }
     return myScope;
-  }
-
-  @Override
-  public PsiElement[] getElementsReferencingToMe() {
-//    if (myReferringElements.isEmpty()) return PsiElement.EMPTY_ARRAY;
-//    return myReferringElements.toArray(new Symbol[myReferringElements.size()]);
-    return PsiElement.EMPTY_ARRAY;
   }
 
   @Override
@@ -171,32 +166,44 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   @Nullable
   @Override
   public PsiElement resolve() {
-    final SymbolResolveResult symbolResolveResult = advancedResolve();
-    if (symbolResolveResult != null) {
-      myScope = symbolResolveResult.getLocalization();
-      if (LocalizationConstruct.isLocalScoping(myScope)) {
-        myScopeElement = symbolResolveResult.getElement();
-      }
-      mySelfReferenceQ = Objects.equals(symbolResolveResult.getElement(), this);
-      return symbolResolveResult.getElement();
+    final ResolveResult[] resolveResults = multiResolve(false);
+    if (resolveResults.length == 0) {
+      return null;
     }
-    return null;
+    return resolveResults[0].getElement();
+  }
+
+  @NotNull
+  @Override
+  public ResolveResult[] multiResolve(boolean incompleteCode) {
+    final PsiFile containingFile = getContainingFile();
+    final ResolveResult[] localResult =
+        myResolveCache.resolveWithCaching(this, LOCAL_SYMBOL_RESOLVER, true, incompleteCode, containingFile);
+    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, localResult)) {
+      cacheScope(localResult[0]);
+      return localResult;
+    }
+
+    final ResolveResult[] globalResult = GLOBAL_SYMBOL_RESOLVER.resolve(this, containingFile);
+    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, globalResult)) {
+      cacheScope(globalResult[0]);
+      return globalResult;
+    }
+    myScope = MScope.NULL_SCOPE;
+    return new ResolveResult[]{new SymbolResolveResult(new LightUndefinedSymbol(this), myScope, containingFile, false)};
+
   }
 
   @Override
-  public SymbolResolveResult advancedResolve() {
-    ResolveCache resolveCache = ResolveCache.getInstance(getProject());
-    return resolveCache.resolveWithCaching(this, RESOLVER, true, false);
+  public void subtreeChanged() {
+
+    myScope = null;
   }
 
-  @Override
-  public boolean isSelfReference() {
-    return mySelfReferenceQ;
-  }
-
-  @Override
-  public boolean isLocallyBound() {
-    return myScopeElement != null && myScopeElement.isValid();
+  private void cacheScope(@NotNull ResolveResult resolve) {
+    if ((resolve instanceof SymbolResolveResult)) {
+      myScope = ((SymbolResolveResult) resolve).getLocalization();
+    }
   }
 
   @NotNull

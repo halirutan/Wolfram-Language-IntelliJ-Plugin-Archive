@@ -21,14 +21,16 @@
  *
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.providers;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
+import de.halirutan.mathematica.codeinsight.completion.rendering.BuiltinSymbolLookupElement;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.settings.MathematicaSettings;
 import org.jetbrains.annotations.NotNull;
@@ -42,10 +44,10 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  * found in the resource directory de/halirutan/mathematica/codeinsight/completion.
  * @author hal (4/2/13)
  */
-class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
+public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
 
   @Override
-  void addTo(CompletionContributor contributor) {
+  public void addTo(CompletionContributor contributor) {
     final Capture<PsiElement> psiElementCapture = psiElement().withElementType(MathematicaElementTypes.IDENTIFIER);
     contributor.extend(CompletionType.BASIC, psiElementCapture, this);
   }
@@ -54,12 +56,11 @@ class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
     HashMap<String, SymbolInformation> symbols = SymbolInformationProvider.getSymbolNames();
 
-    final char start = parameters.getPosition().getText().charAt(0);
-    if (Character.isLowerCase(start) || Character.isDigit(start)) {
+    String prefix = findCurrentText(parameters, parameters.getPosition());
+    if (parameters.getInvocationCount() == 0 && (prefix.isEmpty() || Character.isLowerCase(prefix.charAt(0)))) {
       return;
     }
 
-    String prefix = findCurrentText(parameters, parameters.getPosition());
     final CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
     CompletionResultSet result2 = result.withPrefixMatcher(matcher);
 

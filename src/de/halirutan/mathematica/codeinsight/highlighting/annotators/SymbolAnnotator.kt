@@ -43,13 +43,13 @@ class SymbolAnnotator : Annotator {
   /** Annotates a [symbol] by checking its localization */
   override fun annotate(symbol: PsiElement, holder: AnnotationHolder) {
     if (symbol is Symbol) {
-      val resolve = symbol.advancedResolve()
-      val scope = resolve.localization
+      val scope = symbol.localizationConstruct
       val scopeType = scope.type
-      if (!resolve.isValidResult || LocalizationConstruct.MScope.NULL_SCOPE == scopeType) {
+      if (LocalizationConstruct.MScope.NULL_SCOPE == scope) {
+//        MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.UNKNOWN_SYMBOL)
         return
       }
-      scopeType?.let {
+      scopeType.let {
         when (it) {
           LocalizationConstruct.ScopeType.MODULE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           LocalizationConstruct.ScopeType.RULE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.PATTERN)

@@ -32,8 +32,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
+import de.halirutan.mathematica.lang.psi.impl.LightFileSymbol;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,26 +69,31 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   @Nullable
   @Override
   public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
-    String path = null;
 
+    Symbol docElement;
     if (element instanceof Symbol) {
-      String context = ((Symbol) element).getMathematicaContext();
-      context = context.equals("") ? "System`" : context;
-      String name = ((Symbol) element).getSymbolName();
-      if (ALL_SLOT_PATTERN.matcher(name).matches()) {
-        if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
-        else if (SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
-      }
-//      path = "usages" + File.separatorChar + context.replace('`', File.separatorChar) + name + ".html";
-      path = "usages/" + context.replace('`', '/') + name + ".html";
+      docElement = (Symbol) element;
+    } else if (originalElement instanceof Symbol) {
+      docElement = (Symbol) originalElement;
+    } else {
+      return null;
     }
 
-    if (element instanceof OperatorNameProvider) {
-//      path = "usages" + File.separatorChar + "System" + File.separatorChar + ((OperatorNameProviderImpl) element).getOperatorName() + ".html";
-      path = "usages/System/" + ((OperatorNameProvider) element).getOperatorName() + ".html";
+
+    String context = docElement.getMathematicaContext();
+    context = context.equals("") ? "System`" : context;
+    String name = docElement.getSymbolName();
+    if (ALL_SLOT_PATTERN.matcher(name).matches()) {
+      if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
+      else if (SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
+    }
+    String path = "usages/" + context.replace('`', '/') + name + ".html";
+
+    if (docElement instanceof OperatorNameProvider) {
+      path = "usages/System/" + ((OperatorNameProvider) docElement).getOperatorName() + ".html";
     }
 
-    InputStream docFile = (path != null) ? MathematicaDocumentationProvider.class.getResourceAsStream(path) : null;
+    InputStream docFile = MathematicaDocumentationProvider.class.getResourceAsStream(path);
     if (docFile != null) {
       return new Scanner(docFile, "UTF-8").useDelimiter("\\A").next();
     }
@@ -164,5 +172,24 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
       }
     }
     return null;
+  }
+
+  @Nullable
+  @Override
+  public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
+    if (element instanceof LightBuiltInSymbol) {
+      return "Built-in symbol " + ((LightBuiltInSymbol) element).getName();
+    }
+    if (element instanceof LightFileSymbol) {
+      if (originalElement instanceof Symbol &&
+          ((Symbol) originalElement).getLocalizationConstruct() == LocalizationConstruct.MScope.NULL_SCOPE) {
+        return "Cannot resolve symbol " + ((LightFileSymbol) element).getName();
+      }
+      return "Navigate to definition of " + ((LightFileSymbol) element).getName();
+    }
+    if (element instanceof Symbol) {
+      return "Navigate to definition of " + ((Symbol) element).getFullSymbolName();
+    }
+    return super.getQuickNavigateInfo(element, originalElement);
   }
 }

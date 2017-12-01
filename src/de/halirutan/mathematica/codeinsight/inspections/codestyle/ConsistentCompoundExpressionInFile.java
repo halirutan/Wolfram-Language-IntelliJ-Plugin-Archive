@@ -85,7 +85,9 @@ public class ConsistentCompoundExpressionInFile extends AbstractInspection {
             }
             if (child.getNextSibling() instanceof PsiWhiteSpace) {
               int errorOffset = child.getNextSibling().getTextOffset();
-              holder.registerProblem(file, TextRange.from(Math.max(errorOffset, 0), 1), InspectionBundle.message("consistent.compound.expression.in.file.message"), new ConsistentCompoundExpressionQuickFix());
+              holder.registerProblem(file, TextRange.from(Math.max(errorOffset, 0), 0),
+                  InspectionBundle.message("consistent.compound.expression.in.file.message"),
+                  new ConsistentCompoundExpressionQuickFix());
             }
             child = child.getNextSibling();
           }

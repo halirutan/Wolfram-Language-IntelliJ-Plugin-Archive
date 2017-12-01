@@ -98,9 +98,9 @@ public class SymbolInformationProvider {
   public static class SymbolInformation {
     public final String name;
     public final int importance;
-    public final String callPattern;
+    final String callPattern;
     public final boolean function;
-    public final String attributes[];
+    final String[] attributes;
     public final String options[];
     public final String context;
     public final String nameWithoutContext;
@@ -120,7 +120,7 @@ public class SymbolInformationProvider {
      * Removes the braces around the call patter
      * @return call pattern without braces
      */
-    String getCallPattern() {
+    public String getCallPattern() {
       if (callPattern.length() > 2 && callPattern.matches("\\{.*}")) {
         return callPattern.substring(1, callPattern.length() - 1);
       }

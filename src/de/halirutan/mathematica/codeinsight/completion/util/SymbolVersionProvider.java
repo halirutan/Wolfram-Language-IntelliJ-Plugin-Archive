@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.util;
 
 import java.util.Enumeration;
 import java.util.HashMap;

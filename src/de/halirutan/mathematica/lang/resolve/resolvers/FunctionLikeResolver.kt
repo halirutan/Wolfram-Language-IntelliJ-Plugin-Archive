@@ -40,20 +40,18 @@ class FunctionLikeResolver : Resolver {
     val parameters = scopingElement.parameters
 
     // when resolving doesn't make sense
-    if (!scopingElement.isScopingConstruct || !LocalizationConstruct.isFunctionLike(scope) || parameters.size < 2) {
+    if (!scopingElement.isScopingConstruct || !LocalizationConstruct.isFunctionLike(scope) || parameters.size < 1) {
       return null
     }
 
-    val body = getBodyElement(parameters, scope) ?: return null
+    val body = getBodyElement(parameters, scope)
     val defLists = getLocalizationParameters(parameters, scope).takeUnless { it.isEmpty() } ?: return null
 
     // Symbol to resolve is located in the body of Compile
     if (lastParent == body) {
-      for (defList in defLists) {
-        if (defList is Symbol && defList.hasSameName(symbol)) {
-          return SymbolResolveResult(defList, scope, scopingElement, true)
-        }
-      }
+      defLists
+          .filter { it is Symbol && it.hasSameName(symbol) }
+          .forEach { return SymbolResolveResult(it, scope, scopingElement, true) }
     } else {
       defLists.indexOf(lastParent).takeUnless { it == -1 }?.let {
         val defList = defLists[it]

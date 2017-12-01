@@ -36,7 +36,7 @@ class LocalVariableResolveTestCase : AbstractResolveTest() {
       "Module[{x}, <ref>x]" to TextRange.create(8, 9),
       "Module[{x,y,z}, Module[{x}, y+<ref>x]]" to TextRange.create(24, 25),
       // the second x should refer to the outside x
-      "x=1;Module[{x = <ref>x}, y+x]]" to TextRange.create(0, 1)
+      "Module[{x},Module[{x = <ref>x}, y+x]]" to TextRange.create(8, 9)
   )
 
   private val compileLike = mapOf(

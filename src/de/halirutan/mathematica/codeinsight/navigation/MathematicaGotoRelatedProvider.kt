@@ -52,12 +52,13 @@ class MathematicaGotoRelatedProvider : GotoRelatedProvider() {
         }
         val declarations = SortedList(Comparator.comparingInt<GotoSymbolItem>({ it.lineNumber }))
         if (symbol is Symbol) {
+            val containingFile = symbol.getContainingFile()
+            val resolve = symbol.resolve() ?: return declarations
+            val usages = ReferencesSearch.search(resolve, GlobalSearchScope.fileScope(containingFile)).findAll()
             val project = symbol.getProject()
             val documentManager = PsiDocumentManager.getInstance(project)
-            val containingFile = symbol.getContainingFile()
             val fileName = containingFile.name
             val document = documentManager.getDocument(containingFile) ?: return declarations
-            val usages = ReferencesSearch.search(symbol, GlobalSearchScope.fileScope(containingFile)).findAll()
             for (usage in usages) {
                 val usageElement = usage.element
                 if (usageElement is Symbol && usageElement.isValid) {

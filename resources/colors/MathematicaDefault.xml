@@ -31,6 +31,14 @@
     </value>
   </option>
 
+    <option name="MMA.UNKNOWN_SYMBOL">
+        <value>
+            <option name="FOREGROUND" value="000000"/>
+            <option name="EFFECT_COLOR" value="AA8080"/>
+            <option name="EFFECT_TYPE" value="2"/>
+        </value>
+    </option>
+
     <option name="MMA.IMPORTED_SYMBOL">
         <value>
             <option name="FOREGROUND" value="000000"/>

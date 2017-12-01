@@ -40,7 +40,6 @@ import java.util.*;
  * Not used anymore. I try to accomplish the same behavior by using {@link Grouper}
  * @author patrick (7/20/14)
  */
-@SuppressWarnings("UnusedDeclaration")
 public class AssignmentSymbolNodeViewTreeElement implements StructureViewTreeElement, ExpandInfoProvider {
 
   private final String mySymbolName;

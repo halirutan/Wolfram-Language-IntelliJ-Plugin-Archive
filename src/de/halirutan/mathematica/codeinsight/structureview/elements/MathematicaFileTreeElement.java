@@ -38,7 +38,7 @@ import java.util.Map;
 
 /**
  * The root-node of the structure view. Note that this is not shown due to work around some issue with the
- * structure view: {@link http://youtrack.jetbrains.com/issue/IDEA-127688}
+ * structure view: http://youtrack.jetbrains.com/issue/IDEA-127688
  * @author patrick (6/14/14)
  */
 public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPsiFile> implements ItemPresentation {
@@ -71,7 +71,7 @@ public class MathematicaFileTreeElement extends PsiTreeElementBase<MathematicaPs
   public ItemPresentation getPresentation() {
     //noinspection OverlyComplexAnonymousInnerClass
     return new ItemPresentation() {
-      @Nullable
+      @NotNull
       @Override
       public String getPresentableText() {
         return myElement.getName();

@@ -19,7 +19,7 @@
  * THE SOFTWARE.
  */
 
-package de.halirutan.mathematica.codeinsight.completion;
+package de.halirutan.mathematica.codeinsight.completion.providers;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -29,9 +29,9 @@ import com.intellij.psi.PsiElement;
 /**
  * @author patrick (7/18/13)
  */
-abstract class MathematicaCompletionProvider extends CompletionProvider<CompletionParameters> {
+public abstract class MathematicaCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-  abstract void addTo(CompletionContributor contributor);
+  public abstract void addTo(CompletionContributor contributor);
 
   private String findOriginalText(PsiElement element) {
     return element.getText();

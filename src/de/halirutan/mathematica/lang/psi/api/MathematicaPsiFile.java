@@ -24,16 +24,10 @@
 package de.halirutan.mathematica.lang.psi.api;
 
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 12:09 PM Purpose:
  */
 public interface MathematicaPsiFile extends PsiFile, Expression {
-  void cacheDefinition(@NotNull SymbolResolveResult symbol);
 
-  Set<SymbolResolveResult> getCachedDefinitions();
 }

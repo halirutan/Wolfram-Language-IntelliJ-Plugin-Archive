@@ -25,21 +25,26 @@ package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.ResolveResult;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.util.PsiTreeUtil;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.resolve.processors.LocalDefinitionResolveProcessor;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The symbol resolver works currently in 3 steps to find a possible definition of a symbol that appears in the code.
- * It will check if the symbol is a built-in symbol
- * It will make a tree-walk upwards to check if the symbol is in any localization construct
- * It will check the file, if the symbol is defined as a global symbol like a function at file-scope
- * It will check the file-index and look for symbols that are exported from other files
- * @author patrick (08.07.17).
- */
-public abstract class MathematicaSymbolResolver implements ResolveCache.PolyVariantContextResolver<Symbol> {
+public class MathematicaLocalSymbolResolver extends MathematicaSymbolResolver {
 
   @NotNull
   @Override
-  public abstract ResolveResult[] resolve(@NotNull Symbol ref, @NotNull PsiFile containingFile, boolean incompleteCode);
+  public ResolveResult[] resolve(@NotNull Symbol ref, @NotNull PsiFile containingFile, boolean incompleteCode) {
+    if (!containingFile.equals(ref.getContainingFile())) {
+      return ResolveResult.EMPTY_ARRAY;
+    }
+    LocalDefinitionResolveProcessor processor = new LocalDefinitionResolveProcessor(ref);
+    PsiTreeUtil.treeWalkUp(processor, ref, containingFile, ResolveState.initial());
+    if (processor.getResolveResult() != null) {
+      return new ResolveResult[]{processor.getResolveResult()};
+    }
+
+    return ResolveResult.EMPTY_ARRAY;
+  }
 }

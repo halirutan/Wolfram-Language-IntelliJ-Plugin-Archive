@@ -26,22 +26,20 @@ import com.intellij.openapi.module.ModuleConfigurationEditor;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.CommonContentEntriesEditor;
-import com.intellij.openapi.roots.ui.configuration.DefaultModuleEditorsProvider;
+import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationEditorProvider;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationState;
-import com.intellij.openapi.roots.ui.configuration.ProjectStructureConfigurable;
-import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 /**
  * @author patrick (20.11.16).
  */
-public class MathematicaModuleConfigurationEditor extends DefaultModuleEditorsProvider {
+public class MathematicaModuleConfigurationEditor implements ModuleConfigurationEditorProvider {
   @Override
   public ModuleConfigurationEditor[] createEditors(final ModuleConfigurationState state) {
     Module module = state.getRootModel().getModule();
     final Project project = state.getProject();
-    final ProjectSdksModel sdksModel = ProjectStructureConfigurable.getInstance(project).getProjectJdksModel();
+//    final ProjectSdksModel sdksModel = ProjectStructureConfigurable.getInstance(project).getProjectJdksModel();
     if (!(ModuleType.get(module) instanceof MathematicaModuleType)) {
       return ModuleConfigurationEditor.EMPTY;
     }

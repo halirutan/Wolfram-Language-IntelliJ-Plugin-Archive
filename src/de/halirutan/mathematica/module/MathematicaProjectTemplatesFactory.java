@@ -26,9 +26,9 @@ import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
 import de.halirutan.mathematica.MathematicaBundle;
+import de.halirutan.mathematica.module.MathematicaModuleBuilder.MathematicaApplicationModule;
+import de.halirutan.mathematica.module.MathematicaModuleBuilder.MathematicaBasicModule;
 import de.halirutan.mathematica.util.MathematicaIcons;
-import de.halirutan.mathematica.module.MathematicaModuleBuilder.Application;
-import de.halirutan.mathematica.module.MathematicaModuleBuilder.Basic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +42,7 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
   public static final String MATHEMATICA = MathematicaBundle.message("project.template.mathematica");
   private static final String BASIC_MODULE = MathematicaBundle.message("project.template.basic");
   private static final String APPLICATION_MODULE = MathematicaBundle.message("project.template.application");
-  public static final String TEST_MODULE = MathematicaBundle.message("project.template.test");
-  public static final String DOCUMENTATION_MODULE = MathematicaBundle.message("project.template.documentation");
+  private static final String EMPTY_MODULE = MathematicaBundle.message("project.template.empty");
 
   @NotNull
   @Override
@@ -59,32 +58,20 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
   @NotNull
   @Override
   public ProjectTemplate[] createTemplates(String group, WizardContext context) {
-    ProjectTemplate[] projectTemplates = {
+    return new ProjectTemplate[]{
 
         new MathematicaProjectTemplate(BASIC_MODULE,
             MathematicaBundle.message("project.template.basic.description"),
             // The descriptions should be reworked when the plugin is more mature
-            new Basic()),
+            new MathematicaBasicModule()),
 
         new MathematicaProjectTemplate(APPLICATION_MODULE,
-            MathematicaBundle.message("project.template.application.description"),
-            new Application())
+            MathematicaBundle.message("project.template.application.description"), new MathematicaApplicationModule()),
+
+        new MathematicaProjectTemplate(EMPTY_MODULE, MathematicaBundle.message("project.template.empty.description"),
+            new MathematicaModuleBuilder.MathematicaEmptyModule()),
+
     };
-    return projectTemplates;
-//    if (context.getProject() == null) {
-//      return projectTemplates;
-//    } else {
-//      return new ProjectTemplate[]{
-//
-//          new MathematicaProjectTemplate(TEST_MODULE,
-//              MathematicaBundle.message("project.template.test.description"),
-//              new MathematicaModuleBuilder.Test()),
-//
-//          new MathematicaProjectTemplate(DOCUMENTATION_MODULE,
-//              MathematicaBundle.message("project.template.documentation.description"),
-//              new MathematicaModuleBuilder.Documentation())
-//      };
-//    }
   }
 
   private static class MathematicaProjectTemplate extends BuilderBasedTemplate {
