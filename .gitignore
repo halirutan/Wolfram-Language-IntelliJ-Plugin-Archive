@@ -13,4 +13,5 @@ out/
 /.idea/misc.xml
 /.idea/kotlinc.xml
 /.idea/dictionaries/
+/.idea/vcs.xml
 *.iml

@@ -3,6 +3,8 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="Mathematica-IntelliJ-Plugin_main" target="1.8" />
+      <module name="Mathematica-IntelliJ-Plugin_noGradle_main" target="1.8" />
+      <module name="Mathematica-IntelliJ-Plugin_noGradle_test" target="1.8" />
       <module name="Mathematica-IntelliJ-Plugin_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
