@@ -28,6 +28,7 @@ import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.Expression;
 import de.halirutan.mathematica.lang.psi.api.MessageName;
 import de.halirutan.mathematica.lang.psi.api.StringifiedSymbol;
+import de.halirutan.mathematica.lang.psi.api.string.MString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,5 +83,11 @@ public class MessageNameImpl extends OperatorNameProviderImpl implements Message
       return (StringifiedSymbol) args[2];
     }
     return null;
+  }
+
+  @Override
+  public boolean isUsageMessage() {
+    final StringifiedSymbol tag = getTag();
+    return tag != null && "usage".equals(tag.getText());
   }
 }

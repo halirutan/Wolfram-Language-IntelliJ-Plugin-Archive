@@ -67,7 +67,7 @@ public class MathematicaGlobalResolveCache {
     return containsBuildInSymbol(symbol) || containsFileSymbol(symbol) || containsExternalSymbol(symbol);
   }
 
-  private boolean containsFileSymbol(@NotNull Symbol symbol) {
+  public boolean containsFileSymbol(@NotNull Symbol symbol) {
     final LightFileSymbol lightFileSymbol = new LightFileSymbol(symbol);
     return myCachedFileSymbols.containsKey(lightFileSymbol);
   }
@@ -131,9 +131,19 @@ public class MathematicaGlobalResolveCache {
     return myCachedExternalSymbols.get(new LightExternalSymbol(symbol));
   }
 
+  public List<SymbolResolveResult> getCachedFileSymbolResolves(@NotNull PsiFile containingFile) {
+    return myCachedFileSymbols
+        .values()
+        .parallelStream()
+        .filter(resolve -> containingFile.equals(resolve.getScopingElement()) &&
+            resolve.getElement() instanceof LightFileSymbol)
+        .collect(Collectors.toList());
+  }
+
   public List<String> getCachedFileSymbolNames(@NotNull PsiFile file) {
-    return myCachedFileSymbols.values().parallelStream().filter(
-        resolve -> file.equals(resolve.getScopingElement()) && resolve.getElement() instanceof LightFileSymbol).map(
-        resolve -> ((LightFileSymbol) resolve.getElement()).getName()).collect(Collectors.toList());
+    return getCachedFileSymbolResolves(file)
+        .stream()
+        .filter(resolve -> resolve.getElement() != null)
+        .map(resolve -> ((LightFileSymbol) resolve.getElement()).getName()).collect(Collectors.toList());
   }
 }

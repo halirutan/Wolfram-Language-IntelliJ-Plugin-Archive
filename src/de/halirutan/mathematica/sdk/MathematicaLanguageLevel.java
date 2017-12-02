@@ -33,6 +33,9 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "WeakerAccess"})
 public enum MathematicaLanguageLevel {
+//  M_11_3("11", MathematicaBundle.message("language.level.11.3")),
+  M_11_2("11.2", MathematicaBundle.message("language.level.11.2")),
+  M_11_1("11.1", MathematicaBundle.message("language.level.11.1")),
   M_11("11", MathematicaBundle.message("language.level.11")),
   M_10_4("10.4", MathematicaBundle.message("language.level.10.4")),
   M_10_3("10.3", MathematicaBundle.message("language.level.10.3")),
@@ -72,7 +75,10 @@ public enum MathematicaLanguageLevel {
     if (sdk.getSdkType() instanceof MathematicaSdkType) {
       final String version = sdk.getVersionString();
       if(version != null) {
-        if (version.matches("11.*")) return M_11;
+//        if (version.matches("11\\.3.*")) return M_11_3;
+        if (version.matches("11\\.2.*")) return M_11_2;
+        if (version.matches("11\\.1.*")) return M_11_1;
+        if (version.matches("11\\.0.*")) return M_11;
         if (version.matches("10\\.4.*")) return M_10_4;
         if (version.matches("10\\.3.*")) return M_10_3;
         if (version.matches("10\\.2.*")) return M_10_2;

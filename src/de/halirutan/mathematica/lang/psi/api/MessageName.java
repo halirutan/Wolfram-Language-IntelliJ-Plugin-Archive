@@ -36,4 +36,6 @@ public interface MessageName extends Expression {
 
   @Nullable
   public StringifiedSymbol getLang();
+
+  public boolean isUsageMessage();
 }
