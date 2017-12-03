@@ -2,7 +2,6 @@
 
 ## Todo
 
-- Show usage for own functions. "Quick Documentation" on a package symbol will show its usage message if available
 - Better rendering for "Go to Declaration" targets
 - Inspection for using the same variable in the e.g. Module definition list several times
 - Quick fix for adding usages and other messages
@@ -14,6 +13,7 @@
 
 ## Version 3.0
 
+- Quick Documentation lookup for own functions. This will show the usage message of a function if available.
 - Performance improvement through caching
 - Support for Libraries. Libraries are basically a package folder with Mathematica source code. This code is indexed and
 can now be used for completion and navigation. The highlighter shows which functions come from a different file
