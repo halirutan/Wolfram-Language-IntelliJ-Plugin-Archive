@@ -45,45 +45,46 @@ import java.util.Objects;
  */
 public class MathematicaReferenceSearch extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
 
-    protected MathematicaReferenceSearch() {
-        super(true);
+  protected MathematicaReferenceSearch() {
+    super(true);
+  }
+
+  @Override
+  public void processQuery(@NotNull ReferencesSearch.SearchParameters queryParameters, @NotNull Processor<PsiReference> consumer) {
+    final PsiElement target = queryParameters.getElementToSearch();
+
+    String name;
+    if (target instanceof Symbol) {
+      name = ((Symbol) target).getSymbolName();
+    } else if (target instanceof LightSymbol) {
+      name = ((LightSymbol) target).getName();
+    } else {
+      return;
     }
 
-    @Override
-    public void processQuery(@NotNull ReferencesSearch.SearchParameters queryParameters, @NotNull Processor<PsiReference> consumer) {
-        final PsiElement target = queryParameters.getElementToSearch();
-
-        String name;
-        if (target instanceof Symbol) {
-            name = ((Symbol) target).getSymbolName();
-        } else if (target instanceof LightSymbol) {
-            name = ((LightSymbol) target).getName();
-        } else {
-            return;
-        }
-
-
-       // final PsiElement target = (target instanceof Symbol) ? ((Symbol) target).resolve() : target;
-        if (StringUtil.isEmpty(name)) {
-            return;
-        }
-
-        PsiSearchHelper helper = PsiSearchHelper.SERVICE.getInstance(target.getProject());
-        if (helper instanceof PsiSearchHelperImpl) {
-
-            TextOccurenceProcessor processor = (symbol, offsetInElement) -> {
-                if (symbol instanceof Symbol) {
-                    if (Objects.equals(((Symbol) symbol).resolve(), target)) {
-                        consumer.process(symbol.getReference());
-                    }
-                }
-                return true;
-            };
-
-          EnumSet<PsiSearchHelperImpl.Options> options = EnumSet.of(PsiSearchHelperImpl.Options.CASE_SENSITIVE_SEARCH, PsiSearchHelperImpl.Options.PROCESS_INJECTED_PSI);
-            ((PsiSearchHelperImpl)helper).processElementsWithWord(processor, queryParameters.getEffectiveSearchScope(), name, UsageSearchContext.IN_CODE, options, null);
-        }
+    if (StringUtil.isEmpty(name)) {
+      return;
     }
 
+    PsiSearchHelper helper = PsiSearchHelper.SERVICE.getInstance(target.getProject());
+    if (helper instanceof PsiSearchHelperImpl) {
 
+      TextOccurenceProcessor processor = (symbol, offsetInElement) -> {
+        if (symbol instanceof Symbol) {
+          if (Objects.equals(((Symbol) symbol).resolve(), target)) {
+            consumer.process(symbol.getReference());
+          }
+        }
+        return true;
+      };
+
+      EnumSet<PsiSearchHelperImpl.Options> options = EnumSet
+          .of(PsiSearchHelperImpl.Options.CASE_SENSITIVE_SEARCH, PsiSearchHelperImpl.Options.PROCESS_INJECTED_PSI);
+      ((PsiSearchHelperImpl) helper).processElementsWithWord(processor, queryParameters.getEffectiveSearchScope(), name,
+          UsageSearchContext.IN_CODE, options, null);
+    }
+  }
 }
+
+
+

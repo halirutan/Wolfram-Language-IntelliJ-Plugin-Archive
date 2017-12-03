@@ -32,20 +32,26 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
 import de.halirutan.mathematica.lang.psi.impl.LightFileSymbol;
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiElementFactory;
+import de.halirutan.mathematica.lang.psi.util.UsageMessagesKt;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
+ * Provides documentation aka rendered usage messages for built-in functions, operators and user-defined functions
+ *
  * @author patrick (4/4/13)
  */
 public class MathematicaDocumentationProvider extends AbstractDocumentationProvider {
@@ -55,10 +61,13 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   private static final Pattern SLOT_SEQUENCE_PATTERN = Pattern.compile("##[0-9]*");
 
   /**
-   * Generates the documentation (if available) for element. This does two things, first it looks whether the element is
-   * a {@link Symbol}. If this is true it tries to load the usage message. If element is not a Symbol, it is possibly an
-   * operator. Then it tries to guess the usage message of the operator by converting the class name to a hopefully
-   * valid operator name.
+   * Generates the documentation (if available) for element. This does three things:
+   * <p>
+   * <ul>
+   * <li>it provides documentation if the symbol near the cursor is a built in function</li>
+   * <li>it provides documentation when it is called over operators like ++</li>
+   * <li>it checks if user functions have a usage message and presents this</li>
+   * </ul>
    *
    * @param element         Element which was possibly altered by {@link #getCustomDocumentationElement(Editor, PsiFile, PsiElement)} or by
    *                        {@link #getDocumentationElementForLookupItem(PsiManager, Object, PsiElement)} if the lookup was active
@@ -70,34 +79,66 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   @Override
   public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
 
-    Symbol docElement;
-    if (element instanceof Symbol) {
-      docElement = (Symbol) element;
-    } else if (originalElement instanceof Symbol) {
-      docElement = (Symbol) originalElement;
-    } else {
+    if (!(element instanceof Symbol || element instanceof OperatorNameProvider)) {
       return null;
     }
 
+    String pathToHTMLDoc;
 
-    String context = docElement.getMathematicaContext();
-    context = context.equals("") ? "System`" : context;
-    String name = docElement.getSymbolName();
-    if (ALL_SLOT_PATTERN.matcher(name).matches()) {
-      if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
-      else if (SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
+    if (element instanceof Symbol) {
+      Symbol docElement = (Symbol) element;
+      String context = docElement.getMathematicaContext();
+      context = context.equals("") ? "System`" : context;
+      String name = docElement.getSymbolName();
+      if (ALL_SLOT_PATTERN.matcher(name).matches()) {
+        if (SLOT_PATTERN.matcher(name).matches()) name = "Slot";
+        else if (SLOT_SEQUENCE_PATTERN.matcher(name).matches()) name = "SlotSequence";
+      }
+      pathToHTMLDoc = "usages/" + context.replace('`', '/') + name + ".html";
+    } else {
+      pathToHTMLDoc = "usages/System/" + ((OperatorNameProvider) element).getOperatorName() + ".html";
     }
-    String path = "usages/" + context.replace('`', '/') + name + ".html";
 
-    if (docElement instanceof OperatorNameProvider) {
-      path = "usages/System/" + ((OperatorNameProvider) docElement).getOperatorName() + ".html";
-    }
-
-    InputStream docFile = MathematicaDocumentationProvider.class.getResourceAsStream(path);
+    InputStream docFile = MathematicaDocumentationProvider.class.getResourceAsStream(pathToHTMLDoc);
     if (docFile != null) {
-      return new Scanner(docFile, "UTF-8").useDelimiter("\\A").next();
+      final String usage = new Scanner(docFile, "UTF-8").useDelimiter("\\A").next();
+      if (!usage.isEmpty()) {
+        return usage;
+      }
     }
+
+    // Inject the usage message of functions that are declared inside the package
+    if (element instanceof Symbol) {
+      return renderCustomUsageMessage((Symbol) element);
+    }
+
     return null;
+  }
+
+  /**
+   * Provides a html form of the usage message for custom user functions.
+   * @param symbol a file symbol for which the usage message should be found and rendered
+   * @return the first found usage message
+   */
+  private String renderCustomUsageMessage(@NotNull Symbol symbol) {
+    final Pair<Symbol, List<String>> usages = UsageMessagesKt.extractUsageMessageString(symbol);
+    if (usages.component2().isEmpty()) {
+      return "";
+    }
+    final String fileName = usages.component1().getContainingFile().getName();
+    final String symbolName = symbol.getSymbolName();
+    StringBuilder result = new StringBuilder("<h3>");
+    result.append(symbolName);
+    result.append(" (");
+    result.append(fileName);
+    result.append(")</h3><ul>");
+    for (String usg : usages.component2()) {
+      result.append("<li>");
+      result.append(usg.replaceAll("("+symbolName+"(\\[.*])?)", "<b>$1</b>"));
+      result.append("</li>");
+    }
+    result.append("</ul>");
+    return result.toString();
   }
 
   /**
@@ -137,9 +178,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     // Determine if the contextElement is the operator sign of an operation.
     // See the doc to OperatorNameProviderImpl.
     if (docElement instanceof OperatorNameProvider) {
-//      if (((OperatorNameProvider) docElement).isOperatorSign(contextElement)) {
       return docElement;
-//      }
     }
     return null;
   }
@@ -161,7 +200,8 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   @Override
   public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
     if (element != null) {
-      final LookupEx activeLookup = LookupManager.getActiveLookup(FileEditorManager.getInstance(element.getProject()).getSelectedTextEditor());
+      final LookupEx activeLookup =
+          LookupManager.getActiveLookup(FileEditorManager.getInstance(element.getProject()).getSelectedTextEditor());
       if (activeLookup != null) {
         MathematicaPsiElementFactory elementFactory = new MathematicaPsiElementFactory(psiManager.getProject());
         try {
@@ -174,21 +214,27 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
     return null;
   }
 
+  /**
+   * Provides a quick info when the user hovers code with CTRL pressed
+   * @param element element to show quick navigation. This is the resolved element which means we can check which kind of light symbol it is
+   * @param originalElement the original symbol in file
+   * @return quick info what happens when the user performs a mouse click
+   */
   @Nullable
   @Override
   public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
     if (element instanceof LightBuiltInSymbol) {
-      return "Built-in symbol " + ((LightBuiltInSymbol) element).getName();
+      return MathematicaBundle.message("doc.navi.builtin", ((LightBuiltInSymbol) element).getName());
     }
     if (element instanceof LightFileSymbol) {
       if (originalElement instanceof Symbol &&
           ((Symbol) originalElement).getLocalizationConstruct() == LocalizationConstruct.MScope.NULL_SCOPE) {
-        return "Cannot resolve symbol " + ((LightFileSymbol) element).getName();
+        return MathematicaBundle.message("doc.navi.invalid", ((LightFileSymbol) element).getName());
       }
-      return "Navigate to definition of " + ((LightFileSymbol) element).getName();
+      return MathematicaBundle.message("doc.navi.navto", ((LightFileSymbol) element).getName());
     }
     if (element instanceof Symbol) {
-      return "Navigate to definition of " + ((Symbol) element).getFullSymbolName();
+      return MathematicaBundle.message("doc.navi.navto", ((Symbol) element).getFullSymbolName());
     }
     return super.getQuickNavigateInfo(element, originalElement);
   }
