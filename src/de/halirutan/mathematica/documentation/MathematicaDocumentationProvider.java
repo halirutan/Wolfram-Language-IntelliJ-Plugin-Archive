@@ -123,7 +123,7 @@ public class MathematicaDocumentationProvider extends AbstractDocumentationProvi
   private String renderCustomUsageMessage(@NotNull Symbol symbol) {
     final Pair<Symbol, List<String>> usages = UsageMessagesKt.extractUsageMessageString(symbol);
     if (usages.component2().isEmpty()) {
-      return "";
+      return null;
     }
     final String fileName = usages.component1().getContainingFile().getName();
     final String symbolName = symbol.getSymbolName();
