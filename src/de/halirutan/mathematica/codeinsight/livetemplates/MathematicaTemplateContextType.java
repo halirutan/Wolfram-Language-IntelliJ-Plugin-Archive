@@ -49,7 +49,8 @@ public class MathematicaTemplateContextType extends TemplateContextType {
   public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(MathematicaFileType.INSTANCE.getLanguage())) {
       PsiElement element = PsiUtilBase.getElementAtOffset(file, offset);
-      return PsiTreeUtil.getParentOfType(element, PsiComment.class, MString.class) == null;
+      return !(element instanceof PsiComment) &&
+          PsiTreeUtil.getParentOfType(element, PsiComment.class, MString.class) == null;
     }
     return false;
   }

@@ -66,6 +66,7 @@
 
         <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterInsideFunctionHandler"/>
         <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.MathematicaEnterAfterOperatorHandler"/>
+        <enterHandlerDelegate implementation="de.halirutan.mathematica.codeinsight.editoractions.enter.CommentStarInsertEnterHandler"/>
 
         <liveTemplateContext implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaTemplateContextType"/>
         <defaultLiveTemplatesProvider implementation="de.halirutan.mathematica.codeinsight.livetemplates.MathematicaDefaultLiveTemplateProvider"/>
