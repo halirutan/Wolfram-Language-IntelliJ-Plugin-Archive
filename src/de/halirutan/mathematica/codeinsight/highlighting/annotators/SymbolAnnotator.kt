@@ -43,6 +43,7 @@ class SymbolAnnotator : Annotator {
   /** Annotates a [symbol] by checking its localization */
   override fun annotate(symbol: PsiElement, holder: AnnotationHolder) {
     if (symbol is Symbol) {
+      symbol.resolve()
       val scope = symbol.localizationConstruct
       val scopeType = scope.type
       if (LocalizationConstruct.MScope.NULL_SCOPE == scope) {

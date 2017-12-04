@@ -5,7 +5,6 @@
 - Better rendering for "Go to Declaration" targets
 - Inspection for using the same variable in the e.g. Module definition list several times
 - Quick fix for adding usages and other messages
-- Keeping a leading * when pressing enter inside comments
 - Rework of creating project templates and modules
 - Update to Mathematica version 11.2
 - Quick fix for pushing a variable inside the Module definition list
@@ -13,6 +12,7 @@
 
 ## Version 3.0
 
+- Keeping a leading * when pressing enter inside comments
 - Quick Documentation lookup for own functions. This will show the usage message of a function if available.
 - Performance improvement through caching
 - Support for Libraries. Libraries are basically a package folder with Mathematica source code. This code is indexed and

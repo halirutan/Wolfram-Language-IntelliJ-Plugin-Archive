@@ -38,6 +38,7 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.hash.HashSet;
 import de.halirutan.mathematica.codeinsight.completion.util.LocalDefinitionCompletionProvider;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -82,6 +83,18 @@ public class FileSymbolCompletion extends MathematicaCompletionProvider {
             LookupElementBuilder.create(currentSymbol).bold().withItemTextForeground(JBColor.GREEN),
             LOCAL_VARIABLE_PRIORITY));
       }
+
+      final MathematicaGlobalResolveCache cache =
+          MathematicaGlobalResolveCache.getInstance(callingSymbol.getProject());
+      cache.getCachedFileSymbolResolves(parameters.getOriginalFile())
+           .forEach(symbolResolveResult -> {
+             if (symbolResolveResult.getElement() != null) {
+               result.addElement(PrioritizedLookupElement.withPriority(
+                   LookupElementBuilder.create(symbolResolveResult.getElement()).bold(),
+                   GLOBAL_VARIABLE_PRIORITY));
+             }
+           });
+
     } else {
       final Set<String> allSymbols = new HashSet<>();
       PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
