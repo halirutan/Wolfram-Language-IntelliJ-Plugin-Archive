@@ -34,10 +34,8 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 
-/**/
-
 /**
- *
+ * Inserts a * in each new line of a multi-line comment
  * @author patrick (04.12.17).
  */
 class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
@@ -47,14 +45,18 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
     val offset = caretModel.offset
     val project = dataContext.getData(CommonDataKeys.PROJECT) ?: return EnterHandlerDelegate.Result.Continue
     val psiDocManager = PsiDocumentManager.getInstance(project)
-    val element = file.findElementAt(offset) ?: return EnterHandlerDelegate.Result.Continue
-    if (element is PsiComment) {
+
+    val comment = file.findElementAt(offset) ?: return EnterHandlerDelegate.Result.Continue
+    val commentRange = comment.textRange ?: return EnterHandlerDelegate.Result.Continue
+
+    if (comment is PsiComment && offset >= commentRange.startOffset + 2 && offset <= commentRange.endOffset - 2) {
+
       val document = editor.document
       val textLength = document.textLength
 
       // The case that we opened a comment with (*|) and therefore the complete file is commented
       // We insert the missing *
-      if (element.textRange.endOffset == textLength && offset < textLength && document.getText(TextRange.create(offset, offset + 1)) == ")") {
+      if (comment.textRange.endOffset == textLength && offset < textLength && document.getText(TextRange.create(offset, offset + 1)) == ")") {
         document.insertString(offset, " * \n *")
         caretModel.moveToOffset(offset + 3)
         psiDocManager.commitDocument(document)
@@ -63,8 +65,8 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
 
 
       val lineNumber = document.getLineNumber(offset)
-      val elementStartLine = document.getLineNumber(element.textOffset)
-      val elementEndLine = document.getLineNumber(element.textOffset + element.textLength)
+      val elementStartLine = document.getLineNumber(comment.textOffset)
+      val elementEndLine = document.getLineNumber(comment.textOffset + comment.textLength)
 
       val insertString: String
       val move: Int
@@ -79,7 +81,7 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
       caretModel.moveToOffset(offset + move)
 
       if (lineNumber == elementEndLine) {
-        document.insertString(offset + move, "\n ")
+        document.insertString(commentRange.endOffset + move - 2, "\n ")
       }
       psiDocManager.commitDocument(document)
       return EnterHandlerDelegate.Result.DefaultSkipIndent

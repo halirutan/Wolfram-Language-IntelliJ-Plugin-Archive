@@ -22,7 +22,6 @@
 package de.halirutan.mathematica.settings;
 
 import com.intellij.openapi.options.BaseConfigurable;
-import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +55,7 @@ public class MathematicaSettingsConfigurable extends BaseConfigurable {
   }
 
   @Override
-  public void apply() throws ConfigurationException {
+  public void apply() {
     if (mySettingsUI != null) {
       final MathematicaSettings instance = MathematicaSettings.getInstance();
       instance.loadState(mySettingsUI.getSettings());

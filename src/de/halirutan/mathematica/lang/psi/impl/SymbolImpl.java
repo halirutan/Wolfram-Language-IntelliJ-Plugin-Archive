@@ -179,13 +179,13 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     final PsiFile containingFile = getContainingFile();
     final ResolveResult[] localResult =
         myResolveCache.resolveWithCaching(this, LOCAL_SYMBOL_RESOLVER, true, incompleteCode, containingFile);
-    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, localResult)) {
+    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, localResult) && localResult[0] instanceof SymbolResolveResult) {
       cacheScope(localResult[0]);
       return localResult;
     }
 
     final ResolveResult[] globalResult = GLOBAL_SYMBOL_RESOLVER.resolve(this, containingFile);
-    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, globalResult)) {
+    if (!Arrays.equals(ResolveResult.EMPTY_ARRAY, globalResult) && globalResult[0] instanceof SymbolResolveResult) {
       cacheScope(globalResult[0]);
       return globalResult;
     }
