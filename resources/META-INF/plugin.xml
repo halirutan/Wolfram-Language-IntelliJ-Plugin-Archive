@@ -36,10 +36,13 @@
         <lang.ast.factory language="Mathematica" implementationClass="de.halirutan.mathematica.lang.tree.MathematicaASTFactory"/>
         <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
 
+
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
         <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
+        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaEmptyModule"/>-->
+        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaBasicModule"/>-->
+        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaApplicationModule"/>-->
         <moduleConfigurationEditorProvider implementation="de.halirutan.mathematica.module.MathematicaModuleConfigurationEditor"/>
-
         <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
         <lang.syntaxHighlighterFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
@@ -101,6 +104,7 @@
 
         <applicationService serviceInterface="de.halirutan.mathematica.settings.MathematicaSettings" serviceImplementation="de.halirutan.mathematica.settings.MathematicaSettings"/>
         <applicationConfigurable groupId="language" displayName="Mathematica" id="preferences.Mathematica" instance="de.halirutan.mathematica.settings.MathematicaSettingsConfigurable"/>
+
 
         <spellchecker.support language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaSpellCheck"/>
         <spellchecker.bundledDictionaryProvider implementation="de.halirutan.mathematica.codeinsight.spellcheck.MathematicaDictionaryProvider"/>

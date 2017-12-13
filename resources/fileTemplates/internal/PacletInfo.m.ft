@@ -1,0 +1,14 @@
+(* Paclet Info File *)
+(* Created by Mathematica Plugin for IntelliJ IDEA *)
+
+Paclet[
+    Name -> "${MathematicaContext}",
+    Version -> "0.1",
+    MathematicaVersion -> "${MathematicaVersion}",
+    Extensions ->
+        {
+            {"Kernel", Root -> "Kernel", Context -> "${MathematicaContext}`"}
+        }
+]
+
+

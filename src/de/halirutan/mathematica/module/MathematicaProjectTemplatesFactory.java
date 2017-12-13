@@ -26,11 +26,8 @@ import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplatesFactory;
 import com.intellij.platform.templates.BuilderBasedTemplate;
 import de.halirutan.mathematica.MathematicaBundle;
-import de.halirutan.mathematica.module.MathematicaModuleBuilder.MathematicaApplicationModule;
-import de.halirutan.mathematica.module.MathematicaModuleBuilder.MathematicaBasicModule;
 import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -39,10 +36,7 @@ import javax.swing.*;
  */
 public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory {
 
-  public static final String MATHEMATICA = MathematicaBundle.message("project.template.mathematica");
-  private static final String BASIC_MODULE = MathematicaBundle.message("project.template.basic");
-  private static final String APPLICATION_MODULE = MathematicaBundle.message("project.template.application");
-  private static final String EMPTY_MODULE = MathematicaBundle.message("project.template.empty");
+  private static final String MATHEMATICA = MathematicaBundle.message("project.template.group.name");
 
   @NotNull
   @Override
@@ -52,7 +46,10 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
 
   @Override
   public Icon getGroupIcon(String group) {
-    return MathematicaIcons.FILE_ICON;
+    if (MATHEMATICA.equals(group)) {
+      return MathematicaIcons.FILE_ICON;
+    }
+    return super.getGroupIcon(group);
   }
 
   @NotNull
@@ -60,42 +57,9 @@ public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory 
   public ProjectTemplate[] createTemplates(String group, WizardContext context) {
     return new ProjectTemplate[]{
 
-        new MathematicaProjectTemplate(BASIC_MODULE,
-            MathematicaBundle.message("project.template.basic.description"),
-            // The descriptions should be reworked when the plugin is more mature
-            new MathematicaBasicModule()),
-
-        new MathematicaProjectTemplate(APPLICATION_MODULE,
-            MathematicaBundle.message("project.template.application.description"), new MathematicaApplicationModule()),
-
-        new MathematicaProjectTemplate(EMPTY_MODULE, MathematicaBundle.message("project.template.empty.description"),
-            new MathematicaModuleBuilder.MathematicaEmptyModule()),
-
+        new BuilderBasedTemplate(new MathematicaBasicModule()),
+        new BuilderBasedTemplate(new MathematicaApplicationModule()),
+        new BuilderBasedTemplate(new MathematicaEmptyModule())
     };
   }
-
-  private static class MathematicaProjectTemplate extends BuilderBasedTemplate {
-
-    private final String myProjectName;
-    private final String myProjectDescription;
-
-    private MathematicaProjectTemplate(String name, String description, MathematicaModuleBuilder builder) {
-      super(builder);
-      myProjectName = name;
-      myProjectDescription = description;
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-      return myProjectName;
-    }
-
-    @Nullable
-    @Override
-    public String getDescription() {
-      return myProjectDescription;
-    }
-  }
-
 }

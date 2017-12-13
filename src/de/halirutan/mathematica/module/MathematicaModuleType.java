@@ -21,8 +21,12 @@
 
 package de.halirutan.mathematica.module;
 
+import com.intellij.ide.util.newProjectWizard.SourcePathsStep;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
+import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
@@ -59,11 +63,19 @@ public class MathematicaModuleType extends ModuleType<MathematicaModuleBuilder> 
   @NotNull
   @Override
   public MathematicaModuleBuilder createModuleBuilder() {
-    return new MathematicaModuleBuilder.MathematicaEmptyModule();
+    return new MathematicaModuleBuilder();
   }
 
   @Override
   public Icon getNodeIcon(@Deprecated boolean isOpened) {
     return MathematicaIcons.FILE_ICON;
+  }
+
+  @NotNull
+  @Override
+  public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull MathematicaModuleBuilder moduleBuilder, @NotNull ModulesProvider modulesProvider) {
+    return new ModuleWizardStep[]{
+        new SourcePathsStep(moduleBuilder, MathematicaIcons.SET_DELAYED_ICON, getId())
+    };
   }
 }

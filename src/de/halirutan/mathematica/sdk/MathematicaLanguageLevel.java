@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "WeakerAccess"})
 public enum MathematicaLanguageLevel {
-//  M_11_3("11", MathematicaBundle.message("language.level.11.3")),
+  M_11_3("11", MathematicaBundle.message("language.level.11.3")),
   M_11_2("11.2", MathematicaBundle.message("language.level.11.2")),
   M_11_1("11.1", MathematicaBundle.message("language.level.11.1")),
   M_11("11", MathematicaBundle.message("language.level.11")),
@@ -46,7 +46,7 @@ public enum MathematicaLanguageLevel {
   M_8("8", MathematicaBundle.message("language.level.8"));
 
 
-  public static final MathematicaLanguageLevel HIGHEST = M_11;
+  public static final MathematicaLanguageLevel HIGHEST = M_11_2;
 
   private final String myName;
   private final String myPresentableText;
@@ -75,7 +75,7 @@ public enum MathematicaLanguageLevel {
     if (sdk.getSdkType() instanceof MathematicaSdkType) {
       final String version = sdk.getVersionString();
       if(version != null) {
-//        if (version.matches("11\\.3.*")) return M_11_3;
+        if (version.matches("11\\.3.*")) return M_11_3;
         if (version.matches("11\\.2.*")) return M_11_2;
         if (version.matches("11\\.1.*")) return M_11_1;
         if (version.matches("11\\.0.*")) return M_11;
@@ -88,7 +88,7 @@ public enum MathematicaLanguageLevel {
         if (version.matches("8.*")) return M_8;
       }
     }
-    return M_11;
+    return HIGHEST;
   }
 
   @NotNull

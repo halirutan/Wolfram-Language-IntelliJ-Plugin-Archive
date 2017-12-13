@@ -32,7 +32,7 @@ public class MathematicaGlobalResolveCache {
   private final Map<LightFileSymbol, SymbolResolveResult> myCachedFileSymbols = new ConcurrentHashMap<>();
   private final Map<LightBuiltInSymbol, SymbolResolveResult> myCachedBuiltinSymbols = new ConcurrentHashMap<>();
   private final Map<LightExternalSymbol, SymbolResolveResult> myCachedExternalSymbols = new ConcurrentHashMap<>();
-  private boolean myIsCacheValid = false;
+  private boolean myInvalidCache = true;
 
   private MathematicaGlobalResolveCache(@Nullable("can be null in com.intellij.core.JavaCoreApplicationEnvironment.JavaCoreApplicationEnvironment") MessageBus messageBus) {
     if (messageBus != null) {
@@ -52,14 +52,14 @@ public class MathematicaGlobalResolveCache {
   }
 
   private void markInvalid() {
-    myIsCacheValid = false;
+    myInvalidCache = true;
   }
 
   private void clearCaches() {
     myCachedFileSymbols.clear();
     myCachedBuiltinSymbols.clear();
     myCachedExternalSymbols.clear();
-    myIsCacheValid = true;
+    myInvalidCache = false;
 
   }
 
@@ -83,7 +83,7 @@ public class MathematicaGlobalResolveCache {
   }
 
   public SymbolResolveResult cacheFileSymbol(@NotNull Symbol symbol, PsiElement scopeElement) {
-    if (!myIsCacheValid) {
+    if (myInvalidCache) {
       clearCaches();
     }
     final LightFileSymbol lightSymbol = new LightFileSymbol(symbol);
@@ -92,7 +92,7 @@ public class MathematicaGlobalResolveCache {
   }
 
   public SymbolResolveResult cacheInvalidFileSymbol(@NotNull Symbol symbol, PsiElement scopeElement) {
-    if (!myIsCacheValid) {
+    if (myInvalidCache) {
       clearCaches();
     }
     final LightFileSymbol lightSymbol = new LightFileSymbol(symbol);
@@ -102,7 +102,7 @@ public class MathematicaGlobalResolveCache {
 
 
   public SymbolResolveResult cacheBuiltInSymbol(@NotNull Symbol symbol) {
-    if (!myIsCacheValid) {
+    if (myInvalidCache) {
       clearCaches();
     }
     final LightBuiltInSymbol lightSymbol = new LightBuiltInSymbol(symbol);
@@ -111,7 +111,7 @@ public class MathematicaGlobalResolveCache {
   }
 
   public SymbolResolveResult cacheExternalSymbol(@NotNull Symbol symbol, @NotNull Symbol externalSymbol, PsiElement scopeElement) {
-    if (!myIsCacheValid) {
+    if (myInvalidCache) {
       clearCaches();
     }
     final LightExternalSymbol lightSymbol = new LightExternalSymbol(symbol);

@@ -42,10 +42,10 @@ if (project.file('gradle.properties').exists()) {
     apply from: "gradle.properties"
 }
 
-// turn this on for profiling the running sandbox
-//task runIde {
-//    jvmArgs = ["-agentpath:/home/patrick/build/share/yjp-2017.02/bin/linux-x86-64/libyjpagent.so=delay=2000"]
-//}
+// run this task for profiling the running sandbox
+task runIdeProfiler(type: org.jetbrains.intellij.tasks.RunIdeTask) {
+    jvmArgs = ["-agentpath:/home/patrick/build/share/yjp-2017.02/bin/linux-x86-64/libyjpagent.so=delay=2000"]
+}
 
 sourceSets {
     //noinspection GroovyAssignabilityCheck
@@ -78,7 +78,7 @@ task wrapper(type: Wrapper) {
 version '3.0pre5'
 
 intellij {
-//    version = '2017.2.5'
+    version = '2017.3'
     downloadSources = true
     pluginName = 'Mathematica-IntelliJ-Plugin'
     updateSinceUntilBuild = false

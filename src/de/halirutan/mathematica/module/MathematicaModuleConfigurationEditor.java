@@ -24,12 +24,12 @@ package de.halirutan.mathematica.module;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleConfigurationEditor;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.CommonContentEntriesEditor;
+import com.intellij.openapi.roots.ui.configuration.DefaultModuleConfigurationEditorFactory;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationEditorProvider;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationState;
-import org.jetbrains.jps.model.java.JavaResourceRootType;
-import org.jetbrains.jps.model.java.JavaSourceRootType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author patrick (20.11.16).
@@ -37,15 +37,14 @@ import org.jetbrains.jps.model.java.JavaSourceRootType;
 public class MathematicaModuleConfigurationEditor implements ModuleConfigurationEditorProvider {
   @Override
   public ModuleConfigurationEditor[] createEditors(final ModuleConfigurationState state) {
-    Module module = state.getRootModel().getModule();
-    final Project project = state.getProject();
-//    final ProjectSdksModel sdksModel = ProjectStructureConfigurable.getInstance(project).getProjectJdksModel();
-    if (!(ModuleType.get(module) instanceof MathematicaModuleType)) {
-      return ModuleConfigurationEditor.EMPTY;
-    }
-    return new ModuleConfigurationEditor[]{
-        new CommonContentEntriesEditor(module.getName(),state, JavaSourceRootType.SOURCE,JavaSourceRootType.TEST_SOURCE, JavaResourceRootType.RESOURCE),
-    };
+    final Module module = state.getRootModel().getModule();
+    if (ModuleType.get(module) != MathematicaModuleType.getInstance()) return ModuleConfigurationEditor.EMPTY;
+
+    final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();
+    List<ModuleConfigurationEditor> editors = new ArrayList<>();
+    editors.add(editorFactory.createModuleContentRootsEditor(state));
+    editors.add(editorFactory.createClasspathEditor(state));
+    return editors.toArray(new ModuleConfigurationEditor[editors.size()]);
   }
 }
 

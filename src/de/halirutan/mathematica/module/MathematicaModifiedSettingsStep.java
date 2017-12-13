@@ -24,38 +24,64 @@ package de.halirutan.mathematica.module;
 import com.intellij.ide.util.projectWizard.SdkSettingsStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.Pair;
+import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
 
 /**
  * @author rsmenon (5/13/13)
  */
 class MathematicaModifiedSettingsStep extends SdkSettingsStep {
   private final MathematicaModuleBuilder myModuleBuilder;
+  private final MathematicaLanguageLevelComboBox myLanguageLevelCombo;
+  private MathematicaLanguageLevel myLanguageLevel;
 
   MathematicaModifiedSettingsStep(@NotNull final MathematicaModuleBuilder builder, @NotNull SettingsStep settingsStep) {
-    super(settingsStep, builder, sdkType -> builder.isSuitableSdkType(sdkType));
+    super(settingsStep, builder, builder::isSuitableSdkType);
     myModuleBuilder = builder;
+
+    if (myLanguageLevel == null) {
+      myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
+    }
+    myLanguageLevelCombo = new MathematicaLanguageLevelComboBox();
+    myLanguageLevelCombo.setSelectedItem(builder.getLanguageLevel());
+    myLanguageLevelCombo.addActionListener(e -> {
+      final Object selectedItem = myLanguageLevelCombo.getSelectedItem();
+      if (selectedItem instanceof MathematicaLanguageLevel) {
+        builder.setLanguageLevel((MathematicaLanguageLevel) selectedItem);
+      }
+    });
+    settingsStep.addSettingsField("Language Level:", myLanguageLevelCombo);
+    updateLanguageLevel();
   }
+
 
   @Override
   protected void onSdkSelected(Sdk sdk) {
-    if (sdk instanceof MathematicaSdkType) {
+    if (sdk != null && sdk.getSdkType() == MathematicaSdkType.getInstance()) {
+      myLanguageLevel = MathematicaLanguageLevel.createFromSdk(sdk);
+      updateLanguageLevel();
+    }
+  }
 
+  private void updateLanguageLevel() {
+    if (myLanguageLevelCombo != null) {
+      myLanguageLevelCombo.setSelectedItem(myLanguageLevel);
+    }
+    if (myModuleBuilder != null) {
+      myModuleBuilder.setLanguageLevel(myLanguageLevel);
     }
   }
 
   @Override
   public void updateDataModel() {
     super.updateDataModel();
+    updateLanguageLevel();
     final String path = myModuleBuilder.getContentEntryPath();
 
     if (path != null) {
       //don't create an src file
-      myModuleBuilder.setSourcePaths(Collections.singletonList(Pair.create(path, "")));
+//      myModuleBuilder.setSourcePaths(Collections.singletonList(Pair.create(path, "")));
     }
   }
 

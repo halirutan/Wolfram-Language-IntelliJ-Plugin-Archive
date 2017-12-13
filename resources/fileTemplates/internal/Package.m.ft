@@ -12,11 +12,11 @@
 (* :Keywords: *)
 (* :Discussion: *)
 
-BeginPackage["${NAME}`"]
+BeginPackage["${NAME}`"];
 (* Exported symbols added here with SymbolName::usage *)
 
-Begin["`Private`"]
+Begin["`Private`"];
 
-End[] (* `Private` *)
+End[]; (* `Private` *)
 
 EndPackage[]

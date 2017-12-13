@@ -43,6 +43,9 @@ public class MathematicaFileTemplateProvider {
   public static final String PACKAGE = "Package.m";
 
   @NonNls
+  public static final String PACLET_INFO = "PacletInfo.m";
+
+  @NonNls
   public static final String NOTEBOOK = "Notebook.nb";
 
   @NonNls
@@ -54,12 +57,13 @@ public class MathematicaFileTemplateProvider {
   @NonNls
   public static final String INIT = "init.m";
 
+
   @Nullable
-  private static PsiElement createFromTemplate(@NotNull Project project,
-                                               @NotNull VirtualFile rootDir,
-                                               @NotNull String templateName,
-                                               @NotNull String fileName,
-                                               @NotNull Properties properties) throws Exception {
+  public static PsiElement createFromTemplate(@NotNull Project project,
+                                              @NotNull VirtualFile rootDir,
+                                              @NotNull String templateName,
+                                              @NotNull String fileName,
+                                              @NotNull Properties properties) throws Exception {
     rootDir.refresh(false, false);
     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(rootDir);
     if (directory != null) {
