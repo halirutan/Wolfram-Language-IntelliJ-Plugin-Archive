@@ -22,6 +22,7 @@
 package de.halirutan.mathematica.sdk;
 
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.util.xmlb.annotations.Transient;
 import de.halirutan.mathematica.MathematicaBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -45,12 +46,19 @@ public enum MathematicaLanguageLevel {
   M_9("9", MathematicaBundle.message("language.level.9")),
   M_8("8", MathematicaBundle.message("language.level.8"));
 
-
   public static final MathematicaLanguageLevel HIGHEST = M_11_2;
 
   private final String myName;
   private final String myPresentableText;
   private final double myVersionNumber;
+
+  MathematicaLanguageLevel() {
+    myName = "";
+    myPresentableText = "";
+    myVersionNumber = 0.0;
+  }
+
+
   MathematicaLanguageLevel(@NotNull String name, @NotNull @Nls String presentableText) {
     myName = name;
     myPresentableText = presentableText;
@@ -71,51 +79,69 @@ public enum MathematicaLanguageLevel {
    * @param sdk an Sdk of type {@link MathematicaSdkType}
    * @return the extracted language version
    */
+  @Transient
   public static MathematicaLanguageLevel createFromSdk(@NotNull Sdk sdk) {
+    String version = null;
     if (sdk.getSdkType() instanceof MathematicaSdkType) {
-      final String version = sdk.getVersionString();
-      if(version != null) {
-        if (version.matches("11\\.3.*")) return M_11_3;
-        if (version.matches("11\\.2.*")) return M_11_2;
-        if (version.matches("11\\.1.*")) return M_11_1;
-        if (version.matches("11\\.0.*")) return M_11;
-        if (version.matches("10\\.4.*")) return M_10_4;
-        if (version.matches("10\\.3.*")) return M_10_3;
-        if (version.matches("10\\.2.*")) return M_10_2;
-        if (version.matches("10\\.1.*")) return M_10_1;
-        if (version.matches("10\\.0.*")) return M_10;
-        if (version.matches("9.*")) return M_9;
-        if (version.matches("8.*")) return M_8;
-      }
+      version = sdk.getVersionString();
+    }
+    return fromString(version);
+  }
+
+  @Transient
+  public static MathematicaLanguageLevel fromString(String version) {
+    if (version != null) {
+      if (version.matches("11\\.3.*")) return M_11_3;
+      if (version.matches("11\\.2.*")) return M_11_2;
+      if (version.matches("11\\.1.*")) return M_11_1;
+      if (version.matches("11\\.0.*")) return M_11;
+      if (version.matches("10\\.4.*")) return M_10_4;
+      if (version.matches("10\\.3.*")) return M_10_3;
+      if (version.matches("10\\.2.*")) return M_10_2;
+      if (version.matches("10\\.1.*")) return M_10_1;
+      if (version.matches("10\\.0.*")) return M_10;
+      if (version.matches("9.*")) return M_9;
+      if (version.matches("8.*")) return M_8;
     }
     return HIGHEST;
+
+  }
+
+  @Transient
+  public static MathematicaLanguageLevel fromDouble(double version) {
+    return fromString(Double.toString(version));
   }
 
   @NotNull
+  @Transient
   public String getName() {
     return myName;
   }
 
+  @Transient
   public double getVersionNumber() {
     return myVersionNumber;
   }
 
   @NotNull
   @Nls
+  @Transient
   public String getPresentableText() {
     return myPresentableText;
   }
 
+  @Transient
   public boolean isAtLeast(@NotNull MathematicaLanguageLevel level) {
     return compareTo(level) <= 0;
   }
 
+  @Transient
   public boolean isLessThan(@NotNull MathematicaLanguageLevel level) {
     return compareTo(level) > 0;
   }
 
-
   @Override
+  @Transient
   public String toString() {
     return myPresentableText;
   }

@@ -31,12 +31,12 @@ import de.halirutan.mathematica.codeinsight.inspections.symbol.UnresolvedSymbolI
  * @author patrick (7/8/14)
  */
 class MathematicaInspectionProvider : InspectionToolProvider {
-    override fun getInspectionClasses(): Array<Class<*>> {
-        return arrayOf(
-                UnresolvedSymbolInspection::class.java,
-                ConsistentCompoundExpressionInFile::class.java,
-                ImplicitTimesThroughLinebreak::class.java,
-                UnsupportedVersion::class.java
-        )
-    }
+  override fun getInspectionClasses(): Array<Class<*>> {
+    return arrayOf(
+        UnresolvedSymbolInspection::class.java,
+        ConsistentCompoundExpressionInFile::class.java,
+        ImplicitTimesThroughLinebreak::class.java,
+        UnsupportedVersion::class.java
+    )
+  }
 }
