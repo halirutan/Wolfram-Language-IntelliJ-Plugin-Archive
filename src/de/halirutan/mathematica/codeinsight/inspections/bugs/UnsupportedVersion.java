@@ -26,13 +26,20 @@ package de.halirutan.mathematica.codeinsight.inspections.bugs;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ModuleFileIndex;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
 import de.halirutan.mathematica.codeinsight.completion.util.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.file.MathematicaFileType;
@@ -41,6 +48,8 @@ import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.lists.Association;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
+import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl;
+import de.halirutan.mathematica.module.MathematicaModuleType;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
@@ -64,6 +73,7 @@ public class UnsupportedVersion extends AbstractInspection {
 
   @SuppressWarnings({"InstanceVariableNamingConvention", "WeakerAccess"})
   public boolean useSDKLanguageLevelOrHighest = true;
+  public boolean useModuleLanguageLevelOrHighest = true;
 
   /**
    * Sets the correct text for the info label in the inspection settings page
@@ -82,6 +92,7 @@ public class UnsupportedVersion extends AbstractInspection {
   @Override
   public JComponent createOptionsPanel() {
     final JPanel mainPanel = new JPanel(new VerticalFlowLayout(VerticalFlowLayout.TOP));
+    final JCheckBox useModuleCheckbox = new JCheckBox("Language Level of Module has priority");
     final JCheckBox useSDKCheckbox = new JCheckBox("Use Project SDK Language Level");
     final JLabel infoLabel = new JLabel();
     //noinspection Since15
@@ -102,6 +113,11 @@ public class UnsupportedVersion extends AbstractInspection {
       }
     });
 
+    useModuleCheckbox.setSelected(useModuleLanguageLevelOrHighest);
+    useModuleCheckbox.addActionListener(e ->
+        useModuleLanguageLevelOrHighest = useModuleCheckbox.isSelected()
+    );
+
     useSDKCheckbox.setSelected(useSDKLanguageLevelOrHighest);
     useSDKCheckbox.addActionListener(e -> {
       useSDKLanguageLevelOrHighest = useSDKCheckbox.isSelected();
@@ -114,7 +130,7 @@ public class UnsupportedVersion extends AbstractInspection {
 
     setLabelTextToVersion(infoLabel);
     versionComboBox.setVisible(!useSDKLanguageLevelOrHighest);
-
+    mainPanel.add(useModuleCheckbox);
     mainPanel.add(infoLabel);
     mainPanel.add(useSDKCheckbox);
     mainPanel.add(versionComboBox);
@@ -152,6 +168,27 @@ public class UnsupportedVersion extends AbstractInspection {
   @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
     if (session.getFile().getFileType() instanceof MathematicaFileType) {
+
+      // TODO: There must be a simpler way to find the module for a source file
+      if (useModuleLanguageLevelOrHighest) {
+        final PsiFile file = session.getFile();
+        final ModuleManager instance = ModuleManager.getInstance(file.getProject());
+        for (Module module : instance.getModules()) {
+          if (ModuleType.is(module, MathematicaModuleType.getInstance())) {
+            final ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+            final ModuleFileIndex fileIndex = moduleRootManager.getFileIndex();
+            final VirtualFile virtualFile = file.getVirtualFile();
+            if (fileIndex.isInContent(virtualFile)) {
+              final MathematicaLanguageLevelModuleExtensionImpl languageLevelModuleExtension =
+                  moduleRootManager.getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
+              if (languageLevelModuleExtension.getMathematicaLanguageLevel() != null) {
+                return new WrongVersionVisitor(holder, languageLevelModuleExtension.getMathematicaLanguageLevel());
+              }
+            }
+          }
+        }
+      }
+
       if (useSDKLanguageLevelOrHighest) {
         final ProjectRootManager manager = ProjectRootManager.getInstance(holder.getProject());
         final Sdk projectSdk = manager.getProjectSdk();
@@ -170,12 +207,12 @@ public class UnsupportedVersion extends AbstractInspection {
   private static class WrongVersionVisitor extends MathematicaVisitor {
 
     private final HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
-    private MathematicaLanguageLevel myLanguageLevel;
     private final ProblemsHolder myHolder;
+    private MathematicaLanguageLevel myLanguageLevel;
 
     WrongVersionVisitor(final ProblemsHolder holder, final MathematicaLanguageLevel usedLanguageVersion) {
       this.myHolder = holder;
-        myLanguageLevel = usedLanguageVersion;
+      myLanguageLevel = usedLanguageVersion;
     }
 
     private void registerProblem(final PsiElement element, final String message) {
@@ -188,11 +225,13 @@ public class UnsupportedVersion extends AbstractInspection {
     @Override
     public void visitFunctionCall(FunctionCall functionCall) {
       final PsiElement head = functionCall.getHead();
-      if ("Association".equals(head.getText()) && myLanguageLevel.getVersionNumber() < 10 ) {
-        registerProblem(functionCall, message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
+      if ("Association".equals(head.getText()) && myLanguageLevel.getVersionNumber() < 10) {
+        registerProblem(functionCall,
+            message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
       }
 
-      if (functionCall.hasHead("With") && myLanguageLevel.getVersionNumber() < 10.3 && functionCall.getArguments().size() > 3) {
+      if (functionCall.hasHead("With") && myLanguageLevel.getVersionNumber() < 10.3 &&
+          functionCall.getArguments().size() > 3) {
         registerProblem(functionCall, message("bugs.unsupported.version.with", myLanguageLevel.getPresentableText()));
 
       }
@@ -201,7 +240,8 @@ public class UnsupportedVersion extends AbstractInspection {
     @Override
     public void visitAssociation(Association association) {
       if (myLanguageLevel.getVersionNumber() < 10) {
-        registerProblem(association, message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
+        registerProblem(association,
+            message("bugs.unsupported.version.association", myLanguageLevel.getPresentableText()));
       }
     }
 
@@ -214,12 +254,14 @@ public class UnsupportedVersion extends AbstractInspection {
 
       final PsiElement resolve = symbol.resolve();
       if (resolve instanceof LightBuiltInSymbol) {
-        String nameWithContext = symbol.getMathematicaContext().equals("") ? "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
+        String nameWithContext =
+            symbol.getMathematicaContext().equals("") ? "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
 
         if (mySymbolVersions.containsKey(nameWithContext)) {
           double version = mySymbolVersions.get(nameWithContext);
           if (version > myLanguageLevel.getVersionNumber()) {
-            registerProblem(symbol, "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());
+            registerProblem(symbol,
+                "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());
           }
         }
       }

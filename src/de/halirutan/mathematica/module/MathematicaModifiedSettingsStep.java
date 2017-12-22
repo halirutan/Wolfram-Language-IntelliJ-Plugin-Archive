@@ -24,6 +24,7 @@ package de.halirutan.mathematica.module;
 import com.intellij.ide.util.projectWizard.SdkSettingsStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.projectRoots.Sdk;
+import de.halirutan.mathematica.module.ui.MathematicaLanguageLevelComboBox;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.NotNull;

@@ -26,7 +26,6 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.SdkTypeId;
@@ -71,9 +70,12 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
   }
 
   @Override
-  public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
+  public void setupRootModel(final ModifiableRootModel rootModel) {
 
     ContentEntry contentEntry = doAddContentEntry(rootModel);
+    final MathematicaLanguageLevelModuleExtensionImpl moduleExtension =
+        rootModel.getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
+    moduleExtension.setMathematicaLanguageLevel(myLanguageLevel);
     myPackageName = StringUtil.strip(getName(), CharFilter.NOT_WHITESPACE_FILTER);
     if (contentEntry != null) {
       final File packageDir = new File(getContentEntryPath() + File.separator + myPackageName);

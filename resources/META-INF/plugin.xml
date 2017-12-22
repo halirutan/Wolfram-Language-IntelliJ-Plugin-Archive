@@ -39,10 +39,8 @@
 
         <sdkType id="Mathematica Sdk" implementation="de.halirutan.mathematica.sdk.MathematicaSdkType"/>
         <moduleType id="MATHEMATICA_MODULE" implementationClass="de.halirutan.mathematica.module.MathematicaModuleType"/>
-        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaEmptyModule"/>-->
-        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaBasicModule"/>-->
-        <!--<moduleBuilder builderClass="de.halirutan.mathematica.module.MathematicaApplicationModule"/>-->
-        <moduleConfigurationEditorProvider implementation="de.halirutan.mathematica.module.MathematicaModuleConfigurationEditor"/>
+        <moduleExtension implementation="de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl"/>
+        <moduleConfigurationEditorProvider implementation="de.halirutan.mathematica.module.ui.MathematicaModuleConfigurationEditor"/>
         <projectTemplatesFactory implementation="de.halirutan.mathematica.module.MathematicaProjectTemplatesFactory"/>
 
         <lang.syntaxHighlighterFactory language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterFactory"/>
