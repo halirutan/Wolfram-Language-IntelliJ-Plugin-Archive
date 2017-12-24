@@ -3,9 +3,11 @@ package de.halirutan.mathematica.module;
 import de.halirutan.mathematica.MathematicaBundle;
 
 /**
- * @author patrick (08.12.17).
+ * Module builder for an empty module that does not create any folder structure or files
  */
 public class MathematicaEmptyModule extends MathematicaModuleBuilder {
+
+  @SuppressWarnings("WeakerAccess")
   public MathematicaEmptyModule() {
   }
 

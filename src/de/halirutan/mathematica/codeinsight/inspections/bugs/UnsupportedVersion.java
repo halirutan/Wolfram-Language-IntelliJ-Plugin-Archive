@@ -27,16 +27,12 @@ import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleType;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleFileIndex;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
@@ -48,8 +44,7 @@ import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.lists.Association;
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol;
-import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl;
-import de.halirutan.mathematica.module.MathematicaModuleType;
+import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtension;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import org.jetbrains.annotations.Nls;
@@ -73,6 +68,7 @@ public class UnsupportedVersion extends AbstractInspection {
 
   @SuppressWarnings({"InstanceVariableNamingConvention", "WeakerAccess"})
   public boolean useSDKLanguageLevelOrHighest = true;
+  @SuppressWarnings("WeakerAccess")
   public boolean useModuleLanguageLevelOrHighest = true;
 
   /**
@@ -168,23 +164,13 @@ public class UnsupportedVersion extends AbstractInspection {
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
     if (session.getFile().getFileType() instanceof MathematicaFileType) {
 
-      // TODO: There must be a simpler way to find the module for a source file
       if (useModuleLanguageLevelOrHighest) {
         final PsiFile file = session.getFile();
-        final ModuleManager instance = ModuleManager.getInstance(file.getProject());
-        for (Module module : instance.getModules()) {
-          if (ModuleType.is(module, MathematicaModuleType.getInstance())) {
-            final ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-            final ModuleFileIndex fileIndex = moduleRootManager.getFileIndex();
-            final VirtualFile virtualFile = file.getVirtualFile();
-            if (fileIndex.isInContent(virtualFile)) {
-              final MathematicaLanguageLevelModuleExtensionImpl languageLevelModuleExtension =
-                  moduleRootManager.getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
-              if (languageLevelModuleExtension.getMathematicaLanguageLevel() != null) {
-                return new WrongVersionVisitor(holder, languageLevelModuleExtension.getMathematicaLanguageLevel());
-              }
-            }
-          }
+        final Module moduleForFile = ModuleUtilCore.findModuleForFile(file.getVirtualFile(), file.getProject());
+        if (moduleForFile != null) {
+          final MathematicaLanguageLevel mathematicaLanguageLevel =
+              MathematicaLanguageLevelModuleExtension.getInstance(moduleForFile).getMathematicaLanguageLevel();
+          return new WrongVersionVisitor(holder, mathematicaLanguageLevel);
         }
       }
 

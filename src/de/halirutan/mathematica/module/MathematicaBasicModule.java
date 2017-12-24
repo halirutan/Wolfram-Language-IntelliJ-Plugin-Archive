@@ -1,21 +1,21 @@
 package de.halirutan.mathematica.module;
 
-import com.intellij.ide.util.projectWizard.ModuleWizardStep;
-import com.intellij.ide.util.projectWizard.WizardContext;
-import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaBundle;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * @author patrick (08.12.17).
+ * A module builder that adds a simple package and a notebook file and nothing more
  */
 public class MathematicaBasicModule extends MathematicaModuleBuilder {
+
+  @SuppressWarnings("WeakerAccess")
   public MathematicaBasicModule() {
   }
 
   @Override
-  public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext, @NotNull ModulesProvider modulesProvider) {
-    return ModuleWizardStep.EMPTY_ARRAY;
+  protected void createModuleStructure(Project project, VirtualFile contentRoot) {
+    createProjectFiles(project, contentRoot);
   }
 
   @Override

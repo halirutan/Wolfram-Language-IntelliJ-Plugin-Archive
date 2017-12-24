@@ -23,44 +23,47 @@
 package de.halirutan.mathematica.module.ui;
 
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.ui.configuration.ContentEntriesEditor;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.roots.ui.configuration.JavaContentEntriesEditor;
 import com.intellij.openapi.roots.ui.configuration.ModuleConfigurationState;
+import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
- * @author patrick (22.12.17).
+ *
  */
-public class MathematicaModuleContentRootEditor extends ContentEntriesEditor {
+public class MathematicaModuleContentRootEditor extends JavaContentEntriesEditor {
 
-  private final Module myModule;
   private MathematicaModuleLanguageLevelConfigurable myLanguageLevelConfigurable;
 
-  public MathematicaModuleContentRootEditor(Module module, ModuleConfigurationState state) {
+  MathematicaModuleContentRootEditor(Module module, ModuleConfigurationState state) {
     super(module.getName(), state);
-    myModule = module;
   }
 
   @Override
   protected void addAdditionalSettingsToPanel(JPanel mainPanel) {
-//    myLanguageLevelConfigurable =
-//        new MathematicaModuleLanguageLevelConfigurable(myModule, this::fireConfigurationChanged) {
-//          @Override
-//          MathematicaLanguageLevelModuleExtensionImpl getModuleExtension() {
-//            return getModel().getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
-//          }
-//        };
-//    mainPanel.add(myLanguageLevelConfigurable.createComponent(), BorderLayout.NORTH);
-//    myLanguageLevelConfigurable.reset();
+    myLanguageLevelConfigurable =
+        new MathematicaModuleLanguageLevelConfigurable() {
+          @Override
+          MathematicaLanguageLevelModuleExtensionImpl getModuleExtension() {
+            return getModel().getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
+          }
+        };
+    final JComponent languageConfigurable = myLanguageLevelConfigurable.createComponent();
+    assert languageConfigurable != null;
+    mainPanel.add(languageConfigurable, BorderLayout.NORTH);
+    myLanguageLevelConfigurable.reset();
   }
 
-//  @Override
-//  public void apply() throws ConfigurationException {
-//    myLanguageLevelConfigurable.apply();
-//  }
-//
-//  @Override
-//  public boolean isModified() {
-//    return myLanguageLevelConfigurable.isModified();
-//  }
+  @Override
+  public void apply() throws ConfigurationException {
+    myLanguageLevelConfigurable.apply();
+  }
+
+  @Override
+  public boolean isModified() {
+    return myLanguageLevelConfigurable.isModified();
+  }
 }

@@ -22,8 +22,6 @@
 
 package de.halirutan.mathematica.module.ui;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
@@ -32,26 +30,23 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * @author patrick (22.12.17).
+ * Provides the ComboBox that let's the user select the language level when creating a new Mathematica module.
+ *
+ * @implNote The only thing this configurable needs is access to the {@link MathematicaLanguageLevelModuleExtensionImpl}
+ * which is not directly provided. Instead, this class is abstract and we provide it by implementing {@link #getModuleExtension()}
+ * correctly.
  */
 abstract public class MathematicaModuleLanguageLevelConfigurable implements UnnamedConfigurable {
 
-  private final Module myModule;
   private final JPanel myPanel;
   private final MathematicaLanguageLevelModuleExtensionImpl myModuleExtension;
   private MathematicaLanguageLevelComboBox myLanguageLevelCombo;
 
-  public MathematicaModuleLanguageLevelConfigurable(Module module, Runnable onChange) {
-    myModule = module;
+  MathematicaModuleLanguageLevelConfigurable() {
     myPanel = new JPanel();
     myModuleExtension = getModuleExtension();
     myLanguageLevelCombo = new MathematicaLanguageLevelComboBox();
     myLanguageLevelCombo.setSelectedItem(getModuleExtension().getMathematicaLanguageLevel());
-    myLanguageLevelCombo.addActionListener(e -> {
-      final Object lang = myLanguageLevelCombo.getSelectedItem();
-//      myModuleExtension.setMathematicaLanguageLevel(lang instanceof MathematicaLanguageLevel ?
-//          (MathematicaLanguageLevel) lang : MathematicaLanguageLevel.HIGHEST);
-    });
     myPanel.add(myLanguageLevelCombo);
   }
 
@@ -63,12 +58,11 @@ abstract public class MathematicaModuleLanguageLevelConfigurable implements Unna
 
   @Override
   public boolean isModified() {
-    return myModuleExtension.getMathematicaLanguageLevel() != null &&
-        myLanguageLevelCombo.getSelectedItem() != myModuleExtension.getMathematicaLanguageLevel();
+    return myLanguageLevelCombo.getSelectedItem() != myModuleExtension.getMathematicaLanguageLevel();
   }
 
   @Override
-  public void apply() throws ConfigurationException {
+  public void apply() {
     myModuleExtension.setMathematicaLanguageLevel((MathematicaLanguageLevel) myLanguageLevelCombo.getSelectedItem());
     myModuleExtension.commit();
   }

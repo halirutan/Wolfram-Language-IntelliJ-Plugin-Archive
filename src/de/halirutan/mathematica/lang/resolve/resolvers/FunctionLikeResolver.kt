@@ -27,6 +27,7 @@ import com.intellij.psi.ResolveState
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct
 import de.halirutan.mathematica.lang.psi.api.FunctionCall
 import de.halirutan.mathematica.lang.psi.api.Symbol
+import de.halirutan.mathematica.lang.psi.api.lists.MList
 import de.halirutan.mathematica.lang.resolve.SymbolResolveHint
 import de.halirutan.mathematica.lang.resolve.SymbolResolveResult
 
@@ -49,14 +50,25 @@ class FunctionLikeResolver : Resolver {
 
     // Symbol to resolve is located in the body of Compile
     if (lastParent == body) {
-      defLists
-          .filter { it is Symbol && it.hasSameName(symbol) }
-          .forEach { return SymbolResolveResult(it, scope, scopingElement, true) }
+      for (defList in defLists) {
+        if (defList is MList) {
+          for (elm in defList.listElements) {
+            if (elm is Symbol && elm.hasSameName(symbol)) {
+              return SymbolResolveResult(elm, scope, scopingElement, true)
+            }
+
+          }
+        }
+      }
     } else {
       defLists.indexOf(lastParent).takeUnless { it == -1 }?.let {
-        val defList = defLists[it]
-        if (defList is Symbol && defList == symbol) {
-          return SymbolResolveResult(defList, scope, scopingElement, true)
+        val expr = defLists[it]
+        if (expr is MList) {
+          for (elm in expr.listElements) {
+            if (elm is Symbol && elm == symbol) {
+              return SymbolResolveResult(elm, scope, scopingElement, true)
+            }
+          }
         }
       }
     }

@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 /**
- * @author rsmenon (5/6/13)
+ * Provides templates that are presented in the "new project" or "new module" dialog.
  */
 public class MathematicaProjectTemplatesFactory extends ProjectTemplatesFactory {
 

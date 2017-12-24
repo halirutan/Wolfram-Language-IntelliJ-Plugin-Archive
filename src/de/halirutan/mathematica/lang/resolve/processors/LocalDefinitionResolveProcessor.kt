@@ -83,7 +83,7 @@ import de.halirutan.mathematica.lang.resolve.resolvers.TableLikeResolver
 class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : BaseScopeProcessor() {
     /**
      * Returns the list of all symbols collected during a  run. Before returning
-     * the list, it removes duplicates, so that no entry appears more than once in the autocompletion window.
+     * the list, it removes duplicates, so that no entry appears more than once in the auto-completion window.
      *
      * @return Sorted and cleaned list of collected symbols.
      */
@@ -91,7 +91,7 @@ class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : Base
 
     /**
      * There are several places where a local variable can be "defined". First I check all localization constructs which
-     * are always function call like `Module[{blub},...]`. The complete list of localization constructs can be
+     * are always function call like `Module[{var},...]`. The complete list of localization constructs can be
      * found in [MScope].
      *
      *

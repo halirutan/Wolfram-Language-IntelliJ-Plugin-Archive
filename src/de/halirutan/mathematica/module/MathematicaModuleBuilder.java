@@ -21,7 +21,7 @@
 
 package de.halirutan.mathematica.module;
 
-import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.application.ApplicationManager;
@@ -48,11 +48,17 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
+ * The base-class for all builders that create a Mathematica module with varying content structure.
+ * It is called when a new module is going to be created. This usually happens through the {@link ModuleType} but for
+ * Mathematica we always use extensions of this class that are instantiated in {@link MathematicaProjectTemplatesFactory}.
  * @author patrick (4/8/13)
  */
-public class MathematicaModuleBuilder extends JavaModuleBuilder {
+public class MathematicaModuleBuilder extends ModuleBuilder {
+
+  private static final Logger LOG = Logger.getLogger("#de.halirutan.mathematica.module.MathematicaModuleBuilder");
 
   private String myPackageName = null;
   private MathematicaLanguageLevel myLanguageLevel;
@@ -61,17 +67,18 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     myLanguageLevel = MathematicaLanguageLevel.HIGHEST;
   }
 
-  public MathematicaLanguageLevel getLanguageLevel() {
-    return myLanguageLevel;
-  }
-
   public void setLanguageLevel(MathematicaLanguageLevel level) {
     myLanguageLevel = level;
   }
 
+  /**
+   * Called by IntelliJ when the module structure is constructed. We set up only the language level we obtained from
+   * {@link MathematicaModifiedSettingsStep} and extract the name of the package. The rest of the work of creating a
+   * directory structure and file templates is done in {@link #createModuleStructure(Project, VirtualFile)} that can be
+   * overridden by classes extending from this.
+   */
   @Override
   public void setupRootModel(final ModifiableRootModel rootModel) {
-
     ContentEntry contentEntry = doAddContentEntry(rootModel);
     final MathematicaLanguageLevelModuleExtensionImpl moduleExtension =
         rootModel.getModuleExtension(MathematicaLanguageLevelModuleExtensionImpl.class);
@@ -79,6 +86,7 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     myPackageName = StringUtil.strip(getName(), CharFilter.NOT_WHITESPACE_FILTER);
     if (contentEntry != null) {
       final File packageDir = new File(getContentEntryPath() + File.separator + myPackageName);
+      //noinspection ResultOfMethodCallIgnored
       packageDir.mkdirs();
       final VirtualFile sourceRoot = LocalFileSystem.getInstance()
                                                     .refreshAndFindFileByPath(
@@ -94,23 +102,39 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     }
   }
 
+  /**
+   * Provides a callback where implementations can set up directory structure under the contentRoot
+   *
+   * @param project     Project to which the module is attached
+   * @param contentRoot Content root that is the top-level folder of this module
+   */
   protected void createModuleStructure(Project project, VirtualFile contentRoot) {
   }
 
+  /**
+   * Filters out all other SDK's than valid Mathematica SDK's
+   */
   @Override
   public boolean isSuitableSdkType(SdkTypeId sdkType) {
     return sdkType instanceof MathematicaSdkType;
   }
 
+  /**
+   * Template method that can be used by implementations of this class to create a Kernel dir and an init.m
+   */
   void createKernelFiles(Project project, VirtualFile contentRoot) {
     try {
       final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
       MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT,
           "init");
     } catch (Exception ignored) {
+      LOG.warning("Could not create Kernel files and init.m");
     }
   }
 
+  /**
+   * Template method that can be used by implementations of this class to create a package file and a notebook.
+   */
   void createProjectFiles(Project project, VirtualFile contentRoot) {
     //Create a .m and .nb file with the project's name
     try {
@@ -119,10 +143,13 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
       MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK,
           myPackageName);
     } catch (Exception ignored) {
-
+      LOG.warning("Could not create project files");
     }
   }
 
+  /**
+   * Template method that can be used by implementations of this class to create a PacletInfo.m
+   */
   void createPacletInfoFile(Project project, VirtualFile contentRoot) {
     try {
       Properties props = new Properties();
@@ -132,13 +159,8 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
       MathematicaFileTemplateProvider
           .createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACLET_INFO, "PacletInfo.m", props);
     } catch (Exception ignored) {
-
+      LOG.warning("Could not create PacletInfo.m");
     }
-  }
-
-  @Override
-  public int getWeight() {
-    return 37;
   }
 
   @Override
@@ -156,6 +178,10 @@ public class MathematicaModuleBuilder extends JavaModuleBuilder {
     return true;
   }
 
+  /**
+   * This base-class should not be available to construct modules. Instead, use one of the implementing classes.
+   * @return Always false
+   */
   @Override
   protected boolean isAvailable() {
     return false;

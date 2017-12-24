@@ -5,12 +5,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaBundle;
 
 /**
- * @author patrick (08.12.17).
+ * A module builder that creates a package structure containing a separate folder for the source code. Under this folder
+ * it creates PacletInfo.m, package and notebook file and a Kernel directory with an init.m
  */
 public class MathematicaApplicationModule extends MathematicaModuleBuilder {
+
+  @SuppressWarnings("WeakerAccess")
   public MathematicaApplicationModule() {
   }
-
 
   @Override
   public String getPresentableName() {
