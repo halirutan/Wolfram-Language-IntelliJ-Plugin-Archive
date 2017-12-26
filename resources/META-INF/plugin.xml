@@ -75,9 +75,6 @@
         <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaFunctionSelectioner"/>
         <extendWordSelectionHandler implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.MathematicaListSelectioner"/>
 
-        <!--&lt;!&ndash;<basicWordSelectionFilter&ndash;&gt;-->
-        <!--&lt;!&ndash;implementation="de.halirutan.mathematica.codeinsight.editoractions.wordselection.BasicExpressionSelectionFilter"/>&ndash;&gt;-->
-
         <applicationService serviceInterface="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl" serviceImplementation="de.halirutan.mathematica.codeinsight.folding.MathematicaCodeFoldingSettingsImpl"/>
         <codeFoldingOptionsProvider instance="de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingOptionProvider"/>
         <!-- Code-style and colors-->

@@ -23,8 +23,8 @@ package de.halirutan.mathematica.file;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import de.halirutan.mathematica.Mathematica;
-import de.halirutan.mathematica.util.MathematicaIcons;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +37,7 @@ import javax.swing.*;
 public class MathematicaFileType extends LanguageFileType {
 
   public static final LanguageFileType INSTANCE = new MathematicaFileType();
-  private static final String[] DEFAULT_EXTENSIONS = {"m", "mt", "nb", "mb"};
+  public static final String[] DEFAULT_EXTENSIONS = {"m", "mt", "nb", "mb", "wl", "wlt"};
 
   private MathematicaFileType() {
     super(MathematicaLanguage.INSTANCE);

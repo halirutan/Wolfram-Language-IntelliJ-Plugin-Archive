@@ -1,13 +1,17 @@
 (* Paclet Info File *)
-(* Created by Mathematica Plugin for IntelliJ IDEA *)
+(* Created by Mathematica Plugin for IntelliJ IDEA, see http://wlplugin.halirutan.de/ *)
+(* :Author: ${USER} *)
+(* :Date: ${DATE} *)
 
 Paclet[
-    Name -> "${MathematicaContext}",
+    Name -> "${MATHEMATICA_PACKAGE_NAME}",
     Version -> "0.1",
-    MathematicaVersion -> "${MathematicaVersion}",
+    MathematicaVersion -> "${MATHEMATICA_VERSION}",
+    Description -> "",
+    Creator -> "${USER}",
     Extensions ->
         {
-            {"Kernel", Root -> "Kernel", Context -> "${MathematicaContext}`"}
+            {"Kernel", Root -> "Kernel", Context -> "${MATHEMATICA_CONTEXT}"}
         }
 ]
 

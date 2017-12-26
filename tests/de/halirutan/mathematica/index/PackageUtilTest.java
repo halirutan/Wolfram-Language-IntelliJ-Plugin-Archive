@@ -25,11 +25,12 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author patrick (18.12.16).
  */
+@SuppressWarnings("TooBroadScope")
 public class PackageUtilTest {
   @Test
   public void buildContext() throws Exception {

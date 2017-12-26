@@ -25,6 +25,7 @@ import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
@@ -39,6 +40,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.file.MathematicaFileTemplateProvider;
+import de.halirutan.mathematica.file.MathematicaTemplateProperties;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import de.halirutan.mathematica.sdk.MathematicaSdkType;
 import de.halirutan.mathematica.util.MathematicaIcons;
@@ -47,8 +49,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * The base-class for all builders that create a Mathematica module with varying content structure.
@@ -58,7 +58,7 @@ import java.util.logging.Logger;
  */
 public class MathematicaModuleBuilder extends ModuleBuilder {
 
-  private static final Logger LOG = Logger.getLogger("#de.halirutan.mathematica.module.MathematicaModuleBuilder");
+  private static final Logger LOG = Logger.getInstance("#de.halirutan.mathematica.module.MathematicaModuleBuilder");
 
   private String myPackageName = null;
   private MathematicaLanguageLevel myLanguageLevel;
@@ -71,10 +71,14 @@ public class MathematicaModuleBuilder extends ModuleBuilder {
     myLanguageLevel = level;
   }
 
+  public MathematicaLanguageLevel getLanguageLevel() {
+    return myLanguageLevel;
+  }
+
   /**
    * Called by IntelliJ when the module structure is constructed. We set up only the language level we obtained from
    * {@link MathematicaModifiedSettingsStep} and extract the name of the package. The rest of the work of creating a
-   * directory structure and file templates is done in {@link #createModuleStructure(Project, VirtualFile)} that can be
+   * directory structure and file templates is done in {@link #createModuleStructure(Project, VirtualFile, MathematicaTemplateProperties)} that can be
    * overridden by classes extending from this.
    */
   @Override
@@ -94,21 +98,27 @@ public class MathematicaModuleBuilder extends ModuleBuilder {
       if (sourceRoot != null) {
         contentEntry.addSourceFolder(sourceRoot, false);
         final Project project = rootModel.getProject();
+        MathematicaTemplateProperties props = MathematicaTemplateProperties.create();
+        props.setProperty(MathematicaTemplateProperties.CONTEXT, myPackageName + "`");
+        props.setProperty(MathematicaTemplateProperties.PACKAGE_NAME, myPackageName);
+        props.setProperty(MathematicaTemplateProperties.PACKAGE_VERSION, "0.1");
+        props.setProperty(MathematicaTemplateProperties.MATHEMATICA_VERSION, myLanguageLevel.getName());
+
         StartupManager.getInstance(project).runWhenProjectIsInitialized(
             (DumbAwareRunnable) () -> ApplicationManager.getApplication().invokeLater(
                 () -> ApplicationManager.getApplication()
-                                        .runWriteAction(() -> createModuleStructure(project, sourceRoot))));
+                                        .runWriteAction(() -> createModuleStructure(project, sourceRoot, props))));
       }
     }
   }
 
   /**
    * Provides a callback where implementations can set up directory structure under the contentRoot
-   *
    * @param project     Project to which the module is attached
    * @param contentRoot Content root that is the top-level folder of this module
+   * @param properties Cleaned name of the module which can serve as name of the Mathematica package
    */
-  protected void createModuleStructure(Project project, VirtualFile contentRoot) {
+  protected void createModuleStructure(Project project, VirtualFile contentRoot, MathematicaTemplateProperties properties) {
   }
 
   /**
@@ -122,28 +132,13 @@ public class MathematicaModuleBuilder extends ModuleBuilder {
   /**
    * Template method that can be used by implementations of this class to create a Kernel dir and an init.m
    */
-  void createKernelFiles(Project project, VirtualFile contentRoot) {
+  void createKernelFiles(Project project, VirtualFile contentRoot, MathematicaTemplateProperties properties) {
     try {
       final VirtualFile kernelRoot = contentRoot.createChildDirectory(this, "Kernel");
       MathematicaFileTemplateProvider.createFromTemplate(project, kernelRoot, MathematicaFileTemplateProvider.INIT,
-          "init");
+          "init", properties.getProperties());
     } catch (Exception ignored) {
-      LOG.warning("Could not create Kernel files and init.m");
-    }
-  }
-
-  /**
-   * Template method that can be used by implementations of this class to create a package file and a notebook.
-   */
-  void createProjectFiles(Project project, VirtualFile contentRoot) {
-    //Create a .m and .nb file with the project's name
-    try {
-      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACKAGE,
-          myPackageName);
-      MathematicaFileTemplateProvider.createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.NOTEBOOK,
-          myPackageName);
-    } catch (Exception ignored) {
-      LOG.warning("Could not create project files");
+      LOG.warn("Could not create Kernel files and init.m");
     }
   }
 
@@ -152,14 +147,16 @@ public class MathematicaModuleBuilder extends ModuleBuilder {
    */
   void createPacletInfoFile(Project project, VirtualFile contentRoot) {
     try {
-      Properties props = new Properties();
-      props.put("MathematicaVersion", myLanguageLevel.getName() + "+");
-      props.put("MathematicaContext", myPackageName);
+      MathematicaTemplateProperties props = MathematicaTemplateProperties.create();
+      props.setProperty(MathematicaTemplateProperties.MATHEMATICA_VERSION, myLanguageLevel.getName() + "+");
+      props.setProperty(MathematicaTemplateProperties.PACKAGE_NAME, myPackageName);
+      props.setProperty(MathematicaTemplateProperties.CONTEXT, myPackageName + "`");
 
       MathematicaFileTemplateProvider
-          .createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACLET_INFO, "PacletInfo.m", props);
+          .createFromTemplate(project, contentRoot, MathematicaFileTemplateProvider.PACLET_INFO, "PacletInfo.m",
+              props.getProperties());
     } catch (Exception ignored) {
-      LOG.warning("Could not create PacletInfo.m");
+      LOG.warn("Could not create PacletInfo.m");
     }
   }
 

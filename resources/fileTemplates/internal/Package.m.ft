@@ -1,18 +1,18 @@
 (* Mathematica Package *)
-(* Created by Mathematica Plugin for IntelliJ IDEA *)
+(* Created by Mathematica Plugin for IntelliJ IDEA, see http://wlplugin.halirutan.de/ *)
 
-(* :Title: ${NAME} *)
-(* :Context: ${NAME}` *)
+(* :Title: ${MATHEMATICA_PACKAGE_NAME} *)
+(* :Context: ${MATHEMATICA_CONTEXT} *)
 (* :Author: ${USER} *)
 (* :Date: ${YEAR}-${MONTH}-${DAY} *)
 
-(* :Package Version: 0.1 *)
-(* :Mathematica Version: *)
+(* :Package Version: ${MATHEMATICA_PACKAGE_VERSION} *)
+(* :Mathematica Version: ${MATHEMATICA_VERSION} *)
 (* :Copyright: (c) ${YEAR} ${USER} *)
 (* :Keywords: *)
 (* :Discussion: *)
 
-BeginPackage["${NAME}`"];
+BeginPackage["${MATHEMATICA_CONTEXT}"];
 (* Exported symbols added here with SymbolName::usage *)
 
 Begin["`Private`"];

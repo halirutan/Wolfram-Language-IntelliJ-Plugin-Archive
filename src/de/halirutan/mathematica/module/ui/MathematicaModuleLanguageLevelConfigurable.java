@@ -23,11 +23,14 @@
 package de.halirutan.mathematica.module.ui;
 
 import com.intellij.openapi.options.UnnamedConfigurable;
+import com.intellij.util.ui.JBUI;
+import de.halirutan.mathematica.MathematicaBundle;
 import de.halirutan.mathematica.module.MathematicaLanguageLevelModuleExtensionImpl;
 import de.halirutan.mathematica.sdk.MathematicaLanguageLevel;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Provides the ComboBox that let's the user select the language level when creating a new Mathematica module.
@@ -43,11 +46,19 @@ abstract public class MathematicaModuleLanguageLevelConfigurable implements Unna
   private MathematicaLanguageLevelComboBox myLanguageLevelCombo;
 
   MathematicaModuleLanguageLevelConfigurable() {
-    myPanel = new JPanel();
+    myPanel = new JPanel(new GridBagLayout());
     myModuleExtension = getModuleExtension();
     myLanguageLevelCombo = new MathematicaLanguageLevelComboBox();
     myLanguageLevelCombo.setSelectedItem(getModuleExtension().getMathematicaLanguageLevel());
-    myPanel.add(myLanguageLevelCombo);
+    JLabel label = new JLabel(MathematicaBundle.message("module.settings.language.level"));
+    label.setLabelFor(myLanguageLevelCombo);
+    myPanel.add(label,
+        new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NORTHWEST,
+            JBUI.insets(12, 6, 12, 0), 0, 0));
+    myPanel.add(myLanguageLevelCombo,
+        new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.NORTHWEST,
+            JBUI.insets(6, 6, 12, 0), 0, 0));
+
   }
 
   @Nullable

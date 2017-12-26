@@ -66,12 +66,15 @@ public class MathematicaFileTemplateProvider {
                                               @NotNull Properties properties) throws Exception {
     rootDir.refresh(false, false);
     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(rootDir);
+    final Properties defaultProperties = FileTemplateManager.getInstance(project).getDefaultProperties();
+    defaultProperties.putAll(properties);
     if (directory != null) {
-      return createFromTemplate(project, templateName, fileName, directory, properties);
+      return createFromTemplate(project, templateName, fileName, directory, defaultProperties);
     }
     return null;
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   @Nullable
   public static PsiElement createFromTemplate(@NotNull Project project,
                                               @NotNull VirtualFile rootDir,
