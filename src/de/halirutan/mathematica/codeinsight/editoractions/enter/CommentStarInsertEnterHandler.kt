@@ -29,12 +29,12 @@ import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 
 /**
+ * @Note Currently unused!
  * Inserts a * in each new line of a multi-line comment
  * @author patrick (04.12.17).
  */
@@ -54,19 +54,10 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
       val document = editor.document
       val textLength = document.textLength
 
-      // The case that we opened a comment with (*|) and therefore the complete file is commented
-      // We insert the missing *
-      if (comment.textRange.endOffset == textLength && offset < textLength && document.getText(TextRange.create(offset, offset + 1)) == ")") {
-        document.insertString(offset, " * \n *")
-        caretModel.moveToOffset(offset + 3)
-        psiDocManager.commitDocument(document)
-        return EnterHandlerDelegate.Result.Stop
-      }
-
-
       val lineNumber = document.getLineNumber(offset)
       val elementStartLine = document.getLineNumber(comment.textOffset)
       val elementEndLine = document.getLineNumber(comment.textOffset + comment.textLength)
+      val lineStartOffset = document.getLineStartOffset(lineNumber)
 
       val insertString: String
       val move: Int
@@ -77,6 +68,7 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
         insertString = "* "
         move = 2
       }
+
       document.insertString(offset, insertString)
       caretModel.moveToOffset(offset + move)
 

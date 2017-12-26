@@ -21,7 +21,6 @@
 
 package de.halirutan.mathematica.codeinsight.spellcheck;
 
-import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLanguageInjectionHost;
@@ -53,9 +52,9 @@ public class MathematicaSpellCheck extends SpellcheckingStrategy {
     if (element instanceof Symbol) return new PsiIdentifierOwnerTokenizer();
     if (element instanceof MString) return TEXT_TOKENIZER;
     if (element instanceof PsiComment) {
-      if (SuppressionUtil.isSuppressionComment(element)) {
-        return EMPTY_TOKENIZER;
-      }
+//      if (SuppressionUtil.isSuppressionComment(element)) {
+//        return EMPTY_TOKENIZER;
+//      }
       return myCommentTokenizer;
     }
     return EMPTY_TOKENIZER;

@@ -21,7 +21,10 @@
 
 package de.halirutan.mathematica.codeinsight.editoractions;
 
-import com.intellij.lang.Commenter;
+import com.intellij.lang.CodeDocumentationAwareCommenter;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.tree.IElementType;
+import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -32,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author patrick (3/22/13)
  */
-public class MathematicaCommenter implements Commenter {
+public class MathematicaCommenter implements CodeDocumentationAwareCommenter {
   @Nullable
   @Override
   public String getLineCommentPrefix() {
@@ -65,12 +68,53 @@ public class MathematicaCommenter implements Commenter {
   @Nullable
   @Override
   public String getCommentedBlockCommentPrefix() {
-    return "*";
+    return "-";
   }
 
   @Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
+    return "+";
+  }
+
+  @Nullable
+  @Override
+  public IElementType getLineCommentTokenType() {
     return null;
+  }
+
+  @Nullable
+  @Override
+  public IElementType getBlockCommentTokenType() {
+    return MathematicaElementTypes.COMMENT;
+  }
+
+  @Nullable
+  @Override
+  public IElementType getDocumentationCommentTokenType() {
+    return MathematicaElementTypes.COMMENT;
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentPrefix() {
+    return "(**";
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentLinePrefix() {
+    return "*";
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentSuffix() {
+    return "*)";
+  }
+
+  @Override
+  public boolean isDocumentationComment(PsiComment element) {
+    return true;
   }
 }
