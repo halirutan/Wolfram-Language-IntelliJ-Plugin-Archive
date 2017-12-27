@@ -29,6 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +43,7 @@ abstract class AbstractSurrounder implements Surrounder {
 
   @Override
   public boolean isApplicable(@NotNull PsiElement[] elements) {
-    return true;
+    return elements.length > 0 && elements[0].getContainingFile() instanceof MathematicaPsiFile;
   }
 
   protected abstract String getOpening();

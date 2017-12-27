@@ -136,6 +136,7 @@ public class MathematicaEnterInsideFunctionHandler extends EnterHandlerDelegateA
     if (project != null) {
       CodeStyleManager.getInstance(project).adjustLineIndent(editor.getDocument(), caretOffset.get() + 1);
     }
+    PsiDocumentManager.getInstance(file.getProject()).commitDocument(document);
     return Result.DefaultForceIndent;
   }
 

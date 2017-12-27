@@ -33,6 +33,7 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiUtilBase;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.lang.psi.api.Expression;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -48,12 +49,18 @@ public class MathematicaSurroundWithRangeAdjuster implements SurroundWithRangeAd
   @Nullable
   @Override
   public TextRange adjustSurroundWithRange(PsiFile file, TextRange selectedRange) {
-    return adjustSurroundWithRange(file, selectedRange, true);
+    if (file instanceof MathematicaPsiFile) {
+      return adjustSurroundWithRange(file, selectedRange, true);
+    }
+    return selectedRange;
   }
 
   @Nullable
   @Override
   public TextRange adjustSurroundWithRange(PsiFile file, TextRange selectedRange, boolean hasSelection) {
+    if (!(file instanceof MathematicaPsiFile)) {
+      return selectedRange;
+    }
     int startOffset = selectedRange.getStartOffset();
     int endOffset = selectedRange.getEndOffset();
     if (endOffset < startOffset) {
@@ -103,6 +110,6 @@ public class MathematicaSurroundWithRangeAdjuster implements SurroundWithRangeAd
         return bestExpression.getTextRange();
       }
     }
-    return null;
+    return selectedRange;
   }
 }

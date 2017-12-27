@@ -26,6 +26,7 @@ import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,7 +55,10 @@ public class MathematicaSurroundDescriptor implements SurroundDescriptor {
   @NotNull
   @Override
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    return findElementsInRange(file, startOffset, endOffset);
+    if (file instanceof MathematicaPsiFile) {
+      return findElementsInRange(file, startOffset, endOffset);
+    }
+    return PsiElement.EMPTY_ARRAY;
   }
 
   private PsiElement[] findElementsInRange(PsiFile file, int startOffset, int endOffset) {
