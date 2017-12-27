@@ -1,6 +1,7 @@
 package de.halirutan.mathematica.lang.resolve;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.psi.PsiElement;
@@ -27,12 +28,15 @@ import java.util.stream.Collectors;
  */
 public class MathematicaGlobalResolveCache {
 
+  private static final Logger LOG =
+      Logger.getInstance("#de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache");
+
   private static final NotNullLazyKey<MathematicaGlobalResolveCache, Project> INSTANCE_KEY =
       ServiceManager.createLazyKey(MathematicaGlobalResolveCache.class);
   private final Map<LightFileSymbol, SymbolResolveResult> myCachedFileSymbols = new ConcurrentHashMap<>();
   private final Map<LightBuiltInSymbol, SymbolResolveResult> myCachedBuiltinSymbols = new ConcurrentHashMap<>();
   private final Map<LightExternalSymbol, SymbolResolveResult> myCachedExternalSymbols = new ConcurrentHashMap<>();
-  private boolean myInvalidCache = true;
+
 
   private MathematicaGlobalResolveCache(@Nullable("can be null in com.intellij.core.JavaCoreApplicationEnvironment.JavaCoreApplicationEnvironment") MessageBus messageBus) {
     if (messageBus != null) {
@@ -40,7 +44,7 @@ public class MathematicaGlobalResolveCache {
         @Override
         public void afterPsiChanged(boolean isPhysical) {
           if (isPhysical) {
-            markInvalid();
+            clearCaches();
           }
         }
       });
@@ -51,16 +55,11 @@ public class MathematicaGlobalResolveCache {
     return INSTANCE_KEY.getValue(project);
   }
 
-  private void markInvalid() {
-    myInvalidCache = true;
-  }
-
   private void clearCaches() {
+    LOG.debug("Clearing symbol caches");
     myCachedFileSymbols.clear();
     myCachedBuiltinSymbols.clear();
     myCachedExternalSymbols.clear();
-    myInvalidCache = false;
-
   }
 
   public boolean containsSymbol(@NotNull Symbol symbol) {
@@ -83,18 +82,12 @@ public class MathematicaGlobalResolveCache {
   }
 
   public SymbolResolveResult cacheFileSymbol(@NotNull Symbol symbol, PsiElement scopeElement) {
-    if (myInvalidCache) {
-      clearCaches();
-    }
     final LightFileSymbol lightSymbol = new LightFileSymbol(symbol);
     return myCachedFileSymbols.computeIfAbsent(lightSymbol,
         k -> new SymbolResolveResult(lightSymbol, LocalizationConstruct.MScope.FILE_SCOPE, scopeElement, true));
   }
 
   public SymbolResolveResult cacheInvalidFileSymbol(@NotNull Symbol symbol, PsiElement scopeElement) {
-    if (myInvalidCache) {
-      clearCaches();
-    }
     final LightFileSymbol lightSymbol = new LightFileSymbol(symbol);
     return myCachedFileSymbols.computeIfAbsent(lightSymbol,
         k -> new SymbolResolveResult(lightSymbol, LocalizationConstruct.MScope.NULL_SCOPE, scopeElement, false));
@@ -102,18 +95,12 @@ public class MathematicaGlobalResolveCache {
 
 
   public SymbolResolveResult cacheBuiltInSymbol(@NotNull Symbol symbol) {
-    if (myInvalidCache) {
-      clearCaches();
-    }
     final LightBuiltInSymbol lightSymbol = new LightBuiltInSymbol(symbol);
     return myCachedBuiltinSymbols.computeIfAbsent(lightSymbol,
         k -> new SymbolResolveResult(lightSymbol, LocalizationConstruct.MScope.KERNEL_SCOPE, null, true));
   }
 
   public SymbolResolveResult cacheExternalSymbol(@NotNull Symbol symbol, @NotNull Symbol externalSymbol, PsiElement scopeElement) {
-    if (myInvalidCache) {
-      clearCaches();
-    }
     final LightExternalSymbol lightSymbol = new LightExternalSymbol(symbol);
     return myCachedExternalSymbols.computeIfAbsent(lightSymbol,
         k -> new SymbolResolveResult(externalSymbol, LocalizationConstruct.MScope.IMPORT_SCOPE, scopeElement, true));

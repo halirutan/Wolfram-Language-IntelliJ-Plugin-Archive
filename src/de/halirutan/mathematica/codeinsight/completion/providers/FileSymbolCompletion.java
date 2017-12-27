@@ -23,36 +23,32 @@
 
 package de.halirutan.mathematica.codeinsight.completion.providers;
 
-import com.google.common.collect.Lists;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.hash.HashSet;
-import de.halirutan.mathematica.codeinsight.completion.util.LocalDefinitionCompletionProvider;
+import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
-import de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor.GLOBAL_VARIABLE_PRIORITY;
-import static de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor.LOCAL_VARIABLE_PRIORITY;
 
 
 /**
- * @author patrick (4/2/13)
+ * Provides completion for symbols that are defined at File Scope (opposed to locally bound variables).
  */
 public class FileSymbolCompletion extends MathematicaCompletionProvider {
 
+  private static final Logger LOG =
+      Logger.getInstance("#de.halirutan.mathematica.codeinsight.completion.providers.FileSymbolCompletion");
 
   @Override
   public void addTo(CompletionContributor contributor) {
@@ -62,57 +58,20 @@ public class FileSymbolCompletion extends MathematicaCompletionProvider {
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    final Symbol callingSymbol = (Symbol) parameters.getPosition().getParent();
+    final PsiFile containingFile = parameters.getOriginalFile();
 
     if (!parameters.isExtendedCompletion()) {
-      String prefix = findCurrentText(parameters, parameters.getPosition());
-      if (prefix.isEmpty() || Character.isDigit(prefix.charAt(0))) {
-        return;
-      }
-      final PsiFile containingFile = parameters.getOriginalFile();
-      List<Symbol> variants = Lists.newArrayList();
-
-      final LocalDefinitionCompletionProvider processor = new LocalDefinitionCompletionProvider(callingSymbol);
-      PsiTreeUtil.treeWalkUp(processor, callingSymbol, containingFile, ResolveState.initial());
-
-      variants.addAll(processor.getSymbols());
-
-
-      for (Symbol currentSymbol : variants) {
-        result.addElement(PrioritizedLookupElement.withPriority(
-            LookupElementBuilder.create(currentSymbol).bold().withItemTextForeground(JBColor.GREEN),
-            LOCAL_VARIABLE_PRIORITY));
-      }
-
-      final MathematicaGlobalResolveCache cache =
-          MathematicaGlobalResolveCache.getInstance(callingSymbol.getProject());
-      cache.getCachedFileSymbolResolves(parameters.getOriginalFile())
-           .forEach(symbolResolveResult -> {
-             if (symbolResolveResult.getElement() != null) {
-               result.addElement(PrioritizedLookupElement.withPriority(
-                   LookupElementBuilder.create(symbolResolveResult.getElement()).bold(),
-                   GLOBAL_VARIABLE_PRIORITY));
-             }
-           });
-
-    } else {
-      final Set<String> allSymbols = new HashSet<>();
-      PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
-        @Override
-        public void visitElement(PsiElement element) {
-          if (element instanceof Symbol) {
-            allSymbols.add(((Symbol) element).getFullSymbolName());
+      LOG.debug("Running file symbol completion");
+      final Set<String> symbols = PsiTreeUtil.findChildrenOfType(containingFile, Symbol.class).stream().filter(
+          s -> {
+            final LocalizationConstruct.MScope localizationConstruct = s.getLocalizationConstruct();
+            return s.isValid() && localizationConstruct == LocalizationConstruct.MScope.FILE_SCOPE;
           }
-          element.acceptChildren(this);
-        }
-      };
-      visitor.visitFile(parameters.getOriginalFile());
-      for (String currentSymbol : allSymbols) {
-        result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(currentSymbol),
-            GLOBAL_VARIABLE_PRIORITY));
-
-      }
-
+      ).map(
+          Symbol::getSymbolName
+      ).collect(Collectors.toSet());
+      symbols.forEach(s -> result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(s),
+          GLOBAL_VARIABLE_PRIORITY)));
     }
   }
 

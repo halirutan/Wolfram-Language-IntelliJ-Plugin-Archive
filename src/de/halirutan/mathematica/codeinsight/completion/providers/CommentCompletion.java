@@ -45,7 +45,7 @@ import static com.intellij.patterns.PlatformPatterns.psiComment;
  *
  * @author patrick (4/2/13)
  */
-public class CommentCompletionProvider extends MathematicaCompletionProvider {
+public class CommentCompletion extends MathematicaCompletionProvider {
 
   private static final String[] COMMENT_SECTIONS = {
       "Section", "Subsection", "Subsubsection", "Text", "Package", "Title", "Subtitle", "Subsubtitle", "Chapter", "Subchapter", "Subsubsubsection", "Subsubsubsubsubsection",
@@ -66,30 +66,29 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
     if (parameters.getInvocationCount() > 0) {
-      final String prefix = findCommentPrefix(parameters);
-
       if (isEmptyComment(parameters)) {
         int priority = 100;
         for (String section : COMMENT_SECTIONS) {
           priority--;
 
           final LookupElementBuilder elm = LookupElementBuilder.create(" ::" + section + ":: ")
-              .withPresentableText("::" + section + "::");
-          result.addElement(PrioritizedLookupElement.withPriority(elm, priority));
+                                                               .withPresentableText("::" + section + "::");
+          result.withPrefixMatcher(new PlainPrefixMatcher(""))
+                .addElement(PrioritizedLookupElement.withPriority(elm, priority));
         }
-      }
 
-      final CompletionResultSet resultWithPrefix = result.withPrefixMatcher(prefix);
-
-      for (String tag : COMMENT_TAGS) {
-        resultWithPrefix.addElement(LookupElementBuilder.create(":" + tag + ":"));
-      }
-
-      final PsiFile file = parameters.getOriginalFile();
-      final MathematicaGlobalResolveCache symbolCache = MathematicaGlobalResolveCache.getInstance(file.getProject());
-      final List<String> cachedDefinitions = symbolCache.getCachedFileSymbolNames(file);
-      for (String definition : cachedDefinitions) {
-        resultWithPrefix.addElement(LookupElementBuilder.create(definition));
+        for (String tag : COMMENT_TAGS) {
+          result.withPrefixMatcher(new PlainPrefixMatcher(""))
+                .addElement(LookupElementBuilder.create(" :" + tag + ": "));
+        }
+      } else {
+        final String prefix = findCommentPrefix(parameters);
+        final PsiFile file = parameters.getOriginalFile();
+        final MathematicaGlobalResolveCache symbolCache = MathematicaGlobalResolveCache.getInstance(file.getProject());
+        final List<String> cachedDefinitions = symbolCache.getCachedFileSymbolNames(file);
+        for (String definition : cachedDefinitions) {
+          result.withPrefixMatcher(new PlainPrefixMatcher(prefix)).addElement(LookupElementBuilder.create(definition));
+        }
       }
     }
   }
@@ -98,7 +97,7 @@ public class CommentCompletionProvider extends MathematicaCompletionProvider {
     final PsiElement commentElement = parameters.getPosition();
     if (commentElement instanceof PsiComment) {
       final String commentText = commentElement.getText();
-      return commentText.matches("\\(\\*\\s*ZZZ\\s*\\*\\)") || EMPTY_COMMENT.matcher(commentText).matches();
+      return commentText.matches("\\(\\*ZZZ\\*\\)") || EMPTY_COMMENT.matcher(commentText).matches();
     }
     return false;
   }

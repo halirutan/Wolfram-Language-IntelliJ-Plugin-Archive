@@ -85,7 +85,6 @@ public class MathematicaGlobalSymbolResolver {
     final Collection<PackageExportSymbol> allKeys =
         fileIndex.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
 
-
     for (PackageExportSymbol key : allKeys) {
       if (key.isExported() && key.getSymbol().equals(ref.getSymbolName())) {
         final Collection<VirtualFile> containingFiles =

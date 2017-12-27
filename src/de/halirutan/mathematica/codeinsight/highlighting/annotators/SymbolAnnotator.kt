@@ -25,6 +25,7 @@ package de.halirutan.mathematica.codeinsight.highlighting.annotators
 
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.psi.PsiElement
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighterColors
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct
@@ -42,12 +43,11 @@ class SymbolAnnotator : Annotator {
 
   /** Annotates a [symbol] by checking its localization */
   override fun annotate(symbol: PsiElement, holder: AnnotationHolder) {
+    ProgressManager.checkCanceled()
     if (symbol is Symbol) {
-      symbol.resolve()
       val scope = symbol.localizationConstruct
       val scopeType = scope.type
       if (LocalizationConstruct.MScope.NULL_SCOPE == scope) {
-//        MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.UNKNOWN_SYMBOL)
         return
       }
       scopeType.let {

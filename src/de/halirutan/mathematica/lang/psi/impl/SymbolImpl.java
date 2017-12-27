@@ -200,10 +200,12 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     myScope = null;
   }
 
-  private void cacheScope(@NotNull ResolveResult resolve) {
-    if ((resolve instanceof SymbolResolveResult)) {
+  private void cacheScope(@Nullable ResolveResult resolve) {
+    if (resolve instanceof SymbolResolveResult) {
       myScope = ((SymbolResolveResult) resolve).getLocalization();
+      return;
     }
+    myScope = MScope.NULL_SCOPE;
   }
 
   @NotNull

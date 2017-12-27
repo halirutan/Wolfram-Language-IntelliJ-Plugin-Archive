@@ -22,7 +22,7 @@
 package de.halirutan.mathematica.lang.psi.util;
 
 import com.intellij.psi.PsiComment;
-import de.halirutan.mathematica.codeinsight.completion.providers.CommentCompletionProvider;
+import de.halirutan.mathematica.codeinsight.completion.providers.CommentCompletion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public class Comments {
    * <p>
    * <code>(* ::Section:: *)</code>
    * <p>
-   * Please see {@link CommentCompletionProvider#COMMENT_SECTIONS}.
+   * Please see {@link CommentCompletion#COMMENT_SECTIONS}.
    *
    * @param comment the comment PsiElement
    * @return true if the comment is a valid title, section, ... comment

@@ -26,12 +26,18 @@ package de.halirutan.mathematica.codeinsight.inspections.symbol
 import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInspection.LocalInspectionToolSession
 import com.intellij.codeInspection.ProblemsHolder
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiFile
+import com.intellij.psi.search.PsiElementProcessor
+import com.intellij.psi.util.PsiTreeUtil
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection
 import de.halirutan.mathematica.codeinsight.inspections.InspectionBundle
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile
 import de.halirutan.mathematica.lang.psi.api.Symbol
+import de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache
 
 /**
  *
@@ -51,16 +57,40 @@ class UnresolvedSymbolInspection : AbstractInspection() {
 
   override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean, session: LocalInspectionToolSession): PsiElementVisitor {
     return object : MathematicaVisitor() {
-      override fun visitSymbol(symbol: Symbol?) {
-        symbol?.let {
-          if (!isOnTheFly) {
-            symbol.resolve()
+
+      override fun visitFile(file: PsiFile?) {
+        if (file is MathematicaPsiFile) {
+          MathematicaGlobalResolveCache.getInstance(file.project)
+          PsiTreeUtil.processElements(file, PsiElementProcessor { symbol: PsiElement ->
+            if (symbol is Symbol && symbol.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
+              holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
+            }
+            return@PsiElementProcessor true
           }
-          if (symbol.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
-            holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
-          }
+
+//          { symbol: Symbol? ->
+//                if (symbol is Symbol && symbol.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
+//                  holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
+//                }
+//              }
+          )
         }
       }
+
+//      override fun visitSymbol(symbol: Symbol?) {
+//        symbol?.let {
+//          val localizationConstruct = symbol.localizationConstruct
+//          if (localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE || localizationConstruct == LocalizationConstruct.MScope.FILE_SCOPE) {
+//            ReferencesSearch.search(symbol, GlobalSearchScope.FilesScope.fileScope(symbol.containingFile)).forEach { ref ->
+//              ref.element?.let {
+//                if (it is Symbol && it.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
+//                  holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
+//                }
+//              }
+//            }
+//          }
+//        }
+//      }
     }
 
   }

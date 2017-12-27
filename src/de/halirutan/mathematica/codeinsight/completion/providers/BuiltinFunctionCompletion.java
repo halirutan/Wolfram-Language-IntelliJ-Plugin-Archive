@@ -44,7 +44,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  * found in the resource directory de/halirutan/mathematica/codeinsight/completion.
  * @author hal (4/2/13)
  */
-public class BuiltinFunctionCompletionProvider extends MathematicaCompletionProvider {
+public class BuiltinFunctionCompletion extends MathematicaCompletionProvider {
 
   @Override
   public void addTo(CompletionContributor contributor) {

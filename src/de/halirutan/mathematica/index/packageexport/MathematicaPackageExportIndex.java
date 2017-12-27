@@ -47,7 +47,7 @@ import java.util.Set;
 public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageExportSymbol> {
 
   public static final ID<PackageExportSymbol, Void> INDEX_ID = ID.create("Mathematica.fileExports");
-  private static final int BASE_VERSION = 11;
+  private static final int BASE_VERSION = 12;
   private static final LanguageFileType MATHEMATICA_FILE_TYPE = MathematicaLanguage.INSTANCE.getAssociatedFileType();
   private static final Set<String> IGNORED_FILES = new HashSet<>();
 

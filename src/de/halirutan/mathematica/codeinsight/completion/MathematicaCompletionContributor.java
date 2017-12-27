@@ -23,10 +23,7 @@ package de.halirutan.mathematica.codeinsight.completion;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionInitializationContext;
-import de.halirutan.mathematica.codeinsight.completion.providers.BuiltinFunctionCompletionProvider;
-import de.halirutan.mathematica.codeinsight.completion.providers.CommentCompletionProvider;
-import de.halirutan.mathematica.codeinsight.completion.providers.FileSymbolCompletion;
-import de.halirutan.mathematica.codeinsight.completion.providers.ImportedSymbolCompletion;
+import de.halirutan.mathematica.codeinsight.completion.providers.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,11 +40,12 @@ public class MathematicaCompletionContributor extends CompletionContributor {
 
 
   public MathematicaCompletionContributor() {
-    new BuiltinFunctionCompletionProvider().addTo(this);
+    new BuiltinFunctionCompletion().addTo(this);
     new FileSymbolCompletion().addTo(this);
+    new LocalizedSymbolCompletion().addTo(this);
     new ImportedSymbolCompletion().addTo(this);
     new SmartContextAwareCompletion().addTo(this);
-    new CommentCompletionProvider().addTo(this);
+    new CommentCompletion().addTo(this);
   }
 
   @Override

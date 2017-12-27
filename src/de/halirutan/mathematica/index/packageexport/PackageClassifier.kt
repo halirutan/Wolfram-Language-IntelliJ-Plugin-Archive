@@ -59,6 +59,9 @@ class PackageClassifier internal constructor() : MathematicaVisitor() {
     if (functionCall.matchesHead("BeginPackage")) {
       val beginPackageContext = MathematicaPsiUtilities.getBeginPackageContext(functionCall)
       myContextStack.push(beginPackageContext ?: "")
+      beginPackageContext.let {
+        myExportInfo.add(PackageExportSymbol(myFileName, it, beginPackageContext, true, functionCall.textOffset))
+      }
     } else if (functionCall.matchesHead("Begin")) {
       val beginContext = MathematicaPsiUtilities.getBeginContext(functionCall)
       myContextStack.push(beginContext ?: "")
@@ -66,6 +69,8 @@ class PackageClassifier internal constructor() : MathematicaVisitor() {
       if (!myContextStack.empty()) {
         myContextStack.pop()
       }
+    } else if (functionCall.matchesHead("If")) {
+      functionCall.acceptChildren(this)
     }
   }
 
