@@ -52,7 +52,7 @@ import java.util.Objects;
  * Symbols with explicit context like <code>Developer`ToPackedArray</code> are parsed as one symbol and this class
  * provides methods to separate the parts.
  * <br/>
- *  Provides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
+ * Provides functionality to resolve where a certain symbol is defined in code. For this, the SymbolPsiReference class
  * uses several processors which scan the local scope and global file scope. Note that GlobalDefinitionResolveProcessor
  * does not scan the whole file because this would be too slow. Instead, it expects that global symbol definitions are
  * done at file-scope. The class uses caching to speed up the resolve process. Once a definition for a symbol is found,
@@ -76,7 +76,8 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   public PsiElement setName(@NonNls @NotNull String name) {
     ASTNode identifierNode = getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
     final PsiFileFactory fileFactory = PsiFileFactory.getInstance(getProject());
-    final MathematicaPsiFileImpl file = (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, name);
+    final MathematicaPsiFileImpl file =
+        (MathematicaPsiFileImpl) fileFactory.createFileFromText("dummy.m", MathematicaFileType.INSTANCE, name);
     ASTNode newElm = file.getFirstChild().getNode().findChildByType(MathematicaElementTypes.IDENTIFIER);
     if (identifierNode != null && newElm != null) {
       getNode().replaceChild(identifierNode, newElm);
@@ -126,10 +127,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @NotNull
   public MScope getLocalizationConstruct() {
-    if (myScope == null) {
-      // this will always set the scope to a valid value
-      multiResolve(false);
-    }
+    multiResolve(false);
     return myScope;
   }
 
@@ -191,12 +189,10 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
     }
     myScope = MScope.NULL_SCOPE;
     return new ResolveResult[]{new SymbolResolveResult(new LightUndefinedSymbol(this), myScope, containingFile, false)};
-
   }
 
   @Override
   public void subtreeChanged() {
-
     myScope = null;
   }
 
@@ -226,7 +222,8 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public boolean isReferenceTo(PsiElement element) {
-    return (element instanceof Symbol || element instanceof LightSymbol) && getManager().areElementsEquivalent(resolve(), element);
+    return (element instanceof Symbol || element instanceof LightSymbol) &&
+        getManager().areElementsEquivalent(resolve(), element);
   }
 
   @NotNull

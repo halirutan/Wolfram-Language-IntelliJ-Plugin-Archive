@@ -41,6 +41,8 @@ abstract class AbstractArithmeticOperation extends ExpressionImpl implements Ari
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof MathematicaVisitor) {
       ((MathematicaVisitor) visitor).visitArithmeticOperation(this);
+    } else {
+      super.accept(visitor);
     }
   }
 }

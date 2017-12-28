@@ -104,13 +104,39 @@ public class LocalizationConstruct {
   }
 
   public enum MScope {
-    MODULE("Module", ScopeType.MODULE_LIKE, 1, 0, 0), BLOCK("Block", ScopeType.MODULE_LIKE, 1, 0, 0), DYNAMICMODULE("DynamicModule", ScopeType.MODULE_LIKE, 1, 0, 0), WITH("With", ScopeType.MODULE_LIKE, -1, 0, -2), FUNCTION("Function", ScopeType.FUNCTION_LIKE, 1, 0, 0), TABLE("Table", ScopeType.TABLE_LIKE, 0, 1, -1), DO("Do", ScopeType.TABLE_LIKE, 0, 1, -1), SUM("Sum", ScopeType.TABLE_LIKE, 0, 1, -1), NSUM("NSum", ScopeType.TABLE_LIKE, 0, 1, -1), INTEGRATE("Integrate", ScopeType.TABLE_LIKE, 0, 1, -1), NINTEGRATE("NIntegrate", ScopeType.TABLE_LIKE, 0, 1, -1),
-
-    PLOT("Plot", ScopeType.TABLE_LIKE, 0, 1, 1), PLOT3D("Plot3D", ScopeType.TABLE_LIKE, 0, 1, 2), CONTOURPLOT("ContourPlot", ScopeType.TABLE_LIKE, 0, 1, 2), CONTOURPLOT3D("ContourPlot3D", ScopeType.TABLE_LIKE, 0, 1, 3), PARAMETRICPLOT("ParametricPlot", ScopeType.TABLE_LIKE, 0, 1, 2), PARAMETRICPLOT3D("ParametricPlot3D", ScopeType.TABLE_LIKE, 0, 1, 2), STREAMPLOT("StreamPlot", ScopeType.TABLE_LIKE, 0, 1, 2), STREAMDENSITYPLOT("StreamDensityPlot", ScopeType.TABLE_LIKE, 0, 1, 2), VECTORPLOT("VectorPlot", ScopeType.TABLE_LIKE, 0, 1, 2), VECTORPLOT3D("VectorPlot3D", ScopeType.TABLE_LIKE, 0, 1, 3),
-
-    LIMIT("Limit", ScopeType.LIMIT_LIKE, 0, 1, 1), MANIPULATE("Manipulate", ScopeType.MANIPULATE_LIKE, 0, 1, -1), COMPILE("Compile", ScopeType.COMPILE_LIKE, 1, 0, 0), // The last entries because they are not directly connected to a function call with a special head,
+    MODULE("Module", ScopeType.MODULE_LIKE, 1, 0, 0),
+    BLOCK("Block", ScopeType.MODULE_LIKE, 1, 0, 0),
+    DYNAMICMODULE("DynamicModule", ScopeType.MODULE_LIKE, 1, 0, 0),
+    WITH("With", ScopeType.MODULE_LIKE, -1, 0, -2),
+    FUNCTION("Function", ScopeType.FUNCTION_LIKE, 1, 0, 0),
+    TABLE("Table", ScopeType.TABLE_LIKE, 0, 1, -1),
+    DO("Do", ScopeType.TABLE_LIKE, 0, 1, -1),
+    SUM("Sum", ScopeType.TABLE_LIKE, 0, 1, -1),
+    NSUM("NSum", ScopeType.TABLE_LIKE, 0, 1, -1),
+    INTEGRATE("Integrate", ScopeType.TABLE_LIKE, 0, 1, -1),
+    NINTEGRATE("NIntegrate", ScopeType.TABLE_LIKE, 0, 1, -1),
+    PLOT("Plot", ScopeType.TABLE_LIKE, 0, 1, 1),
+    PLOT3D("Plot3D", ScopeType.TABLE_LIKE, 0, 1, 2),
+    CONTOURPLOT("ContourPlot", ScopeType.TABLE_LIKE, 0, 1, 2),
+    CONTOURPLOT3D("ContourPlot3D", ScopeType.TABLE_LIKE, 0, 1, 3),
+    PARAMETRICPLOT("ParametricPlot", ScopeType.TABLE_LIKE, 0, 1, 2),
+    PARAMETRICPLOT3D("ParametricPlot3D", ScopeType.TABLE_LIKE, 0, 1, 2),
+    STREAMPLOT("StreamPlot", ScopeType.TABLE_LIKE, 0, 1, 2),
+    STREAMDENSITYPLOT("StreamDensityPlot", ScopeType.TABLE_LIKE, 0, 1, 2),
+    VECTORPLOT("VectorPlot", ScopeType.TABLE_LIKE, 0, 1, 2),
+    VECTORPLOT3D("VectorPlot3D", ScopeType.TABLE_LIKE, 0, 1, 3),
+    LIMIT("Limit", ScopeType.LIMIT_LIKE, 0, 1, 1),
+    MANIPULATE("Manipulate", ScopeType.MANIPULATE_LIKE, 0, 1, -1),
+    COMPILE("Compile", ScopeType.COMPILE_LIKE, 1, 0, 0),
+    // The last entries because they are not directly connected to a function call with a special head,
     // because we create the scope from the PsiElement automatically.
-    ANONYMOUS_FUNCTION_SCOPE("AnonymousFunction Scope", ScopeType.ANONYMOUS_FUNCTION_LIKE, 0, 1, 1), RULEDELAYED_SCOPE("RuleDelayed Scope", ScopeType.RULE_LIKE, 1, 0, 0), SETDELAYED_SCOPE("SetDelayed Scope", ScopeType.RULE_LIKE, 1, 0, 0), KERNEL_SCOPE("Kernel Scope"), FILE_SCOPE("File Scope"), IMPORT_SCOPE("Import Scope"), NULL_SCOPE("Null Scope");
+    ANONYMOUS_FUNCTION_SCOPE("AnonymousFunction Scope", ScopeType.ANONYMOUS_FUNCTION_LIKE, 0, 1, 1),
+    RULEDELAYED_SCOPE("RuleDelayed Scope", ScopeType.RULE_LIKE, 1, 0, 0),
+    SETDELAYED_SCOPE("SetDelayed Scope", ScopeType.RULE_LIKE, 1, 0, 0),
+    KERNEL_SCOPE("Kernel Scope"),
+    FILE_SCOPE("File Scope"),
+    IMPORT_SCOPE("Import Scope"),
+    NULL_SCOPE("Null Scope");
 
     final String myName;
     final ScopeType myType;
@@ -171,6 +197,4 @@ public class LocalizationConstruct {
       return myScopePositionEnd;
     }
   }
-
-
 }

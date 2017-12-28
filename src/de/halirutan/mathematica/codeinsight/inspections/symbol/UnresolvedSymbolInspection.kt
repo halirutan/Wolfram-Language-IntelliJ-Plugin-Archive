@@ -40,8 +40,7 @@ import de.halirutan.mathematica.lang.psi.api.Symbol
 import de.halirutan.mathematica.lang.resolve.MathematicaGlobalResolveCache
 
 /**
- *
- * @author patrick (13.09.17).
+ * Provides warning annotations to symbols that could not be resolved to some place of definition.
  */
 class UnresolvedSymbolInspection : AbstractInspection() {
 
@@ -67,32 +66,10 @@ class UnresolvedSymbolInspection : AbstractInspection() {
             }
             return@PsiElementProcessor true
           }
-
-//          { symbol: Symbol? ->
-//                if (symbol is Symbol && symbol.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
-//                  holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
-//                }
-//              }
           )
         }
       }
-
-//      override fun visitSymbol(symbol: Symbol?) {
-//        symbol?.let {
-//          val localizationConstruct = symbol.localizationConstruct
-//          if (localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE || localizationConstruct == LocalizationConstruct.MScope.FILE_SCOPE) {
-//            ReferencesSearch.search(symbol, GlobalSearchScope.FilesScope.fileScope(symbol.containingFile)).forEach { ref ->
-//              ref.element?.let {
-//                if (it is Symbol && it.localizationConstruct == LocalizationConstruct.MScope.NULL_SCOPE) {
-//                  holder.registerProblem(symbol, InspectionBundle.message("symbol.unresolved.message"))
-//                }
-//              }
-//            }
-//          }
-//        }
-//      }
     }
-
   }
 
 }
