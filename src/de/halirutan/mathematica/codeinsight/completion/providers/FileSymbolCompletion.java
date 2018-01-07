@@ -24,6 +24,7 @@
 package de.halirutan.mathematica.codeinsight.completion.providers;
 
 import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.patterns.PlatformPatterns;
@@ -60,7 +61,11 @@ public class FileSymbolCompletion extends MathematicaCompletionProvider {
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
     final PsiFile containingFile = parameters.getOriginalFile();
 
-    if (!parameters.isExtendedCompletion()) {
+    String prefix = findCurrentText(parameters, parameters.getPosition());
+    if (!parameters.isExtendedCompletion() && !prefix.isEmpty()) {
+      final CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
+      CompletionResultSet result2 = result.withPrefixMatcher(matcher);
+
       LOG.debug("Running file symbol completion");
       final Set<String> symbols = PsiTreeUtil.findChildrenOfType(containingFile, Symbol.class).stream().filter(
           s -> {
@@ -70,7 +75,7 @@ public class FileSymbolCompletion extends MathematicaCompletionProvider {
       ).map(
           Symbol::getSymbolName
       ).collect(Collectors.toSet());
-      symbols.forEach(s -> result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(s),
+      symbols.forEach(s -> result2.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(s),
           GLOBAL_VARIABLE_PRIORITY)));
     }
   }

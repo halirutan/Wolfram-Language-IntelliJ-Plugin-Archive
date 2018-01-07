@@ -25,25 +25,25 @@ package de.halirutan.mathematica.codeinsight.completion.providers;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.ProjectScope;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.indexing.FileBasedIndex;
-import de.halirutan.mathematica.codeinsight.completion.util.ImportedContextVisitor;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
-import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 import static de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor.IMPORT_VARIABLE_PRIORITY;
 
 
 /**
- * @author patrick (4/2/13)
+ * Accesses the file index to provide completion for functions that are defined in other packages.
  */
 public class ImportedSymbolCompletion extends MathematicaCompletionProvider {
 
@@ -59,18 +59,27 @@ public class ImportedSymbolCompletion extends MathematicaCompletionProvider {
     final Project project = callingSymbol.getProject();
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    if (parameters.isExtendedCompletion() || !(prefix.isEmpty() || Character.isDigit(prefix.charAt(0)))) {
+    final Module module =
+        ModuleUtilCore.findModuleForFile(parameters.getOriginalFile().getVirtualFile(), project);
+    if (module != null) {
 
-      ImportedContextVisitor importVisitor = new ImportedContextVisitor();
-      callingSymbol.getContainingFile().accept(importVisitor);
-      final FileBasedIndex index = FileBasedIndex.getInstance();
-      final Collection<PackageExportSymbol> allKeys = index.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
-      for (PackageExportSymbol key : allKeys) {
-        if (key.isExported()) {
-          result.addElement(PrioritizedLookupElement.withPriority(
-              LookupElementBuilder.create(key.getSymbol()).appendTailText("(" + key.getFileName() + ")", true),
-              IMPORT_VARIABLE_PRIORITY));
-        }
+      if (!parameters.isExtendedCompletion() || !(prefix.isEmpty() || Character.isDigit(prefix.charAt(0)))) {
+        final GlobalSearchScope moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
+                                                               .union(ProjectScope.getLibrariesScope(project));
+        final FileBasedIndex index = FileBasedIndex.getInstance();
+        index.processAllKeys(
+            MathematicaPackageExportIndex.INDEX_ID,
+            key -> {
+              if (key.isExported()) {
+                result.addElement(PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(key.getSymbol()).withTypeText("(" + key.getFileName() + ")", true),
+                    IMPORT_VARIABLE_PRIORITY));
+              }
+              return true;
+            },
+            moduleScope,
+            null
+        );
       }
     }
   }

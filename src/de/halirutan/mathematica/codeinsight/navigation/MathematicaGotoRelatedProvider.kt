@@ -43,47 +43,46 @@ import java.util.*
  */
 class MathematicaGotoRelatedProvider : GotoRelatedProvider() {
 
-    override fun getItems(psiElement: PsiElement): List<GotoRelatedItem> {
-        // I want the entries in the suggestion window to be sorted by line number!
-        val symbol = when {
-            psiElement is Symbol -> psiElement
-            psiElement is LeafPsiElement && psiElement.elementType == MathematicaElementTypes.IDENTIFIER -> psiElement.parent
-            else -> psiElement
-        }
-        val declarations = SortedList(Comparator.comparingInt<GotoSymbolItem>({ it.lineNumber }))
-        if (symbol is Symbol) {
-            val containingFile = symbol.getContainingFile()
-            val resolve = symbol.resolve() ?: return declarations
-            val usages = ReferencesSearch.search(resolve, GlobalSearchScope.fileScope(containingFile)).findAll()
-            val project = symbol.getProject()
-            val documentManager = PsiDocumentManager.getInstance(project)
-            val fileName = containingFile.name
-            val document = documentManager.getDocument(containingFile) ?: return declarations
-            for (usage in usages) {
-                val usageElement = usage.element
-                if (usageElement is Symbol && usageElement.isValid) {
-                    // What follows is that want to collect code around the found element.
-                    // I will collect neighbouring PsiElements but not more than 20 characters to the right and
-                    // to the left of the current usageElement.
-                    val elementTextOffset = usageElement.getTextOffset()
-                    val lineNumber = document.getLineNumber(elementTextOffset)
-                    val lineStartOffset = document.getLineStartOffset(lineNumber)
-                    val lineEndOffset = document.getLineEndOffset(lineNumber)
-                    assert(lineStartOffset <= lineEndOffset)
-
-                    var textToShow = document.getText(TextRange.create(lineStartOffset, lineEndOffset)).trim { it <= ' ' }
-                    textToShow = if (textToShow.length > 80) textToShow.substring(0, 80) else textToShow
-
-                    val item = GotoSymbolItem(
-                            usageElement,
-                            textToShow,
-                            "(line ${lineNumber + 1} in $fileName)",
-                            lineNumber)
-                    declarations.add(item)
-                }
-            }
-        }
-        return declarations
+  override fun getItems(psiElement: PsiElement): List<GotoRelatedItem> {
+    // I want the entries in the suggestion window to be sorted by line number!
+    val symbol = when {
+      psiElement is Symbol -> psiElement
+      psiElement is LeafPsiElement && psiElement.elementType == MathematicaElementTypes.IDENTIFIER -> psiElement.parent
+      else -> psiElement
     }
+    val declarations = SortedList(Comparator.comparingInt<GotoSymbolItem>({ it.lineNumber }))
+    if (symbol is Symbol) {
+      val containingFile = symbol.getContainingFile()
+      val resolve = symbol.resolve() ?: return declarations
+      val usages = ReferencesSearch.search(resolve, GlobalSearchScope.fileScope(containingFile)).findAll()
+      val project = symbol.getProject()
+      val documentManager = PsiDocumentManager.getInstance(project)
+      val fileName = containingFile.name
+      val document = documentManager.getDocument(containingFile) ?: return declarations
+      for (usage in usages) {
+        val usageElement = usage.element
+        if (usageElement is Symbol && usageElement.isValid) {
+          // What follows is that want to collect code around the found element.
+          // I will collect neighbouring PsiElements but not more than 20 characters to the right and
+          // to the left of the current usageElement.
+          val elementTextOffset = usageElement.getTextOffset()
+          val lineNumber = document.getLineNumber(elementTextOffset)
+          val lineStartOffset = document.getLineStartOffset(lineNumber)
+          val lineEndOffset = document.getLineEndOffset(lineNumber)
+          assert(lineStartOffset <= lineEndOffset)
 
+          var textToShow = document.getText(TextRange.create(lineStartOffset, lineEndOffset)).trim { it <= ' ' }
+          textToShow = if (textToShow.length > 80) textToShow.substring(0, 80) else textToShow
+
+          val item = GotoSymbolItem(
+              usageElement,
+              textToShow,
+              "(line ${lineNumber + 1} in $fileName)",
+              lineNumber)
+          declarations.add(item)
+        }
+      }
+    }
+    return declarations
+  }
 }

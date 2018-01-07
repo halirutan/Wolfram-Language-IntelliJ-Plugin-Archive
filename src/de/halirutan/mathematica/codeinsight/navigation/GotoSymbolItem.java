@@ -23,8 +23,11 @@ package de.halirutan.mathematica.codeinsight.navigation;
 
 import com.intellij.navigation.GotoRelatedItem;
 import com.intellij.psi.PsiElement;
+import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 /**
  * Provides a {@link GotoRelatedItem} that is useful to give information about the usage of a Mathematica symbol
@@ -67,4 +70,9 @@ class GotoSymbolItem extends GotoRelatedItem {
     return myLineNumber;
   }
 
+  @Nullable
+  @Override
+  public Icon getCustomIcon() {
+    return MathematicaIcons.FILE_ICON;
+  }
 }

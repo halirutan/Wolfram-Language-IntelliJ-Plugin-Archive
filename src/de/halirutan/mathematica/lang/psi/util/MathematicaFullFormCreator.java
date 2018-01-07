@@ -126,6 +126,14 @@ public class MathematicaFullFormCreator extends MathematicaRecursiveVisitor {
   }
 
   @Override
+  public void visitGroup(Group group) {
+    final PsiElement[] children = group.getChildren();
+    if (children.length == 1) {
+      children[0].accept(this);
+    }
+  }
+
+  @Override
   public void visitStringifiedSymbol(StringifiedSymbol stringifiedSymbol) {
     addContent("\"" + stringifiedSymbol.getText() + "\"");
   }

@@ -23,21 +23,25 @@
 
 package de.halirutan.mathematica.lang.resolve;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
-import de.halirutan.mathematica.index.packageexport.PackageExportSymbol;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.resolve.processors.GlobalDefinitionResolveProcessor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol;
 
@@ -80,32 +84,43 @@ public class MathematicaGlobalSymbolResolver {
       return new ResolveResult[]{result};
     }
 
-    final FileBasedIndex fileIndex = FileBasedIndex.getInstance();
-    final Project project = ref.getProject();
-    final Collection<PackageExportSymbol> allKeys =
-        fileIndex.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
-
-    for (PackageExportSymbol key : allKeys) {
-      if (key.isExported() && key.getSymbol().equals(ref.getSymbolName())) {
-        final Collection<VirtualFile> containingFiles =
-            fileIndex.getContainingFiles(MathematicaPackageExportIndex.INDEX_ID, key,
-                GlobalSearchScope.allScope(project));
-        if (containingFiles.size() > 0) {
-          final VirtualFile file = containingFiles.iterator().next();
-          final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-          if (psiFile != null) {
-            final Symbol externalSymbol =
-                PsiTreeUtil.findElementOfClassAtOffset(psiFile, key.getOffset(), Symbol.class, true);
-            if (externalSymbol != null) {
-              final SymbolResolveResult result = symbolCache.cacheExternalSymbol(ref, externalSymbol, psiFile);
-              return new ResolveResult[]{result};
+    final Project project = containingFile.getProject();
+    final Module module =
+        ModuleUtilCore.findModuleForFile(containingFile.getVirtualFile(), project);
+    if (module != null) {
+      final List<SymbolResolveResult> references = new ArrayList<>();
+      final PsiManager psiManager = PsiManager.getInstance(project);
+      final FileBasedIndex fileIndex = FileBasedIndex.getInstance();
+      final GlobalSearchScope moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
+                                                             .union(ProjectScope.getLibrariesScope(project));
+      fileIndex.processAllKeys(
+          MathematicaPackageExportIndex.INDEX_ID,
+          key -> {
+            if (key.isExported() && key.getSymbol().equals(ref.getSymbolName())) {
+              final Collection<VirtualFile> containingFiles =
+                  fileIndex.getContainingFiles(MathematicaPackageExportIndex.INDEX_ID, key, moduleScope);
+              containingFiles.forEach(file -> {
+                final PsiFile psiFile = psiManager.findFile(file);
+                if (psiFile != null) {
+                  final Symbol externalSymbol =
+                      PsiTreeUtil.findElementOfClassAtOffset(psiFile, key.getOffset(), Symbol.class, true);
+                  if (externalSymbol != null) {
+                    final SymbolResolveResult result = symbolCache.cacheExternalSymbol(ref, externalSymbol, psiFile);
+                    references.add(result);
+                  }
+                }
+              });
             }
-          }
-        }
+            return true;
+          }, moduleScope, null);
+      fileIndex.getAllKeys(MathematicaPackageExportIndex.INDEX_ID, project);
+      if (!references.isEmpty()) {
+        return references.toArray(new ResolveResult[0]);
       }
     }
 
     final SymbolResolveResult result = symbolCache.cacheInvalidFileSymbol(ref, containingFile);
     return new ResolveResult[]{result};
   }
+
 }

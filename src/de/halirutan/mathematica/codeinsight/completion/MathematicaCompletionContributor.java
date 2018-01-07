@@ -34,15 +34,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MathematicaCompletionContributor extends CompletionContributor {
 
-  public static final double LOCAL_VARIABLE_PRIORITY = 4000;
-  public static final double GLOBAL_VARIABLE_PRIORITY = 3500;
-  public static final double IMPORT_VARIABLE_PRIORITY = 3000;
+  public static final double LOCAL_VARIABLE_PRIORITY = 40;
+  public static final double GLOBAL_VARIABLE_PRIORITY = 35;
+  public static final double IMPORT_VARIABLE_PRIORITY = 30;
 
 
   public MathematicaCompletionContributor() {
     new BuiltinFunctionCompletion().addTo(this);
-    new FileSymbolCompletion().addTo(this);
     new LocalizedSymbolCompletion().addTo(this);
+    new FileSymbolCompletion().addTo(this);
     new ImportedSymbolCompletion().addTo(this);
     new SmartContextAwareCompletion().addTo(this);
     new CommentCompletion().addTo(this);

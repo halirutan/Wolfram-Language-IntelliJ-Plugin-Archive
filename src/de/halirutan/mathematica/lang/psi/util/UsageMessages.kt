@@ -47,20 +47,24 @@ fun extractUsageMessageString(symbol: Symbol): Pair<Symbol, List<String>> {
   if (resolve is Symbol) {
     return Pair(resolve, doUsageMessageExtract(resolve))
   }
-
-  // Find all references and look if one of them is a usage message
-  ReferencesSearch.search(resolve).find { psiReference ->
-    ProgressManager.checkCanceled()
-    val elm = psiReference.element ?: return@find false
-    if (elm is Symbol) {
-      val messages = doUsageMessageExtract(elm)
-      if (messages.isNotEmpty()) {
-        return Pair(elm, messages)
+  var result: Pair<Symbol, List<String>> = Pair(symbol, emptyList())
+  val progressManager = ProgressManager.getInstance()
+  val progressIndicator = progressManager.progressIndicator ?: return result
+  progressManager.runProcess({
+    ReferencesSearch.search(resolve).find { psiReference ->
+      ProgressManager.checkCanceled()
+      val elm = psiReference.element ?: return@find false
+      if (elm is Symbol) {
+        val messages = doUsageMessageExtract(elm)
+        if (messages.isNotEmpty()) {
+          result = Pair(elm, messages)
+        }
       }
+      return@find false
     }
-    return@find false
-  }
-  return Pair(symbol, emptyList())
+  }, progressIndicator)
+  // Find all references and look if one of them is a usage message
+  return result
 }
 
 /**
