@@ -29,15 +29,22 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.util.containers.ContainerUtil;
 import de.halirutan.mathematica.file.MathematicaFileType;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 12:09 PM Purpose:
  */
 public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPsiFile {
+
+  private final HashSet<SymbolResolveResult> cachedDefintions = ContainerUtil.newHashSet();
+  private boolean isCacheOutdated = true;
 
   public MathematicaPsiFileImpl(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, MathematicaLanguage.INSTANCE);
@@ -57,5 +64,26 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
   @Override
   public boolean headMatches(final Class clazz) {
     return clazz.isInstance(this);
+  }
+
+  @Override
+  public void cacheLocalDefinition(SymbolResolveResult result) {
+    if (isCacheOutdated) {
+      cachedDefintions.clear();
+      isCacheOutdated = false;
+    }
+    if (result != null) {
+      cachedDefintions.add(result);
+    }
+  }
+
+  @Override
+  public HashSet<SymbolResolveResult> getCachedDefinitions() {
+    return cachedDefintions;
+  }
+
+  @Override
+  public void subtreeChanged() {
+    isCacheOutdated = true;
   }
 }

@@ -26,19 +26,17 @@ package de.halirutan.mathematica.codeinsight.completion.providers;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 import static de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor.GLOBAL_VARIABLE_PRIORITY;
 
@@ -47,9 +45,6 @@ import static de.halirutan.mathematica.codeinsight.completion.MathematicaComplet
  * Provides completion for symbols that are defined at File Scope (opposed to locally bound variables).
  */
 public class FileSymbolCompletion extends MathematicaCompletionProvider {
-
-  private static final Logger LOG =
-      Logger.getInstance("#de.halirutan.mathematica.codeinsight.completion.providers.FileSymbolCompletion");
 
   @Override
   public void addTo(CompletionContributor contributor) {
@@ -62,21 +57,23 @@ public class FileSymbolCompletion extends MathematicaCompletionProvider {
     final PsiFile containingFile = parameters.getOriginalFile();
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    if (!parameters.isExtendedCompletion() && !prefix.isEmpty()) {
+    if (!parameters.isExtendedCompletion() && !prefix.isEmpty() && containingFile instanceof MathematicaPsiFile) {
       final CamelHumpMatcher matcher = new CamelHumpMatcher(prefix, true);
       CompletionResultSet result2 = result.withPrefixMatcher(matcher);
-
-      LOG.debug("Running file symbol completion");
-      final Set<String> symbols = PsiTreeUtil.findChildrenOfType(containingFile, Symbol.class).stream().filter(
-          s -> {
-            final LocalizationConstruct.MScope localizationConstruct = s.getLocalizationConstruct();
-            return s.isValid() && localizationConstruct == LocalizationConstruct.MScope.FILE_SCOPE;
-          }
-      ).map(
-          Symbol::getSymbolName
-      ).collect(Collectors.toSet());
-      symbols.forEach(s -> result2.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(s),
-          GLOBAL_VARIABLE_PRIORITY)));
+      final HashSet<SymbolResolveResult> cachedDefinitions =
+          ((MathematicaPsiFile) containingFile).getCachedDefinitions();
+      for (SymbolResolveResult cachedDefinition : cachedDefinitions) {
+        if (cachedDefinition.isValidResult() && cachedDefinition.getElement() != null) {
+          result2.addElement(
+              PrioritizedLookupElement
+                  .withPriority(
+                      LookupElementBuilder
+                          .create(cachedDefinition.getElement())
+                          .bold()
+                          .withTypeText("(" + containingFile.getName() + ")", true),
+                      GLOBAL_VARIABLE_PRIORITY));
+        }
+      }
     }
   }
 

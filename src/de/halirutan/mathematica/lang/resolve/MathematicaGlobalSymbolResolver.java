@@ -35,6 +35,7 @@ import com.intellij.psi.search.ProjectScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
+import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.resolve.processors.GlobalDefinitionResolveProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,9 @@ public class MathematicaGlobalSymbolResolver {
     final Symbol resolveResult = globalProcessor.getResolveResult();
     if (resolveResult != null) {
       final SymbolResolveResult result = symbolCache.cacheFileSymbol(resolveResult, containingFile);
+      if (containingFile instanceof MathematicaPsiFile) {
+        ((MathematicaPsiFile) containingFile).cacheLocalDefinition(result);
+      }
       return new ResolveResult[]{result};
     }
 

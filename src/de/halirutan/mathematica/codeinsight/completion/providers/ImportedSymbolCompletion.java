@@ -31,6 +31,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.util.ProcessingContext;
@@ -38,6 +39,8 @@ import com.intellij.util.indexing.FileBasedIndex;
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor.IMPORT_VARIABLE_PRIORITY;
 
@@ -59,10 +62,10 @@ public class ImportedSymbolCompletion extends MathematicaCompletionProvider {
     final Project project = callingSymbol.getProject();
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
+    final PsiFile originalFile = parameters.getOriginalFile();
     final Module module =
-        ModuleUtilCore.findModuleForFile(parameters.getOriginalFile().getVirtualFile(), project);
+        ModuleUtilCore.findModuleForFile(originalFile.getVirtualFile(), project);
     if (module != null) {
-
       if (!parameters.isExtendedCompletion() || !(prefix.isEmpty() || Character.isDigit(prefix.charAt(0)))) {
         final GlobalSearchScope moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
                                                                .union(ProjectScope.getLibrariesScope(project));
@@ -70,7 +73,7 @@ public class ImportedSymbolCompletion extends MathematicaCompletionProvider {
         index.processAllKeys(
             MathematicaPackageExportIndex.INDEX_ID,
             key -> {
-              if (key.isExported()) {
+              if (key.isExported() && !Objects.equals(key.getFileName(), originalFile.getName())) {
                 result.addElement(PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create(key.getSymbol()).withTypeText("(" + key.getFileName() + ")", true),
                     IMPORT_VARIABLE_PRIORITY));

@@ -24,10 +24,16 @@
 package de.halirutan.mathematica.lang.psi.api;
 
 import com.intellij.psi.PsiFile;
+import de.halirutan.mathematica.lang.resolve.SymbolResolveResult;
+
+import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA. User: patrick Date: 1/3/13 Time: 12:09 PM Purpose:
  */
 public interface MathematicaPsiFile extends PsiFile, Expression {
 
+  void cacheLocalDefinition(SymbolResolveResult result);
+
+  HashSet<SymbolResolveResult> getCachedDefinitions();
 }
