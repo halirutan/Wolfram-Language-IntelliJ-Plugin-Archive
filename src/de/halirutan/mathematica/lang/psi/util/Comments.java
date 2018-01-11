@@ -91,8 +91,7 @@ public class Comments {
 
   public static String getStrippedText(@NotNull final PsiComment comment) {
     String text = comment.getText();
-    assert text.length() >= 4; // we need at least this (**), should never happen!
-    return text.substring(2, text.length() - 2).trim();
+    return text != null && text.length() >= 4 ? text.substring(2, text.length() - 2).trim() : "";
   }
 
   public enum CommentStyle implements Comparable<CommentStyle> {
