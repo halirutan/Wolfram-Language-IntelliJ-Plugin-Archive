@@ -56,8 +56,9 @@ class FunctionLikeResolver : Resolver {
             if (elm is Symbol && elm.hasSameName(symbol)) {
               return SymbolResolveResult(elm, scope, scopingElement, true)
             }
-
           }
+        } else if (defList is Symbol && defList.hasSameName(symbol)) {
+          return SymbolResolveResult(defList, scope, scopingElement, true)
         }
       }
     } else {
@@ -69,6 +70,8 @@ class FunctionLikeResolver : Resolver {
               return SymbolResolveResult(elm, scope, scopingElement, true)
             }
           }
+        } else if (expr is Symbol && expr == symbol) {
+          return SymbolResolveResult(symbol, scope, scopingElement, true)
         }
       }
     }

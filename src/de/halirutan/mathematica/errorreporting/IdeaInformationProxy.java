@@ -25,7 +25,7 @@ import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationNamesInfo;
 import com.intellij.openapi.application.ex.ApplicationInfoEx;
 import com.intellij.openapi.diagnostic.Attachment;
-import com.intellij.util.SystemProperties;
+import com.intellij.openapi.util.SystemInfo;
 
 import java.util.LinkedHashMap;
 
@@ -44,9 +44,9 @@ class IdeaInformationProxy {
     params.put("Plugin Name", error.getPluginName());
     params.put("Plugin Version", error.getPluginVersion());
 
-    params.put("OS Name", SystemProperties.getOsName());
-    params.put("Java version", SystemProperties.getJavaVersion());
-    params.put("Java vm vendor", SystemProperties.getJavaVmVendor());
+    params.put("OS Name", SystemInfo.OS_NAME);
+    params.put("Java version", SystemInfo.JAVA_VERSION);
+    params.put("Java vm vendor", SystemInfo.JAVA_VENDOR);
 
     params.put("App Name", namesInfo.getProductName());
     params.put("App Full Name", namesInfo.getFullProductName());

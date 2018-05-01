@@ -25,7 +25,7 @@ package de.halirutan.mathematica.lang.resolve.processors
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveState
-import com.intellij.psi.scope.BaseScopeProcessor
+import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.util.PsiTreeUtil
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope
@@ -80,73 +80,73 @@ import de.halirutan.mathematica.lang.resolve.resolvers.TableLikeResolver
  *
  * @author patrick (5/22/13)
  */
-class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : BaseScopeProcessor() {
-    /**
-     * Returns the list of all symbols collected during a  run. Before returning
-     * the list, it removes duplicates, so that no entry appears more than once in the auto-completion window.
-     *
-     * @return Sorted and cleaned list of collected symbols.
-     */
-    var resolveResult: SymbolResolveResult? = null
+class LocalDefinitionResolveProcessor(private val myStartElement: Symbol) : PsiScopeProcessor {
+  /**
+   * Returns the list of all symbols collected during a  run. Before returning
+   * the list, it removes duplicates, so that no entry appears more than once in the auto-completion window.
+   *
+   * @return Sorted and cleaned list of collected symbols.
+   */
+  var resolveResult: SymbolResolveResult? = null
 
-    /**
-     * There are several places where a local variable can be "defined". First I check all localization constructs which
-     * are always function call like `Module[{var},...]`. The complete list of localization constructs can be
-     * found in [MScope].
-     *
-     *
-     * Secondly I check the patterns in e.g. ```f[var_]:=...!```  for `SetDelayed` and `TagSetDelayed`.
-     *
-     *
-     * Finally, `RuleDelayed` constructs are checked.
-     *
-     * @param element
-     * Element to check for defining the [.myStartElement].
-     * @param state State of the resolving.
-     * @return `false` if the search can be stopped, `true` otherwise
-     */
-    override fun execute(element: PsiElement, state: ResolveState): Boolean {
-        if (element is FunctionCall) {
+  /**
+   * There are several places where a local variable can be "defined". First I check all localization constructs which
+   * are always function call like `Module[{var},...]`. The complete list of localization constructs can be
+   * found in [MScope].
+   *
+   *
+   * Secondly I check the patterns in e.g. ```f[var_]:=...!```  for `SetDelayed` and `TagSetDelayed`.
+   *
+   *
+   * Finally, `RuleDelayed` constructs are checked.
+   *
+   * @param element
+   * Element to check for defining the [.myStartElement].
+   * @param state State of the resolving.
+   * @return `false` if the search can be stopped, `true` otherwise
+   */
+  override fun execute(element: PsiElement, state: ResolveState): Boolean {
+    if (element is FunctionCall) {
 
-            if (element.isScopingConstruct) {
-                val scopingConstruct = element.scopingConstruct
+      if (element.isScopingConstruct) {
+        val scopingConstruct = element.scopingConstruct
 
-                when {
-                  LocalizationConstruct.isModuleLike(scopingConstruct) -> resolveResult = ModuleLikeResolver().resolve(myStartElement, element, state)
-                  LocalizationConstruct.isFunctionLike(scopingConstruct) -> resolveResult = FunctionLikeResolver().resolve(myStartElement, element, state)
-                  LocalizationConstruct.isCompileLike(scopingConstruct) -> resolveResult = CompileLikeResolver().resolve(myStartElement, element, state)
-                  LocalizationConstruct.isTableLike(scopingConstruct) -> resolveResult = TableLikeResolver().resolve(myStartElement, element, state)
-                  LocalizationConstruct.isManipulateLike(scopingConstruct) -> resolveResult = TableLikeResolver().resolve(myStartElement, element, state)
-                }
-                resolveResult?.let { return false }
-            }
-        } else if (element is SetDelayed || element is TagSetDelayed || element is Set) {
-
-          val p2 = MathematicaPatternVisitor2()
-          element.accept(p2)
-
-            val patternVisitor = MathematicaPatternVisitor()
-            element.accept(patternVisitor)
-            for (p in patternVisitor.patternSymbols) {
-                if (p.fullSymbolName == myStartElement.fullSymbolName) {
-                    if (element is Set && myStartElement !== p) {
-                        continue
-                    }
-                    resolveResult = SymbolResolveResult(p, MScope.SETDELAYED_SCOPE, element, true)
-                    return false
-                }
-            }
-        } else if (element is RuleDelayed) {
-          val patternExtractor = PatternSymbolExtractor()
-          element.accept(patternExtractor)
-
-          for (symbol in patternExtractor.patternSymbols) {
-                if (symbol.fullSymbolName == myStartElement.fullSymbolName) {
-                    resolveResult = SymbolResolveResult(symbol, MScope.RULEDELAYED_SCOPE, element, true)
-                    return false
-                }
-            }
+        when {
+          LocalizationConstruct.isModuleLike(scopingConstruct) -> resolveResult = ModuleLikeResolver().resolve(myStartElement, element, state)
+          LocalizationConstruct.isFunctionLike(scopingConstruct) -> resolveResult = FunctionLikeResolver().resolve(myStartElement, element, state)
+          LocalizationConstruct.isCompileLike(scopingConstruct) -> resolveResult = CompileLikeResolver().resolve(myStartElement, element, state)
+          LocalizationConstruct.isTableLike(scopingConstruct) -> resolveResult = TableLikeResolver().resolve(myStartElement, element, state)
+          LocalizationConstruct.isManipulateLike(scopingConstruct) -> resolveResult = TableLikeResolver().resolve(myStartElement, element, state)
         }
-        return true
+        resolveResult?.let { return false }
+      }
+    } else if (element is SetDelayed || element is TagSetDelayed || element is Set) {
+
+      val p2 = MathematicaPatternVisitor2()
+      element.accept(p2)
+
+      val patternVisitor = MathematicaPatternVisitor()
+      element.accept(patternVisitor)
+      for (p in patternVisitor.patternSymbols) {
+        if (p.fullSymbolName == myStartElement.fullSymbolName) {
+          if (element is Set && myStartElement !== p) {
+            continue
+          }
+          resolveResult = SymbolResolveResult(p, MScope.SETDELAYED_SCOPE, element, true)
+          return false
+        }
+      }
+    } else if (element is RuleDelayed) {
+      val patternExtractor = PatternSymbolExtractor()
+      element.accept(patternExtractor)
+
+      for (symbol in patternExtractor.patternSymbols) {
+        if (symbol.fullSymbolName == myStartElement.fullSymbolName) {
+          resolveResult = SymbolResolveResult(symbol, MScope.RULEDELAYED_SCOPE, element, true)
+          return false
+        }
+      }
     }
+    return true
+  }
 }

@@ -1,32 +1,22 @@
 buildscript {
-    ext.kotlin_version = '1.1.61'
+    ext.kotlin_version = '1.2.40'
 
     repositories {
         mavenCentral()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-        maven {
-            url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
-        }
-        maven {
-            url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2'
-        }
     }
 
     dependencies {
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.3.0-SNAPSHOT"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 
 plugins {
-    id "org.jetbrains.kotlin.jvm" version '1.1.61'
+    id "org.jetbrains.kotlin.jvm" version "1.2.40"
+    id "org.jetbrains.intellij" version "0.3.1"
 }
 
 apply plugin: 'java'
-apply plugin: 'org.jetbrains.intellij'
 apply plugin: "kotlin"
 
 //noinspection GroovyAssignabilityCheck,GrUnresolvedAccess
@@ -78,10 +68,10 @@ task wrapper(type: Wrapper) {
 version '3.0pre10'
 
 intellij {
-    version = '2017.3.4'
+    version = '2018.1.2'
     downloadSources = true
     pluginName = 'Mathematica-IntelliJ-Plugin'
-    updateSinceUntilBuild = false
+    updateSinceUntilBuild = true
 }
 
 // Simple function to load change-notes.html and description.html into valid text for plugin.xml

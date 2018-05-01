@@ -26,7 +26,7 @@ package de.halirutan.mathematica.codeinsight.completion.util;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
  *
  * @author patrick (5/22/13)
  */
-public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
+public class LocalDefinitionCompletionProvider implements PsiScopeProcessor {
 
   private final List<Symbol> mySymbols = Lists.newLinkedList();
   private final Symbol myStartElement;
@@ -119,7 +119,8 @@ public class LocalDefinitionCompletionProvider extends BaseScopeProcessor {
     mySymbols.sort(new SymbolComparator());
     Pattern pattern = Pattern.compile(myStartElement.getFullSymbolName().substring(0, 1) + ".*");
     Symbol tmp = null;
-    for (Iterator<Symbol> symbolIterator = mySymbols.iterator(); symbolIterator.hasNext(); ) {
+    Iterator<Symbol> symbolIterator = mySymbols.iterator();
+    while (symbolIterator.hasNext()) {
       Symbol next = symbolIterator.next();
 
       if (!pattern.matcher(next.getFullSymbolName()).matches()) {

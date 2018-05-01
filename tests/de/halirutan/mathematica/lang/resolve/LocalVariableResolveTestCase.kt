@@ -51,7 +51,9 @@ class LocalVariableResolveTestCase : AbstractResolveTest() {
   )
 
   private val functionLike = mapOf(
-      "Function[{val, key}, val + <ref>key]" to TextRange.create(15, 18)
+      "Function[{val, key}, val + <ref>key]" to TextRange.create(15, 18),
+      "Function[val, <ref>val]" to TextRange.create(9, 12)
+
   )
 
   fun testModule() {
