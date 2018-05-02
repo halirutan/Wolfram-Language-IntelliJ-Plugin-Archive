@@ -52,12 +52,10 @@ class CommentStarInsertEnterHandler : MathematicaEnterHandler() {
     if (comment is PsiComment && offset >= commentRange.startOffset + 2 && offset <= commentRange.endOffset - 2) {
 
       val document = editor.document
-      val textLength = document.textLength
 
       val lineNumber = document.getLineNumber(offset)
       val elementStartLine = document.getLineNumber(comment.textOffset)
       val elementEndLine = document.getLineNumber(comment.textOffset + comment.textLength)
-      val lineStartOffset = document.getLineStartOffset(lineNumber)
 
       val insertString: String
       val move: Int

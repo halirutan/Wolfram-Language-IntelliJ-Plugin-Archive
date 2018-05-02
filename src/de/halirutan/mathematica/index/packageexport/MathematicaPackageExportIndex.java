@@ -25,8 +25,6 @@ package de.halirutan.mathematica.index.packageexport;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.HashMap;
-import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileBasedIndex.InputFilter;
 import com.intellij.util.indexing.FileContent;
@@ -36,9 +34,7 @@ import com.intellij.util.io.KeyDescriptor;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Simple file index for functions that are exported from a package by giving them a usage message.

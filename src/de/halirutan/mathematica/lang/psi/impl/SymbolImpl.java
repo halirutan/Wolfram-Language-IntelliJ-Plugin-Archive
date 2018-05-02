@@ -194,6 +194,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
 
   @Override
   public void subtreeChanged() {
+    super.subtreeChanged();
     myScope = null;
   }
 

@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.40'
+    ext.kotlin_version = '1.2.41'
 
     repositories {
         mavenCentral()
@@ -12,7 +12,7 @@ buildscript {
 
 
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.40"
+    id "org.jetbrains.kotlin.jvm" version "1.2.41"
     id "org.jetbrains.intellij" version "0.3.1"
 }
 
@@ -65,7 +65,7 @@ task wrapper(type: Wrapper) {
 // Information  about the plugin
 
 // Plugin version number
-version '3.0pre10'
+version '3.0pre11'
 
 intellij {
     version = '2018.1.2'

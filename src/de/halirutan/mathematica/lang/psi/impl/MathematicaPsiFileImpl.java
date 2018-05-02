@@ -84,6 +84,7 @@ public class MathematicaPsiFileImpl extends PsiFileBase implements MathematicaPs
 
   @Override
   public void subtreeChanged() {
+    super.subtreeChanged();
     isCacheOutdated = true;
   }
 }

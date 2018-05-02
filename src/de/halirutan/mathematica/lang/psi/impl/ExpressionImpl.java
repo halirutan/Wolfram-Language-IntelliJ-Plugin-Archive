@@ -47,13 +47,7 @@ public class ExpressionImpl extends ASTWrapperPsiElement implements Expression {
 
   @Override
   public void subtreeChanged() {
-//    final PsiElement[] children = getChildren();
-//    for (PsiElement child : children) {
-//      if (child instanceof ExpressionImpl) {
-//        ((ExpressionImpl) child).subtreeChanged();
-//      }
-//    }
-
+    super.subtreeChanged();
   }
 
   @Override
