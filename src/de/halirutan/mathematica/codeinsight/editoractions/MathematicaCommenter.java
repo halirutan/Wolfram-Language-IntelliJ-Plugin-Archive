@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,16 +8,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.codeinsight.editoractions;
@@ -42,23 +43,12 @@ public class MathematicaCommenter implements CodeDocumentationAwareCommenter {
     return null;
   }
 
-  /**
-   * Returns the opening string for a comment. In Java and C this is <code >&#47;*</code>, in Mathematica it is <code
-   * >(*</code>
-   *
-   * @return the comment opening string
-   */
   @Nullable
   @Override
   public String getBlockCommentPrefix() {
     return "(*";
   }
 
-  /**
-   * Returns the closing string for a block comment. In Java and C this is <code >*&#47;</code>
-   *
-   * @return the block comment closing string
-   */
   @Nullable
   @Override
   public String getBlockCommentSuffix() {
@@ -68,13 +58,13 @@ public class MathematicaCommenter implements CodeDocumentationAwareCommenter {
   @Nullable
   @Override
   public String getCommentedBlockCommentPrefix() {
-    return "-";
+    return null;
   }
 
   @Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
-    return "+";
+    return null;
   }
 
   @Nullable
@@ -115,6 +105,7 @@ public class MathematicaCommenter implements CodeDocumentationAwareCommenter {
 
   @Override
   public boolean isDocumentationComment(PsiComment element) {
-    return true;
+    return element.getTokenType().equals(MathematicaElementTypes.COMMENT);
   }
+
 }
