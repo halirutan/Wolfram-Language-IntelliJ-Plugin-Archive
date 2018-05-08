@@ -20,27 +20,42 @@
  * SOFTWARE.
  */
 
-package de.halirutan.mathematica.library;
+package de.halirutan.mathematica;
 
-import com.google.common.collect.Lists;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.ui.RootDetector;
-import com.intellij.openapi.roots.ui.configuration.libraryEditor.DefaultLibraryRootsComponentDescriptor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationType;
+import de.halirutan.mathematica.util.MathematicaIcons;
 
 /**
- * Wrapper class for the library root detection
- *
- * @author patrick (25.11.17).
+ * @author patrick (06.05.18).
  */
-public class MathematicaLibraryRootsComponentDescriptor extends DefaultLibraryRootsComponentDescriptor {
+public class MathematicaNotification {
+  private static final NotificationGroup GROUP = new NotificationGroup(
+      MathematicaBundle.message("mathematica.notification.group"),
+      NotificationDisplayType.BALLOON,
+      false,
+      null,
+      MathematicaIcons.FILE_ICON);
 
-  @NotNull
-  @Override
-  public List<? extends RootDetector> getRootDetectors() {
-    return Lists.newArrayList(new MathematicaLibraryRootDetector(OrderRootType.CLASSES, false, "Mathematica Library"));
+  public static void info(String message) {
+    showNotification(message, NotificationType.INFORMATION);
+  }
+
+  public static void warning(String message) {
+    showNotification(message, NotificationType.WARNING);
+  }
+
+  public static void error(String message) {
+    showNotification(message, NotificationType.ERROR);
+  }
+
+  private static void showNotification(String message, NotificationType type) {
+    GROUP.createNotification(
+        MathematicaBundle.message("language.name"),
+        message,
+        type,
+        null).notify(null);
   }
 
 }
