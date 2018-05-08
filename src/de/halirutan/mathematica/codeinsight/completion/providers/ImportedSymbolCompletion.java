@@ -59,11 +59,11 @@ public class ImportedSymbolCompletion extends MathematicaCompletionProvider {
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    final Symbol callingSymbol = (Symbol) parameters.getPosition().getParent();
+    final PsiElement callingSymbol = parameters.getPosition().getParent();
     final Project project = callingSymbol.getProject();
 
     String prefix = findCurrentText(parameters, parameters.getPosition());
-    if (parameters.getInvocationCount() == 0 && prefix.isEmpty()) {
+    if (parameters.getInvocationCount() == 0 && prefix.isEmpty() && !(callingSymbol instanceof Symbol)) {
       return;
     }
     final PsiFile originalFile = parameters.getOriginalFile();
