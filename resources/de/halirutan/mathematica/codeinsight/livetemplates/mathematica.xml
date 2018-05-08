@@ -30,6 +30,7 @@
     <template name="cmpl" description="Compile[{vars}, body]" toReformat="true"
               value="Compile[{$VARS$}, $SELECTION$$END$]">
         <variable name="VARS" expression="" defaultValue="&quot;{x, _Real}&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -38,6 +39,7 @@
     <template name="fnct" description="Function[{vars}, body]" toReformat="true"
               value="Function[{$VARS$}, $SELECTION$$END$]">
         <variable name="VARS" expression="" defaultValue="&quot;var&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -48,6 +50,7 @@
     <template name="do" description="Do[body, {iter}]" toReformat="true"
               value="Do[$SELECTION$$END$, {$ITER$}]">
         <variable name="ITER" expression="" defaultValue="&quot;iter&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -57,6 +60,7 @@
               value="For[$VAR$ = 0, $VAR$ &lt; $MAX$, $VAR$++, $SELECTION$$END$]">
         <variable name="VAR" expression="" defaultValue="&quot;i&quot;" alwaysStopAt="true"/>
         <variable name="MAX" expression="" defaultValue="&quot;max&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -66,6 +70,7 @@
               value="Table[$SELECTION$$END$, {$VAR$, $LIMITS$}]">
         <variable name="VAR" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true"/>
         <variable name="LIMITS" expression="" defaultValue="&quot;min, max, stepSize&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -75,6 +80,7 @@
               value="Fold[$SELECTION$$END$, $FIRST$, $LIST$]">
         <variable name="FIRST" expression="" defaultValue="&quot;x&quot;" alwaysStopAt="true"/>
         <variable name="LIST" expression="" defaultValue="&quot;list&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
@@ -94,6 +100,7 @@
     <template name="if" description="If[cond, then]" toReformat="true"
               value="If[$COND$, $SELECTION$$END$]">
         <variable name="COND" expression="" defaultValue="&quot;cond&quot;" alwaysStopAt="true"/>
+        <variable name="SELECTION" expression="" defaultValue="&quot;body&quot;" alwaysStopAt="true"/>
         <context>
             <option name="Mathematica" value="true"/>
         </context>
