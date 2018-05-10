@@ -69,7 +69,7 @@ class ImportedSymbolCompletion : MathematicaCompletionProvider() {
               indexID,
               it,
               null,
-              { _, _ -> false },
+              { file, _ -> file == originalFile.virtualFile },
               moduleScope
           )
           ProgressManager.checkCanceled()
