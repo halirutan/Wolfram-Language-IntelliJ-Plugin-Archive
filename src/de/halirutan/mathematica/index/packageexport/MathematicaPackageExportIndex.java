@@ -23,17 +23,16 @@
 package de.halirutan.mathematica.index.packageexport;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.indexing.DataIndexer;
+import com.intellij.util.indexing.*;
 import com.intellij.util.indexing.FileBasedIndex.InputFilter;
-import com.intellij.util.indexing.FileContent;
-import com.intellij.util.indexing.ID;
-import com.intellij.util.indexing.ScalarIndexExtension;
 import com.intellij.util.io.KeyDescriptor;
 import de.halirutan.mathematica.lang.MathematicaLanguage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Simple file index for functions that are exported from a package by giving them a usage message.
@@ -63,6 +62,12 @@ public class MathematicaPackageExportIndex extends ScalarIndexExtension<PackageE
       return false;
     };
   }
+
+  public static List<String> getSymbolNames(Project project) {
+    return FileBasedIndex.getInstance().getAllKeys(INDEX_ID, project).stream().map(PackageExportSymbol::getSymbol)
+                         .collect(Collectors.toList());
+  }
+
 
   @Override
   public boolean indexDirectories() {

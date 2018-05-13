@@ -26,7 +26,7 @@
     <name>Mathematica Support</name>
     <category>Custom Language</category>
     <vendor url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
-    <idea-version since-build="172"/>
+    <idea-version since-build="182"/>
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -51,6 +51,7 @@
         <fileBasedIndex implementation="de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex"/>
         <lang.refactoringSupport language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaRefactoringSupport"/>
         <lang.namesValidator language="Mathematica" implementationClass="de.halirutan.mathematica.refactoring.MathematicaNamesValidator"/>
+        <gotoSymbolContributor implementation="de.halirutan.mathematica.codeinsight.navigation.GotoSymbolContributor"/>
         <gotoRelatedProvider implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
         <lang.foldingBuilder language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
 

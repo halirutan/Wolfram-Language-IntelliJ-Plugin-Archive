@@ -30,7 +30,7 @@
 
   <appender name="DIALOG" class="com.intellij.diagnostic.DialogAppender">
     <filter class="org.apache.log4j.varia.LevelRangeFilter">
-      <param name="LevelMin" value="INFO"/>
+        <param name="LevelMin" value="DEBUG"/>
     </filter>
   </appender>
 
@@ -52,9 +52,10 @@
   </appender>
 
   <root>
-    <priority value="INFO"/>
+      <priority value="DEBUG"/>
     <appender-ref ref="DIALOG"/>
     <appender-ref ref="CONSOLE-WARN"/>
+      <appender-ref ref="CONSOLE-DEBUG"/>
     <appender-ref ref="FILE"/>
   </root>
 </log4j:configuration>

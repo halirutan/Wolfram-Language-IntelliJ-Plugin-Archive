@@ -65,12 +65,13 @@ task wrapper(type: Wrapper) {
 // Information  about the plugin
 
 // Plugin version number
-version '3.0pre13'
+version '3.0pre14'
 
 intellij {
-    version = '2018.1.2'
+    version = '2018.1.3'
     downloadSources = true
     pluginName = 'Mathematica-IntelliJ-Plugin'
+    sameSinceUntilBuild = true
     updateSinceUntilBuild = true
 }
 
@@ -80,4 +81,5 @@ def htmlFixer = {htmlFile -> file(htmlFile).text.replace('<html>', '').replace('
 patchPluginXml {
     changeNotes = htmlFixer('resources/META-INF/change-notes.html')
     pluginDescription = htmlFixer('resources/META-INF/description.html')
+    sinceBuild = '181'
 }
