@@ -26,7 +26,7 @@
     <name>Mathematica Support</name>
     <category>Custom Language</category>
     <vendor url="http://mathematicaplugin.halirutan.de">Patrick Scheibe</vendor>
-    <idea-version since-build="182"/>
+    <idea-version since-build="181"/>
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
