@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,38 +8,50 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.codeinsight.completion;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 /**
  * Loads and extracts all information of Mathematica built-in symbols that are used for completion and intelligent
  * code insight.
+ *
  * @author hal (4/3/13)
  */
 public class SymbolInformationProvider {
 
-  private final static String ourSymbolInformationFile = "de.halirutan.mathematica.codeinsight.completion.symbolInformationV11_0_1";
-//  private final static String ourSymbolInformationFile = "symbolInformationV11_0_1";
+  private final static String ourSymbolInformationFile =
+      "de.halirutan.mathematica.codeinsight.completion.systemSymbolInformation";
+  private final static String ourContextsFile = "de.halirutan.mathematica.codeinsight.completion.contexts";
+  private final static String ourAuxSymbolsFile = "de.halirutan.mathematica.codeinsight.completion.contextSymbols";
   private final static HashMap<String, SymbolInformation> ourSymbols;
-
-  private SymbolInformationProvider() {}
+  private final static HashSet<String> ourContexts;
+  private final static HashSet<String> ourAuxSymbols;
 
   static {
+
+    ResourceBundle contextBundle = ResourceBundle.getBundle(ourContextsFile);
+    ourContexts = new HashSet<>(700);
+    ourContexts.addAll(contextBundle.keySet());
+
+    ResourceBundle auxSymbolsBundle = ResourceBundle.getBundle(ourAuxSymbolsFile);
+    ourAuxSymbols = new HashSet<>(13000);
+    ourAuxSymbols.addAll(auxSymbolsBundle.keySet());
 
     ResourceBundle info = ResourceBundle.getBundle(ourSymbolInformationFile);
     ourSymbols = new HashMap<>(6000);
@@ -85,25 +98,39 @@ public class SymbolInformationProvider {
         isFunction = true;
       }
 
-      ourSymbols.put(name, new SymbolInformation(name, nameWithoutContext, context, importance, pattern, isFunction, attributes, options));
+      ourSymbols.put(name,
+          new SymbolInformation(name, nameWithoutContext, context, importance, pattern, isFunction, attributes,
+              options));
     }
 
   }
 
-  public static HashMap<String, SymbolInformation> getSymbolNames() {
+  private SymbolInformationProvider() {
+  }
+
+  public static HashMap<String, SymbolInformation> getSystemSymbolInformation() {
     return ourSymbols;
   }
 
+  public static HashSet<String> getAllContexts() {
+    return ourContexts;
+  }
+
+  public static HashSet<String> getAuxSymbols() {
+    return ourAuxSymbols;
+  }
+
   @SuppressWarnings("InstanceVariableNamingConvention")
+
   public static class SymbolInformation {
     public final String name;
     public final int importance;
-    final String callPattern;
     public final boolean function;
-    final String[] attributes;
     public final String options[];
     public final String context;
     public final String nameWithoutContext;
+    final String callPattern;
+    final String[] attributes;
 
     SymbolInformation(String nameIn, String nameWithoutContextIn, String contextIn, int importanceIn, String callPatternIn, boolean functionIn, String[] attributesIn, String[] optionsIn) {
       this.name = nameIn;
@@ -118,6 +145,7 @@ public class SymbolInformationProvider {
 
     /**
      * Removes the braces around the call patter
+     *
      * @return call pattern without braces
      */
     public String getCallPattern() {

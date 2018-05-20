@@ -1,0 +1,73 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/Curry.html">Curry</a></h3>
+<ul>
+    <li>Curry[<em>f</em>,<em>n</em>] represents an operator form of the function <em>f</em> of <em>n</em> arguments so
+        that Curry[<em>f</em>,<em>n</em>][<em>x</em><sub>1</sub>]
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        [<em>x</em><sub><em>n</em></sub>] is equivalent to <em>f</em>[<em>x</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>x</em><sub><em>n</em></sub>].
+    <li>Curry[<em>f</em>] represents an operator form of the function <em>f</em> of two arguments so that
+        Curry[<em>f</em>][<em>y</em>][<em>x</em>] is equivalent to <em>f</em>[<em>x</em>,<em>y</em>].
+    <li>Curry[<em>f</em>,{<em>i</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>i</em><sub><em>n</em></sub>}] represents an operator form of the function <em>f</em> of <em>n</em>
+        arguments so that Curry[<em>f</em>,{<em>i</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>i</em><sub><em>n</em></sub>}][<em>x</em><sub>1</sub>]
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        [<em>x</em><sub><em>n</em></sub>] is equivalent to <em>f</em>[<em>x</em><sub><em>i</em><sub>1</sub></sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>x</em><sub><em>i</em><sub><em>n</em></sub></sub>].
+    <li>Curry[<em>f</em>,<em>k</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>i</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>i</em><sub><em>n</em></sub>}] represents a <em>k</em>-arguments operator form of the function <em>f</em> of
+        <em>n</em> arguments so that Curry[<em>f</em>,<em>k</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>i</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>i</em><sub><em>n</em></sub>}][<em>x</em><sub>1</sub>]
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        [<em>x</em><sub><em>k</em></sub>] is equivalent to <em>f</em>[<em>x</em><sub><em>i</em><sub>1</sub></sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>x</em><sub><em>i</em><sub><em>n</em></sub></sub>], with <em>k</em>
+        <math>
+            <ms>&#8805;</ms>
+        </math>
+        Max[{<em>i</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ,<em>i</em><sub><em>n</em></sub>}].
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

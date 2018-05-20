@@ -30,6 +30,7 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
+import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile
 import de.halirutan.mathematica.lang.psi.api.Symbol
@@ -82,34 +83,45 @@ class MathematicaGlobalSymbolResolver {
     val cacheInvalidResult: () -> Array<ResolveResult> = { arrayOf(symbolCache.cacheInvalidFileSymbol(ref, containingFile)) }
 
     val project = containingFile.project
-    val virtualFile = containingFile.virtualFile ?: return cacheInvalidResult()
-    val module = ModuleUtilCore.findModuleForFile(virtualFile, project) ?: return cacheInvalidResult()
-    val references = ArrayList<SymbolResolveResult>()
-    val psiManager = PsiManager.getInstance(project)
-    val fileIndex = FileBasedIndex.getInstance() ?: return cacheInvalidResult()
-    val moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
-    fileIndex.getAllKeys(packageIndex, project).forEach {
-      it?.let {
-        val fileForKey = arrayListOf<VirtualFile>()
-        val inScope = !fileIndex.processValues(
-            packageIndex,
-            it,
-            null,
-            { file, _ -> fileForKey.add(file); false },
-            moduleScope
-        )
+    containingFile.virtualFile?.let { virtualFile ->
+      val module = ModuleUtilCore.findModuleForFile(virtualFile, project) ?: return@let
+      val references = ArrayList<SymbolResolveResult>()
+      val psiManager = PsiManager.getInstance(project)
+      val fileIndex = FileBasedIndex.getInstance() ?: return@let
+      val moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
+      fileIndex.getAllKeys(packageIndex, project).forEach {
+        it?.let {
+          val fileForKey = arrayListOf<VirtualFile>()
+          val inScope = !fileIndex.processValues(
+              packageIndex,
+              it,
+              null,
+              { file, _ -> fileForKey.add(file); false },
+              moduleScope
+          )
 
-        if (fileForKey.isNotEmpty() && inScope && it.isExported && it.symbol == ref.fullSymbolName) {
-          val psiFile = psiManager.findFile(fileForKey.first()) ?: return@forEach
-          val externalSymbol = PsiTreeUtil.findElementOfClassAtOffset(psiFile, it.offset, Symbol::class.java, true)
-              ?: return@forEach
-          val result = symbolCache.cacheExternalSymbol(ref, externalSymbol, psiFile)
-          references.add(result)
-          return references.toTypedArray()
+          if (fileForKey.isNotEmpty() && inScope && it.isExported && it.symbol == ref.fullSymbolName) {
+            val psiFile = psiManager.findFile(fileForKey.first()) ?: return@forEach
+            val externalSymbol = PsiTreeUtil.findElementOfClassAtOffset(psiFile, it.offset, Symbol::class.java, true)
+                ?: return@forEach
+            val result = symbolCache.cacheExternalSymbol(ref, externalSymbol, psiFile)
+            references.add(result)
+            return references.toTypedArray()
+          }
         }
       }
     }
+
+    if (isAuxSymbol(ref)) {
+      val result = symbolCache.cacheBuiltInSymbol(ref)
+      return arrayOf(result)
+    }
     return cacheInvalidResult()
+  }
+
+  private fun isAuxSymbol(symbol: Symbol): Boolean {
+    val context = symbol.fullSymbolName ?: return false
+    return SymbolInformationProvider.getAuxSymbols()?.contains(context) ?: false
   }
 
 }

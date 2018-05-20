@@ -1,26 +1,23 @@
 /*
- * Copyright (c) 2017. Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
  *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the “Software”), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.lang.psi.util
@@ -38,19 +35,20 @@ import de.halirutan.mathematica.lang.psi.api.string.MString
  * @author patrick (02.12.17).
  */
 
-fun extractUsageMessageString(symbol: Symbol): Pair<Symbol, List<String>> {
-  val resolve = symbol.resolve() ?: return Pair(symbol, emptyList())
+fun Symbol.extractUsageMessageString(): Pair<Symbol, List<String>> {
+  var result: Pair<Symbol, List<String>> = Pair(this, emptyList())
+  val resolve = resolve() ?: return result
 
   // if resolve is a real symbol, then already point to the usage message in another file
   // this might change in future
   // TODO: Keep above in mind
-  if (resolve is Symbol) {
-    return Pair(resolve, doUsageMessageExtract(resolve))
-  }
-  var result: Pair<Symbol, List<String>> = Pair(symbol, emptyList())
+//  if (resolve is Symbol) {
+//    return Pair(resolve, doUsageMessageExtract(resolve))
+//  }
   val progressManager = ProgressManager.getInstance()
   val progressIndicator = progressManager.progressIndicator ?: return result
   progressManager.runProcess({
+    // Find all references and look if one of them is a usage message
     ReferencesSearch.search(resolve).find { psiReference ->
       ProgressManager.checkCanceled()
       val elm = psiReference.element ?: return@find false
@@ -63,7 +61,6 @@ fun extractUsageMessageString(symbol: Symbol): Pair<Symbol, List<String>> {
       return@find false
     }
   }, progressIndicator)
-  // Find all references and look if one of them is a usage message
   return result
 }
 

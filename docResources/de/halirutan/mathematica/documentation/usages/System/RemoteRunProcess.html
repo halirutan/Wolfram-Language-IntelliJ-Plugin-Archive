@@ -1,0 +1,22 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/RemoteRunProcess.html">RemoteRunProcess</a></h3>
+<ul>
+    <li>RemoteRunProcess["host","command"] runs the specified system command on the remote host, returning information
+        on the outcome.
+    <li>RemoteRunProcess[IPAddress["address"],"command"] runs the command on the machine with the specified IP address.
+    <li>RemoteRunProcess[<em>obj</em>,"command"] run the command on the remote host specified by the
+        RemoteConnectionObject <em>obj</em>.
+    <li>RemoteRunProcess["host",{"command",<em>arg</em><sub>1</sub>,<em>arg</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] runs the specified command, with command-line arguments <em>arg</em><sub><em>i</em></sub>.
+    <li>RemoteRunProcess["host", <em>command</em>,<em>"prop"</em>] returns only the specified property.
+    <li>RemoteRunProcess["host", <em>command</em>,<em>prop</em>,<em>input</em>] feeds the specified initial input to the
+        command.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

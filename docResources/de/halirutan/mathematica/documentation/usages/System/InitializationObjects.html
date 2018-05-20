@@ -1,0 +1,20 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/InitializationObjects.html">InitializationObjects</a></h3>
+<ul>
+    <li>InitializationObjects[] gives the list of all persistent initialization objects in all locations in
+        $PersistencePath.
+    <li>InitializationObjects["patt"] gives all persistent initialization objects for symbols matching the string
+        pattern "<em>patt</em>".
+    <li>InitializationObjects["patt",<em>loc</em>] gives all matching persistent initialization objects in the
+        persistence location <em>loc</em>.
+    <li>InitializationObjects["patt",{<em>loc</em><sub>1</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives all matching persistent initialization objects in all the <em>loc</em><sub><em>i</em></sub>.
+</ul><p><b>Attributes:</b>HoldFirst, Protected, ReadProtected</p><p><b>Options: </b>EvaluationEnvironment</p>

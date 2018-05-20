@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/LinearLayer.html">LinearLayer</a></h3>
+<ul>
+    <li>LinearLayer[<em>n</em>] represents a trainable, fully connected net layer that computes w.x+b with output vector
+        of size <em>n</em>.
+    <li>LinearLayer[{<em>n</em><sub>1</sub>,<em>n</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] represents a layer that outputs a tensor of dimensions <em>n</em><sub>1</sub>
+        <math>
+            <ms>&#215;</ms>
+        </math>
+        <em>n</em><sub>2</sub>
+        <math>
+            <ms>&#215;</ms>
+        </math>
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        .
+    <li>LinearLayer[] leaves the dimensions of the output tensor to be inferred from context.
+    <li>LinearLayer[<em>n</em>,<em>opts</em>] includes options for initial weights and other parameters.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

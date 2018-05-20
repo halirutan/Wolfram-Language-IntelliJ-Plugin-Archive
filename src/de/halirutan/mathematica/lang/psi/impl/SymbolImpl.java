@@ -89,6 +89,7 @@ public class SymbolImpl extends ExpressionImpl implements Symbol {
   }
 
   @Override
+
   public String getMathematicaContext() {
     String myName = getName();
     String context = "";

@@ -1,0 +1,98 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/AnglePath3D.html">AnglePath3D</a></h3>
+<ul>
+    <li>AnglePath3D[{{
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub>1</sub>,
+        <math>
+            <ms>&#946;</ms>
+        </math>
+        <sub>1</sub>,
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        <sub>1</sub>},{
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub>2</sub>,
+        <math>
+            <ms>&#946;</ms>
+        </math>
+        <sub>2</sub>,
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        <sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] gives the list of 3D coordinates of a path of an object that starts at {0,0,0}, then takes a series of steps
+        of unit length, each in the direction of the x axis obtained after successive rotation of the object by the
+        Euler angles
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub><em>i</em></sub>,
+        <math>
+            <ms>&#946;</ms>
+        </math>
+        <sub><em>i</em></sub>,
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        <sub><em>i</em></sub>.
+    <li>AnglePath3D[{{
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub>1</sub>,
+        <math>
+            <ms>&#946;</ms>
+        </math>
+        <sub>1</sub>},{
+        <math>
+            <ms>&#945;</ms>
+        </math>
+        <sub>2</sub>,
+        <math>
+            <ms>&#946;</ms>
+        </math>
+        <sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] assumes the Euler angles
+        <math>
+            <ms>&#947;</ms>
+        </math>
+        <sub><em>i</em></sub> to be 0.
+    <li>AnglePath3D[{<em>mat</em><sub>1</sub>,<em>mat</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes the successive rotations to be specified by the 3D rotation matrices <em>mat</em><sub><em>i</em></sub>.
+    <li>AnglePath3D[{{<em>r</em><sub>1</sub>,<em>rot</em><sub>1</sub>},{<em>r</em><sub>2</sub>,<em>rot</em><sub>2</sub>},
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] takes successive steps of length <em>r</em><sub><em>i</em></sub> with Euler angles or rotation matrices
+        specified by <em>rot</em><sub><em>i</em></sub>.
+    <li>AnglePath3D[{<em>x</em><sub>0</sub>,<em>y</em><sub>0</sub>,<em>z</em><sub>0</sub>},<em>steps</em>] starts at the
+        point {<em>x</em><sub>0</sub>,<em>y</em><sub>0</sub>,<em>z</em><sub>0</sub>}.
+    <li>AnglePath3D[{<em>rot</em><sub>0</sub>},<em>steps</em>] starts in the x axis direction specified by rotating the
+        object according to Euler angles or rotation matrix <em>rot</em><sub>0</sub>.
+    <li>
+        AnglePath3D[{{<em>x</em><sub>0</sub>,<em>y</em><sub>0</sub>,<em>z</em><sub>0</sub>},<em>rot</em><sub>0</sub>},<em>steps</em>]
+        starts at point {<em>x</em><sub>0</sub>,<em>y</em><sub>0</sub>,<em>z</em><sub>0</sub>} with the x axis direction
+        specified by <em>rot</em><sub>0</sub>.
+    <li>AnglePath3D[<em>init</em>,<em>steps</em>,<em>form</em>] returns at each step the data of the form specified by
+        <em>form</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

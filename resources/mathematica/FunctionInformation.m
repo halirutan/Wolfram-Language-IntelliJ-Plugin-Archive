@@ -18,9 +18,13 @@ CreateCompletionInformation::usage = "CreateCompletionInformation[] returns a li
 entry of the .properties file that is used to enable autocompletion in idea.";
 CreateSymbolVersions::usage = "CreateSymbolVersions[] creates a list all symbols in the form {sym1 -> $VersionNumber, \
 sym2 -> $VersionNumber}. CreateSymbolVersions[list] updates a list of versioned symbol with the current $VersionNumber.";
+InitializeSymbolInformation::usage = "InitializeSymbolInformation[] loads all symbols we need in the Plugin for completion and resolving";
 
+Begin["`Private`"];
 
-Begin["`Private`"] (* Begin Private Context *)
+$additionalSymbols = {
+  "FEPrivate`AddSpecialArgCompletion"
+}
 
 << JLink`;
 
@@ -43,11 +47,23 @@ makeContextNames[context_String] := Block[{$ContextPath = {context}},
   StringJoin[context, #]& /@ Names[RegularExpression[context <> "\$?[A-Z]\\w*"]]
 ];
 
-names = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
+InitializeSymbolInformation[] := Module[{},
+  $builtInNames = Sort[Flatten[ makeContextNames /@ {"System`"} ]];
+  $versionedNames = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
+  $allNames = Sort[Flatten[ makeContextNames /@ DeleteCases[Contexts[], "Global`" | "System`"]]];
+]
 
-CreateSymbolVersions[] := Thread[names -> $VersionNumber];
+CreateAuxNames[outDir_ /; DirectoryQ[outDir]] := Module[
+  {
+    contexts = Union[Context /@ $allNames]
+  },
+  Export[FileNameJoin[{outDir, "contexts.properties"}], contexts, "Table"];
+  Export[FileNameJoin[{outDir, "contextSymbols.properties"}], Sort[Join[$additionalSymbols, $allNames]], "Table"];
+];
+
+CreateSymbolVersions[] := Thread[$versionedNames -> $VersionNumber];
 CreateSymbolVersions[existingNames_List] := With[{currVersion = $VersionNumber},
-  existingNames /. (Function[n, (n -> oldVersion_) :> (n -> Min[{currVersion, oldVersion}])] /@ names)
+  existingNames /. (Function[n, (n -> oldVersion_) :> (n -> Min[{currVersion, oldVersion}])] /@ $versionedNames)
 ];
 
 isFunction[str_String] :=
@@ -108,12 +124,12 @@ createInformation[name_String] := Module[{importance, info, context},
     If[info === {}, info = "",
       info = ";" <> Riffle[ToString /@ First[info], ";"]
     ];
-    name <> "=" <> importance <> ";" <> getAttributes[name] <> StringJoin[info] <> "\n",
+    name <> "=" <> importance <> ";" <> getAttributes[name] <> StringJoin[info],
     ""
   ]
 ];
 
-CreateCompletionInformation[] := createInformation /@ names;
+CreateCompletionInformation[] := createInformation /@ $builtInNames;
 
 End[];
 (* End Private Context *)

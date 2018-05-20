@@ -1,0 +1,14 @@
+<h3><a href="http://reference.wolfram.com/search/?q=BlockFlatten">BlockFlatten</a></h3>
+<ul>
+    <li>BlockFlatten[tensor, {{p11, p12, ...}, {p21,
+    <li>p22, ...}, {pk1, pk2, ...}}] is a generalization of Flatten which collapses
+    <li>each of several sets of levels to a single level, without loss of elements.
+    <li>The levels {p11, p12, ...} are collapsed to a single level, the levels {p21,
+    <li>p22, ...} are collapsed to another single level, and so on. All the pij must
+    <li>be distinct nonzero integers representing levels from 1 to
+    <li>ArrayDepth[tensor]. A negative pij simply specifies a level counting from
+    <li>the bottom level of the tensor, i.e. R = ArrayDepth[tensor]. Thus, -1 is
+    <li>equivalent to R, -2 is equivalent to (R - 1), and -k is equivalent to (R + 1
+    <li>+ k). The pij need not span all levels of the tensor; levels not listed will
+    <li>not be merged with other levels, so will emerge unscathed.
+</ul><p><b>Attributes:</b>ReadProtected</p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,32 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/ExternalEvaluate.html">ExternalEvaluate</a></h3>
+<ul>
+    <li>ExternalEvaluate["sys","cmd"] evaluates the command <em>cmd</em> in the external evaluator <em>sys</em>,
+        returning an expression corresponding to the output.
+    <li>ExternalEvaluate[{"sys",<em>opts</em>},"cmd"] uses the options <em>opts</em> for the external evaluator.
+    <li>ExternalEvaluate[<em>assoc</em>,"cmd"] evaluates <em>cmd</em> using the external evaluator specified by <em>assoc</em>.
+    <li>ExternalEvaluate[<em>session</em>,"cmd"] evaluates <em>cmd</em> in the specified running ExternalSessionObject.
+    <li>ExternalEvaluate[<em>sys</em>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        "type",
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] returns output converted to the specified type.
+    <li>ExternalEvaluate[<em>spec</em>,<em>obj</em>] evaluates the content of the specified File, URL or CloudObject.
+    <li>ExternalEvaluate[<em>spec</em>,<em>assoc</em>] evaluates the command specified by <em>assoc</em>.
+    <li>ExternalEvaluate[<em>spec</em>,{<em>cmd</em><sub>1</sub>,<em>cmd</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] evaluates the list of commands <em>cmd</em><sub><em>i</em></sub>.
+    <li>ExternalEvaluate[<em>spec</em>] represents an operator form of ExternalEvaluate that can be applied to a command
+        or object.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/NetReplacePart.html">NetReplacePart</a></h3>
+<ul>
+    <li>NetReplacePart[<em>layer</em>,"array"
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>value</em>] replaces an array within a layer, returning a new layer.
+    <li>NetReplacePart[<em>layer</em>,"port"
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>type</em>] returns a new layer in which an input or output port has the specified type.
+    <li>NetReplacePart[<em>net</em>,"input"
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>encoder</em>] attaches a NetEncoder[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] to a specified input port.
+    <li>NetReplacePart[<em>net</em>,"output"
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>decoder</em>] attaches a NetDecoder[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] to a specified output port.
+    <li>NetReplacePart[<em>net</em>,{<em>lspec</em>,<em>pspec</em>}
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>value</em>] makes a replacement of a part <em>pspec</em> of a layer <em>lspec</em> within a NetGraph or
+        NetChain.
+    <li>NetReplacePart[<em>net</em>,{<em>spec</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>1</sub>,<em>spec</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>val</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] makes multiple simultaneous replacements.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>

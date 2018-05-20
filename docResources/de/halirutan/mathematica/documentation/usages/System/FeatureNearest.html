@@ -1,0 +1,69 @@
+<!--
+  ~ Copyright (c) 2018 Wolfram Research, Inc.  All rights reserved.
+  ~ Redistribution or use of this work in any form, with or without modification,
+  ~ requires written permission from the copyright holder.
+  -->
+
+<h3><a href="http://reference.wolfram.com/mathematica/ref/FeatureNearest.html">FeatureNearest</a></h3>
+<ul>
+    <li>FeatureNearest[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>x</em>] gives the list of <em>elem</em><sub><em>i</em></sub> to which <em>x</em> is nearest in a computed
+        feature space.
+    <li>FeatureNearest[{<em>elem</em><sub>1</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>v</em><sub>1</sub>,<em>elem</em><sub>2</sub>
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>v</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>x</em>] gives the <em>v</em><sub><em>i</em></sub> corresponding to the <em>elem</em><sub><em>i</em></sub>
+        to which <em>x</em> is nearest.
+    <li>FeatureNearest[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        {<em>v</em><sub>1</sub>,<em>v</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        },<em>x</em>] gives the same result.
+    <li>FeatureNearest[{<em>elem</em><sub>1</sub>,<em>elem</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }
+        <math>
+            <ms>&rarr;</ms>
+        </math>
+        <em>prop</em>,<em>x</em>] gives the property <em>prop</em> for the <em>elem</em><sub><em>i</em></sub> to which
+        <em>x</em> is nearest.
+    <li>FeatureNearest[<em>data</em>,{<em>x</em><sub>1</sub>,<em>x</em><sub>2</sub>,
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }] effectively gives
+        {FeatureNearest[<em>data</em>,<em>x</em><sub>1</sub>],FeatureNearest[<em>data</em>,<em>x</em><sub>2</sub>],
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        }.
+    <li>FeatureNearest[<em>data</em>,<em>x</em>,<em>n</em>] gives the <em>n</em> nearest
+        <em>elem</em><sub><em>i</em></sub> to <em>x</em>.
+    <li>FeatureNearest[<em>data</em>] generates a NearestFunction[
+        <math>
+            <ms>&#8230;</ms>
+        </math>
+        ] that can be applied repeatedly to different <em>x</em>.
+</ul><p><b>Attributes:</b>Protected, ReadProtected</p><p><b>Symbol has no options.</b></p>
