@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,16 +8,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.lang.psi.util;
@@ -57,18 +58,26 @@ public class MathematicaPsiElementFactory {
     return (MathematicaPsiFile) PsiFileFactory.getInstance(myProject).createFileFromText(DUMMY_FILE_NAME, type, code);
   }
 
-  public Expression createExpressionFromText(@NotNull String expr) {
+  /**
+   * Creates an expression from a string
+   *
+   * @param expr valid mathematica expression
+   *
+   * @return Mathematica expression
+   * @throws IncorrectOperationException If the supplied string is not an expression
+   */
+  public Expression createExpressionFromText(@NotNull String expr) throws IncorrectOperationException {
     final PsiElement exprFile = createDummyFile(expr).getFirstChild();
-    if (exprFile != null && exprFile instanceof Expression) {
+    if (exprFile instanceof Expression) {
       return (Expression) exprFile;
     }
     throw new IncorrectOperationException("The supplied string is not a valid Mathematica expression.");
   }
 
   @NotNull
-  public Symbol createSymbol(@NotNull String symbolName) {
+  public Symbol createSymbol(@NotNull String symbolName) throws IncorrectOperationException{
     final PsiElement symbol = createDummyFile(symbolName).getFirstChild();
-    if (symbol != null && symbol instanceof Symbol) {
+    if (symbol instanceof Symbol) {
       return (Symbol) symbol;
     }
     throw new IncorrectOperationException("The supplied string is not a valid Mathematica Symbol.");

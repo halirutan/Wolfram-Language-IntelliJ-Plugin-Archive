@@ -42,20 +42,21 @@ fun Symbol.extractUsageMessageString(): Pair<Symbol, List<String>> {
   // if resolve is a real symbol, then already point to the usage message in another file
   // this might change in future
   // TODO: Keep above in mind
-//  if (resolve is Symbol) {
-//    return Pair(resolve, doUsageMessageExtract(resolve))
-//  }
+  if (resolve is Symbol && resolve.parent is MessageName) {
+    return Pair(resolve, doUsageMessageExtract(resolve))
+  }
   val progressManager = ProgressManager.getInstance()
   val progressIndicator = progressManager.progressIndicator ?: return result
   progressManager.runProcess({
     // Find all references and look if one of them is a usage message
     ReferencesSearch.search(resolve).find { psiReference ->
-      ProgressManager.checkCanceled()
+      progressIndicator.checkCanceled()
       val elm = psiReference.element ?: return@find false
-      if (elm is Symbol) {
+      if (elm is Symbol && elm.parent is MessageName) {
         val messages = doUsageMessageExtract(elm)
         if (messages.isNotEmpty()) {
           result = Pair(elm, messages)
+          return@find true
         }
       }
       return@find false

@@ -29,9 +29,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.util.IncorrectOperationException
 import de.halirutan.mathematica.MathematicaBundle
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct
 import de.halirutan.mathematica.lang.psi.api.OperatorNameProvider
+import de.halirutan.mathematica.lang.psi.api.StringifiedSymbol
 import de.halirutan.mathematica.lang.psi.api.Symbol
 import de.halirutan.mathematica.lang.psi.api.slots.Slot
 import de.halirutan.mathematica.lang.psi.impl.LightBuiltInSymbol
@@ -106,9 +108,12 @@ class MathematicaDocumentationProvider : AbstractDocumentationProvider() {
     }
 
     // Inject the usage message of functions that are declared inside the package
-    return if (element is Symbol) {
-      renderCustomUsageMessage(element)
-    } else null
+    if (element is Symbol) {
+      renderCustomUsageMessage(element).let {
+        if (it.isNotEmpty()) return it
+      }
+    }
+    return null
   }
 
   /**
@@ -130,7 +135,8 @@ class MathematicaDocumentationProvider : AbstractDocumentationProvider() {
     result.append(")</h3><ul>")
     for (usg in usages.component2()) {
       result.append("<li>")
-      result.append(usg.replace("($symbolName(\\[.*])?)".toRegex(), "<b>$1</b>"))
+      result.append(usg.replace("($symbolName)".toRegex(), "<b>$1</b>"))
+//      result.append(usg)
       result.append("</li>")
     }
     result.append("</ul>")
@@ -186,7 +192,17 @@ class MathematicaDocumentationProvider : AbstractDocumentationProvider() {
     val elementFactory = MathematicaPsiElementFactory(manager.project)
     `object`?.let {
       logger.debug("Looking up doc for completion element $it")
-      return elementFactory.createSymbol(it.toString())
+      try {
+        elementFactory.createExpressionFromText(it.toString())?.let {
+          return when (it) {
+            is Symbol -> it
+            is StringifiedSymbol -> it
+            else -> null
+          }
+        }
+      } catch (exception: IncorrectOperationException) {
+        logger.debug("Invalid lookup element expression")
+      }
     }
     return null
   }
