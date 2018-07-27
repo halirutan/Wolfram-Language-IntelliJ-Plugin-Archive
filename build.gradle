@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.2.51"
-    id "org.jetbrains.intellij" version "0.3.1"
+    id "org.jetbrains.intellij" version "0.3.5"
 }
 
 apply plugin: 'java'
@@ -65,13 +65,13 @@ task wrapper(type: Wrapper) {
 // Information  about the plugin
 
 // Plugin version number
-version '3.0beta2'
+version '3.0beta4'
 
 intellij {
-    version = '2018.1.5'
+    version = '2018.2'
     downloadSources = true
     pluginName = 'Mathematica-IntelliJ-Plugin'
-    sameSinceUntilBuild = true
+    sameSinceUntilBuild = false
     updateSinceUntilBuild = true
 }
 

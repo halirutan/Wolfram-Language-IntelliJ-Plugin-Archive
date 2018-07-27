@@ -51,7 +51,7 @@ fun Symbol.extractUsageMessageString(): Pair<Symbol, List<String>> {
     // Find all references and look if one of them is a usage message
     ReferencesSearch.search(resolve).find { psiReference ->
       progressIndicator.checkCanceled()
-      val elm = psiReference.element ?: return@find false
+      val elm = psiReference.element
       if (elm is Symbol && elm.parent is MessageName) {
         val messages = doUsageMessageExtract(elm)
         if (messages.isNotEmpty()) {

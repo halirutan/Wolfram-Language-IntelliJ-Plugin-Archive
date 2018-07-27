@@ -23,6 +23,120 @@ symbols in context.";
 
 Begin["`Private`"];
 
+
+$additionalSymbols = {
+  "FEPrivate`AddSpecialArgCompletion"
+}
+
+<< JLink`;
+
+(* For good code completion we need an ordering of all possible completions. This is done with the *)
+(* function frequency list that comes with Mathematica nowadays. I just assign numbers according to the *)
+(* place in this list. The higher the number, the more important and the more like is the completion result. *)
+$functionFrequency = With[{file = First[FileNames["all_top_level.m", {$InstallationDirectory}, Infinity]]},
+  Dispatch[Append[
+    MapIndexed[Rule[#1, ToString @@ #2]&, Reverse[Get[file]]],
+    _ -> "0"
+  ]]
+];
+
+(* Call patterns, attributes and options of functions are available too and don't need to be extracted manually *)
+$functionInformation = With[{file = First[FileNames["SystemFiles/Kernel/TextResources/English/FunctionInformation.m", {$InstallationDirectory}, Infinity]]},
+  Rule @@@ Get[file]
+];
+
+makeContextNames[context_String] := Block[{$ContextPath = {context}},
+  StringJoin[context, #]& /@ Names[RegularExpression[context <> "\$?[A-Z]\\w*"]]
+];
+
+InitializeSymbolInformation[] := Module[{},
+  $builtInNames = Sort[Flatten[ makeContextNames /@ {"System`"} ]];
+  $versionedNames = Sort[Flatten[ makeContextNames /@ {"System`", "Developer`", "Internal`", "JLink`"} ]];
+  $allNames = Sort[Flatten[ makeContextNames /@ DeleteCases[Contexts[], "Global`" | "System`"]]];
+]
+
+CreateAuxNames[outDir_ /; DirectoryQ[outDir]] := Module[
+  {
+    contexts = Union[Context /@ $allNames]
+  },
+  Export[FileNameJoin[{outDir, "contexts.properties"}], contexts, "Table"];
+  Export[FileNameJoin[{outDir, "contextSymbols.properties"}], Sort[Join[$additionalSymbols, $allNames]], "Table"];
+];
+
+CreateSymbolVersions[] := Thread[$versionedNames -> $VersionNumber];
+CreateSymbolVersions[existingNames_List] := With[{currVersion = $VersionNumber},
+  existingNames /. (Function[n, (n -> oldVersion_) :> (n -> Min[{currVersion, oldVersion}])] /@ $versionedNames)
+];
+
+isFunction[str_String] :=
+    With[{usg =
+        ToString[
+          Function[s, MessageName[s, "usage"], HoldAll] @@
+              ToHeldExpression[str]]},
+      str <> " " <>
+          If[StringMatchQ[usg, __ ~~ str ~~ "[" ~~ ___ ~~ "]" ~~ ___],
+            " = true", " = false"]
+    ]
+
+getOptions[str_String] :=
+    str <> " = " <>
+        StringTrim[
+          Function[expr,
+            Riffle[ToString[#, InputForm] & /@ (First /@
+                Options[Unevaluated[expr]]), " "] // StringJoin, HoldAll] @@
+              ToHeldExpression[str], "{" | "}" | ","]
+
+getAttributes[str_String] :=
+    str <> " = " <>
+        StringTrim[
+          Function[expr,
+            Riffle[ToString /@ Attributes[Unevaluated[expr]], " "] //
+                StringJoin, HoldAll] @@ ToHeldExpression[str], "{" | "}"]
+
+isFunction[str_String] :=
+    With[{usg =
+        ToString[
+          Function[s, MessageName[s, "usage"], HoldAll] @@
+              ToHeldExpression[str]]},
+      str <> " " <>
+          If[StringMatchQ[usg, __ ~~ str ~~ "[" ~~ ___ ~~ "]" ~~ ___],
+            " = true", " = false"]
+    ]
+getAttributes[str_String] :=
+    StringTrim[
+      Function[expr,
+        Riffle[ToString /@ Attributes[Unevaluated[expr]], " "] //
+            StringJoin, HoldAll] @@ ToHeldExpression[str], "{" | "}"];
+
+getOptions[str_String] :=
+    StringTrim[
+      Function[expr,
+        Riffle[ToString[#, InputForm] & /@ (First /@
+            Options[Unevaluated[expr]]), " "] // StringJoin, HoldAll] @@
+          ToHeldExpression[str], "{" | "}" | ","]
+
+
+createInformation[name_String] := Module[{importance, info, context},
+  importance = StringReplace[name, "System`" ~~ n__ :> n] /. $functionFrequency;
+  Check[
+    context = Context[name];
+    info = Cases[
+      context /.
+          $functionInformation, {ToHeldExpression[name] /.
+          Hold[expr_] :> SymbolName[Unevaluated[expr]], __}];
+    If[info === {}, info = "",
+      info = ";" <> Riffle[ToString /@ First[info], ";"]
+    ];
+    name <> "=" <> importance <> ";" <> getAttributes[name] <> StringJoin[info],
+    ""
+  ]
+];
+
+CreateCompletionInformation[] := createInformation /@ $builtInNames;
+
+(* ::Section:: *)
+(* Creating html usage messages *)
+
 (*	Here we replace Mathematica box expressions with HTML constructs. If we lack of some things we just use a
 	a string representation like with UnderscriptBox *)
 $boxRules = {
@@ -56,7 +170,7 @@ $specialHtmlCharacterRules = {
   "&#10869;" -> "=="
 };
 
-$referenceURL = "http://reference.wolfram.com/mathematica/";
+$referenceURL = "http://reference.wolfram.com/language/";
 $searchURL = "http://reference.wolfram.com/search/?q=";
 
 
@@ -66,6 +180,16 @@ convertBoxExpressionToHTML[boxExpr_] := StringJoin[ToString /@ Flatten[ReleaseHo
 (* 	We need to take care to not evaluate symbols like Black (which is ev to RGBColor[0,0,0]) before we extract the
 	usage message.
 *)
+hasUsage[str_] := With[{usg = ToExpression[str, InputForm, Function[s, MessageName[s, "usage"], HoldFirst]]},
+  Head[usg] =!= MessageName
+];
+
+getUsage[str_] := With[{usg = ToExpression[str, InputForm, Function[s, MessageName[s, "usage"], HoldFirst]]},
+  If[Head[usg] =!= MessageName,
+    usg, ""
+  ]
+];
+
 extractUsage[str_] := With[{usg = Function[expr, expr::usage, HoldAll] @@ MakeExpression[str]},
   If[Head[usg] === String, usg, ""]];
 
@@ -142,29 +266,33 @@ createOptionString[s_] := With[{opts = Function[expr, Options[Unevaluated[expr]]
 ];
 
 convertUsageStringToHTML[usg_] := Module[{},
-  StringReplace[StringReplace[
-    StringReplace[
-      usg, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :>
+  Quiet@Check[
+    StringSplit[
+      StringReplace[StringReplace[
         StringReplace[
-          convertBoxExpressionToHTML[StringReplace[replaceNestedStyleString[content], "\n" :> ""]],
-          "<>" -> "&lt;&gt;"]
-      , "\n" :> "<li>"}], {
+          usg, {Shortest["\!\(\*" ~~ content__ ~~ "\)"] :>
+            StringReplace[
+              convertBoxExpressionToHTML[StringReplace[replaceNestedStyleString[content], "\n" :> ""]],
+              "<>" -> "&lt;&gt;"] }], {
 
-      "\[Null]" :> "",
-      a_?(StringMatchQ[ToString@FullForm[#], "\"\\[" ~~ __ ~~ "]\""] &) :> StringReplace[ToString[a, MathMLForm], {WhitespaceCharacter :> ""}]}
-  ], $specialHtmlCharacterRules]
+          "\[Null]" :> "",
+          a_?(StringMatchQ[ToString@FullForm[#], "\"\\[" ~~ __ ~~ "]\""] &) :> StringReplace[ToString[a, MathMLForm], {WhitespaceCharacter :> ""}]}
+      ], $specialHtmlCharacterRules], "\n"],
+    ""
+  ]
 ];
 
 Options[CreateHTMLUsageString] = {
-  "CheckURL" -> True
+  "CheckURL" -> False
 };
 
 CreateHTMLUsageString[s_String, context_String, OptionsPattern[]] := Module[{
   usg = extractUsage[s, context],
   attr = With[{full = context <> s}, Attributes[full]],
-  link, name},
+  link, name, html},
 
   {name, link} = createOnlineLink[s, context, OptionValue["CheckURL"]];
+  html = Quiet[Check[convertUsageStringToHTML[usg], usg]];
   {name, StringJoin[
     "<h3>", link, "</h3>",
     If[usg =!= "",

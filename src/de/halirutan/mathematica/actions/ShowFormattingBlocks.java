@@ -1,5 +1,28 @@
+/*
+ * Copyright (c) 2018 Patrick Scheibe
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package de.halirutan.mathematica.actions;
 
+import com.intellij.application.options.CodeStyle;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.FormattingModel;
 import com.intellij.formatting.Indent;
@@ -13,11 +36,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.formatter.common.AbstractBlock;
-import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.codeinsight.formatter.AbstractMathematicaBlock;
 import de.halirutan.mathematica.codeinsight.formatter.MathematicaFormattingModelBuilder;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 
 import javax.swing.*;
 import java.util.List;
@@ -51,7 +73,7 @@ public class ShowFormattingBlocks extends AnAction {
     dialogBuilder.setTitle("Formatting Block structure");
 
     final String text = editor != null ? editor.getDocument().getText() : "";
-    final CodeStyleSettings settings = CodeStyleSettingsManager.getInstance(project).getCurrentSettings();
+    final CodeStyleSettings settings = CodeStyle.getDefaultSettings();
     MathematicaFormattingModelBuilder modelBuilder = new MathematicaFormattingModelBuilder();
     final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText("a.m", MathematicaLanguage.INSTANCE, text);
     final FormattingModel model = modelBuilder.createModel(file.getNode().getPsi(), settings);
