@@ -26,6 +26,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.lang.folding.NamedFoldingDescriptor;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
@@ -34,6 +35,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
+import de.halirutan.mathematica.information.SymbolInformation;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
 import de.halirutan.mathematica.lang.psi.api.CompoundExpression;
@@ -43,11 +45,8 @@ import de.halirutan.mathematica.lang.psi.util.Comments.CommentStyle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,20 +60,8 @@ import static de.halirutan.mathematica.codeinsight.folding.MathematicaFoldingGro
  */
 public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
 
-  private static final ResourceBundle ourCharactersResourceBundle;
-  private static final HashMap<String, String> ourNamedCharacters;
   private static final Pattern namedCharacterPattern = Pattern.compile("\\\\\\[[A-Z][a-zA-Z]+]");
-
-  static {
-    ourCharactersResourceBundle = ResourceBundle.getBundle("/de/halirutan/mathematica/codeinsight/folding/namedCharacters");
-    ourNamedCharacters = new HashMap<>(ourCharactersResourceBundle.keySet().size());
-    for (String key : ourCharactersResourceBundle.keySet()) {
-      try {
-        ourNamedCharacters.put(key, new String(ourCharactersResourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8"));
-      } catch (UnsupportedEncodingException ignored) {
-      }
-    }
-  }
+  private SymbolInformation information = ServiceManager.getService(SymbolInformation.class);
 
   @NotNull
   @Override
@@ -94,22 +81,16 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
     final IElementType elementType = node.getElementType();
     if (foldCharacters && elementType == MathematicaElementTypes.IDENTIFIER) {
       final String symbol = node.getText();
-      final Matcher matcher = namedCharacterPattern.matcher(symbol);
-      while (matcher.find()) {
-        if (matcher.end() - matcher.start() > 3) {
-          final String key = symbol.substring(matcher.start() + 2, matcher.end() - 1);
-          final TextRange nodeRange = node.getTextRange();
-          final TextRange range = TextRange.create(nodeRange.getStartOffset() + matcher.start(), nodeRange.getStartOffset() + matcher.end());
-          if (ourNamedCharacters.containsKey(key)) {
-            descriptors.add(new MathematicaNamedFoldingDescriptor(node, range, NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
-          }
-        }
+      if (information.isNamedCharacter(symbol)) {
+        descriptors.add(
+            new NamedFoldingDescriptor(node, node.getTextRange(), NAMED_CHARACTER_GROUP,
+                information.getNamedCharacter(symbol)));
       }
     } else if (foldCharacters && elementType == MathematicaElementTypes.STRING_NAMED_CHARACTER) {
-      final String name = node.getText();
-      final String key = name.substring(2, name.length() - 1);
-      if (ourNamedCharacters.containsKey(key)) {
-        descriptors.add(new MathematicaNamedFoldingDescriptor(node, node.getTextRange(), NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
+      final String character = node.getText();
+      if (information.isNamedCharacter(character)) {
+        descriptors.add(new NamedFoldingDescriptor(node, node.getTextRange(), NAMED_CHARACTER_GROUP,
+            information.getNamedCharacter(character)));
       }
     } else if (elementType == MathematicaElementTypes.LIST_EXPRESSION) {
       // Well, we count the number of elements by counting the commas and adding one. Not bullet-proof, but will do.
@@ -146,7 +127,6 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
   }
 
   /**
-   *
    * @param node        node to a PsiComment
    * @param document    the document of the code
    * @param descriptors collects all folding descriptors
@@ -237,16 +217,25 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
 
   }
 
-  private void foldNamedCharacters(final ASTNode node, @NotNull List<FoldingDescriptor> descriptors ) {
+  /**
+   * Takes a larger portion of text and inserts folding regions for named characters. This is necessary because comments
+   * are one chunk of text while in code, each named character is a separate element.
+   *
+   * @param node        Node that might contain named characters
+   * @param descriptors List of folding descriptions where the found named character regions are added
+   */
+  private void foldNamedCharacters(final ASTNode node, @NotNull List<FoldingDescriptor> descriptors) {
     final String text = node.getText();
     final Matcher matcher = namedCharacterPattern.matcher(text);
     while (matcher.find()) {
       if (matcher.end() - matcher.start() > 3) {
-        final String key = text.substring(matcher.start() + 2, matcher.end() - 1);
+        final String key = text.substring(matcher.start(), matcher.end());
         final TextRange nodeRange = node.getTextRange();
-        final TextRange range = TextRange.create(nodeRange.getStartOffset() + matcher.start(), nodeRange.getStartOffset() + matcher.end());
-        if (ourNamedCharacters.containsKey(key)) {
-          descriptors.add(new MathematicaNamedFoldingDescriptor(node, range, NAMED_CHARACTER_GROUP, ourNamedCharacters.get(key), false));
+        final TextRange range =
+            TextRange.create(nodeRange.getStartOffset() + matcher.start(), nodeRange.getStartOffset() + matcher.end());
+        if (information.isNamedCharacter(key)) {
+          descriptors.add(
+              new NamedFoldingDescriptor(node, range, NAMED_CHARACTER_GROUP, information.getNamedCharacter(key)));
         }
       }
     }
@@ -260,7 +249,8 @@ public class MathematicaExpressionFoldingBuilder implements FoldingBuilder {
 
   @Override
   public boolean isCollapsedByDefault(@NotNull final ASTNode node) {
-    return node.getElementType() == MathematicaElementTypes.IDENTIFIER || node.getElementType() == MathematicaElementTypes.STRING_NAMED_CHARACTER;
+    return node.getElementType() == MathematicaElementTypes.IDENTIFIER ||
+        node.getElementType() == MathematicaElementTypes.STRING_NAMED_CHARACTER;
   }
 
   private MathematicaCodeFoldingSettings getMathematicaFoldingSettings() {

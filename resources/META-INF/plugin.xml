@@ -31,7 +31,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <internalFileTemplate name="Package"/>
         <fileTypeFactory implementation="de.halirutan.mathematica.file.MathematicaFileTypeFactory"/>
         <lang.ast.factory language="Mathematica" implementationClass="de.halirutan.mathematica.lang.tree.MathematicaASTFactory"/>
         <lang.parserDefinition language="Mathematica" implementationClass="de.halirutan.mathematica.lang.parsing.prattparser.MathematicaParserDefinition"/>
@@ -120,6 +119,7 @@
         <orderRootType id="MATHEMATICA_LIBRARY" order="FIRST" implementation="de.halirutan.mathematica.library.MathematicaLibraryRootType"/>
         <OrderRootTypeUI key="MATHEMATICA_LIBRARY" implementationClass="de.halirutan.mathematica.library.MathematicaLibraryRootTypeUIFactory"/>
 
+        <applicationService serviceInterface="de.halirutan.mathematica.information.SymbolInformation" serviceImplementation="de.halirutan.mathematica.information.impl.SymbolInformationImpl"/>
     </extensions>
 
     <actions>
