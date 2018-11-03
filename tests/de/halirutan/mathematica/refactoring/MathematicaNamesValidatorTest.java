@@ -22,6 +22,8 @@
 
 package de.halirutan.mathematica.refactoring;
 
+import de.halirutan.mathematica.information.SymbolInformation;
+import de.halirutan.mathematica.information.impl.SymbolInformationImpl;
 import org.junit.Test;
 
 import java.util.ResourceBundle;
@@ -34,7 +36,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class MathematicaNamesValidatorTest {
 
-  private final ResourceBundle myNamedCharacters = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.namedCharacters");
+  // In real code, use ServiceManager.getService(SymbolInformation.class) to retrieve an object of this.
+  private final SymbolInformation symbolInfo = new SymbolInformationImpl();
   private final ResourceBundle mySymbols =
       ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.contextSymbols");
 
@@ -48,7 +51,7 @@ public class MathematicaNamesValidatorTest {
   @Test
   public void testIsIdentifier() {
     MathematicaNamesValidator validator = new MathematicaNamesValidator();
-    for (String nc : myNamedCharacters.keySet()) {
+    for (String nc : symbolInfo.getNamedCharacters()) {
       assertTrue(validator.isIdentifier("\\[" + nc + "]", null));
     }
 

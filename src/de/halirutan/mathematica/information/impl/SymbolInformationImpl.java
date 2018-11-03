@@ -77,4 +77,9 @@ public class SymbolInformationImpl implements SymbolInformation {
     return null;
   }
 
+  @Override
+  public Set<String> getNamedCharacters() {
+    return myNamedCharacters.keySet();
+  }
+
 }

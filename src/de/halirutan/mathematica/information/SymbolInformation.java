@@ -25,9 +25,8 @@ package de.halirutan.mathematica.information;
 import com.intellij.openapi.components.ServiceManager;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author patrick (05.09.18).
- */
+import java.util.Set;
+
 public interface SymbolInformation {
 
   static SymbolInformation getInstance() {
@@ -39,4 +38,5 @@ public interface SymbolInformation {
   String getNamedCharacter(@NotNull String name);
 
 
+  Set<String> getNamedCharacters();
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,16 +8,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.lang.parsing;
@@ -27,8 +28,8 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.codeinsight.highlighting.MathematicaSyntaxHighlighter;
+import de.halirutan.mathematica.lang.MathematicaLanguage;
 import de.halirutan.mathematica.lang.psi.impl.*;
 import de.halirutan.mathematica.lang.psi.impl.arithmetic.*;
 import de.halirutan.mathematica.lang.psi.impl.assignment.*;
@@ -80,11 +81,6 @@ public interface MathematicaElementTypes {
   );
   IElementType BAD_CHARACTER = TokenType.BAD_CHARACTER;
   IElementType COMMENT = new MathematicaElementType("COMMENT");
-  //  IElementType COMMENT_START = new MathematicaElementType("COMMENT_START");
-//  IElementType COMMENT_END = new MathematicaElementType("COMMENT_END");
-//  IElementType COMMENT_CONTENT = new MathematicaElementType("COMMENT_CONTENT");
-//  IElementType COMMENT_SECTION = new MathematicaElementType("COMMENT_SECTION");
-//  IElementType COMMENT_ANNOTATION = new MathematicaElementType("COMMENT_ANNOTATION");
   TokenSet COMMENTS = TokenSet.create(
       COMMENT
   );
@@ -110,7 +106,7 @@ public interface MathematicaElementTypes {
   IElementType LEFT_BRACE = new MathematicaElementType("LEFT_BRACE");
   IElementType RIGHT_BRACE = new MathematicaElementType("RIGHT_BRACE");
   IElementType LEFT_BRACKET = new MathematicaElementType("LEFT_BRACKET");
-  IElementType PART_BEGIN = new MathematicaElementType("PART_BEGIN");
+  IElementType LEFT_BRACKET_ESCAPED = new MathematicaElementType("LEFT_BRACKET_ESCAPED");
   IElementType RIGHT_BRACKET = new MathematicaElementType("RIGHT_BRACKET");
   TokenSet BRACES = TokenSet.create(
       LEFT_BRACE, LEFT_BRACKET, LEFT_PAR,
@@ -244,7 +240,6 @@ public interface MathematicaElementTypes {
   IElementType NUMBER_EXPRESSION = new MathematicaElementType("NUMBER_EXPRESSION");
   IElementType SYMBOL_EXPRESSION = new MathematicaElementType("SYMBOL_EXPRESSION");
   IElementType STRINGIFIED_SYMBOL_EXPRESSION = new MathematicaElementType("STRINGIFIED_SYMBOL_EXPRESSION");
-  IElementType STRING = new MathematicaElementType("STRING");
   IElementType MESSAGE_NAME_EXPRESSION = new MathematicaElementType("MESSAGE_NAME_EXPRESSION");
   IElementType BLANK_EXPRESSION = new MathematicaElementType("BLANK_EXPRESSION");
   IElementType BLANK_SEQUENCE_EXPRESSION = new MathematicaElementType("BLANK_SEQUENCE_EXPRESSION");
