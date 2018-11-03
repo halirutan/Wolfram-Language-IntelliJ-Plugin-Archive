@@ -29,10 +29,14 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.formatting.blocks.prev
+import com.intellij.lang.ASTNode
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.util.ProcessingContext
 import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.codeinsight.completion.rendering.BuiltinSymbolLookupElement
+import de.halirutan.mathematica.information.SymbolInformation
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes
 import de.halirutan.mathematica.settings.MathematicaSettings
 
@@ -43,6 +47,8 @@ import de.halirutan.mathematica.settings.MathematicaSettings
  */
 class BuiltinFunctionCompletion : MathematicaCompletionProvider() {
 
+  private val symbolInfo: SymbolInformation = ServiceManager.getService(SymbolInformation::class.java)
+
   override fun addTo(contributor: CompletionContributor) {
     val psiElementCapture = psiElement().withElementType(MathematicaElementTypes.IDENTIFIER)
     contributor.extend(CompletionType.BASIC, psiElementCapture, this)
@@ -51,12 +57,22 @@ class BuiltinFunctionCompletion : MathematicaCompletionProvider() {
   override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
 
     val prefix = findCurrentText(parameters, parameters.position)
+    val previousNode: ASTNode? = parameters.position.node.prev()
     if (parameters.invocationCount == 0 && (prefix.isEmpty() || Character.isLowerCase(prefix[0]))) {
       return
     }
 
     val matcher = CamelHumpMatcher(prefix, true)
     val result2 = result.withPrefixMatcher(matcher)
+
+    // User started a named symbol
+    if (previousNode is ASTNode && previousNode.elementType == MathematicaElementTypes.LEFT_BRACKET_ESCAPED) {
+      result2.addAllElements(symbolInfo.namedCharacters.map { name ->
+        LookupElementBuilder.create(name)
+      })
+      result2.stopHere()
+      return
+    }
 
     val symbols = SymbolInformationProvider.getSystemSymbolInformation()
     val sortByImportance = !MathematicaSettings.getInstance().isSortCompletionEntriesLexicographically
