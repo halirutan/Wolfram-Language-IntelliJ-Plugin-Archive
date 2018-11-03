@@ -93,6 +93,7 @@ Out = "%"+
 
 	"``"				{ return MathematicaElementTypes.ACCURACY; }
 	"["					{ return MathematicaElementTypes.LEFT_BRACKET; }
+	"\\["				{ return MathematicaElementTypes.LEFT_BRACKET_ESCAPED; }
 	"]"					{ return MathematicaElementTypes.RIGHT_BRACKET; }
 	"("					{ return MathematicaElementTypes.LEFT_PAR; }
 	")"					{ return MathematicaElementTypes.RIGHT_PAR; }
