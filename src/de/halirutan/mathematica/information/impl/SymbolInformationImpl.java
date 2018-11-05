@@ -39,13 +39,13 @@ public class SymbolInformationImpl implements SymbolInformation {
   private static Logger LOG = Logger.getInstance(SymbolInformation.class);
   private Map<String, String> myNamedCharacters = convertNamedCharacters();
   private Set<String> myContexts =
-      convertResourceBundleToList("de.halirutan.mathematica.information.impl.MathematicaContexts");
+      convertResourceBundleToList("de.halirutan.mathematica.codeinsight.completion.MathematicaContexts");
   private Set<String> myContextSymbols =
-      convertResourceBundleToList("de.halirutan.mathematica.information.impl.MathematicaContextSymbols");
+      convertResourceBundleToList("de.halirutan.mathematica.codeinsight.completion.MathematicaContextSymbols");
 
 
   private static Map<String, String> convertNamedCharacters() {
-    ResourceBundle bundle = ResourceBundle.getBundle("de.halirutan.mathematica.information.impl.NamedCharacters");
+    ResourceBundle bundle = ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.NamedCharacters");
     Map<String, String> map = new HashMap<>();
 
     Enumeration<String> keys = bundle.getKeys();

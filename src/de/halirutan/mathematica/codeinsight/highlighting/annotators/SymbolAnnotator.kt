@@ -53,10 +53,9 @@ class SymbolAnnotator : Annotator {
         when (it) {
           LocalizationConstruct.ScopeType.MODULE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           LocalizationConstruct.ScopeType.RULE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.PATTERN)
-//          LocalizationConstruct.ScopeType.FUNCTION_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.PATTERN)
+          LocalizationConstruct.ScopeType.FUNCTION_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.PATTERN)
           LocalizationConstruct.ScopeType.TABLE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           LocalizationConstruct.ScopeType.COMPILE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
-//          LocalizationConstruct.ScopeType.ANONYMOUS_FUNCTION_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           LocalizationConstruct.ScopeType.LIMIT_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           LocalizationConstruct.ScopeType.MANIPULATE_LIKE -> MathematicaSyntaxHighlighterColors.setHighlighting(symbol, holder, MathematicaSyntaxHighlighterColors.MODULE_LOCALIZED)
           else -> when (scope) {

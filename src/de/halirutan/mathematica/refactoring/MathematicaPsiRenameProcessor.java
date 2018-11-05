@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,26 +8,28 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.refactoring;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
 import de.halirutan.mathematica.lang.psi.api.string.MString;
+import de.halirutan.mathematica.lang.psi.impl.LightFileSymbol;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -45,13 +48,14 @@ import java.util.HashSet;
 public class MathematicaPsiRenameProcessor extends RenamePsiElementProcessor {
   @Override
   public boolean canProcessElement(@NotNull PsiElement element) {
-    return element instanceof Symbol || element instanceof MString;
+    return element instanceof Symbol || element instanceof LightFileSymbol || element instanceof MString;
   }
 
   @NotNull
   @Override
   public Collection<PsiReference> findReferences(PsiElement element) {
     final Collection<PsiReference> references = super.findReferences(element);
+    final Collection<PsiReference> all = ReferencesSearch.search(element).findAll();
     PsiReference elementRef = element.getReference();
     PsiElement definitionElement;
     if (elementRef != null) {
@@ -63,6 +67,12 @@ public class MathematicaPsiRenameProcessor extends RenamePsiElementProcessor {
       }
     }
     return references;
+  }
+
+
+  @Override
+  public boolean isInplaceRenameSupported() {
+    return true;
   }
 
   private class SymbolCollector extends MathematicaRecursiveVisitor {

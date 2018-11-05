@@ -41,7 +41,8 @@ import de.halirutan.mathematica.lang.psi.api.slots.SlotExpression
 class FunctionAnnotator : Annotator {
 
   /**
-   * We annotate slots in anonymous functions and in `Function[Null, ...]` constructs
+   * We annotate slots in anonymous functions and in `Function[Null, ...]` constructs.
+   * Constructs with symbols like `Function[{x, y}, x + y]` are handled through resolving in [SymbolAnnotator].
    */
   override fun annotate(function: PsiElement, holder: AnnotationHolder) {
     when {
@@ -52,12 +53,19 @@ class FunctionAnnotator : Annotator {
       }
       function is FunctionCall && function.hasHead("Function") -> {
         val arguments = function.arguments
-        if (arguments.size >= 2) {
-          arguments[1].let { first ->
+        when (arguments.size) {
+          // Function[# + #]
+          0, 1 -> return
+          2 -> arguments[1].let {
+            val slotVisitor = SlotVisitor(holder)
+            it.accept(slotVisitor)
+          }
+          else -> arguments[1].let { first ->
             if (first is Symbol && "Null" == first.symbolName) {
               arguments[2].let {
                 val slotVisitor = SlotVisitor(holder)
                 it.accept(slotVisitor)
+                return
               }
             }
           }
@@ -70,15 +78,15 @@ class FunctionAnnotator : Annotator {
 private class SlotVisitor(val holder: AnnotationHolder) : MathematicaRecursiveVisitor() {
 
   override fun visitSlot(slot: Slot) {
-    MathematicaSyntaxHighlighterColors.setHighlighting(slot, holder, MathematicaSyntaxHighlighterColors.PATTERN)
+    MathematicaSyntaxHighlighterColors.setHighlighting(slot, holder, MathematicaSyntaxHighlighterColors.SLOT)
   }
 
   override fun visitSlotExpression(slotExpr: SlotExpression) {
     val head = slotExpr.firstChild.node.elementType
     if (head == MathematicaElementTypes.ASSOCIATION_SLOT) {
-      MathematicaSyntaxHighlighterColors.setHighlighting(slotExpr, holder, MathematicaSyntaxHighlighterColors.PATTERN)
+      MathematicaSyntaxHighlighterColors.setHighlighting(slotExpr, holder, MathematicaSyntaxHighlighterColors.SLOT)
     } else {
-      MathematicaSyntaxHighlighterColors.setHighlighting(slotExpr.firstChild, holder, MathematicaSyntaxHighlighterColors.PATTERN)
+      MathematicaSyntaxHighlighterColors.setHighlighting(slotExpr.firstChild, holder, MathematicaSyntaxHighlighterColors.SLOT)
     }
     slotExpr.acceptChildren(this)
 

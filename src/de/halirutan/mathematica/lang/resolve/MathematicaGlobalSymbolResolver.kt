@@ -34,6 +34,7 @@ import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile
 import de.halirutan.mathematica.lang.psi.api.Symbol
+import de.halirutan.mathematica.lang.psi.impl.LightSymbol
 import de.halirutan.mathematica.lang.psi.util.MathematicaPsiUtilities.isBuiltInSymbol
 import de.halirutan.mathematica.lang.resolve.processors.GlobalDefinitionResolveProcessor
 import java.util.*
@@ -89,8 +90,8 @@ class MathematicaGlobalSymbolResolver {
       val psiManager = PsiManager.getInstance(project)
       val fileIndex = FileBasedIndex.getInstance() ?: return@let
       val moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
-      fileIndex.getAllKeys(packageIndex, project).forEach {
-        it?.let {
+      fileIndex.getAllKeys(packageIndex, project).forEach { key ->
+        key?.let {
           val fileForKey = arrayListOf<VirtualFile>()
           val inScope = !fileIndex.processValues(
               packageIndex,
@@ -104,8 +105,11 @@ class MathematicaGlobalSymbolResolver {
             val psiFile = psiManager.findFile(fileForKey.first()) ?: return@forEach
             val externalSymbol = PsiTreeUtil.findElementOfClassAtOffset(psiFile, it.offset, Symbol::class.java, true)
                 ?: return@forEach
-            val result = symbolCache.cacheExternalSymbol(ref, externalSymbol, psiFile)
-            references.add(result)
+            val resolve = externalSymbol.resolve()
+            if (resolve is LightSymbol) {
+              val result = symbolCache.cacheExternalSymbol(ref, resolve, psiFile)
+              references.add(result)
+            }
             return references.toTypedArray()
           }
         }

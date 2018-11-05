@@ -29,3 +29,6 @@ I know that go to _declaration_ is misleading for Mathematica, but it is the eas
 - Heavy reimplementation of the core algorithms for resolving references.
 - Goto Declaration now shows all places, where a functions gets some value. Be it several patterns, usage messages, options, or others.
 - Now there is a "Goto Symbol" function that lets you search for symbols that have a usage messages throughout your project
+- Fix broken renaming of symbols
+- Find usage of symbols works project wide
+- Code completion for named characters

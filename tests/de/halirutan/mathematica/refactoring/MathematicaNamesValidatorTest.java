@@ -39,7 +39,7 @@ public class MathematicaNamesValidatorTest {
   // In real code, use ServiceManager.getService(SymbolInformation.class) to retrieve an object of this.
   private final SymbolInformation symbolInfo = new SymbolInformationImpl();
   private final ResourceBundle mySymbols =
-      ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.contextSymbols");
+      ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.MathematicaContextSymbols");
 
   private final String[] myCounterExamples = {
       "Internal`",

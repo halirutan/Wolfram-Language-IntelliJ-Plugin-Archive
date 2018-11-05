@@ -72,6 +72,7 @@ public class MathematicaReferenceSearch extends QueryExecutorBase<PsiReference, 
         if (symbol instanceof Symbol) {
           if (Objects.equals(((Symbol) symbol).resolve(), target)) {
             consumer.process(symbol.getReference());
+            return false;
           }
         }
         return true;

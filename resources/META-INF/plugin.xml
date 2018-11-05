@@ -120,6 +120,7 @@
         <OrderRootTypeUI key="MATHEMATICA_LIBRARY" implementationClass="de.halirutan.mathematica.library.MathematicaLibraryRootTypeUIFactory"/>
 
         <applicationService serviceInterface="de.halirutan.mathematica.information.SymbolInformation" serviceImplementation="de.halirutan.mathematica.information.impl.SymbolInformationImpl"/>
+        <lang.findUsagesProvider language="Mathematica" implementationClass="de.halirutan.mathematica.find.MathematicaFindUsages"/>
     </extensions>
 
     <actions>

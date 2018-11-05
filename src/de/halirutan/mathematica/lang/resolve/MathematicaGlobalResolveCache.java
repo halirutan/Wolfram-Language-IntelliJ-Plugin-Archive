@@ -124,7 +124,7 @@ public class MathematicaGlobalResolveCache {
   }
 
   @NotNull
-  public SymbolResolveResult cacheExternalSymbol(@NotNull Symbol symbol, @NotNull Symbol externalSymbol, PsiElement scopeElement) {
+  public SymbolResolveResult cacheExternalSymbol(@NotNull Symbol symbol, @NotNull PsiElement externalSymbol, PsiElement scopeElement) {
     final LightExternalSymbol lightSymbol = new LightExternalSymbol(symbol);
     return myCachedExternalSymbols.computeIfAbsent(lightSymbol,
         k -> new SymbolResolveResult(externalSymbol, LocalizationConstruct.MScope.IMPORT_SCOPE, scopeElement, true));
