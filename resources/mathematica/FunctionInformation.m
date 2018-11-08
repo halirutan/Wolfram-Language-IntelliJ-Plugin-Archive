@@ -39,7 +39,7 @@ $functionFrequency = With[{file = First[FileNames["all_top_level.m", {$Installat
 ];
 
 (* Call patterns, attributes and options of functions are available too and don't need to be extracted manually *)
-$functionInformation = With[{file = First[FileNames["FunctionInformation.m", {$InstallationDirectory}, Infinity]]},
+$functionInformation = With[{file = First[FileNames["SystemFiles/Kernel/TextResources/English/FunctionInformation.m", {$InstallationDirectory}, Infinity]]},
   Rule @@@ Get[file]
 ];
 

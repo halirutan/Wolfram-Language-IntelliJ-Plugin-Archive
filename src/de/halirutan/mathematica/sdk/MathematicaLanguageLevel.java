@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -7,16 +8,16 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.sdk;
@@ -34,19 +35,19 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings({"EnumeratedConstantNamingConvention", "WeakerAccess"})
 public enum MathematicaLanguageLevel {
-  M_11_3("11", MathematicaBundle.message("language.level.11.3")),
+  M_11_3("11.3", MathematicaBundle.message("language.level.11.3")),
   M_11_2("11.2", MathematicaBundle.message("language.level.11.2")),
   M_11_1("11.1", MathematicaBundle.message("language.level.11.1")),
-  M_11("11", MathematicaBundle.message("language.level.11")),
+  M_11("11.0", MathematicaBundle.message("language.level.11")),
   M_10_4("10.4", MathematicaBundle.message("language.level.10.4")),
   M_10_3("10.3", MathematicaBundle.message("language.level.10.3")),
   M_10_2("10.2", MathematicaBundle.message("language.level.10.2")),
   M_10_1("10.1", MathematicaBundle.message("language.level.10.1")),
-  M_10("10",MathematicaBundle.message("language.level.10")),
-  M_9("9", MathematicaBundle.message("language.level.9")),
-  M_8("8", MathematicaBundle.message("language.level.8"));
+  M_10("10.0", MathematicaBundle.message("language.level.10")),
+  M_9("9.0", MathematicaBundle.message("language.level.9")),
+  M_8("8.0", MathematicaBundle.message("language.level.8"));
 
-  public static final MathematicaLanguageLevel HIGHEST = M_11_2;
+  public static final MathematicaLanguageLevel HIGHEST = M_11_3;
 
   private final String myName;
   private final String myPresentableText;

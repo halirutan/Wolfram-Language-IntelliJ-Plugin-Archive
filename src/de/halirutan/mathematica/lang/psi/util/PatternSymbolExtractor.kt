@@ -32,6 +32,7 @@ import de.halirutan.mathematica.lang.psi.api.pattern.Blank
 import de.halirutan.mathematica.lang.psi.api.pattern.BlankNullSequence
 import de.halirutan.mathematica.lang.psi.api.pattern.BlankSequence
 import de.halirutan.mathematica.lang.psi.api.pattern.Condition
+import de.halirutan.mathematica.lang.psi.api.pattern.Default
 import de.halirutan.mathematica.lang.psi.api.pattern.Optional
 import de.halirutan.mathematica.lang.psi.api.pattern.Pattern
 
@@ -73,6 +74,10 @@ class PatternSymbolExtractor : MathematicaVisitor() {
   override fun visitCondition(condition: Condition) {
     val firstChild = condition.firstChild
     firstChild?.accept(this)
+  }
+
+  override fun visitDefault(default: Default?) {
+    default?.firstChild?.let { if (it is Symbol) patternSymbols.add(it) }
   }
 
   override fun visitPattern(pattern: Pattern) {
