@@ -50,7 +50,7 @@ public class MathematicaReferenceSearch extends QueryExecutorBase<PsiReference, 
   }
 
   @Override
-  public void processQuery(@NotNull ReferencesSearch.SearchParameters queryParameters, @NotNull Processor<PsiReference> consumer) {
+  public void processQuery(@NotNull ReferencesSearch.SearchParameters queryParameters, @NotNull Processor<? super PsiReference> consumer) {
     final PsiElement target = queryParameters.getElementToSearch();
 
     String name;
@@ -66,7 +66,7 @@ public class MathematicaReferenceSearch extends QueryExecutorBase<PsiReference, 
       return;
     }
 
-    PsiSearchHelper helper = PsiSearchHelper.SERVICE.getInstance(target.getProject());
+    PsiSearchHelper helper = PsiSearchHelper.getInstance(target.getProject());
     if (helper instanceof PsiSearchHelperImpl) {
 
       TextOccurenceProcessor processor = (symbol, offsetInElement) -> {
