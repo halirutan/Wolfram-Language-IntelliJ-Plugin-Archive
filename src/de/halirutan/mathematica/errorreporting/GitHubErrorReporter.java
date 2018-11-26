@@ -22,12 +22,11 @@
 
 package de.halirutan.mathematica.errorreporting;
 
-import com.intellij.diagnostic.IdeErrorsDialog;
+import com.intellij.diagnostic.IdeaReportingEvent;
 import com.intellij.diagnostic.LogMessage;
 import com.intellij.diagnostic.ReportMessages;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.idea.IdeaLogger;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
@@ -42,7 +41,6 @@ import com.intellij.openapi.diagnostic.ErrorReportSubmitter;
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.diagnostic.SubmittedReportInfo.SubmissionStatus;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
@@ -77,21 +75,15 @@ public class GitHubErrorReporter extends ErrorReportSubmitter {
     bean.setDescription(description);
     bean.setMessage(event.getMessage());
 
-    Throwable throwable = event.getThrowable();
-    if (throwable != null) {
-      final PluginId pluginId = IdeErrorsDialog.findPluginId(throwable);
-      if (pluginId != null) {
-        final IdeaPluginDescriptor ideaPluginDescriptor = PluginManager.getPlugin(pluginId);
-        if (ideaPluginDescriptor != null && !ideaPluginDescriptor.isBundled()) {
-          bean.setPluginName(ideaPluginDescriptor.getName());
-          bean.setPluginVersion(ideaPluginDescriptor.getVersion());
-        }
+    if (event instanceof IdeaReportingEvent) {
+      final IdeaPluginDescriptor plugin = ((IdeaReportingEvent) event).getPlugin();
+      if (plugin != null) {
+        bean.setPluginName(plugin.getName());
+        bean.setPluginVersion(plugin.getVersion());
       }
     }
 
     Object data = event.getData();
-
-
     if (data instanceof LogMessage) {
       bean.setAttachments(ContainerUtil.filter(((LogMessage) data).getAllAttachments(), Attachment::isIncluded));
     }
@@ -154,6 +146,4 @@ public class GitHubErrorReporter extends ErrorReportSubmitter {
 
     }
   }
-
-
 }
