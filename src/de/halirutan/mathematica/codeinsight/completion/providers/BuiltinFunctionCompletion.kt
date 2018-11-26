@@ -34,7 +34,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.util.ProcessingContext
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.codeinsight.completion.rendering.BuiltinSymbolLookupElement
 import de.halirutan.mathematica.information.SymbolInformation
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes
@@ -74,10 +73,10 @@ class BuiltinFunctionCompletion : MathematicaCompletionProvider() {
       return
     }
 
-    val symbols = SymbolInformationProvider.getSystemSymbolInformation()
+    val symbols = symbolInfo.allSymbolProperties
     val sortByImportance = !MathematicaSettings.getInstance().isSortCompletionEntriesLexicographically
 
-    for (info in symbols.values) {
+    for (info in symbols) {
       val lookup = BuiltinSymbolLookupElement(info)
       if (sortByImportance) {
         result2.addElement(PrioritizedLookupElement.withPriority(lookup, info.importance.toDouble()))
@@ -87,8 +86,8 @@ class BuiltinFunctionCompletion : MathematicaCompletionProvider() {
     }
 
     if (parameters.isExtendedCompletion) {
-      result2.addAllElements(SymbolInformationProvider.getAllContexts().map { name -> LookupElementBuilder.create(name) })
-      result2.addAllElements(SymbolInformationProvider.getAuxSymbols().map { name -> LookupElementBuilder.create(name) })
+      result2.addAllElements(symbolInfo.allContexts.map { name -> LookupElementBuilder.create(name) })
+      result2.addAllElements(symbolInfo.contextSymbols.map { name -> LookupElementBuilder.create(name) })
     }
   }
 }

@@ -23,8 +23,9 @@
 package de.halirutan.mathematica.lang.psi.util;
 
 import com.google.common.collect.Lists;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.*;
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider;
+import de.halirutan.mathematica.information.SymbolInformation;
 import de.halirutan.mathematica.lang.parsing.MathematicaElementTypes;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct.MScope;
@@ -52,14 +53,15 @@ import java.util.List;
  */
 public class MathematicaPsiUtilities {
 
-  private static final java.util.Set<String> NAMES = SymbolInformationProvider.getSystemSymbolInformation().keySet();
+  private static final SymbolInformation symbolInfo = ServiceManager.getService(SymbolInformation.class);
+
 
   public static boolean isBuiltInSymbol(PsiElement element) {
     if (element instanceof Symbol) {
       Symbol symbol = (Symbol) element;
       final String name = symbol.getMathematicaContext().equals("") ?
           "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
-      return NAMES.contains(name);
+      return symbolInfo.isBuiltinSymbol(name);
     }
     return false;
   }

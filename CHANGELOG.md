@@ -32,3 +32,7 @@ I know that go to _declaration_ is misleading for Mathematica, but it is the eas
 - Fix broken renaming of symbols
 - Find usage of symbols works project wide
 - Code completion for named characters
+- Fix highlighting for Function
+- Fix duplicate entries in "Find Symbol" action
+- Replace old SymbolInformationProvider with a Service that holds exactly one instance and contains a clear interface
+- Include the "new package style" macros Package, PackageImport, PackageExport, and PackageScope

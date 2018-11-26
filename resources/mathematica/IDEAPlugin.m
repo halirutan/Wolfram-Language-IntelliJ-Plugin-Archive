@@ -59,8 +59,8 @@ CreateAuxNames[outDir_ /; DirectoryQ[outDir]] := Module[
   {
     contexts = Union[Context /@ $allNames]
   },
-  Export[FileNameJoin[{outDir, "contexts.properties"}], contexts, "Table"];
-  Export[FileNameJoin[{outDir, "contextSymbols.properties"}], Sort[Join[$additionalSymbols, $allNames]], "Table"];
+  Export[FileNameJoin[{outDir, "MathematicaContexts.properties"}], contexts, "Table"];
+  Export[FileNameJoin[{outDir, "MathematicaContextSymbols.properties"}], Sort[Join[$additionalSymbols, $allNames]], "Table"];
 ];
 
 CreateSymbolVersions[] := Thread[$versionedNames -> $VersionNumber];

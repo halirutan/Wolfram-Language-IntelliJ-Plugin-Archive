@@ -24,7 +24,6 @@ package de.halirutan.mathematica.codeinsight.navigation
 
 import com.intellij.navigation.ChooseByNameContributor
 import com.intellij.navigation.NavigationItem
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
@@ -43,17 +42,16 @@ import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector
 class GotoSymbolContributor : ChooseByNameContributor {
 
   private val packageIndex = MathematicaPackageExportIndex.INDEX_ID
-  private val logger = Logger.getInstance("#de.halirutan.mathematica.codeinsight.navigation.GotoSymbolContributor")
 
   override fun getItemsByName(name: String?, pattern: String?, project: Project?, includeNonProjectItems: Boolean): Array<NavigationItem> {
     val project1 = project ?: return emptyArray()
     val scope = GlobalSearchScope.projectScope(project1)
     val name1 = name ?: return emptyArray()
     val keys = getPackageExportKeys(project1, includeNonProjectItems)
-    val result = keys.filter { k -> k.symbol == name1 }.fold(ArrayList<NavigationItem>(), { accumulator, key ->
+    val result = keys.filter { k -> k.symbol == name1 }.fold(ArrayList<NavigationItem>()) { accumulator, key ->
       val filesByName = FilenameIndex.getFilesByName(project1, key.fileName, scope)
-      filesByName.forEach {
-        it?.let {
+      filesByName.forEach { file ->
+        file?.let {
           val symbol = it.findElementAt(key.offset)?.parent
           if (symbol is Symbol && symbol.symbolName == key.symbol) {
             val c = GlobalDefinitionCollector(symbol.getContainingFile())
@@ -68,22 +66,21 @@ class GotoSymbolContributor : ChooseByNameContributor {
         }
       }
       accumulator
-    })
+    }
     return result.toTypedArray()
   }
 
   override fun getNames(project: Project?, includeNonProjectItems: Boolean): Array<String> {
-    val nameArray = MathematicaPackageExportIndex.getSymbolNames(project).toTypedArray()
-    logger.debug("found ${nameArray.size} Mathematica symbols")
-    return nameArray
+    val nameArray = MathematicaPackageExportIndex.getSymbolNames(project).toHashSet()
+    return nameArray.toTypedArray()
   }
 
   private fun getPackageExportKeys(project: Project, includeNonProjectItems: Boolean): ArrayList<PackageExportSymbol> {
     val fileIndex = FileBasedIndex.getInstance() ?: return arrayListOf()
     val scope = if (includeNonProjectItems) GlobalSearchScope.projectScope(project) else GlobalSearchScope.allScope(project)
     val result: ArrayList<PackageExportSymbol> = arrayListOf()
-    fileIndex.getAllKeys(packageIndex, project).forEach {
-      it?.let {
+    fileIndex.getAllKeys(packageIndex, project).forEach { symbol ->
+      symbol?.let {
         val fileForKey = arrayListOf<VirtualFile>()
         val inScope = !fileIndex.processValues(
             packageIndex,

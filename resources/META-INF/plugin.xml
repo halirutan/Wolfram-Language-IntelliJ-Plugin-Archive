@@ -53,7 +53,6 @@
         <gotoSymbolContributor implementation="de.halirutan.mathematica.codeinsight.navigation.GotoSymbolContributor"/>
         <gotoRelatedProvider implementation="de.halirutan.mathematica.codeinsight.navigation.MathematicaGotoRelatedProvider"/>
         <lang.foldingBuilder language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.folding.MathematicaExpressionFoldingBuilder"/>
-
         <completion.contributor language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.completion.MathematicaCompletionContributor"/>
 
         <lang.commenter language="Mathematica" implementationClass="de.halirutan.mathematica.codeinsight.editoractions.MathematicaCommenter"/>

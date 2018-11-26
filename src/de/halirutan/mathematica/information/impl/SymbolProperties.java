@@ -20,45 +20,47 @@
  * SOFTWARE.
  */
 
-package de.halirutan.mathematica.information;
+package de.halirutan.mathematica.information.impl;
 
-import com.intellij.openapi.components.ServiceManager;
-import de.halirutan.mathematica.information.impl.SymbolProperties;
-import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
-import java.util.Collection;
-import java.util.Set;
+/**
+ * @author patrick (25.11.18).
+ */
+public class SymbolProperties {
+  private String context;
+  private String name;
+  private boolean functionQ;
+  private List<String> options;
+  private List<String> attributes;
+  private List<String> callPattern;
+  private int importance;
 
-public interface SymbolInformation {
-
-  static SymbolInformation getInstance() {
-    return ServiceManager.getService(SymbolInformation.class);
+  public String getContext() {
+    return context;
   }
 
-  boolean isNamedCharacter(@NotNull String name);
+  public String getName() {
+    return name;
+  }
 
-  boolean isSystemSymbol(@NotNull String nameWithoutContext);
+  public boolean isFunctionQ() {
+    return functionQ;
+  }
 
-  boolean isBuiltinSymbol(@NotNull String nameWithContext);
+  public List<String> getOptions() {
+    return options;
+  }
 
-  Set<String> getContextSymbols();
+  public List<String> getAttributes() {
+    return attributes;
+  }
 
-  Set<String> getAllContexts();
+  public List<String> getCallPattern() {
+    return callPattern;
+  }
 
-  Set<String> getSymbolsWithProperties();
-
-  boolean hasProperties(@NotNull String nameWithContext);
-
-  @NotNull
-  Collection<SymbolProperties> getAllSymbolProperties();
-
-  SymbolProperties getSymbolProperties(@NotNull String nameWithContext);
-
-  String getNamedCharacter(@NotNull String name);
-
-  Set<String> getNamedCharacters();
-
-  double getSymbolVersion(@NotNull String nameWithContext);
-
-  boolean isVersionedSymbol(@NotNull String nameWithContext);
+  public int getImportance() {
+    return importance;
+  }
 }

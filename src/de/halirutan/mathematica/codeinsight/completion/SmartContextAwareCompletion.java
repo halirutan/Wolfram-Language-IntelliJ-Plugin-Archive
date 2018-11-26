@@ -28,11 +28,12 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider.SymbolInformation;
 import de.halirutan.mathematica.codeinsight.completion.providers.MathematicaCompletionProvider;
+import de.halirutan.mathematica.information.SymbolInformation;
 import de.halirutan.mathematica.lang.psi.MathematicaRecursiveVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.MessageName;
@@ -41,8 +42,8 @@ import de.halirutan.mathematica.util.MathematicaIcons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -57,9 +58,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
  */
 class SmartContextAwareCompletion extends MathematicaCompletionProvider {
 
-
-  private static final HashMap<String, SymbolInformation> ourSymbolInformation =
-      SymbolInformationProvider.getSystemSymbolInformation();
+  private final SymbolInformation symbolInfo = ServiceManager.getService(SymbolInformation.class);
   private static final HashSet<String> ourOptionsWithSetDelayed = new HashSet<>(
       Arrays.asList("EvaluationMonitor", "StepMonitor", "DisplayFunction", "Deinitialization", "DisplayFunction",
           "DistributedContexts", "Initialization", "UnsavedVariables", "UntrackedVariables"));
@@ -79,13 +78,12 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
       final Symbol head = (Symbol) ((FunctionCall) function).getHead();
       String functionName = head.getSymbolName();
       String functionContext = head.getMathematicaContext();
-      if (functionContext.equals("") && ourSymbolInformation.containsKey("System`" + functionName)) {
+      if (functionContext.equals("") && symbolInfo.isSystemSymbol(functionName)) {
         functionContext = "System`";
       }
       final String key = functionContext + functionName;
-      if (ourSymbolInformation.containsKey(key) && ourSymbolInformation.get(key).function) {
-        final SymbolInformation functionInformation = ourSymbolInformation.get(key);
-        final String[] options = functionInformation.options;
+      if (symbolInfo.hasProperties(key)) {
+        final List<String> options = symbolInfo.getSymbolProperties(key).getOptions();
         if (options != null) {
           for (String opt : options) {
             String ruleSymbol = ourOptionsWithSetDelayed.contains(opt) ? " :> " : " -> ";
@@ -104,7 +102,8 @@ class SmartContextAwareCompletion extends MathematicaCompletionProvider {
             usages.add(
                 LookupElementBuilder.create(messageName.getText()).
                     withIcon(MathematicaIcons.MESSAGES_ICON).
-                    withCaseSensitivity(false)); // make it case insensitive so you can type argx in Sym::argx to
+                                        withCaseSensitivity(
+                                            false)); // make it case insensitive so you can type argX in Sym::argX to
             // find the correct completion
           }
         };

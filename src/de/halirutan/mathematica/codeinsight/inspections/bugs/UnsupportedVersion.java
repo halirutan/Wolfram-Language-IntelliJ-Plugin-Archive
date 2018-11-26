@@ -1,24 +1,23 @@
 /*
- * Copyright (c) 2017 Patrick Scheibe
+ * Copyright (c) 2018 Patrick Scheibe
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
- *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package de.halirutan.mathematica.codeinsight.inspections.bugs;
@@ -26,6 +25,7 @@ package de.halirutan.mathematica.codeinsight.inspections.bugs;
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -36,9 +36,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
-import de.halirutan.mathematica.codeinsight.completion.util.SymbolVersionProvider;
 import de.halirutan.mathematica.codeinsight.inspections.AbstractInspection;
 import de.halirutan.mathematica.file.MathematicaFileType;
+import de.halirutan.mathematica.information.SymbolInformation;
 import de.halirutan.mathematica.lang.psi.MathematicaVisitor;
 import de.halirutan.mathematica.lang.psi.api.FunctionCall;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
@@ -52,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.HashMap;
 
 import static de.halirutan.mathematica.codeinsight.inspections.InspectionBundle.message;
 
@@ -191,7 +190,7 @@ public class UnsupportedVersion extends AbstractInspection {
    */
   private static class WrongVersionVisitor extends MathematicaVisitor {
 
-    private final HashMap<String, Double> mySymbolVersions = SymbolVersionProvider.getSymbolNames();
+    private final SymbolInformation symbolInfo = ServiceManager.getService(SymbolInformation.class);
     private final ProblemsHolder myHolder;
     private MathematicaLanguageLevel myLanguageLevel;
 
@@ -242,8 +241,8 @@ public class UnsupportedVersion extends AbstractInspection {
         String nameWithContext =
             symbol.getMathematicaContext().equals("") ? "System`" + symbol.getSymbolName() : symbol.getFullSymbolName();
 
-        if (mySymbolVersions.containsKey(nameWithContext)) {
-          double version = mySymbolVersions.get(nameWithContext);
+        if (symbolInfo.isVersionedSymbol(nameWithContext)) {
+          double version = symbolInfo.getSymbolVersion(nameWithContext);
           if (version > myLanguageLevel.getVersionNumber()) {
             registerProblem(symbol,
                 "Mathematica " + version + " required. You are using " + myLanguageLevel.getPresentableText());

@@ -26,8 +26,6 @@ import de.halirutan.mathematica.information.SymbolInformation;
 import de.halirutan.mathematica.information.impl.SymbolInformationImpl;
 import org.junit.Test;
 
-import java.util.ResourceBundle;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -38,8 +36,6 @@ public class MathematicaNamesValidatorTest {
 
   // In real code, use ServiceManager.getService(SymbolInformation.class) to retrieve an object of this.
   private final SymbolInformation symbolInfo = new SymbolInformationImpl();
-  private final ResourceBundle mySymbols =
-      ResourceBundle.getBundle("de.halirutan.mathematica.codeinsight.completion.MathematicaContextSymbols");
 
   private final String[] myCounterExamples = {
       "Internal`",
@@ -55,7 +51,7 @@ public class MathematicaNamesValidatorTest {
       assertTrue(validator.isIdentifier("\\[" + nc + "]", null));
     }
 
-    for (String symbol : mySymbols.keySet()) {
+    for (String symbol : symbolInfo.getSymbolsWithProperties()) {
       assertTrue(symbol, validator.isIdentifier(symbol, null));
     }
 

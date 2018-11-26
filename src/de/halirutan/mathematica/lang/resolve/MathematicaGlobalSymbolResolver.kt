@@ -22,6 +22,7 @@
 
 package de.halirutan.mathematica.lang.resolve
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
@@ -30,8 +31,8 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
-import de.halirutan.mathematica.codeinsight.completion.SymbolInformationProvider
 import de.halirutan.mathematica.index.packageexport.MathematicaPackageExportIndex
+import de.halirutan.mathematica.information.SymbolInformation
 import de.halirutan.mathematica.lang.psi.api.MathematicaPsiFile
 import de.halirutan.mathematica.lang.psi.api.Symbol
 import de.halirutan.mathematica.lang.psi.impl.LightSymbol
@@ -50,6 +51,7 @@ import java.util.*
  */
 class MathematicaGlobalSymbolResolver {
 
+  private val symbolInfo: SymbolInformation = ServiceManager.getService(SymbolInformation::class.java)
   private val packageIndex = MathematicaPackageExportIndex.INDEX_ID
 
   fun resolve(ref: Symbol, containingFile: PsiFile): Array<ResolveResult> {
@@ -116,16 +118,11 @@ class MathematicaGlobalSymbolResolver {
       }
     }
 
-    if (isAuxSymbol(ref)) {
+    if (symbolInfo.isSystemSymbol(ref.symbolName) || symbolInfo.isBuiltinSymbol(ref.fullSymbolName)) {
       val result = symbolCache.cacheBuiltInSymbol(ref)
       return arrayOf(result)
     }
     return cacheInvalidResult()
-  }
-
-  private fun isAuxSymbol(symbol: Symbol): Boolean {
-    val context = symbol.fullSymbolName ?: return false
-    return SymbolInformationProvider.getAuxSymbols()?.contains(context) ?: false
   }
 
 }

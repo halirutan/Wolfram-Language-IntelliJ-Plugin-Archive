@@ -1,0 +1,7 @@
+The Mathematica Plugin for IntelliJ is allowed to use the information available in the files of this directory
+under the condition to make clear that they are property of Wolfram Research, Inc.
+Since JSON does not allow comments, the following copyright applies for all files in this folder:
+
+Copyright (c) $today.year Wolfram Research, Inc.  All rights reserved.
+Redistribution or use of this work in any form, with or without modification,
+requires written permission from the copyright holder.
