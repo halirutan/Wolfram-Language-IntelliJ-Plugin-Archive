@@ -25,13 +25,12 @@ package de.halirutan.mathematica.information.impl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.intellij.openapi.diagnostic.Logger;
 import de.halirutan.mathematica.information.SymbolInformation;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -42,7 +41,6 @@ import java.util.regex.Pattern;
 public class SymbolInformationImpl implements SymbolInformation {
 
   private static final Pattern namedCharacterPattern = Pattern.compile("\\\\\\[[A-Z][a-zA-Z]+]");
-  private static Logger LOG = Logger.getInstance(SymbolInformation.class);
   private Map<String, String> myNamedCharacters = convertNamedCharacters();
   private Set<String> myContexts;
   private Set<String> myContextSymbols;
@@ -51,16 +49,12 @@ public class SymbolInformationImpl implements SymbolInformation {
   private Map<String, SymbolProperties> mySymbolProperties;
 
   public SymbolInformationImpl() {
-    try {
-      myContexts = loadJSONList("Contexts");
-      myContextSymbols =
-          loadJSONList("ContextSymbolNames");
-      mySystemSymbols = loadJSONList("SystemSymbolNames");
-      mySymbolProperties = loadSymbolProperties();
-      mySymbolVersions = loadSymbolVersions();
-    } catch (FileNotFoundException e) {
-      LOG.error("Cannot open Mathematica information resources", e);
-    }
+    myContexts = loadJSONList("Contexts");
+    myContextSymbols =
+        loadJSONList("ContextSymbolNames");
+    mySystemSymbols = loadJSONList("SystemSymbolNames");
+    mySymbolProperties = loadSymbolProperties();
+    mySymbolVersions = loadSymbolVersions();
   }
 
 
@@ -115,6 +109,7 @@ public class SymbolInformationImpl implements SymbolInformation {
     return mySymbolProperties.containsKey(nameWithContext);
   }
 
+  @NotNull
   @Override
   public Collection<SymbolProperties> getAllSymbolProperties() {
     return mySymbolProperties.values();
@@ -148,38 +143,32 @@ public class SymbolInformationImpl implements SymbolInformation {
     return mySymbolVersions.containsKey(nameWithContext);
   }
 
-  private HashSet<String> loadJSONList(String fileName) throws FileNotFoundException {
+  private JsonReader getJsonReaderForFile(@NotNull String fileName) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    final InputStream stream =
+        classLoader.getResourceAsStream(fileName);
+    return new JsonReader(new BufferedReader(new InputStreamReader(stream)));
+  }
+
+  private HashSet<String> loadJSONList(String fileName) {
     Gson gson = new Gson();
-    final URL resource = getClass().getClassLoader().getResource(
-        "de/halirutan/mathematica/codeinsight/completion/" + fileName + ".json");
-    if (resource == null) {
-      throw new FileNotFoundException(fileName);
-    }
-    JsonReader reader = new JsonReader(new FileReader(resource.getFile()));
+    final JsonReader reader =
+        getJsonReaderForFile("de/halirutan/mathematica/codeinsight/completion/" + fileName + ".json");
     return gson.fromJson(reader, new TypeToken<HashSet<String>>() {
     }.getType());
   }
 
-  private HashMap<String, Double> loadSymbolVersions() throws FileNotFoundException {
+  private HashMap<String, Double> loadSymbolVersions() {
     Gson gson = new Gson();
-    final URL resource = getClass().getClassLoader().getResource(
-        "de/halirutan/mathematica/codeinsight/completion/SymbolVersions.json");
-    if (resource == null) {
-      throw new FileNotFoundException("SymbolVersions.json");
-    }
-    JsonReader reader = new JsonReader(new FileReader(resource.getFile()));
+    final JsonReader reader =
+        getJsonReaderForFile("de/halirutan/mathematica/codeinsight/completion/SymbolVersions.json");
     return gson.fromJson(reader, new TypeToken<HashMap<String, Double>>() {
     }.getType());
   }
 
-  private HashMap<String, SymbolProperties> loadSymbolProperties() throws FileNotFoundException {
+  private HashMap<String, SymbolProperties> loadSymbolProperties() {
     Gson gson = new Gson();
-    final URL resource = getClass().getClassLoader().getResource(
-        "de/halirutan/mathematica/codeinsight/completion/SymbolInformation.json");
-    if (resource == null) {
-      throw new FileNotFoundException("SymbolInformation.json");
-    }
-    JsonReader reader = new JsonReader(new FileReader(resource.getFile()));
+    JsonReader reader = getJsonReaderForFile("de/halirutan/mathematica/codeinsight/completion/SymbolInformation.json");
     return gson.fromJson(reader, new TypeToken<HashMap<String, SymbolProperties>>() {
     }.getType());
   }

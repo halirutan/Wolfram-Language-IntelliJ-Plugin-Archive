@@ -67,7 +67,7 @@ task wrapper(type: Wrapper) {
 // Information  about the plugin
 
 // Plugin version number
-version '3.0beta7'
+version '3.0beta8'
 
 intellij {
     version = '2018.3'
