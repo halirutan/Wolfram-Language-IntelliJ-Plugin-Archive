@@ -29,6 +29,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveResult;
 import de.halirutan.mathematica.lang.psi.LocalizationConstruct;
 import de.halirutan.mathematica.lang.psi.api.Symbol;
+import de.halirutan.mathematica.lang.psi.impl.LightSymbol;
 import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,8 +61,8 @@ public class MathematicaGotoDeclarationProvider implements GotoDeclarationHandle
         final ResolveResult[] resolve = symbol.multiResolve(false);
         if (resolve.length > 0) {
           final PsiElement elm = resolve[0].getElement();
-          if (elm instanceof Symbol) {
-            return findDeclarations((Symbol) elm);
+          if (elm instanceof LightSymbol) {
+            return findLightSymbolDeclarations((LightSymbol) elm);
           }
         }
       }
@@ -75,6 +76,16 @@ public class MathematicaGotoDeclarationProvider implements GotoDeclarationHandle
   @Override
   public String getActionText(DataContext context) {
     return null;
+  }
+
+  private PsiElement[] findLightSymbolDeclarations(@NotNull LightSymbol lightSymbol) {
+    java.util.Set<PsiElement> result = new HashSet<>();
+    GlobalDefinitionCollector coll = new GlobalDefinitionCollector(lightSymbol.getContainingFile());
+    if (coll.getAssignments().containsKey(lightSymbol.getName())) {
+      coll.getAssignments().get(lightSymbol.getName()).forEach(
+          assignmentProperty -> result.add(assignmentProperty.myLhsOfAssignment));
+    }
+    return result.toArray(PsiElement.EMPTY_ARRAY);
   }
 
   private PsiElement[] findDeclarations(@NotNull Symbol symbol) {
