@@ -38,3 +38,4 @@ I know that go to _declaration_ is misleading for Mathematica, but it is the eas
 - Include the "new package style" macros Package, PackageImport, PackageExport, and PackageScope
 - Fix Go To Declaration (Ctrl+B) jumping to the wrong position
 - Fix autocompletion showing only System symbols with known properties
+- Sort Go To Declaration results by appearance
