@@ -34,7 +34,9 @@ import de.halirutan.mathematica.lang.resolve.GlobalDefinitionCollector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
+import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author patrick (30.11.17).
@@ -79,7 +81,7 @@ public class MathematicaGotoDeclarationProvider implements GotoDeclarationHandle
   }
 
   private PsiElement[] findLightSymbolDeclarations(@NotNull LightSymbol lightSymbol) {
-    java.util.Set<PsiElement> result = new HashSet<>();
+    SortedSet<PsiElement> result = new TreeSet<>(Comparator.comparing(PsiElement::getTextOffset));
     GlobalDefinitionCollector coll = new GlobalDefinitionCollector(lightSymbol.getContainingFile());
     if (coll.getAssignments().containsKey(lightSymbol.getName())) {
       coll.getAssignments().get(lightSymbol.getName()).forEach(
@@ -89,7 +91,7 @@ public class MathematicaGotoDeclarationProvider implements GotoDeclarationHandle
   }
 
   private PsiElement[] findDeclarations(@NotNull Symbol symbol) {
-    java.util.Set<PsiElement> result = new HashSet<>();
+    SortedSet<PsiElement> result = new TreeSet<>(Comparator.comparing(PsiElement::getTextOffset));
     GlobalDefinitionCollector c = new GlobalDefinitionCollector(symbol.getContainingFile());
     if (c.getAssignments().containsKey(symbol.getSymbolName())) {
       c.getAssignments().get(symbol.getSymbolName()).forEach(
