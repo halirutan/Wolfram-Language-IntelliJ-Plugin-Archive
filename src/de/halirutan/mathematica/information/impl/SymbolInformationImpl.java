@@ -95,6 +95,11 @@ public class SymbolInformationImpl implements SymbolInformation {
   }
 
   @Override
+  public Set<String> getSystemSymbols() {
+    return mySystemSymbols;
+  }
+
+  @Override
   public Set<String> getAllContexts() {
     return myContexts;
   }

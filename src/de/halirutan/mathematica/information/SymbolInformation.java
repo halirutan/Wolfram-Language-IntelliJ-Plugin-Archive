@@ -29,6 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * Provides unified access to all information gathered from Mathematica including symbol-names, contexts,
+ * symbol-properties, named characters.
+ */
 public interface SymbolInformation {
 
   static SymbolInformation getInstance() {
@@ -42,6 +46,8 @@ public interface SymbolInformation {
   boolean isBuiltinSymbol(@NotNull String nameWithContext);
 
   Set<String> getContextSymbols();
+
+  Set<String> getSystemSymbols();
 
   Set<String> getAllContexts();
 

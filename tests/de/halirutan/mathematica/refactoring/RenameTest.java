@@ -73,8 +73,7 @@ public class RenameTest extends LightCodeInsightFixtureTestCase{
     myFixture.checkResult("newFunc::usage = \"newFunc is a function called like newFunc[]\";");
   }
 
-  //TODO: This seems to be a bug in the FindUsage framework of IDEA
-  //I have to decide if I really want to do this work by myself and probably loose performance.
+  // This was broke for a long time due to IDEA internals but works in 2018.3
   public void testDollarVariables() {
     myFixture.configureByText(MathematicaFileType.INSTANCE,
         "var$ = 1;\n" +

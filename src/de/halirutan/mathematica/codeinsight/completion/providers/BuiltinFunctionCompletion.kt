@@ -85,6 +85,12 @@ class BuiltinFunctionCompletion : MathematicaCompletionProvider() {
       }
     }
 
+    // The list of symbols with properties does not contain all system symbols. Let's add them
+    val remainingSystemSymbols = symbolInfo.systemSymbols.filter {
+      !symbolInfo.hasProperties("System`$it")
+    }
+    result2.addAllElements(remainingSystemSymbols.map { name -> LookupElementBuilder.create(name) })
+
     if (parameters.isExtendedCompletion) {
       result2.addAllElements(symbolInfo.allContexts.map { name -> LookupElementBuilder.create(name) })
       result2.addAllElements(symbolInfo.contextSymbols.map { name -> LookupElementBuilder.create(name) })

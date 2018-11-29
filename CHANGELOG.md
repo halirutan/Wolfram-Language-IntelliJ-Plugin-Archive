@@ -36,3 +36,5 @@ I know that go to _declaration_ is misleading for Mathematica, but it is the eas
 - Fix duplicate entries in "Find Symbol" action
 - Replace old SymbolInformationProvider with a Service that holds exactly one instance and contains a clear interface
 - Include the "new package style" macros Package, PackageImport, PackageExport, and PackageScope
+- Fix Go To Declaration (Ctrl+B) jumping to the wrong position
+- Fix autocompletion showing only System symbols with known properties
