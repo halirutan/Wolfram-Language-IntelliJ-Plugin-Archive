@@ -11,8 +11,7 @@ People, who just want to use the plug-in should take a look at the official webs
 
 For a very quick start just download and install the free [Community Edition of IDEA](https://www.jetbrains.com/idea/download/). After you have done that, open the *Settings* by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>,</kbd> on OS X) and navigate to *Plugins* in the right column. On the right side you find the button *Browse repositories* and there you use the search box to find the **Mathematica Support**. With a right-click you can install it and after the suggested restart of IDEA everything is set up.
 
-**If you use the plug-in**, please leave a comment and rating at the [IntelliJ IDEA Plugins page](https://plugins.jetbrains.com/plugin/writeComment?pr=idea&pluginId=7232)
- (note that you don't have to provide a username. Just leave the field blank).
+**If you like the plug-in**, please leave a comment and a rating at the [IntelliJ IDEA Plugins page](https://plugins.jetbrains.com/plugin/7232-wolfram-language).
 ## ![Docs][doc-image]Documentation
 
 There are two kinds of documentation: For **users** there is the [GitHub Wiki page](https://github.com/halirutan/Mathematica-IntelliJ-Plugin/wiki) that I will update regularely and a very detailed [blog post](http://wlplugin.halirutan.de/index.php/blog/7-how-to-use-idea-effectively-with-mathematica-code) on the official website. There, you will learn what features the plug-in provides and how you can use them.
