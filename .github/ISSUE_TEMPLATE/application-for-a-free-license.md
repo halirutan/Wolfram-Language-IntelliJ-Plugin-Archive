@@ -7,4 +7,18 @@ assignees: halirutan
 
 ---
 
-Please add information where you want to use the plugin. Links to the open-source project or the intended use are helpful.
+To get a free license, I need some information. In the issue description, please provide information about how you want to use the plugin:
+
+1. Links to open-source projects
+2. Information about academic or class-room usage
+
+From this information, it must become clear that you are eligible to obtain a free license. Furthermore, I need
+
+- Your full name
+- The email address that you use in your Jetbrains account
+
+You can send this sensitive information to the following email address if you don't feel comfortable putting them online:
+
+```
+Uncompress["1:eJxTTMoPChZhYGAoSCwpykzOdshIzMksKi1JzNNLSQUAgX0JmQ=="]
+```
