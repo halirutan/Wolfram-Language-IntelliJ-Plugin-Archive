@@ -12,7 +12,7 @@ To get a free license, I need some information. In the issue description, please
 1. Links to open-source projects
 2. Information about academic or class-room usage
 
-From this information, it must become clear that you are eligible to obtain a free license. Furthermore, I need
+From this information, it must become clear that you are [eligible to obtain a free license](https://www.jetbrains.com/store/?fromNavMenu#discounts?billing=yearly). Furthermore, I need
 
 - Your full name
 - The email address that you use in your Jetbrains account
